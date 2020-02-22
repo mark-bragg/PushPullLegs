@@ -7,15 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4937729324001807005F566A /* DBUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4937729224001807005F566A /* DBUtilities.swift */; };
+		496A844B240173A20082D677 /* AppStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496A844A240173A20082D677 /* AppStates.swift */; };
+		49E3832B23FA09BF00F7A502 /* TemplateManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3832A23FA09BF00F7A502 /* TemplateManagement.swift */; };
+		49E3832D23FA0A0000F7A502 /* TemplateManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3832C23FA0A0000F7A502 /* TemplateManagementTests.swift */; };
+		49E3832F23FB295C00F7A502 /* ProgramManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3832E23FB295C00F7A502 /* ProgramManagerTests.swift */; };
+		49E3833123FB29F600F7A502 /* ProgramManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3833023FB29F600F7A502 /* ProgramManager.swift */; };
+		49E3833523FB44AD00F7A502 /* ProgramMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3833423FB44AD00F7A502 /* ProgramMaker.swift */; };
+		49E3833723FB44EA00F7A502 /* ProgramMakerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3833623FB44EA00F7A502 /* ProgramMakerTests.swift */; };
 		49EF4B7923F8381F0071687D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7823F8381F0071687D /* AppDelegate.swift */; };
 		49EF4B7B23F8381F0071687D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7A23F8381F0071687D /* SceneDelegate.swift */; };
 		49EF4B7D23F8381F0071687D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7C23F8381F0071687D /* ViewController.swift */; };
 		49EF4B8023F8381F0071687D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B7E23F8381F0071687D /* Main.storyboard */; };
-		49EF4B8323F8381F0071687D /* PushPullLegs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B8123F8381F0071687D /* PushPullLegs.xcdatamodeld */; };
 		49EF4B8523F838370071687D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8423F838370071687D /* Assets.xcassets */; };
 		49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8623F838370071687D /* LaunchScreen.storyboard */; };
-		49EF4B9323F838380071687D /* PushPullLegsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B9223F838380071687D /* PushPullLegsTests.swift */; };
 		49EF4B9E23F838380071687D /* PushPullLegsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B9D23F838380071687D /* PushPullLegsUITests.swift */; };
+		49EF4BAE23F838F60071687D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BAB23F838F60071687D /* CoreDataManager.swift */; };
+		49EF4BAF23F838F60071687D /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BAC23F838F60071687D /* DataManager.swift */; };
+		49EF4BB023F838F60071687D /* ExerciseDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BAD23F838F60071687D /* ExerciseDataManager.swift */; };
+		49EF4BB223F838FE0071687D /* WorkoutDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BB123F838FE0071687D /* WorkoutDataManager.swift */; };
+		49EF4BB423F8390A0071687D /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BB323F8390A0071687D /* Date+Helpers.swift */; };
+		49EF4BB623F8391B0071687D /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BB523F8391A0071687D /* EntryViewController.swift */; };
+		49EF4BB923F8392B0071687D /* ExerciseDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BB723F8392A0071687D /* ExerciseDataManagerTests.swift */; };
+		49EF4BBA23F8392B0071687D /* CoreDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BB823F8392B0071687D /* CoreDataManagerTests.swift */; };
+		49EF4BBC23F839360071687D /* WorkoutDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BBB23F839360071687D /* WorkoutDataManagerTests.swift */; };
+		49EF4BC023F8393D0071687D /* NSManagedObjectContextSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BBE23F8393D0071687D /* NSManagedObjectContextSpy.swift */; };
+		49EF4BC123F8393D0071687D /* CoreDataTestStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BBF23F8393D0071687D /* CoreDataTestStack.swift */; };
+		49EF4BCF23F8422D0071687D /* PushPullLegs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4BCD23F8422C0071687D /* PushPullLegs.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,21 +54,39 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4937729224001807005F566A /* DBUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUtilities.swift; sourceTree = "<group>"; };
+		496A844A240173A20082D677 /* AppStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStates.swift; sourceTree = "<group>"; };
+		49E3832A23FA09BF00F7A502 /* TemplateManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManagement.swift; sourceTree = "<group>"; };
+		49E3832C23FA0A0000F7A502 /* TemplateManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManagementTests.swift; sourceTree = "<group>"; };
+		49E3832E23FB295C00F7A502 /* ProgramManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramManagerTests.swift; sourceTree = "<group>"; };
+		49E3833023FB29F600F7A502 /* ProgramManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramManager.swift; sourceTree = SOURCE_ROOT; };
+		49E3833423FB44AD00F7A502 /* ProgramMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramMaker.swift; sourceTree = "<group>"; };
+		49E3833623FB44EA00F7A502 /* ProgramMakerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramMakerTests.swift; sourceTree = "<group>"; };
 		49EF4B7523F8381F0071687D /* PushPullLegs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushPullLegs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EF4B7823F8381F0071687D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49EF4B7A23F8381F0071687D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		49EF4B7C23F8381F0071687D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		49EF4B7F23F8381F0071687D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		49EF4B8223F8381F0071687D /* PushPullLegs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushPullLegs.xcdatamodel; sourceTree = "<group>"; };
 		49EF4B8423F838370071687D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49EF4B8723F838370071687D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		49EF4B8923F838370071687D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49EF4B8E23F838380071687D /* PushPullLegsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PushPullLegsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		49EF4B9223F838380071687D /* PushPullLegsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPullLegsTests.swift; sourceTree = "<group>"; };
 		49EF4B9423F838380071687D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49EF4B9923F838380071687D /* PushPullLegsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PushPullLegsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EF4B9D23F838380071687D /* PushPullLegsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPullLegsUITests.swift; sourceTree = "<group>"; };
 		49EF4B9F23F838380071687D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		49EF4BAB23F838F60071687D /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		49EF4BAC23F838F60071687D /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		49EF4BAD23F838F60071687D /* ExerciseDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseDataManager.swift; sourceTree = "<group>"; };
+		49EF4BB123F838FE0071687D /* WorkoutDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutDataManager.swift; sourceTree = "<group>"; };
+		49EF4BB323F8390A0071687D /* Date+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
+		49EF4BB523F8391A0071687D /* EntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
+		49EF4BB723F8392A0071687D /* ExerciseDataManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseDataManagerTests.swift; sourceTree = "<group>"; };
+		49EF4BB823F8392B0071687D /* CoreDataManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManagerTests.swift; sourceTree = "<group>"; };
+		49EF4BBB23F839360071687D /* WorkoutDataManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutDataManagerTests.swift; sourceTree = "<group>"; };
+		49EF4BBE23F8393D0071687D /* NSManagedObjectContextSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContextSpy.swift; sourceTree = "<group>"; };
+		49EF4BBF23F8393D0071687D /* CoreDataTestStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTestStack.swift; sourceTree = "<group>"; };
+		49EF4BCE23F8422C0071687D /* PushPullLegs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushPullLegs.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +114,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		496A84472400EE790082D677 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				49EF4B8923F838370071687D /* Info.plist */,
+				49EF4B8423F838370071687D /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		49EF4B6C23F8381F0071687D = {
 			isa = PBXGroup;
 			children = (
@@ -101,14 +146,14 @@
 		49EF4B7723F8381F0071687D /* PushPullLegs */ = {
 			isa = PBXGroup;
 			children = (
+				49E3833423FB44AD00F7A502 /* ProgramMaker.swift */,
+				49EF4BC523F839A30071687D /* View */,
+				49EF4BB323F8390A0071687D /* Date+Helpers.swift */,
+				49EF4BC623F839B50071687D /* Data Management */,
 				49EF4B7823F8381F0071687D /* AppDelegate.swift */,
 				49EF4B7A23F8381F0071687D /* SceneDelegate.swift */,
-				49EF4B7C23F8381F0071687D /* ViewController.swift */,
-				49EF4B7E23F8381F0071687D /* Main.storyboard */,
-				49EF4B8423F838370071687D /* Assets.xcassets */,
-				49EF4B8623F838370071687D /* LaunchScreen.storyboard */,
-				49EF4B8923F838370071687D /* Info.plist */,
-				49EF4B8123F8381F0071687D /* PushPullLegs.xcdatamodeld */,
+				496A84472400EE790082D677 /* Resources */,
+				496A844A240173A20082D677 /* AppStates.swift */,
 			);
 			path = PushPullLegs;
 			sourceTree = "<group>";
@@ -116,7 +161,13 @@
 		49EF4B9123F838380071687D /* PushPullLegsTests */ = {
 			isa = PBXGroup;
 			children = (
-				49EF4B9223F838380071687D /* PushPullLegsTests.swift */,
+				49E3833623FB44EA00F7A502 /* ProgramMakerTests.swift */,
+				49EF4BB823F8392B0071687D /* CoreDataManagerTests.swift */,
+				49E3832E23FB295C00F7A502 /* ProgramManagerTests.swift */,
+				49E3832C23FA0A0000F7A502 /* TemplateManagementTests.swift */,
+				49EF4BB723F8392A0071687D /* ExerciseDataManagerTests.swift */,
+				49EF4BBB23F839360071687D /* WorkoutDataManagerTests.swift */,
+				49EF4BBD23F8393D0071687D /* CoreData Helpers */,
 				49EF4B9423F838380071687D /* Info.plist */,
 			);
 			path = PushPullLegsTests;
@@ -129,6 +180,41 @@
 				49EF4B9F23F838380071687D /* Info.plist */,
 			);
 			path = PushPullLegsUITests;
+			sourceTree = "<group>";
+		};
+		49EF4BBD23F8393D0071687D /* CoreData Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				49EF4BBE23F8393D0071687D /* NSManagedObjectContextSpy.swift */,
+				49EF4BBF23F8393D0071687D /* CoreDataTestStack.swift */,
+			);
+			path = "CoreData Helpers";
+			sourceTree = "<group>";
+		};
+		49EF4BC523F839A30071687D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				49EF4B7C23F8381F0071687D /* ViewController.swift */,
+				49EF4B8623F838370071687D /* LaunchScreen.storyboard */,
+				49EF4B7E23F8381F0071687D /* Main.storyboard */,
+				49EF4BB523F8391A0071687D /* EntryViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		49EF4BC623F839B50071687D /* Data Management */ = {
+			isa = PBXGroup;
+			children = (
+				49E3833023FB29F600F7A502 /* ProgramManager.swift */,
+				49EF4BCD23F8422C0071687D /* PushPullLegs.xcdatamodeld */,
+				49EF4BB123F838FE0071687D /* WorkoutDataManager.swift */,
+				49EF4BAB23F838F60071687D /* CoreDataManager.swift */,
+				49EF4BAC23F838F60071687D /* DataManager.swift */,
+				49EF4BAD23F838F60071687D /* ExerciseDataManager.swift */,
+				49E3832A23FA09BF00F7A502 /* TemplateManagement.swift */,
+				4937729224001807005F566A /* DBUtilities.swift */,
+			);
+			path = "Data Management";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,8 +349,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				49EF4B7D23F8381F0071687D /* ViewController.swift in Sources */,
-				49EF4B8323F8381F0071687D /* PushPullLegs.xcdatamodeld in Sources */,
+				49EF4BCF23F8422D0071687D /* PushPullLegs.xcdatamodeld in Sources */,
+				49EF4BB623F8391B0071687D /* EntryViewController.swift in Sources */,
+				49E3833523FB44AD00F7A502 /* ProgramMaker.swift in Sources */,
+				49EF4BB423F8390A0071687D /* Date+Helpers.swift in Sources */,
+				49E3832B23FA09BF00F7A502 /* TemplateManagement.swift in Sources */,
+				4937729324001807005F566A /* DBUtilities.swift in Sources */,
+				49EF4BAF23F838F60071687D /* DataManager.swift in Sources */,
+				496A844B240173A20082D677 /* AppStates.swift in Sources */,
+				49EF4BB023F838F60071687D /* ExerciseDataManager.swift in Sources */,
+				49EF4BB223F838FE0071687D /* WorkoutDataManager.swift in Sources */,
 				49EF4B7923F8381F0071687D /* AppDelegate.swift in Sources */,
+				49EF4BAE23F838F60071687D /* CoreDataManager.swift in Sources */,
+				49E3833123FB29F600F7A502 /* ProgramManager.swift in Sources */,
 				49EF4B7B23F8381F0071687D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,7 +370,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49EF4B9323F838380071687D /* PushPullLegsTests.swift in Sources */,
+				49EF4BC123F8393D0071687D /* CoreDataTestStack.swift in Sources */,
+				49E3832F23FB295C00F7A502 /* ProgramManagerTests.swift in Sources */,
+				49EF4BBA23F8392B0071687D /* CoreDataManagerTests.swift in Sources */,
+				49E3832D23FA0A0000F7A502 /* TemplateManagementTests.swift in Sources */,
+				49EF4BB923F8392B0071687D /* ExerciseDataManagerTests.swift in Sources */,
+				49EF4BBC23F839360071687D /* WorkoutDataManagerTests.swift in Sources */,
+				49E3833723FB44EA00F7A502 /* ProgramMakerTests.swift in Sources */,
+				49EF4BC023F8393D0071687D /* NSManagedObjectContextSpy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,7 +544,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
-				INFOPLIST_FILE = PushPullLegs/Info.plist;
+				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -458,7 +562,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
-				INFOPLIST_FILE = PushPullLegs/Info.plist;
+				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -596,13 +700,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		49EF4B8123F8381F0071687D /* PushPullLegs.xcdatamodeld */ = {
+		49EF4BCD23F8422C0071687D /* PushPullLegs.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				49EF4B8223F8381F0071687D /* PushPullLegs.xcdatamodel */,
+				49EF4BCE23F8422C0071687D /* PushPullLegs.xcdatamodel */,
 			);
-			currentVersion = 49EF4B8223F8381F0071687D /* PushPullLegs.xcdatamodel */;
-			path = PushPullLegs.xcdatamodeld;
+			currentVersion = 49EF4BCE23F8422C0071687D /* PushPullLegs.xcdatamodel */;
+			name = PushPullLegs.xcdatamodeld;
+			path = "../../../../PushPullLegs/PushPullLegs/Data Management/PushPullLegs.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
