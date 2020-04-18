@@ -17,14 +17,10 @@ let WorkoutTemplateEntityName = "WorkoutTemplate"
 let ExerciseTemplateEntityName = "ExerciseTemplate"
 
 enum ExerciseType: String {
-    case push
-    case pull
-    case legs
-}
-
-enum WorkoutType: String {
-    case upper
-    case lower
+    case push = "Push"
+    case pull = "Pull"
+    case legs = "Legs"
+    case error = "EXERCISE TYPE ERROR"
 }
 
 enum ProgramError: Error {
@@ -34,4 +30,5 @@ enum ProgramError: Error {
 enum TemplateError: Error {
     case duplicateWorkout
     case duplicateExercise
+    case missingExercise
 }

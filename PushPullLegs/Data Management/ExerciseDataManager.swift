@@ -14,6 +14,13 @@ class ExerciseDataManager: DataManager {
         entityName = ExerciseEntityName
     }
     
+    override func create(name: String?, keyValuePairs pairs: [String : Any] = [:]) {
+        guard let name = name else {
+            return
+        }
+        super.create(name: name, keyValuePairs: pairs)
+    }
+    
     func addSet(_ exercise: Exercise) {
         backgroundContext.performAndWait {
             if let set = NSEntityDescription.insertNewObject(forEntityName: ExerciseSetEntityName, into: backgroundContext) as? ExerciseSet,

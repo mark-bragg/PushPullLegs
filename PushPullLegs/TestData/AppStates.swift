@@ -30,10 +30,11 @@ protocol LegalStates {
     func legalStates() -> [[LegalStates]]
 }
 
-enum AppState: LegalStates {
+enum LaunchState: LegalStates {
     case initialLaunch
+    case standardLaunch
     func legalStates() -> [[LegalStates]] {
-        return [[AppState.initialLaunch]]
+        return [[LaunchState.initialLaunch], [LaunchState.standardLaunch]]
     }
 }
 
@@ -54,7 +55,6 @@ enum Creating: LegalStates {
 }
 
 enum WorkoutState: LegalStates {
-    case betweenWorkouts
     case initial
     case inProgress
     case betweenExercises
@@ -63,7 +63,6 @@ enum WorkoutState: LegalStates {
     case resting
     func legalStates() -> [[LegalStates]] {
         return [
-            [WorkoutState.betweenWorkouts],
             [WorkoutState.inProgress, WorkoutState.initial],
             [WorkoutState.inProgress, WorkoutState.betweenExercises],
             [WorkoutState.inProgress, WorkoutState.betweenSets],
