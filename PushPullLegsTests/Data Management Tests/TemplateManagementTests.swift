@@ -20,14 +20,13 @@ let Names = ["ex1", "ex2", "ex3"]
 
 class TemplateManagementTests: XCTestCase {
     
-    var coreDataStack: CoreDataTestStack!
+    let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
     var sut: TemplateManagement!
     var exerciseCount: Int = 0
     var workoutCount: Int = 0
     
     override func setUp() {
-        coreDataStack = CoreDataTestStack()
-        sut = TemplateManagement(backgroundContext: coreDataStack.backgroundContext)
+        sut = TemplateManagement(coreDataManager: dbHelper.coreDataStack)
         exerciseCount = 0
         workoutCount = 0
     }
@@ -36,50 +35,21 @@ class TemplateManagementTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func exerciseTemplates() -> [ExerciseTemplate]? {
-        if let temps = try? coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) as? [ExerciseTemplate] {
-            return temps
-        }
-        return nil
-    }
-    
     func addExerciseTemplate(name: String = TempName, type: ExerciseType = .push) {
-        let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.backgroundContext) as! ExerciseTemplate
-        temp.name = name
-        temp.type = type.rawValue
-        try? coreDataStack.backgroundContext.save()
-        if let temps = exerciseTemplates() {
-            exerciseCount += 1
-            XCTAssert(temps.count == exerciseCount)
-        }
-    }
-    
-    func workoutTemplates() -> [WorkoutTemplate]? {
-        if let temps = try? coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: WrkTemp)) as? [WorkoutTemplate] {
-            return temps
-        }
-        return nil
+        dbHelper.addExerciseTemplate(name: name, type: type)
+        exerciseCount += 1
     }
     
     func addWorkoutTemplate(type: ExerciseType = .push, exerciseNames: [String] = Names) {
-        let temp = NSEntityDescription.insertNewObject(forEntityName: WrkTemp, into: coreDataStack.backgroundContext) as! WorkoutTemplate
-        temp.name = type.rawValue
-        temp.exerciseNames = exerciseNames
-        try? coreDataStack.backgroundContext.save()
-        if let temps = workoutTemplates() {
-            workoutCount += 1
-            XCTAssert(temps.count == workoutCount)
-        }
-        for name in exerciseNames {
-            addExerciseTemplate(name: name, type: type)
-        }
+        dbHelper.addWorkoutTemplate(type: type, exerciseNames: exerciseNames)
+        workoutCount += 1
     }
     
     // MARK: exercise
 
     func testCreateExerciseTemplate_templateCreated_push() {
         try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.push)
-        guard let temps = try? coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
+        guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
             XCTFail()
             return
         }
@@ -94,7 +64,7 @@ class TemplateManagementTests: XCTestCase {
     
     func testCreateExerciseTemplate_templateCreated_pull() {
         try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.pull)
-        guard let temps = try? coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
+        guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
             XCTFail()
             return
         }
@@ -109,28 +79,30 @@ class TemplateManagementTests: XCTestCase {
     
     func testCreateExerciseTemplate_templateCreated_legs() {
         try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.legs)
-        guard let temps = try? coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
-            XCTFail()
-            return
+        dbHelper.coreDataStack.backgroundContext.performAndWait {
+            guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
+                XCTFail()
+                return
+            }
+            XCTAssert(temps.count == 1)
+            guard let temp = temps.first as? ExerciseTemplate else {
+                XCTFail()
+                return
+            }
+            XCTAssert(temp.name == TempName)
+            XCTAssert(temp.type == ExerciseType.legs.rawValue)
         }
-        XCTAssert(temps.count == 1)
-        guard let temp = temps.first as? ExerciseTemplate else {
-            XCTFail()
-            return
-        }
-        XCTAssert(temp.name == TempName)
-        XCTAssert(temp.type == ExerciseType.legs.rawValue)
     }
     
     func testDeleteExerciseTemplate_templateDeleted() {
         addExerciseTemplate()
-        guard let temps = exerciseTemplates() else {
+        guard let temps = dbHelper.fetchExerciseTemplates() else {
             XCTFail()
             return
         }
         XCTAssert(temps.count == 1)
         sut.deleteExerciseTemplate(name: TempName)
-        guard let temps2 = exerciseTemplates() else {
+        guard let temps2 = dbHelper.fetchExerciseTemplates() else {
             return
         }
         XCTAssert(temps2.count == 0)
@@ -140,7 +112,7 @@ class TemplateManagementTests: XCTestCase {
         addExerciseTemplate(name: "\(ExTemp)1")
         addExerciseTemplate(name: TempName)
         addExerciseTemplate(name: "\(ExTemp)3")
-        guard let temps = exerciseTemplates() else {
+        guard let temps = dbHelper.fetchExerciseTemplates() else {
             XCTFail()
             return
         }
@@ -151,17 +123,17 @@ class TemplateManagementTests: XCTestCase {
             temp.name != TempName
         }
         sut.deleteExerciseTemplate(name: TempName)
-        guard let temps2 = try? coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) as? [ExerciseTemplate] else {
+        guard let temps2 = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) as? [ExerciseTemplate] else {
             return
         }
         XCTAssert(temps2.count == 2)
-        XCTAssert(temps2.contains(toKeep[0]) && temps2.contains(toKeep[1]))
+        XCTAssert(temps2.contains(where: { objectsAreEqual($0, toKeep[0])}) && temps2.contains(where: { objectsAreEqual($0, toKeep[1])}))
         XCTAssert(!temps2.contains(toDelete))
     }
     
     func testGetExerciseTemplate_templateGeted() {
         addExerciseTemplate()
-        guard let temps = exerciseTemplates() else { XCTFail();return }
+        guard let temps = dbHelper.fetchExerciseTemplates() else { XCTFail();return }
         XCTAssert(temps.count == 1)
         guard let temp = sut.exerciseTemplate(name: TempName) else {
             XCTFail()
@@ -174,7 +146,7 @@ class TemplateManagementTests: XCTestCase {
         addExerciseTemplate(name: "\(ExTemp)1")
         addExerciseTemplate(name: TempName)
         addExerciseTemplate(name: "\(ExTemp)2")
-        guard let temps = exerciseTemplates() else {
+        guard let temps = dbHelper.fetchExerciseTemplates() else {
             XCTFail()
             return
         }
@@ -185,7 +157,7 @@ class TemplateManagementTests: XCTestCase {
             XCTFail()
             return
         }
-        XCTAssert(tempToTest == temp)
+        XCTAssert(objectsAreEqual(tempToTest, temp))
     }
     
     func testCreateDuplicateExerciseTemplates_errorThrown() {
@@ -206,14 +178,14 @@ class TemplateManagementTests: XCTestCase {
     // MARK: workout
     
     func testCreatePushWorkoutTemplate_templateCreated() {
-        coreDataStack.backgroundContext.expectation = expectation(description: "workout template creation")
+        (self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation = expectation(description: "workout template creation")
         do {
             try sut.addWorkoutTemplate(type: .push)
         } catch {
             XCTFail("error shouldn't be thrown: \(error)")
         }
-        wait(for: [coreDataStack.backgroundContext.expectation!], timeout: 60)
-        guard let temps = try? coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: WrkTemp)) else {
+        wait(for: [(self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation!], timeout: 60)
+        guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: WrkTemp)) else {
             XCTFail()
             return
         }
@@ -226,7 +198,7 @@ class TemplateManagementTests: XCTestCase {
     }
     
     func testCreateLegsWorkoutTemplate_templateCreated() {
-        coreDataStack.backgroundContext.expectation = expectation(description: "workout template creation")
+        (self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation = expectation(description: "workout template creation")
         for name in Names {
             addExerciseTemplate(name: name, type: .legs)
         }
@@ -236,8 +208,8 @@ class TemplateManagementTests: XCTestCase {
             XCTFail("error shouldn't be thrown: \(error)")
         }
         
-        wait(for: [coreDataStack.backgroundContext.expectation!], timeout: 60)
-        guard let temps = try? coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: WrkTemp)) else {
+        wait(for: [(self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation!], timeout: 60)
+        guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: WrkTemp)) else {
             XCTFail()
             return
         }
@@ -251,7 +223,7 @@ class TemplateManagementTests: XCTestCase {
 
     func testGetWorkoutTemplate_templateGeted() {
         addWorkoutTemplate(type: .push)
-        guard let temps = workoutTemplates() else { XCTFail();return }
+        let temps = dbHelper.fetchWorkoutTemplates()
         XCTAssert(temps.count == 1)
         let temp = sut.workoutTemplate(type: ExerciseType.push)
         XCTAssert(temp.name == ExerciseType.push.rawValue)
@@ -261,12 +233,9 @@ class TemplateManagementTests: XCTestCase {
         addWorkoutTemplate(type: .push)
         addWorkoutTemplate(type: .pull)
         addWorkoutTemplate(type: .legs)
-        guard let temps = workoutTemplates() else {
-            XCTFail()
-            return
-        }
+        let temps = dbHelper.fetchWorkoutTemplates()
         let tempToTest = sut.workoutTemplate(type: ExerciseType.pull)
-        XCTAssert(temps.contains(tempToTest))
+        XCTAssert(temps.contains(where: { objectsAreEqual($0, tempToTest) }))
         XCTAssert(tempToTest.name == ExerciseType.pull.rawValue)
     }
     
@@ -274,7 +243,7 @@ class TemplateManagementTests: XCTestCase {
         addWorkoutTemplate(type: .push)
         addWorkoutTemplate(type: .pull)
         addWorkoutTemplate(type: .legs)
-        guard let temps = workoutTemplates() else { XCTFail();return }
+        let temps = dbHelper.fetchWorkoutTemplates()
         XCTAssert(temps.count == 3)
         guard let tempsToTest = sut.workoutTemplates() else {
             XCTFail()
@@ -282,12 +251,12 @@ class TemplateManagementTests: XCTestCase {
         }
         XCTAssert(tempsToTest.count == 3)
         for temp in temps {
-            XCTAssert(tempsToTest.contains(temp))
+            XCTAssert(tempsToTest.contains(where: { objectsAreEqual($0, temp) }))
         }
     }
     
     func testGetAllWorkoutTemplates_noTemplatesStored_emptyArrayGeted() {
-        guard let temps = workoutTemplates() else { XCTFail();return }
+        let temps = dbHelper.fetchWorkoutTemplates()
         XCTAssert(temps.count == 0)
         guard let tempsToTest = sut.workoutTemplates() else {
             XCTFail()
@@ -297,13 +266,12 @@ class TemplateManagementTests: XCTestCase {
     }
     
     func testGetAllExerciseTemplates_allTemplatesGeted() {
-        addExerciseTemplate(name: "\(TempName)1")
-        addExerciseTemplate(name: "\(TempName)2")
-        addExerciseTemplate(name: "\(TempName)3")
-        addExerciseTemplate(name: "\(TempName)4")
-        addExerciseTemplate(name: "\(TempName)5")
-        addExerciseTemplate(name: "\(TempName)6")
-        guard let temps = exerciseTemplates() else { XCTFail();return }
+        dbHelper.coreDataStack.backgroundContext.performAndWait {
+            for i in 1...6 {
+                addExerciseTemplate(name: "\(TempName)\(i)")
+            }
+        }
+        guard let temps = dbHelper.fetchExerciseTemplates() else { XCTFail();return }
         XCTAssert(temps.count == 6)
         guard let tempsToTest = sut.exerciseTemplates(withType: .push) else {
             XCTFail()
@@ -311,12 +279,12 @@ class TemplateManagementTests: XCTestCase {
         }
         XCTAssert(tempsToTest.count == 6)
         for temp in temps {
-            XCTAssert(tempsToTest.contains(temp))
+            XCTAssert(tempsToTest.contains(where: { objectsAreEqual($0, temp) }))
         }
     }
     
     func testGetAllExerciseTemplates_noTemplatesStored_emptyArrayGeted() {
-        guard let temps = exerciseTemplates() else { XCTFail();return }
+        guard let temps = dbHelper.fetchExerciseTemplates() else { XCTFail();return }
         XCTAssert(temps.count == 0)
         var tempsToTest = [ExerciseTemplate]()
         for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs] {
@@ -353,15 +321,15 @@ class TemplateManagementTests: XCTestCase {
     func testAddExerciseToWorkout() {
         addWorkoutTemplate(type: .legs, exerciseNames: ["A", "B", "C"])
         addExerciseTemplate(name: "D", type: .legs)
-        sut.addToWorkout(exercise: (exerciseTemplates()?.first(where: {$0.name == "D"})!)!)
-        XCTAssert(workoutTemplates()!.first!.exerciseNames!.contains("D"))
+        sut.addToWorkout(exercise: (dbHelper.fetchExerciseTemplates()?.first(where: {$0.name == "D"})!)!)
+        XCTAssert(dbHelper.fetchWorkoutTemplates().first!.exerciseNames!.contains("D"))
     }
     
     func testRemoveExerciseFromWorkout() {
         addWorkoutTemplate(type: .legs, exerciseNames: ["A", "B", "C", "D"])
-        XCTAssert(workoutTemplates()!.first!.exerciseNames!.contains("D"))
-        sut.removeFromWorkout(exercise: (exerciseTemplates()?.first(where: {$0.name == "D"})!)!)
-        XCTAssert(!workoutTemplates()!.first!.exerciseNames!.contains("D"))
+        XCTAssert(dbHelper.fetchWorkoutTemplates().first!.exerciseNames!.contains("D"))
+        sut.removeFromWorkout(exercise: (dbHelper.fetchExerciseTemplates()?.first(where: {$0.name == "D"})!)!)
+        XCTAssert(!dbHelper.fetchWorkoutTemplates().first!.exerciseNames!.contains("D"))
     }
     
     func testAddAndRemoveExerciseToFromWorkout() {
@@ -369,15 +337,19 @@ class TemplateManagementTests: XCTestCase {
         for i in 0...3 {
             let name = "D\(i)"
             addExerciseTemplate(name: name, type: .legs)
-            sut.addToWorkout(exercise: (exerciseTemplates()?.first(where: {$0.name == name})!)!)
-            XCTAssert(workoutTemplates()!.first!.exerciseNames!.contains(name))
+            sut.addToWorkout(exercise: (dbHelper.fetchExerciseTemplates()?.first(where: {$0.name == name})!)!)
+            XCTAssert(dbHelper.fetchWorkoutTemplates().first!.exerciseNames!.contains(name))
         }
         
         for i in 0...3 {
             let name = "D\(i)"
-            sut.removeFromWorkout(exercise: (exerciseTemplates()?.first(where: {$0.name == name})!)!)
-            XCTAssert(!workoutTemplates()!.first!.exerciseNames!.contains(name))
+            sut.removeFromWorkout(exercise: (dbHelper.fetchExerciseTemplates()?.first(where: {$0.name == name})!)!)
+            XCTAssert(!dbHelper.fetchWorkoutTemplates().first!.exerciseNames!.contains(name))
         }
+    }
+    
+    func testGetExercisesForWorkoutTemplate_noExercisesInWorkoutTemplate_noExerciseTemplatesReturned() {
+        XCTAssert(sut.exerciseTemplatesForWorkout(.push).count == 0)
     }
 
 }

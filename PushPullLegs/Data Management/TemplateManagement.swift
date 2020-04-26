@@ -11,60 +11,62 @@ import CoreData
 
 class TemplateManagement {
     
-    var workoutManager: DataManager!
-    var exerciseManager: DataManager!
+    private let coreDataManager: CoreDataManagement
     
-    init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
-        self.workoutManager = DataManager(backgroundContext: backgroundContext)
-        self.exerciseManager = DataManager(backgroundContext: backgroundContext)
-        self.workoutManager.entityName = WorkoutTemplateEntityName
-        self.exerciseManager.entityName = ExerciseTemplateEntityName
+    init(coreDataManager: CoreDataManagement = CoreDataManager.shared) {
+        self.coreDataManager = coreDataManager
     }
     
     func addExerciseTemplate(name: String, type: ExerciseType) throws {
-        if exerciseManager.exists(name: name) {
+        let er = exerciseReader()
+        if er.exists(name: name) {
             throw TemplateError.duplicateExercise
         }
-        exerciseManager.create(name: name)
-        if let creation = exerciseManager.creation as? ExerciseTemplate {
-            creation.type = type.rawValue
-            try? self.workoutManager.backgroundContext.save()
-        }
+        let ew = exerciseWriter()
+        ew.create(name: name, keyValuePairs: ["type": type.rawValue])
     }
     
     func deleteExerciseTemplate(name: String) {
-        exerciseManager.deleteTemplate(name: name)
+        coreDataManager.mainContext.performAndWait {
+            let req = NSFetchRequest<NSFetchRequestResult>(entityName: "ExerciseTemplate")
+            req.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
+            if let template = try? coreDataManager.backgroundContext.fetch(req).first as? ExerciseTemplate {
+                coreDataManager.backgroundContext.delete(template)
+                try? coreDataManager.backgroundContext.save()
+            }
+        }
+        
     }
     
     func exerciseTemplate(name: String) -> ExerciseTemplate? {
-        exerciseManager.getTemplate(name: name) as? ExerciseTemplate
+        exerciseReader().getTemplate(name: name) as? ExerciseTemplate
     }
     
     func exerciseTemplates(withType type: ExerciseType) -> [ExerciseTemplate]? {
-        exerciseManager.exerciseTemplates(withType: type)
+        exerciseReader().exerciseTemplates(withType: type)
     }
     
     func addWorkoutTemplate(type: ExerciseType) throws {
-        if workoutManager.exists(name: type.rawValue) {
+        if workoutReader().exists(name: type.rawValue) {
             throw TemplateError.duplicateWorkout
         }
-        workoutManager.create(name: type.rawValue, keyValuePairs: [:])
+        workoutWriter().create(name: type.rawValue, keyValuePairs: [:])
     }
     
     func saveWorkoutTemplate(exercises: [ExerciseTemplate]) throws {
         let type = ExerciseType(rawValue: exercises[0].type!)!
-    let names =  exercises.map({ (temp) -> String in
+        let names =  exercises.map({ (temp) -> String in
             return temp.name!
         })
-        workoutManager.update(workoutTemplate(type: type), keyValuePairs: ["exerciseNames": names])
+        workoutWriter().update(workoutTemplate(type: type), keyValuePairs: ["exerciseNames": names])
     }
     
     func workoutTemplate(type: ExerciseType) -> WorkoutTemplate {
-        workoutManager.getTemplate(name: type.rawValue) as! WorkoutTemplate
+        workoutReader().getTemplate(name: type.rawValue) as! WorkoutTemplate
     }
     
     func workoutTemplates() -> [WorkoutTemplate]? {
-        return workoutManager.getAllTemplates() as? [WorkoutTemplate]
+        return workoutReader().getAllTemplates() as? [WorkoutTemplate]
     }
     
     func addToWorkout(exercise: ExerciseTemplate) {
@@ -73,7 +75,7 @@ class TemplateManagement {
             workout.exerciseNames = []
         }
         workout.exerciseNames?.append(exercise.name!)
-        try? self.workoutManager.backgroundContext.save()
+        try? coreDataManager.mainContext.save()
     }
     
     func removeFromWorkout(exercise: ExerciseTemplate) {
@@ -87,12 +89,64 @@ class TemplateManagement {
         
         exerciseNames.removeAll(where: {$0 == exercise.name})
         workout.exerciseNames = exerciseNames
-        try? self.workoutManager.backgroundContext.save()
+        try? self.coreDataManager.mainContext.save()
+    }
+    
+    func exerciseTemplatesForWorkout(_ type: ExerciseType) -> [ExerciseTemplate] {
+        let req = NSFetchRequest<NSFetchRequestResult>(entityName: "WorkoutTemplate")
+        req.fetchLimit = 1
+        req.predicate = NSPredicate(format: "name == %@", argumentArray: [type.rawValue])
+        if let workoutTemplate = try? coreDataManager.mainContext.fetch(req).first as? WorkoutTemplate {
+            if let names = workoutTemplate.exerciseNames {
+                let req = NSFetchRequest<NSFetchRequestResult>(entityName: "ExerciseTemplate")
+                req.predicate = NSPredicate(format: "type == %@", argumentArray: [type.rawValue])
+                if let exerciseTemplates = try? coreDataManager.mainContext.fetch(req) as? [ExerciseTemplate] {
+                    return exerciseTemplates.filter { (temp) -> Bool in
+                        return names.contains { (name) -> Bool in
+                            return temp.name! == name
+                        }
+                    }
+                }
+            }
+        }
+        guard
+            let workoutTemplate = workoutReader().getTemplate(name: type.rawValue) as? WorkoutTemplate,
+            let names = workoutTemplate.exerciseNames,
+            let exerciseTemplates = exerciseReader().getTemplates(names: names)
+        else
+        {
+            return []
+        }
+        return exerciseTemplates
+    }
+    
+    private func exerciseWriter() -> ExerciseDataManager {
+        let edm = ExerciseDataManager(backgroundContext: coreDataManager.backgroundContext)
+        edm.entityName = ExerciseTemplateEntityName
+        return edm
+    }
+    
+    private func exerciseReader() -> ExerciseDataManager {
+        let edm = ExerciseDataManager(backgroundContext: coreDataManager.mainContext)
+        edm.entityName = ExerciseTemplateEntityName
+        return edm
+    }
+    
+    private func workoutWriter() -> WorkoutDataManager {
+        let wdm = WorkoutDataManager(backgroundContext: coreDataManager.backgroundContext)
+        wdm.entityName = WorkoutTemplateEntityName
+        return wdm
+    }
+    
+    private func workoutReader() -> WorkoutDataManager {
+        let wdm = WorkoutDataManager(backgroundContext: coreDataManager.mainContext)
+        wdm.entityName = WorkoutTemplateEntityName
+        return wdm
     }
     
 }
 
-extension DataManager {
+fileprivate extension DataManager {
     func deleteTemplate(name: String) {
         guard let template = self.getTemplate(name: name) else {
             // TODO: handle error
@@ -105,6 +159,20 @@ extension DataManager {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityName)
         request.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
         guard let template = try? self.backgroundContext.fetch(request).first as? NSManagedObject else {
+            // TODO: handle error
+            return nil
+        }
+        return template
+    }
+    
+    func getTemplates(names: [String]) -> [ExerciseTemplate]? {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityName)
+        var predicates = [NSPredicate]()
+        for name in names {
+            predicates.append(NSPredicate(format: "name == %@", argumentArray: [name]))
+        }
+        request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        guard let template = try? self.backgroundContext.fetch(request) as? [ExerciseTemplate] else {
             // TODO: handle error
             return nil
         }

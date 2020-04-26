@@ -9,21 +9,27 @@
 import Foundation
 import CoreData
 
-class CoreDataManager {
+protocol CoreDataManagement {
+    var persistentContainer: NSPersistentContainer! { get }
+    var backgroundContext: NSManagedObjectContext! { get }
+    var mainContext: NSManagedObjectContext! { get }
+}
+
+class CoreDataManager: CoreDataManagement {
     static let shared = CoreDataManager()
     private var storeType: String!
-    lazy var persistentContainer: NSPersistentContainer! = {
+    lazy var persistentContainer: NSPersistentContainer! = { [unowned self] in
         let persistentContainer = NSPersistentContainer(name: "PushPullLegs")
         let description = persistentContainer.persistentStoreDescriptions.first
         description?.type = storeType
         return persistentContainer
     }()
-    lazy var backgroundContext: NSManagedObjectContext! = {
+    lazy var backgroundContext: NSManagedObjectContext! = { [unowned self] in
         let context = persistentContainer.newBackgroundContext()
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return context
     }()
-    lazy var mainContext: NSManagedObjectContext! = {
+    lazy var mainContext: NSManagedObjectContext! = { [unowned self] in
         let context = persistentContainer.viewContext
         context.automaticallyMergesChangesFromParent = true
         return context
@@ -31,7 +37,7 @@ class CoreDataManager {
     
     func setup(storeType: String = NSSQLiteStoreType, completion: (() -> Void)?) {
         self.storeType = storeType
-        loadPersistentStore {
+        loadPersistentStore { [unowned self] in
             self.addWorkouts()
             completion?()
         }
@@ -61,7 +67,7 @@ class CoreDataManager {
     }
     
     private func addWorkouts() {
-        let mgmt = TemplateManagement(backgroundContext: backgroundContext)
+        let mgmt = TemplateManagement(coreDataManager: self)
         guard Array.emptyOrNil(mgmt.workoutTemplates()) else {
             return
         }

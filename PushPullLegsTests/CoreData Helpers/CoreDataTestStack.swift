@@ -8,11 +8,15 @@
 
 import Foundation
 import CoreData
+@testable import PushPullLegs
 
-class CoreDataTestStack {
-    let persistentContainer: NSPersistentContainer
-    let backgroundContext: NSManagedObjectContextSpy
-    let mainContext: NSManagedObjectContextSpy
+
+class CoreDataTestStack: CoreDataManagement {
+    var persistentContainer: NSPersistentContainer!
+    
+    var backgroundContext: NSManagedObjectContext!
+    
+    var mainContext: NSManagedObjectContext!
     
     init() {
         let persistentContainer = NSPersistentContainer(name: "PushPullLegs")

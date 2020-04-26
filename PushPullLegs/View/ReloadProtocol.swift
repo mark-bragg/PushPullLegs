@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol ReloadProtocol {
+protocol ReloadProtocol: NSObject {
     func reload()
 }

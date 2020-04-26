@@ -21,6 +21,19 @@ class ExerciseDataManager: DataManager {
         super.create(name: name, keyValuePairs: pairs)
     }
     
+    func insertSet(duration: Int, weight: Double, reps: Int, exercise: Exercise) {
+        backgroundContext.performAndWait {
+            if let set = NSEntityDescription.insertNewObject(forEntityName: ExerciseSetEntityName, into: backgroundContext) as? ExerciseSet,
+                let exerciseInContext = fetch(exercise) as? Exercise {
+                set.duration = Int16(duration)
+                set.weight = weight
+                set.reps = Int16(reps)
+                exerciseInContext.addToSets(set)
+                try? backgroundContext.save()
+            }
+        }
+    }
+    
     func addSet(_ exercise: Exercise) {
         backgroundContext.performAndWait {
             if let set = NSEntityDescription.insertNewObject(forEntityName: ExerciseSetEntityName, into: backgroundContext) as? ExerciseSet,

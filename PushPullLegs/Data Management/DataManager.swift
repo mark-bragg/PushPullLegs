@@ -53,7 +53,7 @@ class DataManager {
             }
             do {
                 try backgroundContext.save()
-                creation = object
+                creation = backgroundContext.registeredObject(for: object.objectID)
             } catch {
                 print(error)
             }

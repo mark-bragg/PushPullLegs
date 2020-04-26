@@ -13,7 +13,6 @@ let defaultCellIdentifier = "DefaultTableViewCell"
 class AppConfigurationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
-    private let viewModel = AppConfigurationViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +26,7 @@ class AppConfigurationViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.rowCount()
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -78,32 +77,6 @@ class AppConfigurationViewController: UIViewController, UITableViewDataSource, U
     @objc func toggleWorkoutTypePromptValue() {
         PPLDefaults.instance.toggleWorkoutTypePromptValue()
     }
-    
-}
-
-class AppConfigurationViewModel {
-    
-    let defaults = PPLDefaults.instance
-    
-    func rowCount() -> Int {
-        return 3
-    }
-    
-    // cell 1
-    func editWorkoutList() {
-        // edit workout
-    }
-    
-    // cell 2
-    func editExerciseList() {
-        // add exercise
-        // delete exercise
-        // edit exercise
-    }
-    
-    // cell 3
-    // switch
-    // "prompt for workout type when starting next workout"
     
 }
 

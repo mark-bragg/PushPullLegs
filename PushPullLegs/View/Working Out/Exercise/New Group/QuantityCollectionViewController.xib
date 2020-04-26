@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QuantityCollectionViewController" customModule="PushPullLegs" customModuleProvider="target">
+            <connections>
+                <outlet property="button" destination="n5t-pM-Rhr" id="LtV-7T-iCO"/>
+                <outlet property="label" destination="xpg-sK-wes" id="UGX-wI-y0p"/>
+                <outlet property="stackView" destination="J9I-pQ-jtB" id="QNX-Xk-hkb"/>
+                <outlet property="textField" destination="Sg3-FI-cWM" id="SBJ-G6-QNX"/>
+                <outlet property="view" destination="x7e-Ni-8Se" id="PEO-Ab-djY"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="x7e-Ni-8Se">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="J9I-pQ-jtB">
+                    <rect key="frame" x="0.0" y="44" width="414" height="308"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Weight" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpg-sK-wes" userLabel="Label">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="93.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sg3-FI-cWM">
+                            <rect key="frame" x="0.0" y="107.5" width="414" height="93"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <action selector="editingChanged:" destination="-1" eventType="editingChanged" id="RNq-Ae-Gcm"/>
+                            </connections>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n5t-pM-Rhr">
+                            <rect key="frame" x="0.0" y="214.5" width="414" height="93.5"/>
+                            <state key="normal" title="Button"/>
+                            <connections>
+                                <action selector="buttonTapped:" destination="-1" eventType="touchUpInside" id="oSy-jF-dQQ"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="308" identifier="height" id="VwY-Br-WR6"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="J9I-pQ-jtB" firstAttribute="leading" secondItem="vQW-z9-zNf" secondAttribute="leading" id="8mH-BK-vmn"/>
+                <constraint firstItem="vQW-z9-zNf" firstAttribute="trailing" secondItem="J9I-pQ-jtB" secondAttribute="trailing" id="AMs-fR-JBd"/>
+                <constraint firstItem="J9I-pQ-jtB" firstAttribute="top" secondItem="vQW-z9-zNf" secondAttribute="top" id="nEN-Fh-TDG"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vQW-z9-zNf"/>
+            <point key="canvasLocation" x="-443" y="93"/>
+        </view>
+    </objects>
+</document>

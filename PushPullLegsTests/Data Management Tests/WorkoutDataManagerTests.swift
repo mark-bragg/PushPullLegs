@@ -14,64 +14,37 @@ import CoreData
 
 class WorkoutDataManagerTests : XCTestCase {
     var sut: WorkoutDataManager!
-    var coreDataStack: CoreDataTestStack!
     static let workoutTestName = "test workout name"
     static let exerciseTestName = "test exercise name"
+    let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
     
     override func setUp() {
-        coreDataStack = CoreDataTestStack()
-        sut = WorkoutDataManager(backgroundContext: coreDataStack.backgroundContext)
-    }
-    
-    func fetchWorkouts() -> [Workout] {
-        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "Workout")
-        let workouts = try! self.coreDataStack.backgroundContext.fetch(request)
-        return workouts as! [Workout]
-    }
-    
-    func fetchExercises(workout: Workout) -> [Exercise] {
-        if let workoutInContext = try? coreDataStack.backgroundContext.existingObject(with: workout.objectID) as? Workout {
-            return (workoutInContext.exercises?.array as? [Exercise])!
-        }
-        XCTFail("workout missing")
-        return []
-    }
-    
-    func insertWorkout(name: String = workoutTestName) -> Workout {
-        let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.backgroundContext) as! Workout
-        workout.name = name
-        try? coreDataStack.backgroundContext.save()
-        return workout
-    }
-    
-    func insertExercise() -> Exercise {
-        let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: coreDataStack.backgroundContext) as! Exercise
-        try? coreDataStack.backgroundContext.save()
-        return exercise
+        self.dbHelper.coreDataStack = CoreDataTestStack()
+        sut = WorkoutDataManager(backgroundContext: self.dbHelper.coreDataStack.backgroundContext)
     }
     
     func setExpectation(description: String) {
         let performAndWaitExpectation = expectation(description: description)
-        coreDataStack.backgroundContext.expectation = performAndWaitExpectation
+        (self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation = performAndWaitExpectation
     }
     
     func add(_ exercise: Exercise, to workout: Workout) {
         workout.addToExercises(exercise)
-        try? coreDataStack.backgroundContext.save()
+        try? self.dbHelper.coreDataStack.backgroundContext.save()
     }
     
     func test_createWorkout_workoutCreated() {
         setExpectation(description: "background perform and wait")
         sut.create(name: WorkoutDataManagerTests.workoutTestName)
         waitForExpectations(timeout: 60) { (_) in
-            let workouts = self.fetchWorkouts()
+            let workouts = self.dbHelper.fetchWorkouts()
             guard let workout = workouts.first, let exercises = workout.exercises else {
                 XCTFail("workout missing/exercises missing")
                 return
             }
             XCTAssert(workouts.count == 1)
             XCTAssert(exercises.count == 0)
-            XCTAssert(self.coreDataStack.backgroundContext.saveWasCalled)
+            XCTAssert((self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).saveWasCalled)
             guard let name = workout.name else {
                 XCTFail()
                 return
@@ -82,39 +55,42 @@ class WorkoutDataManagerTests : XCTestCase {
     
     func test_deleteWorkout_workoutDeleted() {
         setExpectation(description: "background perform and wait")
-        let workout1 = insertWorkout()
-        let workout2 = insertWorkout()
-        let workout3 = insertWorkout()
+        let workout1 = dbHelper.createWorkout()
+        let workout2 = dbHelper.createWorkout()
+        let workout3 = dbHelper.createWorkout()
         
         sut.delete(workout2)
         
         waitForExpectations(timeout: 60) { (_) in
-            let backgroundContextWorkouts = self.fetchWorkouts()
+            let backgroundContextWorkouts = self.dbHelper.fetchWorkoutsBackground()
+            for wkt in backgroundContextWorkouts {
+                let _ = wkt.name
+            }
             XCTAssert(backgroundContextWorkouts.count == 2)
             XCTAssert(backgroundContextWorkouts.contains(workout1) && backgroundContextWorkouts.contains(workout3))
-            XCTAssert(self.coreDataStack.backgroundContext.saveWasCalled)
+            XCTAssert((self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).saveWasCalled)
         }
     }
     
     func test_deleteWorkout_switchingContexts_workoutDeleted() {
         setExpectation(description: "background perform and wait")
-        let workout1 = insertWorkout()
-        let workout2 = insertWorkout()
-        let workout3 = insertWorkout()
-        let mainContextWorkout = coreDataStack.mainContext.object(with: workout2.objectID)
+        let workout1 = dbHelper.createWorkout()
+        let workout2 = dbHelper.createWorkout()
+        let workout3 = dbHelper.createWorkout()
+        let mainContextWorkout = self.dbHelper.coreDataStack.mainContext.object(with: workout2.objectID)
         sut.delete(mainContextWorkout)
         
         waitForExpectations(timeout: 60) { (_) in
-            let backgroundContextWorkouts = self.fetchWorkouts()
+            let backgroundContextWorkouts = self.dbHelper.fetchWorkoutsBackground()
             XCTAssert(backgroundContextWorkouts.count == 2)
             XCTAssert(backgroundContextWorkouts.contains(workout1) && backgroundContextWorkouts.contains(workout3))
-            XCTAssert(self.coreDataStack.backgroundContext.saveWasCalled)
+            XCTAssert((self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).saveWasCalled)
         }
     }
     
     func test_addExercise_exerciseAdded() {
         setExpectation(description: "background perform and wait")
-        let exerciseOriginal = insertExercise()
+        let exerciseOriginal = dbHelper.createExercise()
         sut.create(name: WorkoutDataManagerTests.workoutTestName)
         waitForExpectations(timeout: 60)
         guard let workout = sut.creation as? Workout else {
@@ -124,19 +100,19 @@ class WorkoutDataManagerTests : XCTestCase {
         setExpectation(description: "add exercise perform and wait")
         sut.add(exerciseOriginal, to: workout)
         waitForExpectations(timeout: 60) { (_) in
-            guard let workout = self.fetchWorkouts().first else {
+            guard let workout = self.dbHelper.fetchWorkouts().first else {
                 XCTFail("workout not in context")
                 return
             }
             XCTAssert(workout.exercises?.count == 1)
             let exerciseToTest = workout.exercises?.firstObject as! Exercise
-            XCTAssert(exerciseToTest == exerciseOriginal)
+            XCTAssert(objectsAreEqual(exerciseToTest, exerciseOriginal))
         }
     }
     
     func test_addExercise_switchingContexts_exerciseAdded() {
         setExpectation(description: "background perform and wait")
-        let exerciseOriginal = insertExercise()
+        let exerciseOriginal = dbHelper.createExercise()
         sut.create(name: WorkoutDataManagerTests.workoutTestName)
         waitForExpectations(timeout: 60)
         guard let workout = sut.creation as? Workout else {
@@ -144,27 +120,27 @@ class WorkoutDataManagerTests : XCTestCase {
             return
         }
         setExpectation(description: "add exercise perform and wait")
-        let mainContextWorkout = coreDataStack.mainContext.object(with: workout.objectID) as! Workout
+        let mainContextWorkout = self.dbHelper.coreDataStack.mainContext.object(with: workout.objectID) as! Workout
         sut.add(exerciseOriginal, to: mainContextWorkout)
         waitForExpectations(timeout: 60) { (_) in
-            guard let workout = self.fetchWorkouts().first else {
+            guard let workout = self.dbHelper.fetchWorkouts().first else {
                 XCTFail("workout not in context")
                 return
             }
             XCTAssert(workout.exercises?.count == 1)
             let exerciseToTest = workout.exercises?.firstObject as! Exercise
-            XCTAssert(exerciseToTest == exerciseOriginal)
+            XCTAssert(objectsAreEqual(exerciseToTest, exerciseOriginal))
         }
     }
     
     func test_deleteExercise_exerciseDeleted() {
-        let exerciseOriginal = insertExercise()
-        let workoutOriginal = insertWorkout()
+        let exerciseOriginal = dbHelper.createExercise()
+        let workoutOriginal = dbHelper.createWorkout()
         add(exerciseOriginal, to: workoutOriginal)
         setExpectation(description: "add exercise perform and wait")
         sut.delete(exerciseOriginal)
         waitForExpectations(timeout: 60) { (_) in
-            guard let workout = self.fetchWorkouts().first else {
+            guard let workout = self.dbHelper.fetchWorkouts().first else {
                 XCTFail("workout not in context")
                 return
             }
@@ -182,10 +158,10 @@ class WorkoutDataManagerTests : XCTestCase {
         }
         for _ in 0...9 {
             setExpectation(description: "add exercise perform and wait")
-            sut.add(insertExercise(), to: workout)
+            sut.add(dbHelper.createExercise(), to: workout)
         }
         waitForExpectations(timeout: 60) { (_) in
-            guard let workout = self.fetchWorkouts().first else {
+            guard let workout = self.dbHelper.fetchWorkouts().first else {
                 XCTFail("workout not in context")
                 return
             }
@@ -194,9 +170,9 @@ class WorkoutDataManagerTests : XCTestCase {
     }
     
     func test_deleteMultipleExercises_multipleExercisesDeleted() {
-        let workout = insertWorkout()
+        let workout = dbHelper.createWorkout()
         for _ in 0...9 {
-            add(insertExercise(), to: workout)
+            add(dbHelper.createExercise(), to: workout)
         }
         guard let exercises = workout.exercises?.array as? [Exercise] else {
             XCTFail()
@@ -209,7 +185,7 @@ class WorkoutDataManagerTests : XCTestCase {
         }
         
         waitForExpectations(timeout: 60) { (_) in
-            guard let workout = self.fetchWorkouts().first else {
+            guard let workout = self.dbHelper.fetchWorkouts().first else {
                 XCTFail("workout not in context")
                 return
             }
@@ -218,9 +194,9 @@ class WorkoutDataManagerTests : XCTestCase {
     }
     
     func test_deleteSpecificExercises_specificExercisesDeleted() {
-        let workout = insertWorkout()
+        let workout = dbHelper.createWorkout()
         for _ in 0...9 {
-            add(insertExercise(), to: workout)
+            add(dbHelper.createExercise(), to: workout)
         }
         guard let exercises = workout.exercises?.array as? [Exercise] else {
             XCTFail()
@@ -234,7 +210,7 @@ class WorkoutDataManagerTests : XCTestCase {
         }
         
         waitForExpectations(timeout: 60) { (_) in
-            guard let workout = self.fetchWorkouts().first else {
+            guard let workout = self.dbHelper.fetchWorkouts().first else {
                 XCTFail("workout not in context")
                 return
             }
@@ -247,6 +223,56 @@ class WorkoutDataManagerTests : XCTestCase {
                 XCTAssert(!exercises.contains(deletedExercise))
             }
         }
+    }
+    
+    func testGetLastWorkoutType_noWorkoutsSaved_nilReturned() {
+        XCTAssert(sut.getLastWorkoutType() == .error)
+    }
+    
+    func testGetLastWorkoutType_onePushSaved_pushReturned() {
+        let workout = dbHelper.createWorkout(name: .push)
+        workout.dateCreated = Date()
+        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        XCTAssert(sut.getLastWorkoutType() == .push)
+    }
+    
+    func testGetLastWorkoutType_onePushOnePullSaved_pullReturned() {
+        for type in [ExerciseType.push, ExerciseType.pull] {
+            let workout = dbHelper.createWorkout(name: type)
+            workout.dateCreated = Date()
+        }
+        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        XCTAssert(sut.getLastWorkoutType() == .pull)
+    }
+    
+    func testGetLastWorkoutType_onePushOnePullOneLegsSaved_pullReturned() {
+        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs] {
+            let workout = dbHelper.createWorkout(name: type)
+            workout.dateCreated = Date()
+        }
+        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        XCTAssert(sut.getLastWorkoutType() == .legs)
+    }
+    
+    func testGetLastWorkoutType_PushPullLegsPushSaved_pushReturned() {
+        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs, ExerciseType.push] {
+            let workout = dbHelper.createWorkout(name: type)
+            workout.dateCreated = Date()
+        }
+        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        XCTAssert(sut.getLastWorkoutType() == .push)
+    }
+    
+    func testWorkouts_zeroWorkouts() {
+        XCTAssert(sut.workouts().count == 0)
+    }
+    
+    func testWorkouts_tenWorkouts_sameName() {
+        for _ in 0...9 {
+            sut.add(dbHelper.createExercise(), to: dbHelper.createWorkout())
+        }
+        let workouts = sut.workouts()
+        XCTAssert(workouts.count == 10)
     }
 
 }

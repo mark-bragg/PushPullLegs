@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         // MARK: NSInMemoryStoreType for testing purposes
         CoreDataManager.shared.setup(completion: nil)
+        CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
         return true
     }
 
