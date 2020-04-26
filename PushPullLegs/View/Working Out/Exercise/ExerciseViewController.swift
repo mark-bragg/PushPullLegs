@@ -45,8 +45,18 @@ class ExerciseViewController: UIViewController, ExerciseSetViewModelDelegate, Ex
     }
     
     @IBAction func done(_ sender: Any) {
-        viewModel.exerciseCompleted()
-        navigationController?.popViewController(animated: true)
+        presentExerciseCompletionConfirmation()
+    }
+    
+    func presentExerciseCompletionConfirmation() {
+        let alert = UIAlertController(title: "Exercise Completed?", message: "A completed exercise cannot be edited", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel.exerciseCompleted()
+            self.navigationController?.popViewController(animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Default action"), style: .cancel))
+        present(alert, animated: true, completion: nil)
     }
     
     func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel) {
