@@ -226,4 +226,17 @@ class ExerciseDataManagerTests: XCTestCase {
         }
     }
     
+    func testExercisesWithName_allExercisesReturned() {
+        for _ in 0...9 {
+            dbHelper.addExercise("anutha won")
+        }
+        let exercises = sut.exercises(withName: "anutha won")
+        XCTAssert(exercises.count == 10)
+        for _ in 0...7 {
+            dbHelper.addExercise("anutha win")
+        }
+        let exercises2 = sut.exercises(withName: "anutha win")
+        XCTAssert(exercises2.count == 8)
+    }
+    
 }

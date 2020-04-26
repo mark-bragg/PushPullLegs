@@ -31,11 +31,29 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="Y8O-mN-0k7" id="YgA-aS-utK"/>
+                        <segue destination="rdh-LA-mAK" kind="show" identifier="to the charts!" id="7Fz-V5-fBI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oVX-x4-JtD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-32" y="119"/>
+        </scene>
+        <!--Graph View Controller-->
+        <scene sceneID="bRt-FD-I3Q">
+            <objects>
+                <viewController id="rdh-LA-mAK" customClass="PPLGraphViewController" customModule="PushPullLegs" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KRK-SG-One">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="NCB-Iq-AdY"/>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" id="OAU-2e-J5v"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8na-SC-FaO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="999" y="119"/>
         </scene>
     </scenes>
 </document>

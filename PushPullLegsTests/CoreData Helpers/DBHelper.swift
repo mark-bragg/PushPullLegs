@@ -81,10 +81,10 @@ class DBHelper {
     }
     
     // MARK: Exercise
-    func addExercise(_ name: String, to workout: Workout) {
+    func addExercise(_ name: String, to workout: Workout? = nil) {
         let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: coreDataStack.backgroundContext) as! Exercise
         exercise.name = name
-        if let wkt = coreDataStack.backgroundContext.object(with: workout.objectID) as? Workout {
+        if let wk = workout, let wkt = coreDataStack.backgroundContext.object(with: wk.objectID) as? Workout {
             wkt.addToExercises(exercise)
         }
         try? coreDataStack.backgroundContext.save()

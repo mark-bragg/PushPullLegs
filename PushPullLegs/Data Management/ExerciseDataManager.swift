@@ -21,6 +21,19 @@ class ExerciseDataManager: DataManager {
         super.create(name: name, keyValuePairs: pairs)
     }
     
+    func exercises(withName name: String) -> [Exercise] {
+        let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        req.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
+        do {
+            if let exercises = try backgroundContext.fetch(req) as? [Exercise] {
+                return exercises
+            }
+        } catch {
+            
+        }
+        return []
+    }
+    
     func insertSet(duration: Int, weight: Double, reps: Int, exercise: Exercise) {
         backgroundContext.performAndWait {
             if let set = NSEntityDescription.insertNewObject(forEntityName: ExerciseSetEntityName, into: backgroundContext) as? ExerciseSet,

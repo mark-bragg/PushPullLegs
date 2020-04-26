@@ -27,6 +27,11 @@ class DBTableViewController: UIViewController, UITableViewDelegate, UITableViewD
         workouts = WorkoutDataManager().workouts().sorted(by: {$0.dateCreated! > $1.dateCreated!})
         tableView.reloadData()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        performSegue(withIdentifier: "to the charts!", sender: self)
+    }
 
     // MARK: - Table view data source
 
@@ -75,14 +80,15 @@ class DBTableViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "to the charts!" {
+            segue.destination.hidesBottomBarWhenPushed = true
+        }
     }
-    */
+    
 
 }
