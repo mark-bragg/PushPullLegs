@@ -61,6 +61,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
                 let vm = ExerciseViewModel(exercise: exercise)
                 vc.viewModel = vm
                 vm.reloader = vc
+                vc.readOnly = true
             }
         } else if segue.identifier == AddExerciseOnTheFlySegue, let vc = vc as? ExerciseTemplateSelectionViewController {
             vc.viewModel = exerciseSelectionViewModel

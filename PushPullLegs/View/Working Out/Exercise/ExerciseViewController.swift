@@ -22,12 +22,16 @@ class ExerciseViewController: UIViewController, ExerciseSetViewModelDelegate, Ex
     weak var repsCollector: RepsCollectionViewController!
     var exerciseSetViewModel: ExerciseSetViewModel?
     var viewModel: ExerciseViewModel!
+    var readOnly = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: ExerciseSetReuseIdentifier)
+        if readOnly {
+            navigationItem.rightBarButtonItem = nil
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,7 +49,11 @@ class ExerciseViewController: UIViewController, ExerciseSetViewModelDelegate, Ex
     }
     
     @IBAction func done(_ sender: Any) {
-        presentExerciseCompletionConfirmation()
+        if readOnly {
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            presentExerciseCompletionConfirmation()
+        }
     }
     
     func presentExerciseCompletionConfirmation() {
