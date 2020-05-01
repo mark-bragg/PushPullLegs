@@ -239,4 +239,23 @@ class ExerciseDataManagerTests: XCTestCase {
         XCTAssert(exercises2.count == 8)
     }
     
+    func testGetAllExercises() {
+        var names = [String]()
+        for i in 0...9 {
+            names.append("exercise \(i)")
+            dbHelper.addExercise(names.last!)
+        }
+        let exercises = sut.getAllExercises()
+        let exercisesTester = dbHelper.fetchExercises()
+        XCTAssert(exercises.count == 10)
+        for exercise in exercises {
+            XCTAssert(names.contains(where: { (str) -> Bool in
+                exercises.contains { (ex) -> Bool in
+                    ex.name! == str
+                }
+            }))
+            XCTAssert(exercisesTester.contains(where: { $0.objectID == exercise.objectID }))
+        }
+    }
+    
 }

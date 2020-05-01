@@ -38,9 +38,12 @@ class DBHelper {
         return workouts as! [Workout]
     }
     
-    func createWorkout(name: ExerciseType = .push) -> Workout {
+    func createWorkout(name: ExerciseType = .push, date: Date? = nil) -> Workout {
         let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.backgroundContext) as! Workout
         workout.name = name.rawValue
+        if let date = date {
+            workout.dateCreated = date
+        }
         try? coreDataStack.backgroundContext.save()
         return workout
     }
@@ -81,11 +84,20 @@ class DBHelper {
     }
     
     // MARK: Exercise
-    func addExercise(_ name: String, to workout: Workout? = nil) {
+    func addExercise(_ name: String, to workout: Workout? = nil, data: [(w: Double, r: Int, d: Int)]? = nil) {
         let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: coreDataStack.backgroundContext) as! Exercise
         exercise.name = name
         if let wk = workout, let wkt = coreDataStack.backgroundContext.object(with: wk.objectID) as? Workout {
             wkt.addToExercises(exercise)
+        }
+        if let data = data {
+            for setData in data {
+                let set = NSEntityDescription.insertNewObject(forEntityName: "ExerciseSet", into: coreDataStack.backgroundContext) as! ExerciseSet
+                set.duration = Int16(setData.d)
+                set.reps = Int16(setData.r)
+                set.weight = setData.w
+                exercise.addToSets(set)
+            }
         }
         try? coreDataStack.backgroundContext.save()
     }

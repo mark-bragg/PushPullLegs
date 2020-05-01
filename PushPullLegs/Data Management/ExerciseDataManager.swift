@@ -22,16 +22,7 @@ class ExerciseDataManager: DataManager {
     }
     
     func exercises(withName name: String) -> [Exercise] {
-        let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-        req.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
-        do {
-            if let exercises = try backgroundContext.fetch(req) as? [Exercise] {
-                return exercises
-            }
-        } catch {
-            
-        }
-        return []
+        performFetch(with: NSPredicate(format: "name == %@", argumentArray: [name]))
     }
     
     func insertSet(duration: Int, weight: Double, reps: Int, exercise: Exercise) {
@@ -76,5 +67,22 @@ class ExerciseDataManager: DataManager {
                 try? backgroundContext.save()
             }
         }
+    }
+    
+    func getAllExercises() -> [Exercise] {
+        return performFetch()
+    }
+    
+    private func performFetch(with predicate: NSPredicate? = nil) -> [Exercise] {
+        let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        req.predicate = predicate
+        do {
+            if let exercises = try backgroundContext.fetch(req) as? [Exercise] {
+                return exercises
+            }
+        } catch {
+            
+        }
+        return []
     }
 }

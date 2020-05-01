@@ -10,6 +10,8 @@
 		4901FBCF245612C40048D31E /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 498B619D245611E800432FB7 /* Charts.framework */; };
 		4901FBD0245612C40048D31E /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 498B619D245611E800432FB7 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4901FBD324562F5D0048D31E /* PPLGraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FBD224562F5D0048D31E /* PPLGraphViewController.swift */; };
+		4901FBD52457C91A0048D31E /* ExerciseGraphModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FBD42457C91A0048D31E /* ExerciseGraphModel.swift */; };
+		4901FBDA2457CA8F0048D31E /* ExerciseGraphModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FBD92457CA8F0048D31E /* ExerciseGraphModelTests.swift */; };
 		49028D24243D85AC005EC078 /* AppConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D23243D85AC005EC078 /* AppConfigurationViewController.swift */; };
 		49028D26243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D25243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift */; };
 		49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D2A243DA206005EC078 /* WorkoutTemplateEditViewModel.swift */; };
@@ -123,6 +125,8 @@
 
 /* Begin PBXFileReference section */
 		4901FBD224562F5D0048D31E /* PPLGraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLGraphViewController.swift; sourceTree = "<group>"; };
+		4901FBD42457C91A0048D31E /* ExerciseGraphModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGraphModel.swift; sourceTree = "<group>"; };
+		4901FBD92457CA8F0048D31E /* ExerciseGraphModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGraphModelTests.swift; sourceTree = "<group>"; };
 		49028D23243D85AC005EC078 /* AppConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurationViewController.swift; sourceTree = "<group>"; };
 		49028D25243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateEditViewController.swift; sourceTree = "<group>"; };
 		49028D2A243DA206005EC078 /* WorkoutTemplateEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateEditViewModel.swift; sourceTree = "<group>"; };
@@ -222,6 +226,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4901FBD82457C9570048D31E /* Data Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				4901FBD92457CA8F0048D31E /* ExerciseGraphModelTests.swift */,
+			);
+			path = "Data Presentation";
+			sourceTree = "<group>";
+		};
 		49028D22243D8587005EC078 /* App Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,6 +289,7 @@
 			children = (
 				49453377244FC8FA00FA1665 /* DBTableViewController.swift */,
 				4901FBD224562F5D0048D31E /* PPLGraphViewController.swift */,
+				4901FBD42457C91A0048D31E /* ExerciseGraphModel.swift */,
 			);
 			path = "Data Presentation";
 			sourceTree = "<group>";
@@ -474,6 +487,7 @@
 		49EF4B9123F838380071687D /* PushPullLegsTests */ = {
 			isa = PBXGroup;
 			children = (
+				4901FBD82457C9570048D31E /* Data Presentation */,
 				49568BA524422E2E00166F09 /* ViewModel Tests */,
 				49568BA224422C8100166F09 /* Data Management Tests */,
 				49EF4BBD23F8393D0071687D /* CoreData Helpers */,
@@ -718,6 +732,7 @@
 			files = (
 				4973C124244BCC26009460F2 /* WorkoutViewModel.swift in Sources */,
 				4929DB112454DB0C009DCC7F /* RepsCollectionViewController.swift in Sources */,
+				4901FBD52457C91A0048D31E /* ExerciseGraphModel.swift in Sources */,
 				49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */,
 				490AEAD22423AA5D005C1112 /* WorkoutTemplateListViewController.swift in Sources */,
 				4945337A244FCC1900FA1665 /* PPLTabBarControllerViewController.swift in Sources */,
@@ -772,6 +787,7 @@
 				49E3832D23FA0A0000F7A502 /* TemplateManagementTests.swift in Sources */,
 				49EF4BB923F8392B0071687D /* ExerciseDataManagerTests.swift in Sources */,
 				49EF4BBC23F839360071687D /* WorkoutDataManagerTests.swift in Sources */,
+				4901FBDA2457CA8F0048D31E /* ExerciseGraphModelTests.swift in Sources */,
 				49F8EF2724440EBD00B6BD45 /* WorkoutTemplateEditViewModelTests.swift in Sources */,
 				49453382245090F600FA1665 /* ExerciseViewModelTests.swift in Sources */,
 				49EF4BC023F8393D0071687D /* NSManagedObjectContextSpy.swift in Sources */,
