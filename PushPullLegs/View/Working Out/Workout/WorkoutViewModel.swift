@@ -128,19 +128,6 @@ class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDeleg
                     }
                 }
                 exercisesToDo = newTodos.sorted(by: exerciseTemplateSorter)
-//                exercisesToDo = exercisesDone.map { (exercise) -> ExerciseTemplate in
-//                    if let todo = exercisesToDo.first(where: { (exerciseTemplate) -> Bool in
-//                        exerciseTemplate.name == exercise.name
-//                    }) {
-//                        return todo
-//                    }
-//                    
-//                }
-//                exercisesToDo = exercisesToDo
-//                    .filter({ (exerciseTemplate) -> Bool in
-//                    exercisesDone
-//                        .contains { exerciseTemplate.name! != $0.name! } })
-//                    .sorted(by: exerciseTemplateSorter)
             }
         }
     }

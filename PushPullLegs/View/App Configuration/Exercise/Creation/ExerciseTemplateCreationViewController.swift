@@ -24,6 +24,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     var showExerciseType: Bool = false
     var viewModel: ExerciseTemplateCreationViewModel?
+    var delegate: ExerciseTemplateSelectionDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,13 +38,19 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         saveButton.isEnabled = false
         self.isModalInPresentation = true
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        textField.becomeFirstResponder()
+    }
 
     @IBAction func save(_ sender: Any) {
-        guard let text = textField.text else {
+        guard let text = textField.text?.trimmingCharacters(in: .whitespaces) else {
             return
         }
         viewModel?.saveExercise(withName: text, successCompletion: { [weak self] in
             guard let self = self else { return }
+            self.delegate?.exerciseTemplatesAdded()
             self.dismiss(animated: true, completion: nil)
         })
     }

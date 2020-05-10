@@ -36,6 +36,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
                 vc.showExerciseType = false
                 vc.viewModel = ExerciseTemplateCreationViewModel(withType: viewModel.getExerciseType(), management: TemplateManagement())
                 vc.viewModel?.reloader = self
+                vc.delegate = viewModel
                 vc.modalPresentationStyle = .pageSheet
                 present(vc, animated: true, completion: nil)
             }

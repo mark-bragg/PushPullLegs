@@ -16,22 +16,10 @@ class PPLTabBarControllerViewController: UITabBarController {
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let configVc = UIStoryboard(name: "DataPresentation", bundle: nil).instantiateInitialViewController() {
-            let nvc = UINavigationController(rootViewController: configVc)
-            viewControllers?.append(nvc)
+        if let dataVc = UIStoryboard(name: "DataPresentation", bundle: nil).instantiateInitialViewController() {
+            viewControllers?.append(dataVc)
         }
         if let workoutNavVC = UIStoryboard(name: "Workout", bundle: nil).instantiateInitialViewController() {
             viewControllers?.append(workoutNavVC)

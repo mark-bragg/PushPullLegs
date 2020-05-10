@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="OIS-n4-C3C">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0Zv-Oe-owo">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
@@ -31,7 +31,6 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="Y8O-mN-0k7" id="YgA-aS-utK"/>
-                        <segue destination="rdh-LA-mAK" kind="show" identifier="to the charts!" id="7Fz-V5-fBI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oVX-x4-JtD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -43,9 +42,31 @@
             <objects>
                 <viewController id="rdh-LA-mAK" customClass="PPLGraphViewController" customModule="PushPullLegs" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KRK-SG-One">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-Zq-u5T" customClass="UILabel">
+                                <rect key="frame" x="20" y="792" width="374" height="56"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="z2W-ag-RHp"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pzS-ko-YZe" customClass="LineChartView" customModule="Charts">
+                                <rect key="frame" x="20" y="44" width="374" height="720"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="2fK-Zq-u5T" firstAttribute="leading" secondItem="NCB-Iq-AdY" secondAttribute="leading" constant="20" id="ItT-T6-2dk"/>
+                            <constraint firstItem="NCB-Iq-AdY" firstAttribute="trailing" secondItem="2fK-Zq-u5T" secondAttribute="trailing" constant="20" id="L1B-Uj-Yt0"/>
+                            <constraint firstItem="NCB-Iq-AdY" firstAttribute="bottom" secondItem="2fK-Zq-u5T" secondAttribute="bottom" constant="14" id="bqP-qk-DzK"/>
+                            <constraint firstItem="2fK-Zq-u5T" firstAttribute="top" secondItem="pzS-ko-YZe" secondAttribute="bottom" constant="28" id="cOZ-VY-uVN"/>
+                            <constraint firstItem="pzS-ko-YZe" firstAttribute="top" secondItem="NCB-Iq-AdY" secondAttribute="top" id="fmP-ez-SNA"/>
+                            <constraint firstItem="pzS-ko-YZe" firstAttribute="leading" secondItem="NCB-Iq-AdY" secondAttribute="leading" constant="20" id="i3z-Rk-pEe"/>
+                            <constraint firstItem="NCB-Iq-AdY" firstAttribute="trailing" secondItem="pzS-ko-YZe" secondAttribute="trailing" constant="20" id="rEd-Zq-kl6"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="NCB-Iq-AdY"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -53,7 +74,15 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8na-SC-FaO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="999" y="119"/>
+            <point key="canvasLocation" x="863.768115942029" y="118.52678571428571"/>
+        </scene>
+        <!--Data Presentation Page View Controller-->
+        <scene sceneID="LfS-vG-dZ3">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="0Zv-Oe-owo" customClass="PPLDataPresentationPageViewController" customModule="PushPullLegs" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sNA-oc-FNQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1741" y="119"/>
         </scene>
     </scenes>
 </document>

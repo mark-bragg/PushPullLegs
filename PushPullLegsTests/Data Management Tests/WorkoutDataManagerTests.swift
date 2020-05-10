@@ -88,7 +88,7 @@ class WorkoutDataManagerTests : XCTestCase {
         }
     }
     
-    func test_addExercise_exerciseAdded() {
+    func test_addExercise_exerciseAdded_workoutRelationshipFulfilled() {
         setExpectation(description: "background perform and wait")
         let exerciseOriginal = dbHelper.createExercise()
         sut.create(name: WorkoutDataManagerTests.workoutTestName)
@@ -104,6 +104,11 @@ class WorkoutDataManagerTests : XCTestCase {
                 XCTFail("workout not in context")
                 return
             }
+            guard let exercise = self.dbHelper.fetchExercises().first else {
+                XCTFail()
+                return
+            }
+            XCTAssert(exercise.workout == workout)
             XCTAssert(workout.exercises?.count == 1)
             let exerciseToTest = workout.exercises?.firstObject as! Exercise
             XCTAssert(objectsAreEqual(exerciseToTest, exerciseOriginal))

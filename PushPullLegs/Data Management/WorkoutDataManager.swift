@@ -23,7 +23,11 @@ class WorkoutDataManager: DataManager {
         
         backgroundContext.performAndWait {
             workoutInContext.addToExercises(exerciseInContext)
-            try? backgroundContext.save()
+            do {
+                try backgroundContext.save()
+            } catch {
+                print(error)
+            }
         }
     }
     

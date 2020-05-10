@@ -86,6 +86,14 @@ class DBHelper {
     // MARK: Exercise
     func addExercise(_ name: String, to workout: Workout? = nil, data: [(w: Double, r: Int, d: Int)]? = nil) {
         let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: coreDataStack.backgroundContext) as! Exercise
+        if !(fetchExerciseTemplates()?.contains(where: { $0.name == name }) ?? false) {
+            if let wkt = workout, let workoutTemplate = fetchWorkoutTemplates().first(where: { $0.name! == wkt.name }) {
+                addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+            } else {
+                addExerciseTemplate(name: name)
+            }
+        }
+        
         exercise.name = name
         if let wk = workout, let wkt = coreDataStack.backgroundContext.object(with: wk.objectID) as? Workout {
             wkt.addToExercises(exercise)
@@ -135,19 +143,17 @@ class DBHelper {
     // MARK: ExerciseTemplate
     
     func addExerciseTemplate(_ name: String, to workout: WorkoutTemplate, addToWorkout: Bool = false) {
-//        coreDataStack.backgroundContext.performAndWait {
-            let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.mainContext) as! ExerciseTemplate
-            temp.name = name
-            temp.type = workout.name
-            if addToWorkout {
-                let wkt = coreDataStack.mainContext.object(with: workout.objectID) as! WorkoutTemplate
-                if wkt.exerciseNames == nil {
-                    wkt.exerciseNames = []
-                }
-                wkt.exerciseNames?.append(temp.name!)
+        let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.mainContext) as! ExerciseTemplate
+        temp.name = name
+        temp.type = workout.name
+        if addToWorkout {
+            let wkt = coreDataStack.mainContext.object(with: workout.objectID) as! WorkoutTemplate
+            if wkt.exerciseNames == nil {
+                wkt.exerciseNames = []
             }
+            wkt.exerciseNames?.append(temp.name!)
+        }
         try? coreDataStack.mainContext.save()
-//        }
     }
     
     func addExerciseTemplate(name: String = TempName, type: ExerciseType = .push) {

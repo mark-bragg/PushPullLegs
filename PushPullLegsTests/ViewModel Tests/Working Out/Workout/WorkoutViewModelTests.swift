@@ -212,6 +212,28 @@ class WorkoutViewModelTests: XCTestCase {
         XCTAssert(workout.name == ExerciseType.push.rawValue)
     }
     
+    func testCompleteExercises_FinishWorkout_exercisesWorkoutIsEqualToWorkout() {
+        dbHelper.addExerciseTemplate()
+        let template = dbHelper.fetchExerciseTemplates()!.first!
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
+        sleep(5)
+        dbHelper.addExercise(template.name!, to: dbHelper.fetchWorkouts().first!, data: [(2.5, 8, 13)])
+        sut.finishWorkout()
+        guard let workout = dbHelper.fetchWorkouts().first else {
+            XCTFail()
+            return
+        }
+        XCTAssert(Int(workout.dateCreated!.timeIntervalSinceNow) < 5)
+        XCTAssert(workout.duration == 5)
+        XCTAssert(workout.name == ExerciseType.push.rawValue)
+        let exercise = dbHelper.fetchExercises().first!
+        guard let workoutToTest = exercise.workout else {
+            XCTFail()
+            return
+        }
+        XCTAssert(workoutToTest == workout)
+    }
+    
     func testAddExercise_exerciseTemplateAdded() {
         dbHelper.insertWorkoutTemplate(type: .push)
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!

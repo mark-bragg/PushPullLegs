@@ -78,6 +78,11 @@ class ExerciseDataManager: DataManager {
         req.predicate = predicate
         do {
             if let exercises = try backgroundContext.fetch(req) as? [Exercise] {
+                for exercise in exercises {
+                    if exercise.workout == nil {
+                        backgroundContext.refresh(exercise, mergeChanges: true)
+                    }
+                }
                 return exercises
             }
         } catch {

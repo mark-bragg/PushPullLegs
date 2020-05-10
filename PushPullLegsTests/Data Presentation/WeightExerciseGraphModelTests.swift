@@ -9,13 +9,15 @@
 import XCTest
 @testable import PushPullLegs
 
-class ExerciseGraphModelTests: XCTestCase {
+class WeightExerciseGraphModelTests: XCTestCase {
 
-    var sut: ExerciseGraphModel!
-    let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
+    var sut: WeightExerciseGraphModel!
+    var dbHelper: DBHelper!
     
     override func setUp() {
-        sut = ExerciseGraphModel(withExerciseDataManager: ExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
+        let stack = CoreDataTestStack()
+        sut = WeightExerciseGraphModel(withCoreDataManager: stack)
+        dbHelper = DBHelper(coreDataStack: stack)
     }
 
     override func tearDown() {
@@ -33,6 +35,19 @@ class ExerciseGraphModelTests: XCTestCase {
         for name in namesToTest {
             XCTAssert(names.contains(name))
         }
+    }
+    
+    func testGetExerciseNames_multipleOfTheSameExerciseExist_oneExerciseNameReturned() {
+        let name = "exercise"
+        for _ in 0...9 {
+            dbHelper.addExercise(name, to: nil)
+        }
+        let namesToTest = sut.getExerciseNames()
+        guard namesToTest.count == 1 else {
+            XCTFail()
+            return
+        }
+        XCTAssert(name == namesToTest[0])
     }
     
     func testSelectExerciseWithName_getDates_oneExercise_singleCorrectDateReturned() {
@@ -64,7 +79,7 @@ class ExerciseGraphModelTests: XCTestCase {
     
     func testSelectExerciseWithName_getName_correctNameReturned() {
         var names = [String]()
-        let push = dbHelper.createWorkout(name: .push)
+        let push = dbHelper.createWorkout(name: .push, date: Date())
         for i in 0...9 {
             names.append("exercise \(i)")
             dbHelper.addExercise(names.last!, to: push)
@@ -94,7 +109,6 @@ class ExerciseGraphModelTests: XCTestCase {
         for dataIndex in 0..<dataToTest.count {
             XCTAssert(dataToTest[dataIndex] == exerciseData[dataIndex])
         }
-//        XCTAssert(dates == datesToTest)
     }
 
 

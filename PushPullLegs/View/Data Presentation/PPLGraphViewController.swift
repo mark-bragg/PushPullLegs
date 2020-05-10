@@ -9,36 +9,116 @@
 import UIKit
 import Charts
 
-class PPLGraphViewController: UIViewController {
+class PPLGraphViewController: UIViewController, DropdownTableViewControllerDelegate, ExerciseGraphModelDelegate {
 
-    weak var barChartView: BarChartView!
+    @IBOutlet weak var lineChartView: LineChartView!
+    var model: ExerciseGraphModel
+    @IBOutlet weak var dropdown: UILabel!
+    
+    init(withGraphModel: ExerciseGraphModel) {
+        model = WeightExerciseGraphModel()
+        super.init(nibName: nil, bundle: nil)
+        model.delegate = self
+    }
+    
+    required init?(coder: NSCoder) {
+        model = WeightExerciseGraphModel()
+        super.init(coder: coder)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let bc = BarChartView(frame: view.frame)
-        view.addSubview(bc)
-        barChartView = bc
-        barChartView.noDataText = "AAAAAAARRRRRGGGGGHHHHHHHHHH!"
-        setupGraph()
+        lineChartView.noDataText = "Select Exercise"
+        lineChartView.xAxis.valueFormatter = model
+        setupDropdown()
     }
     
-    func setupGraph() {
-        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        var dataEntries: [BarChartDataEntry] = []
-        let exercises = ExerciseDataManager().exercises(withName: "pulleys")
-        for i in 0..<exercises.count {
-            let volume = calculateVolume(exercises[i])
-            let dataEntry = BarChartDataEntry(x: Double(i), y: Double(volume))
+    func setupDropdown() {
+        dropdown.text = "Select Exercise"
+        dropdown.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showDropdown(_:))))
+        dropdown.isUserInteractionEnabled = true
+    }
+    
+    @objc func showDropdown(_ sender: Any?) {
+        let dropdownVC = DropdownTableViewController()
+        dropdownVC.delegate = self
+        dropdownVC.modalPresentationStyle = .popover
+        dropdownVC.preferredContentSize = CGSize(width: lineChartView.frame.width - 40, height: lineChartView.frame.height - 40)
+        dropdownVC.popoverPresentationController?.sourceView = dropdown
+        dropdownVC.popoverPresentationController?.sourceRect = dropdown.frame
+        dropdownVC.cellTitles = model.getExerciseNames()
+        present(dropdownVC, animated: true, completion: nil)
+    }
+    
+    func exerciseGraphModel(_ graphModel: ExerciseGraphModel, dataPoints: [String], values: [Double]) {
+        setChart(dataPoints: dataPoints, values: values)
+    }
+    
+    func setChart(dataPoints: [String], values: [Double]) {
+        var dataEntries: [ChartDataEntry] = []
+        
+        for i in 0..<dataPoints.count {
+            let dataEntry = ChartDataEntry(x: Double(i), y: values[i], data: dataPoints[i])
             dataEntries.append(dataEntry)
         }
-                
-        let chartDataSet = [BarChartDataSet(entries: dataEntries, label: "pulleys performed")]
-        let chartData = BarChartData(dataSets: chartDataSet)
-        barChartView.data = chartData
+        
+        let lineChartDataSet = LineChartDataSet(entries: dataEntries, label: "Maximum Weight")
+        let lineChartData = LineChartData(dataSet: lineChartDataSet)
+        lineChartView.data = lineChartData
+//        lineChartView.setLabel
+        lineChartView.maxVisibleCount = values.count
     }
     
-    func calculateVolume(_ exercise: Exercise) -> Int {
-        return Int.random(in: 5...100)
+    func dropdownController(_ dropdownController: DropdownTableViewController, didSelectName name: String) {
+        dropdown.text = name
+        dismiss(animated: true, completion: { self.model.select(name: name) })
     }
 
+}
+
+protocol DropdownTableViewControllerDelegate: NSObject {
+    func dropdownController(_ dropdownController: DropdownTableViewController, didSelectName name: String)
+}
+
+class DropdownTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    weak var tableView: UITableView!
+    weak var delegate: DropdownTableViewControllerDelegate?
+    private var rowCount: Int!
+    var cellTitles = [String]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        rowCount = cellTitles.count
+        let tblv = UITableView()
+        view.insertSubview(tblv, at: 0)
+        tblv.layer.cornerRadius = 10.0
+        tableView = tblv
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = 44
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.frame = view.frame
+    }
+    
+    func height() -> CGFloat {
+        return view.frame.height
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return rowCount
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = cellTitles[indexPath.row]
+        cell.textLabel?.textAlignment = .center
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.dropdownController(self, didSelectName: cellTitles[indexPath.row])
+    }
 }
