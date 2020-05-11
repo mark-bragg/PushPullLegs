@@ -12,11 +12,11 @@ struct FinishedSetCellData {
     var duration: Int
     var weight: Double
     var reps: Int
-    var volume: Int
+    var volume: Double
     
     init(withExerciseSet exerciseSet: ExerciseSet) {
-        duration = exerciseSet.duration.intValue()
-        reps = exerciseSet.reps.intValue()
+        duration = Int(exerciseSet.duration)
+        reps = Int(exerciseSet.reps)
         weight = exerciseSet.weight
         volume = exerciseSet.volume()
     }
@@ -79,7 +79,21 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
 }
 
 extension ExerciseSet {
-    func volume() -> Int {
-        return (Int(weight) * reps.intValue() * duration.intValue()) / 60
+    func volume() -> Double {
+        return ((weight * Double(reps) * Double(duration)) / 60.0).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
+    }
+}
+
+extension Double {
+//    func rounded(toPlaces places:Int) -> Double {
+//        let divisor = pow(10.0, Double(places))
+//        let val = self * divisor
+//        let toReturn = val.rounded()
+//        let toReturn2: Int = Int(toReturn) / Int(divisor)
+//        return Double(toReturn2)
+//    }
+    
+    func truncateDigitsAfterDecimal(afterDecimalDigits: Int) -> Double {
+       return Double(String(format: "%.\(afterDecimalDigits)f", self))!
     }
 }

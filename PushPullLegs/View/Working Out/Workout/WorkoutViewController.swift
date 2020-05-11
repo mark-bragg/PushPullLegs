@@ -88,8 +88,8 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeuCell(section: indexPath.section)
-        cell.detailTextLabel?.text = viewModel.detailText(indexPath: indexPath)
         if indexPath.section == 1 {
+            cell.detailTextLabel?.text = "Total volume: \(viewModel.detailText(indexPath: indexPath)!)"
             let color: UIColor = viewModel.exerciseVolumeComparison(row: indexPath.row) == .increase ? .green : .red
             cell.imageView?.image = color.getImage(size: CGSize(width: 20, height: 20))
         }

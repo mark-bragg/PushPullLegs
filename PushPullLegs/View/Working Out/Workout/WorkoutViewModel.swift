@@ -150,12 +150,12 @@ class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDeleg
         return "\(volumeFor(exercise: exercisesDone[indexPath.row]))"
     }
     
-    private func volumeFor(exercise: Exercise) -> Int {
+    private func volumeFor(exercise: Exercise) -> Double {
         guard let sets = exercise.sets?.array as? [ExerciseSet] else { return 0 }
         
-        var volume = 0
+        var volume = 0.0
         for set in sets {
-            volume += (set.duration.intValue() * Int(set.weight) * set.reps.intValue()) / 60
+            volume += (Double(set.duration) * set.weight * Double(set.reps)) / 60.0
         }
         return volume
     }
@@ -171,21 +171,15 @@ class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDeleg
     }
 }
 
-extension FixedWidthInteger {
-    func intValue() -> Int {
-        return Int(self)
-    }
-}
-
 extension Exercise: Comparable {
     public static func < (lhs: Exercise, rhs: Exercise) -> Bool {
         return lhs.volume() < rhs.volume()
     }
     
-    func volume() -> Int {
+    func volume() -> Double {
         guard let sets = sets?.array as? [ExerciseSet] else { return 0 }
         
-        var volume = 0
+        var volume = 0.0
         for set in sets {
             volume += set.volume()
         }
