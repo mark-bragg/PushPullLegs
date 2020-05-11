@@ -28,7 +28,7 @@ class ExerciseViewController: UIViewController, ExerciseSetViewModelDelegate, Ex
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: ExerciseSetReuseIdentifier)
+        tableView.rowHeight = 75
         if readOnly {
             navigationItem.rightBarButtonItem = nil
         }
@@ -131,13 +131,39 @@ extension ExerciseViewController: UITableViewDelegate, UITableViewDataSource {
         return viewModel.rowCount()
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: ExerciseSetReuseIdentifier)
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: ExerciseSetReuseIdentifier)
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect(origin: .zero, size: CGSize(width: tableView.frame.width, height: 60)))
+        for i in 0...2 {
+            let label = UILabel(frame: CGRect(x: CGFloat(i) * tableView.frame.width/3.0, y: 0, width: tableView.frame.width / 3.0, height: 40))
+            label.text = headerLabelText(i)
+            view.addSubview(label)
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
         }
-        var data = viewModel.dataForRow(indexPath.row)
-        cell?.textLabel?.text = "\(data.reps) \(data.weight) \(data.duration) \(data.volume)"
-        return cell!
+        return view
     }
+    
+    private func headerLabelText(_ index: Int) -> String {
+        if index == 0 {
+            return "Weight"
+        } else if index == 1 {
+            return "Reps"
+        }
+        return "Time"
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ExerciseSetReuseIdentifier) as! ExerciseSetTableViewCell
+        let data = viewModel.dataForRow(indexPath.row)
+        cell.weightLabel.text = "\(data.weight)"
+        cell.repsLabel.text = "\(data.reps)"
+        cell.timeLabel.text = "\(data.duration)"
+        return cell
+    }
+}
+
+class ExerciseSetTableViewCell: UITableViewCell {
+    @IBOutlet weak var weightLabel: UILabel!
+    @IBOutlet weak var repsLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
 }

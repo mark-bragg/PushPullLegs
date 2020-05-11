@@ -38,9 +38,10 @@ class DBHelper {
         return workouts as! [Workout]
     }
     
-    func createWorkout(name: ExerciseType = .push) -> Workout {
+    func createWorkout(name: ExerciseType = .push, date: Date? = nil) -> Workout {
         let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.backgroundContext) as! Workout
         workout.name = name.rawValue
+        workout.dateCreated = date
         try? coreDataStack.backgroundContext.save()
         return workout
     }
@@ -105,9 +106,18 @@ class DBHelper {
         return []
     }
     
-    func createExercise(_ name: String? = nil) -> Exercise {
+    func createExercise(_ name: String? = nil, sets: [(d: Int, r: Int, w: Double)]? = nil) -> Exercise {
         let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: coreDataStack.backgroundContext) as! Exercise
         exercise.name = name
+        if let sets = sets {
+            for set in sets {
+                let exerciseSet = NSEntityDescription.insertNewObject(forEntityName: "ExerciseSet", into: coreDataStack.backgroundContext) as! ExerciseSet
+                exerciseSet.duration = Int16(set.d)
+                exerciseSet.reps = Int16(set.r)
+                exerciseSet.weight = set.w
+                exercise.addToSets(exerciseSet)
+            }
+        }
         try? coreDataStack.backgroundContext.save()
         return exercise
     }
@@ -123,19 +133,17 @@ class DBHelper {
     // MARK: ExerciseTemplate
     
     func addExerciseTemplate(_ name: String, to workout: WorkoutTemplate, addToWorkout: Bool = false) {
-//        coreDataStack.backgroundContext.performAndWait {
-            let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.mainContext) as! ExerciseTemplate
-            temp.name = name
-            temp.type = workout.name
-            if addToWorkout {
-                let wkt = coreDataStack.mainContext.object(with: workout.objectID) as! WorkoutTemplate
-                if wkt.exerciseNames == nil {
-                    wkt.exerciseNames = []
-                }
-                wkt.exerciseNames?.append(temp.name!)
+        let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.mainContext) as! ExerciseTemplate
+        temp.name = name
+        temp.type = workout.name
+        if addToWorkout {
+            let wkt = coreDataStack.mainContext.object(with: workout.objectID) as! WorkoutTemplate
+            if wkt.exerciseNames == nil {
+                wkt.exerciseNames = []
             }
-        try? coreDataStack.mainContext.save()
-//        }
+            wkt.exerciseNames?.append(temp.name!)
+        }
+    try? coreDataStack.mainContext.save()
     }
     
     func addExerciseTemplate(name: String = TempName, type: ExerciseType = .push) {

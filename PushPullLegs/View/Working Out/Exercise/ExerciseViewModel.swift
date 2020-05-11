@@ -12,9 +12,14 @@ struct FinishedSetCellData {
     var duration: Int
     var weight: Double
     var reps: Int
-    lazy var volume: Double = {
-        return (Double(duration) * weight * Double(reps)) / 60.0
-    }()
+    var volume: Double
+    
+    init(withExerciseSet exerciseSet: ExerciseSet) {
+        duration = Int(exerciseSet.duration)
+        reps = Int(exerciseSet.reps)
+        weight = exerciseSet.weight
+        volume = exerciseSet.volume()
+    }
 }
 
 protocol ExerciseViewModelDelegate: NSObject {
@@ -49,9 +54,10 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
     }
     
     func collectSet(duration: Int, weight: Double, reps: Int) {
-        exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: exercise)
-        finishedCellData.append(FinishedSetCellData(duration: duration, weight: weight, reps: reps))
-        reloader?.reload()
+        exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: exercise) { exerciseSet in
+            finishedCellData.append(FinishedSetCellData(withExerciseSet: exerciseSet))
+            reloader?.reload()
+        }
     }
     
     func dataForRow(_ row: Int) -> FinishedSetCellData {
@@ -66,9 +72,28 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
     private func collectFinishedCellData() {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
         for set in sets {
-            let (d, w, r) = (Int(set.duration), weight: set.weight, reps: Int(set.reps))
-            finishedCellData.append(FinishedSetCellData(duration: d, weight: w, reps: r))
+            finishedCellData.append(FinishedSetCellData(withExerciseSet: set))
         }
     }
     
+}
+
+extension ExerciseSet {
+    func volume() -> Double {
+        return ((weight * Double(reps) * Double(duration)) / 60.0).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
+    }
+}
+
+extension Double {
+//    func rounded(toPlaces places:Int) -> Double {
+//        let divisor = pow(10.0, Double(places))
+//        let val = self * divisor
+//        let toReturn = val.rounded()
+//        let toReturn2: Int = Int(toReturn) / Int(divisor)
+//        return Double(toReturn2)
+//    }
+    
+    func truncateDigitsAfterDecimal(afterDecimalDigits: Int) -> Double {
+       return Double(String(format: "%.\(afterDecimalDigits)f", self))!
+    }
 }

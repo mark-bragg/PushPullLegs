@@ -68,7 +68,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         }
         sut.collectSet(duration: 35, weight: 135, reps: 12)
         XCTAssert(sut.rowCount() == 1)
-        var dataForRow = sut.dataForRow(0)
+        let dataForRow = sut.dataForRow(0)
         XCTAssert(dataForRow.duration == 35)
         XCTAssert(dataForRow.weight == 135)
         XCTAssert(dataForRow.reps == 12)
@@ -82,15 +82,16 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         }
         for i in 0...9 {
             let d = Int.random(in: 10...100)
-            let w = Double.random(in: 20...500)
+            let w = Double.random(in: 20...500).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
             let r = Int.random(in: 12...20)
             sut.collectSet(duration: d, weight: w, reps: r)
             XCTAssert(sut.rowCount() == i + 1)
-            var dataForRow = sut.dataForRow(i)
+            let dataForRow = sut.dataForRow(i)
             XCTAssert(dataForRow.duration == d)
             XCTAssert(dataForRow.weight == w)
             XCTAssert(dataForRow.reps == r)
-            XCTAssert(dataForRow.volume == Double(Double(d) * w * Double(r)) / 60.0)
+            let volume = ((Double(d) * w * Double(r)) / 60.0).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
+            XCTAssert(dataForRow.volume == volume, "\nexpected: \(volume)\nactual: \(dataForRow.volume)")
         }
     }
     

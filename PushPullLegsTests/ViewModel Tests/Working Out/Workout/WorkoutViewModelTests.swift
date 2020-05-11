@@ -412,7 +412,99 @@ class WorkoutViewModelTests: XCTestCase {
         XCTAssert(sut.titleForIndexPath(IndexPath(row: 0, section: 1)) == name1, "\nexpected: \(name1)\nactual: \(sut.titleForIndexPath(IndexPath(row: 0, section: 0)))")
         XCTAssert(sut.titleForIndexPath(IndexPath(row: 1, section: 1)) == name2, "\nexpected: \(name2)\nactual: \(sut.titleForIndexPath(IndexPath(row: 0, section: 1)))")
     }
-
+    
+    func testDetailTextForIndexPath_correctVolumeReturnedForCompletedExercise() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        let name = "exercise"
+        dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set = (10, 1, 60.0)
+        let exercise = dbHelper.createExercise(name, sets: [set, set, set])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
+        guard let volume = sut.detailText(indexPath: IndexPath(row: 0, section: 1)) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(volume == "\(10.0*60.0*3.0/60.0)")
+    }
+    
+    func testDetailTextForIndexPath_incorrectSection_nilReturned() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        let name = "exercise"
+        dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set = (10, 1, 60.0)
+        let exercise = dbHelper.createExercise(name, sets: [set, set, set])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
+        XCTAssert(sut.detailText(indexPath: IndexPath(row: 0, section: 0)) == nil)
+    }
+    
+    func testExerciseVolumeComparison_equalVolumes_noChangeReturned() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        let name = "exercise"
+        dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set1 = (10, 1, 60.0)
+        let exercise1 = dbHelper.createExercise(name, sets: [set1])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set2 = (10, 1, 60.0)
+        let exercise2 = dbHelper.createExercise(name, sets: [set2])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
+        let progression = sut.exerciseVolumeComparison(row: 0)
+        XCTAssert(progression == .noChange)
+    }
+    
+    func testExerciseVolumeComparison_increaseInVolume_positiveReturned() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        let name = "exercise"
+        dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set1 = (10, 1, 60.0)
+        let exercise1 = dbHelper.createExercise(name, sets: [set1])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set2 = (10, 2, 60.0)
+        let exercise2 = dbHelper.createExercise(name, sets: [set2])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
+        let progression = sut.exerciseVolumeComparison(row: 0)
+        XCTAssert(progression == .increase)
+    }
+    
+    func testExerciseVolumeComparison_decreaseInVolume_negativeReturned() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        let name = "exercise"
+        dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set1 = (10, 2, 60.0)
+        let exercise1 = dbHelper.createExercise(name, sets: [set1])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set2 = (10, 1, 60.0)
+        let exercise2 = dbHelper.createExercise(name, sets: [set2])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
+        let progression = sut.exerciseVolumeComparison(row: 0)
+        XCTAssert(progression == .decrease)
+    }
+    
+    func testExerciseVolumeComparison_noPreviousWorkouts_positiveReturned() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        let name = "exercise"
+        dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set1 = (10, 2, 60.0)
+        let exercise1 = dbHelper.createExercise(name, sets: [set1])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        let progression = sut.exerciseVolumeComparison(row: 0)
+        XCTAssert(progression == .increase)
+    }
+    
 }
 
 func assertEqual(_ v1: Int, _ v2: Int) {

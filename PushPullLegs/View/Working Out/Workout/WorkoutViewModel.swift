@@ -9,6 +9,12 @@
 import Foundation
 import CoreData
 
+enum ExerciseVolumeComparison {
+    case increase
+    case decrease
+    case noChange
+}
+
 class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDelegate, ExerciseViewModelDelegate {
     
     private var exerciseType: ExerciseType!
@@ -128,19 +134,6 @@ class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDeleg
                     }
                 }
                 exercisesToDo = newTodos.sorted(by: exerciseTemplateSorter)
-//                exercisesToDo = exercisesDone.map { (exercise) -> ExerciseTemplate in
-//                    if let todo = exercisesToDo.first(where: { (exerciseTemplate) -> Bool in
-//                        exerciseTemplate.name == exercise.name
-//                    }) {
-//                        return todo
-//                    }
-//                    
-//                }
-//                exercisesToDo = exercisesToDo
-//                    .filter({ (exerciseTemplate) -> Bool in
-//                    exercisesDone
-//                        .contains { exerciseTemplate.name! != $0.name! } })
-//                    .sorted(by: exerciseTemplateSorter)
             }
         }
     }
@@ -150,4 +143,47 @@ class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDeleg
         workoutManager.add(exercise, to: workout)
         reload()
     }
+    
+    func detailText(indexPath: IndexPath) -> String? {
+        guard indexPath.section == 1 else { return nil }
+        
+        return "\(volumeFor(exercise: exercisesDone[indexPath.row]))"
+    }
+    
+    private func volumeFor(exercise: Exercise) -> Double {
+        guard let sets = exercise.sets?.array as? [ExerciseSet] else { return 0 }
+        
+        var volume = 0.0
+        for set in sets {
+            volume += (Double(set.duration) * set.weight * Double(set.reps)) / 60.0
+        }
+        return volume
+    }
+    
+    func exerciseVolumeComparison(row: Int) -> ExerciseVolumeComparison {
+        guard let previousWorkout = workoutManager.previousWorkout(),
+            let exerciseToCompare = previousWorkout.exercises?.first(where: { ($0 as! Exercise).name == exercisesDone[row].name}) as? Exercise
+            else { return .increase }
+        if exerciseToCompare.volume() == exercisesDone[row].volume() {
+            return .noChange
+        }
+        return exerciseToCompare < exercisesDone[row] ? .increase : .decrease
+    }
+}
+
+extension Exercise: Comparable {
+    public static func < (lhs: Exercise, rhs: Exercise) -> Bool {
+        return lhs.volume() < rhs.volume()
+    }
+    
+    func volume() -> Double {
+        guard let sets = sets?.array as? [ExerciseSet] else { return 0 }
+        
+        var volume = 0.0
+        for set in sets {
+            volume += set.volume()
+        }
+        return volume
+    }
+    
 }

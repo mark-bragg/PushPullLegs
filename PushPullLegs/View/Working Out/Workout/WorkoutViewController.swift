@@ -8,6 +8,9 @@
 
 import UIKit
 
+let ExerciseToDoCellReuseIdentifier = "ExerciseToDoCellReuseIdentifier"
+let ExerciseDoneCellReuseIdentifier = "ExerciseDoneCellReuseIdentifier"
+
 class WorkoutViewController: UIViewController, ReloadProtocol {
 
     @IBOutlet weak var tableView: UITableView!
@@ -16,7 +19,6 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
         navigationItem.title = viewModel.getExerciseType().rawValue
@@ -85,13 +87,18 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: exerciseCellReuseIdentifier)
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: exerciseCellReuseIdentifier)
+        let cell = dequeuCell(section: indexPath.section)
+        if indexPath.section == 1 {
+            cell.detailTextLabel?.text = "Total volume: \(viewModel.detailText(indexPath: indexPath)!)"
+            let color: UIColor = viewModel.exerciseVolumeComparison(row: indexPath.row) == .increase ? .green : .red
+            cell.imageView?.image = color.getImage(size: CGSize(width: 20, height: 20))
         }
-        cell?.textLabel?.text = viewModel.titleForIndexPath(indexPath)
-        cell?.accessoryType =  indexPath.section == 0 ? .disclosureIndicator : .checkmark
-        return cell!
+        cell.textLabel?.text = viewModel.titleForIndexPath(indexPath)
+        return cell
+    }
+    
+    func dequeuCell(section: Int) -> UITableViewCell {
+        return tableView.dequeueReusableCell(withIdentifier: section == 0 ? ExerciseToDoCellReuseIdentifier : ExerciseDoneCellReuseIdentifier)!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -106,3 +113,12 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
         return "done"
     }
 }
+
+extension UIColor {
+func getImage(size: CGSize) -> UIImage {
+    let renderer = UIGraphicsImageRenderer(size: size)
+    return renderer.image(actions: { rendererContext in
+        self.setFill()
+        rendererContext.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+    })
+}}
