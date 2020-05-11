@@ -35,13 +35,30 @@ class WorkoutDataManager: DataManager {
         return type
     }
     
-    func fetchLatestWorkout() -> Workout? {
+    private func fetchLatestWorkout() -> Workout? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
         request.fetchLimit = 1
         do {
             let latestWorkouts = try backgroundContext.fetch(request) as? [Workout]
             if let workout = latestWorkouts?.first {
+                return workout
+            }
+        } catch {
+            
+        }
+        return nil
+    }
+    
+    func previousWorkout() -> Workout? {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        request.fetchLimit = 2
+        do {
+            let latestWorkouts = try backgroundContext.fetch(request) as? [Workout]
+            guard let workouts = latestWorkouts, workouts.count == 2 else { return nil }
+            
+            if let workout = latestWorkouts?.last {
                 return workout
             }
         } catch {

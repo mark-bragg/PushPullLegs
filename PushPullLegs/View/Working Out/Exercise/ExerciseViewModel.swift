@@ -12,9 +12,14 @@ struct FinishedSetCellData {
     var duration: Int
     var weight: Double
     var reps: Int
-    lazy var volume: Double = {
-        return (Double(duration) * weight * Double(reps)) / 60.0
-    }()
+    var volume: Int
+    
+    init(withExerciseSet exerciseSet: ExerciseSet) {
+        duration = exerciseSet.duration.intValue()
+        reps = exerciseSet.reps.intValue()
+        weight = exerciseSet.weight
+        volume = exerciseSet.volume()
+    }
 }
 
 protocol ExerciseViewModelDelegate: NSObject {
@@ -49,9 +54,10 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
     }
     
     func collectSet(duration: Int, weight: Double, reps: Int) {
-        exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: exercise)
-        finishedCellData.append(FinishedSetCellData(duration: duration, weight: weight, reps: reps))
-        reloader?.reload()
+        exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: exercise) { exerciseSet in
+            finishedCellData.append(FinishedSetCellData(withExerciseSet: exerciseSet))
+            reloader?.reload()
+        }
     }
     
     func dataForRow(_ row: Int) -> FinishedSetCellData {
@@ -66,9 +72,14 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
     private func collectFinishedCellData() {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
         for set in sets {
-            let (d, w, r) = (Int(set.duration), weight: set.weight, reps: Int(set.reps))
-            finishedCellData.append(FinishedSetCellData(duration: d, weight: w, reps: r))
+            finishedCellData.append(FinishedSetCellData(withExerciseSet: set))
         }
     }
     
+}
+
+extension ExerciseSet {
+    func volume() -> Int {
+        return (Int(weight) * reps.intValue() * duration.intValue()) / 60
+    }
 }

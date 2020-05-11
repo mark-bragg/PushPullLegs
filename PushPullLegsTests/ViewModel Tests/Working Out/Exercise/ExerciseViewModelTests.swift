@@ -86,11 +86,11 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
             let r = Int.random(in: 12...20)
             sut.collectSet(duration: d, weight: w, reps: r)
             XCTAssert(sut.rowCount() == i + 1)
-            var dataForRow = sut.dataForRow(i)
+            let dataForRow = sut.dataForRow(i)
             XCTAssert(dataForRow.duration == d)
             XCTAssert(dataForRow.weight == w)
             XCTAssert(dataForRow.reps == r)
-            XCTAssert(dataForRow.volume == Double(Double(d) * w * Double(r)) / 60.0)
+            XCTAssert(dataForRow.volume == (d * Int(w) * r) / 60)
         }
     }
     

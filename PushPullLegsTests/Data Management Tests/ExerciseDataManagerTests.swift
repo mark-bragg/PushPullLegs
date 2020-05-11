@@ -214,7 +214,9 @@ class ExerciseDataManagerTests: XCTestCase {
     func test_addCompletedSet_setAdded_durationWeightRepsSet() {
         setExpectation(description: "add completed set")
         let exercise = dbHelper.createExercise()
-        sut.insertSet(duration: 25, weight: 135, reps: 12, exercise: exercise)
+        sut.insertSet(duration: 25, weight: 135, reps: 12, exercise: exercise) { exerciseSet in
+            
+        }
         waitForExpectations(timeout: 60) { (_) in
             guard let set = self.dbHelper.fetchSets(exercise)?.first else {
                 XCTFail("set not added to exercise")
