@@ -1,5 +1,5 @@
 //
-//  WorkoutViewModel.swift
+//  WorkoutEditViewModel.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 4/18/20.
@@ -15,63 +15,43 @@ enum ExerciseVolumeComparison {
     case noChange
 }
 
-class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDelegate, ExerciseViewModelDelegate {
+class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate, ExerciseViewModelDelegate {
     
-    private var exerciseType: ExerciseType!
-    private var workoutManager: WorkoutDataManager
     private var exercisesToDo = [ExerciseTemplate]()
-    private var exercisesDone = [Exercise]()
     private var workoutId: NSManagedObjectID!
     private var startingTime: Date!
-    private var coreDataManager: CoreDataManagement!
-    private var selectedIndex: IndexPath?
     
-    init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
-        coreDataManager = coreDataManagement
-        workoutManager = WorkoutDataManager(backgroundContext: coreDataManagement.mainContext)
-        super.init()
-        exerciseType = type == nil ? computeExerciseType() : type
+    override init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
+        super.init(withType: type, coreDataManagement: coreDataManagement)
+        if type == nil { exerciseType = computeExerciseType() }
         exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
         startingTime = Date()
         workoutManager.create(name: exerciseType.rawValue, keyValuePairs: ["dateCreated": startingTime!])
         workoutId = (workoutManager.creation as? Workout)?.objectID
     }
     
-    private func computeExerciseType() -> ExerciseType {
-        switch workoutManager.getLastWorkoutType() {
-        case .push:
-            return .pull
-        case .pull:
-            return .legs
-        case .legs:
-            fallthrough
-        default:
-            return .push
-        }
-    }
-    
-    func getExerciseType() -> ExerciseType {
-        return exerciseType
-    }
-    
-    func sectionCount() -> Int {
+    override func sectionCount() -> Int {
         return 2
     }
     
-    func rowsForSection(_ section: Int) -> Int {
+    override func rowsForSection(_ section: Int) -> Int {
         return section == 0 ? exercisesToDo.count : exercisesDone.count
     }
     
-    func titleForIndexPath(_ indexPath: IndexPath) -> String {
+    override func titleForIndexPath(_ indexPath: IndexPath) -> String {
         if indexPath.section < 2 {
             if indexPath.section == 0 && indexPath.row < exercisesToDo.count, let name = exercisesToDo[indexPath.row].name {
                 return name
-            } else if indexPath.row < exercisesDone.count, let name = exercisesDone[indexPath.row].name {
-                return name
+            } else {
+                return super.titleForIndexPath(indexPath)
             }
-            return "ERROR: CAN'T GET NAME FOR INDEX PATH: \(indexPath)"
         }
         return "ERROR: SECTION COUNT IS LARGER THAN 2"
+    }
+    
+    override func detailText(indexPath: IndexPath) -> String? {
+        if indexPath.section == 0 { return nil }
+        return super.detailText(indexPath: indexPath)
     }
     
     func timerText() -> String {
@@ -107,18 +87,10 @@ class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDeleg
         reload()
     }
     
-    func selected(indexPath: IndexPath) {
-        selectedIndex = indexPath
-    }
     
-    func getSelectedExerciseTemplate() -> ExerciseTemplate? {
-        guard let indexPath = selectedIndex, indexPath.section == 0 else { return nil }
+    override func getSelected() -> Any? {
+        guard let indexPath = selectedIndex, indexPath.section == 0 && indexPath.row < exercisesToDo.count else { return super.getSelected() }
         return exercisesToDo[indexPath.row]
-    }
-    
-    func getSelectedExercise() -> Exercise? {
-        guard let indexPath = selectedIndex, indexPath.section == 1 else { return nil }
-        return exercisesDone[indexPath.row]
     }
     
     func reload() {
@@ -144,30 +116,17 @@ class WorkoutViewModel: NSObject, ReloadProtocol, ExerciseTemplateSelectionDeleg
         reload()
     }
     
-    func detailText(indexPath: IndexPath) -> String? {
-        guard indexPath.section == 1 else { return nil }
-        
-        return "\(volumeFor(exercise: exercisesDone[indexPath.row]))"
-    }
-    
-    private func volumeFor(exercise: Exercise) -> Double {
-        guard let sets = exercise.sets?.array as? [ExerciseSet] else { return 0 }
-        
-        var volume = 0.0
-        for set in sets {
-            volume += (Double(set.duration) * set.weight * Double(set.reps)) / 60.0
+    private func computeExerciseType() -> ExerciseType {
+        switch workoutManager.getLastWorkoutType() {
+        case .push:
+            return .pull
+        case .pull:
+            return .legs
+        case .legs:
+            fallthrough
+        default:
+            return .push
         }
-        return volume
-    }
-    
-    func exerciseVolumeComparison(row: Int) -> ExerciseVolumeComparison {
-        guard let previousWorkout = workoutManager.previousWorkout(),
-            let exerciseToCompare = previousWorkout.exercises?.first(where: { ($0 as! Exercise).name == exercisesDone[row].name}) as? Exercise
-            else { return .increase }
-        if exerciseToCompare.volume() == exercisesDone[row].volume() {
-            return .noChange
-        }
-        return exerciseToCompare < exercisesDone[row] ? .increase : .decrease
     }
 }
 

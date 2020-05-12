@@ -14,15 +14,15 @@ let ExerciseDoneCellReuseIdentifier = "ExerciseDoneCellReuseIdentifier"
 class WorkoutViewController: UIViewController, ReloadProtocol {
 
     @IBOutlet weak var tableView: UITableView!
-    var viewModel: WorkoutViewModel!
+    var viewModel: WorkoutEditViewModel!
     private var exerciseSelectionViewModel: ExerciseSelectionViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        navigationItem.title = viewModel.getExerciseType().rawValue
-        exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: viewModel.getExerciseType(), templateManagement: TemplateManagement())
+        navigationItem.title = viewModel.exerciseType.rawValue
+        exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: viewModel.exerciseType, templateManagement: TemplateManagement())
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,7 +36,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
         } else {
             if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateExerciseViewController") as? ExerciseTemplateCreationViewController {
                 vc.showExerciseType = false
-                vc.viewModel = ExerciseTemplateCreationViewModel(withType: viewModel.getExerciseType(), management: TemplateManagement())
+                vc.viewModel = ExerciseTemplateCreationViewModel(withType: viewModel.exerciseType, management: TemplateManagement())
                 vc.viewModel?.reloader = self
                 vc.modalPresentationStyle = .pageSheet
                 present(vc, animated: true, completion: nil)
@@ -54,12 +54,12 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
         let vc = segue.destination
         if segue.identifier == NavigateToExerciseDetailSegue, let vc = vc as? ExerciseViewController {
             // TODO: open already performed Exercise instead of creating a new ExerciseTemplate
-            if let exerciseTemplate = viewModel.getSelectedExerciseTemplate() {
+            if let exerciseTemplate = viewModel.getSelected() as? ExerciseTemplate {
                 let vm = ExerciseViewModel(exerciseTemplate: exerciseTemplate)
                 vc.viewModel = vm
                 vm.reloader = vc
                 vm.delegate = viewModel
-            } else if let exercise = viewModel.getSelectedExercise() {
+            } else if let exercise = viewModel.getSelected() as? Exercise {
                 let vm = ExerciseViewModel(exercise: exercise)
                 vc.viewModel = vm
                 vm.reloader = vc
@@ -102,7 +102,7 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.selected(indexPath: indexPath)
+        viewModel.selectedIndex = indexPath
         performSegue(withIdentifier: NavigateToExerciseDetailSegue, sender: self)
     }
     
