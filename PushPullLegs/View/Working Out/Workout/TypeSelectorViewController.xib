@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TypeSelectorViewController" customModule="PushPullLegs" customModuleProvider="target">
+            <connections>
+                <outlet property="legsButton" destination="T4Z-zK-anp" id="kXT-5r-MXC"/>
+                <outlet property="pullButton" destination="ua4-xj-beE" id="c5B-QJ-9fN"/>
+                <outlet property="pushButton" destination="Ne0-Rc-Afz" id="5eV-4J-aF7"/>
+                <outlet property="view" destination="iN0-l3-epB" id="nFZ-a0-hkm"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="5eX-7n-35U">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ne0-Rc-Afz" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
+                            <rect key="frame" x="20" y="0.0" width="374" height="270"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                            <state key="normal" title="Push"/>
+                            <connections>
+                                <action selector="typeSelected:" destination="-1" eventType="touchUpInside" id="GWT-55-qLa"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ua4-xj-beE" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
+                            <rect key="frame" x="20" y="274" width="374" height="270"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                            <state key="normal" title="Pull"/>
+                            <connections>
+                                <action selector="typeSelected:" destination="-1" eventType="touchUpInside" id="JzQ-Cc-Upo"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T4Z-zK-anp" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
+                            <rect key="frame" x="20" y="548" width="374" height="270"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                            <state key="normal" title="Legs"/>
+                            <connections>
+                                <action selector="typeSelected:" destination="-1" eventType="touchUpInside" id="Ny9-Im-9Ct"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="ua4-xj-beE" secondAttribute="trailing" constant="20" symbolic="YES" id="7XL-4u-rPQ"/>
+                        <constraint firstItem="ua4-xj-beE" firstAttribute="leading" secondItem="5eX-7n-35U" secondAttribute="leading" constant="20" symbolic="YES" id="Kk7-HD-zjH"/>
+                        <constraint firstAttribute="trailing" secondItem="Ne0-Rc-Afz" secondAttribute="trailing" constant="20" symbolic="YES" id="c65-kn-2De"/>
+                        <constraint firstAttribute="trailing" secondItem="T4Z-zK-anp" secondAttribute="trailing" constant="20" symbolic="YES" id="lJr-Cn-Z4a"/>
+                        <constraint firstItem="T4Z-zK-anp" firstAttribute="leading" secondItem="5eX-7n-35U" secondAttribute="leading" constant="20" symbolic="YES" id="wwu-9y-8n4"/>
+                        <constraint firstItem="Ne0-Rc-Afz" firstAttribute="leading" secondItem="5eX-7n-35U" secondAttribute="leading" constant="20" symbolic="YES" id="x0e-Km-Q0x"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="5eX-7n-35U" secondAttribute="trailing" id="DpL-GW-jbu"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="5eX-7n-35U" secondAttribute="bottom" id="LtB-yf-bKH"/>
+                <constraint firstItem="5eX-7n-35U" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="af3-dR-DSw"/>
+                <constraint firstItem="5eX-7n-35U" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="ujP-04-ngT"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="141" y="125"/>
+        </view>
+    </objects>
+</document>
