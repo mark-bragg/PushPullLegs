@@ -91,7 +91,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
             XCTAssert(dataForRow.weight == w)
             XCTAssert(dataForRow.reps == r)
             let volume = ((Double(d) * w * Double(r)) / 60.0).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
-            XCTAssert(dataForRow.volume == volume, "\nexpected: \(volume)\nactual: \(dataForRow.volume)")
+            XCTAssert(dataForRow.volume.distance(to: volume) <= 0.02, "\nexpected: \(volume)\nactual: \(dataForRow.volume)")
         }
     }
     

@@ -7,71 +7,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Type Selector View Controller-->
-        <scene sceneID="S9O-mx-xWT">
-            <objects>
-                <viewController storyboardIdentifier="TypeSelectorViewController" id="5ie-l7-eNK" customClass="TypeSelectorViewController" customModule="PushPullLegs" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="JgI-og-L7R">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="fAC-2i-Qq8">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8j8-lu-XUF" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="0.0" width="374" height="266.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="50"/>
-                                        <state key="normal" title="Push"/>
-                                        <connections>
-                                            <action selector="typeSelected:" destination="5ie-l7-eNK" eventType="touchUpInside" id="bn4-vF-DzW"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f85-CZ-8cK" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="270.5" width="374" height="267"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="50"/>
-                                        <state key="normal" title="Pull"/>
-                                        <connections>
-                                            <action selector="typeSelected:" destination="5ie-l7-eNK" eventType="touchUpInside" id="Hsu-0x-elM"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3sB-gb-DTu" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="541.5" width="374" height="266.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="50"/>
-                                        <state key="normal" title="Legs"/>
-                                        <connections>
-                                            <action selector="typeSelected:" destination="5ie-l7-eNK" eventType="touchUpInside" id="C6D-gF-bFA"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="f85-CZ-8cK" firstAttribute="leading" secondItem="fAC-2i-Qq8" secondAttribute="leading" constant="20" symbolic="YES" id="1ug-Fa-aAh"/>
-                                    <constraint firstItem="8j8-lu-XUF" firstAttribute="leading" secondItem="fAC-2i-Qq8" secondAttribute="leading" constant="20" symbolic="YES" id="4Vi-Yw-Nfz"/>
-                                    <constraint firstAttribute="trailing" secondItem="f85-CZ-8cK" secondAttribute="trailing" constant="20" symbolic="YES" id="Zge-p6-fVT"/>
-                                    <constraint firstAttribute="trailing" secondItem="8j8-lu-XUF" secondAttribute="trailing" constant="20" symbolic="YES" id="k7v-al-BBZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="3sB-gb-DTu" secondAttribute="trailing" constant="20" symbolic="YES" id="md1-dq-SJR"/>
-                                    <constraint firstItem="3sB-gb-DTu" firstAttribute="leading" secondItem="fAC-2i-Qq8" secondAttribute="leading" constant="20" symbolic="YES" id="nT9-Yg-eAh"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="fAC-2i-Qq8" firstAttribute="top" secondItem="sSb-eU-3Sb" secondAttribute="top" id="Ob0-Gt-bDI"/>
-                            <constraint firstItem="sSb-eU-3Sb" firstAttribute="trailing" secondItem="fAC-2i-Qq8" secondAttribute="trailing" id="OrS-At-anz"/>
-                            <constraint firstItem="sSb-eU-3Sb" firstAttribute="bottom" secondItem="fAC-2i-Qq8" secondAttribute="bottom" id="d5f-aP-Ofh"/>
-                            <constraint firstItem="fAC-2i-Qq8" firstAttribute="leading" secondItem="sSb-eU-3Sb" secondAttribute="leading" id="d5l-cE-2Yw"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="sSb-eU-3Sb"/>
-                    </view>
-                    <connections>
-                        <outlet property="legsButton" destination="3sB-gb-DTu" id="LeJ-tW-Cse"/>
-                        <outlet property="pullButton" destination="f85-CZ-8cK" id="eGi-4Y-JIh"/>
-                        <outlet property="pushButton" destination="8j8-lu-XUF" id="YO9-TD-0lJ"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Nu3-94-eQ9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3228" y="-246"/>
-        </scene>
         <!--Exercise Template Selection View Controller-->
         <scene sceneID="9Tg-iz-0eW">
             <objects>
@@ -112,7 +47,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c7d-GQ-qeQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4196" y="518"/>
+            <point key="canvasLocation" x="4196" y="886"/>
         </scene>
         <!--Workout View Controller-->
         <scene sceneID="7JE-rT-KHl">
@@ -287,7 +222,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4BU-D3-UI7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4195.652173913044" y="-246.42857142857142"/>
+            <point key="canvasLocation" x="4196" y="180"/>
         </scene>
         <!--Start Workout View Controller-->
         <scene sceneID="ZKb-bC-k1t">
@@ -322,7 +257,6 @@
                         <barButtonItem key="backBarButtonItem" title="Done" id="ekB-9s-MrU"/>
                     </navigationItem>
                     <connections>
-                        <segue destination="5ie-l7-eNK" kind="presentation" identifier="GetExerciseTypeSegue" id="43A-Hf-4ck"/>
                         <segue destination="k8C-Wq-1Pq" kind="show" identifier="StartWorkoutSegue" id="iti-Qd-uDi"/>
                     </connections>
                 </viewController>

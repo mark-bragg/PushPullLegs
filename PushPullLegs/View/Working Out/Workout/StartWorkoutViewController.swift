@@ -20,7 +20,11 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     
     @IBAction func startWorkout(_ sender: Any) {
         if PPLDefaults.instance.workoutTypePromptSwitchValue() {
-            performSegue(withIdentifier: GetExerciseTypeSegue, sender: self)
+            let typeVC = TypeSelectorViewController()
+            typeVC.delegate = self
+            typeVC.modalPresentationStyle = .pageSheet
+            typeVC.isModalInPresentation = true
+            present(typeVC, animated: true, completion: nil)
         } else {
             performSegue(withIdentifier: StartWorkoutSegue, sender: self)
         }
@@ -31,7 +35,7 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
             vc.delegate = self
             vc.isModalInPresentation = true
         } else if segue.identifier == StartWorkoutSegue, let vc = segue.destination as? WorkoutViewController {
-            vc.viewModel = WorkoutViewModel(withType: exerciseType)
+            vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
             vc.hidesBottomBarWhenPushed = true
         }
     }

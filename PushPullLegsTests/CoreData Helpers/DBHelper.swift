@@ -122,10 +122,15 @@ class DBHelper {
         return exercise
     }
     
-    func addSetTo(_ exercise: Exercise) {
+    func addSetTo(_ exercise: Exercise, data: (r: Int, w: Double, d: Int)? = nil) {
         let set = NSEntityDescription.insertNewObject(forEntityName: "ExerciseSet", into: coreDataStack.backgroundContext) as! ExerciseSet
         if let exerciseInContext = try? coreDataStack.backgroundContext.existingObject(with: exercise.objectID) as? Exercise {
             exerciseInContext.addToSets(set)
+            if let data = data {
+                set.duration = Int16(data.d)
+                set.reps = Int16(data.r)
+                set.weight = data.w
+            }
             try? coreDataStack.backgroundContext.save()
         }
     }
@@ -161,9 +166,11 @@ class DBHelper {
     }
     
     // MARK: ExerciseSet
-    func fetchSets(_ exercise: Exercise) -> [ExerciseSet]? {
+    func fetchSets(_ exercise: Exercise? = nil) -> [ExerciseSet]? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ExerciseSet")
-        request.predicate = NSPredicate(format: "exercise == %@", argumentArray: [exercise])
+        if let exercise = exercise {
+            request.predicate = NSPredicate(format: "exercise == %@", argumentArray: [exercise])
+        }
         return try? coreDataStack.mainContext.fetch(request) as? [ExerciseSet]
     }
     

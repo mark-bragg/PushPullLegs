@@ -1,5 +1,5 @@
 //
-//  WorkoutViewModel.swift
+//  WorkoutEditViewModelTests.swift
 //  PushPullLegsTests
 //
 //  Created by Mark Bragg on 4/18/20.
@@ -10,35 +10,35 @@ import XCTest
 import CoreData
 @testable import PushPullLegs
 
-class WorkoutViewModelTests: XCTestCase {
+class WorkoutEditViewModelTests: XCTestCase {
 
-    var sut: WorkoutViewModel!
+    var sut: WorkoutEditViewModel!
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
     
     fileprivate func assertNoSavedWorkoutsTypeInjectedIsReturned(_ type: ExerciseType) {
-        sut = WorkoutViewModel(withType: type,  coreDataManagement: dbHelper.coreDataStack )
-        XCTAssert(sut.getExerciseType() == type)
+        sut = WorkoutEditViewModel(withType: type,  coreDataManagement: dbHelper.coreDataStack )
+        XCTAssert(sut.exerciseType == type)
     }
     
     fileprivate func assertPreviousWorkouts(withTypes previousWorkoutTypes: [ExerciseType], injectionType: ExerciseType) {
         for type in previousWorkoutTypes {
             dbHelper.insertWorkout(name: type)
         }
-        sut = WorkoutViewModel(withType: injectionType,  coreDataManagement: dbHelper.coreDataStack )
-        XCTAssert(sut.getExerciseType() == injectionType)
+        sut = WorkoutEditViewModel(withType: injectionType,  coreDataManagement: dbHelper.coreDataStack )
+        XCTAssert(sut.exerciseType == injectionType)
     }
     
     fileprivate func assertPreviousWorkoutsNoInjection(_ previousWorkoutTypes: [ExerciseType], expectedType: ExerciseType) {
         for type in previousWorkoutTypes {
             dbHelper.insertWorkout(name: type)
         }
-        sut = WorkoutViewModel(withType: nil,  coreDataManagement: dbHelper.coreDataStack )
-        XCTAssert(sut.getExerciseType() == expectedType)
+        sut = WorkoutEditViewModel(withType: nil,  coreDataManagement: dbHelper.coreDataStack )
+        XCTAssert(sut.exerciseType == expectedType)
     }
     
     func testGetExerciseType_noPreviousWorkouts_noTypeInjected_pushReturned() {
-        sut = WorkoutViewModel(withType: nil,  coreDataManagement: dbHelper.coreDataStack )
-        XCTAssert(sut.getExerciseType() == ExerciseType.push)
+        sut = WorkoutEditViewModel(withType: nil,  coreDataManagement: dbHelper.coreDataStack )
+        XCTAssert(sut.exerciseType == ExerciseType.push)
     }
     
     func testGetExerciseType_noPreviousWorkouts_pushTypeInjected_pushReturned() {
@@ -102,12 +102,12 @@ class WorkoutViewModelTests: XCTestCase {
     }
     
     func testSectionCount() {
-        sut = WorkoutViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack )
         XCTAssert(sut.sectionCount() == 2)
     }
     
     func testRowsForSection_zeroExercises_zeroRowsForBothSections() {
-        sut = WorkoutViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack )
         XCTAssert(sut.rowsForSection(0) == 0, "\nexpected: 0\nactual: \(sut.rowsForSection(0))")
         XCTAssert(sut.rowsForSection(1) == 0)
     }
@@ -116,7 +116,7 @@ class WorkoutViewModelTests: XCTestCase {
         dbHelper.insertWorkoutTemplateMainContext()
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         dbHelper.addExerciseTemplate("exercise to do", to: workoutTemplate, addToWorkout: true)
-        sut = WorkoutViewModel(withType: nil,coreDataManagement: dbHelper.coreDataStack)
+        sut = WorkoutEditViewModel(withType: nil,coreDataManagement: dbHelper.coreDataStack)
         assertEqual(sut.rowsForSection(0), 1)
         XCTAssert(sut.rowsForSection(1) == 0)
     }
@@ -126,13 +126,13 @@ class WorkoutViewModelTests: XCTestCase {
         for i in 0...9 {
             dbHelper.addExerciseTemplate("exercise to do #\(i)", to: dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         }
-        sut = WorkoutViewModel(withType: nil,coreDataManagement: dbHelper.coreDataStack)
+        sut = WorkoutEditViewModel(withType: nil,coreDataManagement: dbHelper.coreDataStack)
         assertEqual(sut.rowsForSection(0), 10)
         XCTAssert(sut.rowsForSection(1) == 0)
     }
     
     func testRowsForSection_oneExerciseDone_zeroExercisesToDo_zeroRowsForSectionZero_oneRowForSectionOne() {
-        sut = WorkoutViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack)
+        sut = WorkoutEditViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack)
         dbHelper.addExercise("exercise done", to: dbHelper.fetchWorkouts().first!)
         sut.exerciseTemplatesAdded()
         XCTAssert(sut.rowsForSection(0) == 0)
@@ -145,7 +145,7 @@ class WorkoutViewModelTests: XCTestCase {
         for i in 0...4 {
             dbHelper.addExerciseTemplate("to do \(i)", to: workoutTemplate, addToWorkout: true)
         }
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         for i in 0...9 {
             dbHelper.addExercise("done \(i)", to: dbHelper.fetchWorkouts().first!)
         }
@@ -164,7 +164,7 @@ class WorkoutViewModelTests: XCTestCase {
             todoNames.append("to do \(i)")
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         var doneNames = [String]()
         for i in 0...9 {
             doneNames.append("done \(i)")
@@ -200,7 +200,7 @@ class WorkoutViewModelTests: XCTestCase {
 //    }
     
     func testFinishWorkout() {
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         sleep(15)
         sut.finishWorkout()
         guard let workout = dbHelper.fetchWorkouts().first else {
@@ -222,7 +222,7 @@ class WorkoutViewModelTests: XCTestCase {
         }
         let name = "to be added"
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: false)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         assertEqual(sut.rowsForSection(0), 5)
         XCTAssert(sut.rowsForSection(1) == 0)
         guard let exerciseToBeAdded = dbHelper.fetchExerciseTemplates()?.first(where: { $0.name! == name })! else {
@@ -243,7 +243,7 @@ class WorkoutViewModelTests: XCTestCase {
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
         
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         assertEqual(sut.rowsForSection(0), 5)
         XCTAssert(sut.rowsForSection(1) == 0)
         var toAddNames = [String]()
@@ -269,7 +269,7 @@ class WorkoutViewModelTests: XCTestCase {
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
         
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         assertEqual(sut.rowsForSection(0), 5)
         XCTAssert(sut.rowsForSection(1) == 0)
         sut.addExercise(templates: [])
@@ -286,7 +286,7 @@ class WorkoutViewModelTests: XCTestCase {
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
         let name = "to be added"
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         XCTAssert(sut.rowsForSection(0) == 5)
         XCTAssert(sut.rowsForSection(1) == 0)
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
@@ -308,7 +308,7 @@ class WorkoutViewModelTests: XCTestCase {
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
         
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         assertEqual(sut.rowsForSection(0), 5)
         XCTAssert(sut.rowsForSection(1) == 0)
         var toAddNames = [String]()
@@ -321,7 +321,7 @@ class WorkoutViewModelTests: XCTestCase {
         XCTAssert(sut.rowsForSection(1) == 0)
     }
     
-    func testSelectedIndexPath_sectionZero_getExerciseTemplate_templateReturned_getExercise_nilReturned() {
+    func testSelectedIndexPath_sectionZero_getSelected_templateReturned() {
         dbHelper.insertWorkoutTemplate(type: .push)
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         var todoNames = [String]()
@@ -329,20 +329,19 @@ class WorkoutViewModelTests: XCTestCase {
             todoNames.append("to do \(i)")
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
-        XCTAssert(sut.getSelectedExerciseTemplate() == nil)
-        sut.selected(indexPath: IndexPath(row: 0, section: 0))
-        var tempToTest = sut.getSelectedExerciseTemplate()
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        XCTAssert(sut.getSelected() == nil)
+        sut.selectedIndex = IndexPath(row: 0, section: 0)
+        var tempToTest = sut.getSelected() as! ExerciseTemplate
         var tempTester = dbHelper.fetchExerciseTemplates()?.first(where: { $0.name! == todoNames[0] })
         XCTAssert(tempToTest == tempTester)
-        sut.selected(indexPath: IndexPath(row: 2, section: 0))
-        XCTAssert(sut.getSelectedExercise() == nil)
-        tempToTest = sut.getSelectedExerciseTemplate()
+        sut.selectedIndex = IndexPath(row: 2, section: 0)
+        tempToTest = sut.getSelected() as! ExerciseTemplate
         tempTester = dbHelper.fetchExerciseTemplates()?.first(where: { $0.name! == todoNames[2] })
         XCTAssert(tempToTest == tempTester)
     }
     
-    func testSelectedIndexPath_sectionOne_getExercise_exerciseReturned_getExerciseTemplate_nilReturned() {
+    func testSelectedIndexPath_sectionOne_getSelected_exerciseReturned() {
         dbHelper.insertWorkoutTemplate(type: .push)
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         var todoNames = [String]()
@@ -350,14 +349,36 @@ class WorkoutViewModelTests: XCTestCase {
             todoNames.append("to do \(i)")
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         dbHelper.addExercise(todoNames[0], to: dbHelper.fetchWorkouts().first!)
         sut.reload()
-        sut.selected(indexPath: IndexPath(row: 0, section: 1))
-        let exerciseToTest = sut.getSelectedExercise()
+        sut.selectedIndex = IndexPath(row: 0, section: 1)
+        let exerciseToTest = sut.getSelected() as! Exercise
         let exerciseTester = dbHelper.fetchExercises().first(where: { $0.name! == todoNames[0] })
         XCTAssert(exerciseToTest == exerciseTester)
-        XCTAssert(sut.getSelectedExerciseTemplate() == nil)
+        XCTAssert(sut.rowsForSection(0) == 4)
+        XCTAssert(sut.rowsForSection(1) == 1)
+    }
+    
+    func testSelectedIndexPath_sectionZero_workoutHasExerciseAndTemplate_getSelected_exerciseReturned() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        var todoNames = [String]()
+        for i in 0...4 {
+            todoNames.append("to do \(i)")
+            dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
+        }
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        dbHelper.addExercise(todoNames[0], to: dbHelper.fetchWorkouts().first!)
+        sut.reload()
+        sut.selectedIndex = IndexPath(row: 0, section: 1)
+        let exerciseToTest = sut.getSelected() as! Exercise
+        let exerciseTester = dbHelper.fetchExercises().first(where: { $0.name! == todoNames[0] })
+        XCTAssert(exerciseToTest == exerciseTester)
+        sut.selectedIndex = IndexPath(row: 0, section: 0)
+        let tempToTest = sut.getSelected() as! ExerciseTemplate
+        let tempTester = dbHelper.fetchExerciseTemplates()?.first(where: { $0.name! == todoNames[1] })
+        XCTAssert(tempToTest == tempTester)
         XCTAssert(sut.rowsForSection(0) == 4)
         XCTAssert(sut.rowsForSection(1) == 1)
     }
@@ -370,7 +391,7 @@ class WorkoutViewModelTests: XCTestCase {
             todoNames.append("to do \(i)")
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let name = todoNames.remove(at: 2)
         let exercise = dbHelper.createExercise(name)
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
@@ -390,7 +411,7 @@ class WorkoutViewModelTests: XCTestCase {
             todoNames.append("to do \(i)")
             dbHelper.addExerciseTemplate(todoNames.last!, to: workoutTemplate, addToWorkout: true)
         }
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let name1 = todoNames.remove(at: 2)
         var exercise = dbHelper.createExercise(name1)
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
@@ -418,7 +439,7 @@ class WorkoutViewModelTests: XCTestCase {
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         let name = "exercise"
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set = (10, 1, 60.0)
         let exercise = dbHelper.createExercise(name, sets: [set, set, set])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
@@ -434,7 +455,7 @@ class WorkoutViewModelTests: XCTestCase {
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         let name = "exercise"
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set = (10, 1, 60.0)
         let exercise = dbHelper.createExercise(name, sets: [set, set, set])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
@@ -446,11 +467,11 @@ class WorkoutViewModelTests: XCTestCase {
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         let name = "exercise"
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 1, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set2 = (10, 1, 60.0)
         let exercise2 = dbHelper.createExercise(name, sets: [set2])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
@@ -463,11 +484,11 @@ class WorkoutViewModelTests: XCTestCase {
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         let name = "exercise"
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 1, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set2 = (10, 2, 60.0)
         let exercise2 = dbHelper.createExercise(name, sets: [set2])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
@@ -480,11 +501,11 @@ class WorkoutViewModelTests: XCTestCase {
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         let name = "exercise"
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 2, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set2 = (10, 1, 60.0)
         let exercise2 = dbHelper.createExercise(name, sets: [set2])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
@@ -497,7 +518,7 @@ class WorkoutViewModelTests: XCTestCase {
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         let name = "exercise"
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
-        sut = WorkoutViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 2, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
