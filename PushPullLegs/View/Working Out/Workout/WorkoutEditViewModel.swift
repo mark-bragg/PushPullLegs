@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CoreData
 
 enum ExerciseVolumeComparison {
     case increase
@@ -18,12 +17,11 @@ enum ExerciseVolumeComparison {
 class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate, ExerciseViewModelDelegate {
     
     private var exercisesToDo = [ExerciseTemplate]()
-    private var workoutId: NSManagedObjectID!
     private var startingTime: Date!
     
-    override init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
-        super.init(withType: type, coreDataManagement: coreDataManagement)
-        if type == nil { exerciseType = computeExerciseType() }
+    init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
+        super.init(withCoreDataManagement: coreDataManagement)
+        exerciseType = type != nil ? type : computeExerciseType() 
         exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
         startingTime = Date()
         workoutManager.create(name: exerciseType.rawValue, keyValuePairs: ["dateCreated": startingTime!])

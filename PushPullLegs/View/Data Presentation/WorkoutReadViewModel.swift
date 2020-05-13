@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 class WorkoutReadViewModel: NSObject {
     
@@ -15,11 +16,15 @@ class WorkoutReadViewModel: NSObject {
     var coreDataManager: CoreDataManagement!
     var exercisesDone = [Exercise]()
     var selectedIndex: IndexPath?
+    var workoutId: NSManagedObjectID!
     
-    init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
+    init(withCoreDataManagement coreDataManagement: CoreDataManagement = CoreDataManager.shared, workout: Workout? = nil) {
         coreDataManager = coreDataManagement
         workoutManager = WorkoutDataManager(backgroundContext: coreDataManagement.mainContext)
-        exerciseType = type
+        workoutId = workout?.objectID
+        if let exercises = workout?.exercises?.array as? [Exercise] {
+            exercisesDone = exercises
+        }
         super.init()
     }
     
@@ -39,7 +44,7 @@ class WorkoutReadViewModel: NSObject {
     }
     
     func detailText(indexPath: IndexPath) -> String? {
-        return "\(volumeFor(exercise: exercisesDone[indexPath.row]))"
+        return "\(exercisesDone[indexPath.row].volume())"
     }
     
     func getSelected() -> Any? {
@@ -48,21 +53,27 @@ class WorkoutReadViewModel: NSObject {
     }
     
     func exerciseVolumeComparison(row: Int) -> ExerciseVolumeComparison {
-        guard let previousWorkout = workoutManager.previousWorkout(),
-            let exerciseToCompare = previousWorkout.exercises?.first(where: { ($0 as! Exercise).name == exercisesDone[row].name}) as? Exercise
-            else { return .increase }
-        if exerciseToCompare.volume() == exercisesDone[row].volume() {
+        guard
+            let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
+            let date = workout.dateCreated,
+            let previousWorkout = workoutManager.previousWorkout(before: date),
+            let previousExercise = previousWorkout.exercises?.first(where: { ($0 as! Exercise).name == exercisesDone[row].name}) as? Exercise
+            else {
+                return .increase }
+        
+        if previousExercise.volume() == exercisesDone[row].volume() {
             return .noChange
         }
-        return exerciseToCompare < exercisesDone[row] ? .increase : .decrease
+        return previousExercise < exercisesDone[row] ? .increase : .decrease
     }
-    
-    private func volumeFor(exercise: Exercise) -> Double {
-        guard let sets = exercise.sets?.array as? [ExerciseSet] else { return 0 }
-        
+}
+
+extension Workout {
+    func volume() -> Double {
         var volume = 0.0
-        for set in sets {
-            volume += (Double(set.duration) * set.weight * Double(set.reps)) / 60.0
+        let exercises = self.exercises!.array as! [Exercise]
+        for exercise in exercises {
+            volume += exercise.volume()
         }
         return volume
     }

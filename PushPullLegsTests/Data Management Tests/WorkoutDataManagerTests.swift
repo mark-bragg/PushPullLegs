@@ -311,5 +311,22 @@ class WorkoutDataManagerTests : XCTestCase {
         sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: Date()))
         XCTAssert(sut.previousWorkout() == nil)
     }
+    
+    func testGetPreviousWorkout_eachOfTenWorkouts_correctWorkoutsReturned_nilReturnedFirst() {
+        var dates = [Date]()
+        for i in 0...9 {
+            dates.append(Date().addingTimeInterval(TimeInterval(integerLiteral:Int64((60 * 60 * 24) * i))))
+            sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: dates.last!))
+        }
+        XCTAssert(sut.workouts().count == 10)
+        let workouts = dbHelper.fetchWorkouts().sorted(by: { $0.dateCreated! < $1.dateCreated! })
+        for i in 0..<dates.count {
+            if let previousWorkout = sut.previousWorkout(before: dates[i]) {
+                XCTAssert(previousWorkout.objectID == workouts[i-1].objectID, "\npreviousWorkout: \(previousWorkout)\nworkouts[i-1]: \(workouts[i-1])")
+            } else {
+                XCTAssert(i == 0)
+            }
+        }
+    }
 
 }

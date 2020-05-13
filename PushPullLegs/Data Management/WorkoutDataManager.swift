@@ -50,17 +50,21 @@ class WorkoutDataManager: DataManager {
         return nil
     }
     
-    func previousWorkout() -> Workout? {
+    func previousWorkout(before date: Date? = nil) -> Workout? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
         request.fetchLimit = 2
+        if let date = date {
+            request.predicate = NSPredicate(format: "dateCreated < %@", argumentArray: [date])
+            request.fetchLimit = 1
+        }
         do {
             let latestWorkouts = try backgroundContext.fetch(request) as? [Workout]
-            guard let workouts = latestWorkouts, workouts.count == 2 else { return nil }
-            
-            if let workout = latestWorkouts?.last {
-                return workout
+            guard let workouts = latestWorkouts, workouts.count > 0 else { return nil }
+            if date == nil && workouts.count == 1 {
+                return nil
             }
+            return latestWorkouts?.last
         } catch {
             
         }
