@@ -1,5 +1,5 @@
 //
-//  DBTableViewController.swift
+//  WorkoutLogViewController.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 4/21/20.
@@ -10,7 +10,7 @@ import UIKit
 
 let DataCell = "DataCell"
 
-class DBTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class WorkoutLogViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     var workouts = [Workout]()

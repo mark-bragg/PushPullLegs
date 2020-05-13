@@ -25,7 +25,7 @@
 		4937729324001807005F566A /* DBUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4937729224001807005F566A /* DBUtilities.swift */; };
 		493C2C712455E5D2005308AF /* WeightCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */; };
 		49453375244FC88B00FA1665 /* DataPresentation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49453374244FC88B00FA1665 /* DataPresentation.storyboard */; };
-		49453378244FC8FA00FA1665 /* DBTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453377244FC8FA00FA1665 /* DBTableViewController.swift */; };
+		49453378244FC8FA00FA1665 /* WorkoutLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */; };
 		4945337A244FCC1900FA1665 /* PPLTabBarControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453379244FCC1900FA1665 /* PPLTabBarControllerViewController.swift */; };
 		4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4945337B2450895500FA1665 /* ExerciseViewModel.swift */; };
 		49453382245090F600FA1665 /* ExerciseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453381245090F600FA1665 /* ExerciseViewModelTests.swift */; };
@@ -112,7 +112,7 @@
 		4937729224001807005F566A /* DBUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUtilities.swift; sourceTree = "<group>"; };
 		493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCollectionViewController.swift; sourceTree = "<group>"; };
 		49453374244FC88B00FA1665 /* DataPresentation.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DataPresentation.storyboard; sourceTree = "<group>"; };
-		49453377244FC8FA00FA1665 /* DBTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBTableViewController.swift; sourceTree = "<group>"; };
+		49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewController.swift; sourceTree = "<group>"; };
 		49453379244FCC1900FA1665 /* PPLTabBarControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTabBarControllerViewController.swift; sourceTree = "<group>"; };
 		4945337B2450895500FA1665 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		49453381245090F600FA1665 /* ExerciseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModelTests.swift; sourceTree = "<group>"; };
@@ -247,7 +247,7 @@
 		49453376244FC8BB00FA1665 /* Data Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				49453377244FC8FA00FA1665 /* DBTableViewController.swift */,
+				49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */,
 				4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */,
 			);
 			path = "Data Presentation";
@@ -662,7 +662,7 @@
 				49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */,
 				490AEAD22423AA5D005C1112 /* WorkoutTemplateListViewController.swift in Sources */,
 				4945337A244FCC1900FA1665 /* PPLTabBarControllerViewController.swift in Sources */,
-				49453378244FC8FA00FA1665 /* DBTableViewController.swift in Sources */,
+				49453378244FC8FA00FA1665 /* WorkoutLogViewController.swift in Sources */,
 				490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */,
 				49EF4BCF23F8422D0071687D /* PushPullLegs.xcdatamodeld in Sources */,
 				4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */,
