@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PPLTabBarControllerViewController: UITabBarController {
+class PPLTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,10 +29,9 @@ class PPLTabBarControllerViewController: UITabBarController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let configVc = UIStoryboard(name: "DataPresentation", bundle: nil).instantiateInitialViewController() {
-            let nvc = UINavigationController(rootViewController: configVc)
+        let workoutLogVC = WorkoutLogViewController()
+            let nvc = UINavigationController(rootViewController: workoutLogVC)
             viewControllers?.append(nvc)
-        }
         if let workoutNavVC = UIStoryboard(name: "Workout", bundle: nil).instantiateInitialViewController() {
             viewControllers?.append(workoutNavVC)
         }

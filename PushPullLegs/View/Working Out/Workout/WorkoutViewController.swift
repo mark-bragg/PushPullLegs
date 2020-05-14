@@ -9,7 +9,6 @@
 import UIKit
 
 let ExerciseToDoCellReuseIdentifier = "ExerciseToDoCellReuseIdentifier"
-let ExerciseDoneCellReuseIdentifier = "ExerciseDoneCellReuseIdentifier"
 
 class WorkoutViewController: UIViewController, ReloadProtocol {
 
@@ -23,6 +22,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
         tableView.dataSource = self
         navigationItem.title = viewModel.exerciseType.rawValue
         exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: viewModel.exerciseType, templateManagement: TemplateManagement())
+        tableView.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,7 +98,7 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func dequeuCell(section: Int) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: section == 0 ? ExerciseToDoCellReuseIdentifier : ExerciseDoneCellReuseIdentifier)!
+        return tableView.dequeueReusableCell(withIdentifier: section == 0 ? ExerciseToDoCellReuseIdentifier : ExerciseDataCellReuseIdentifier)!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
