@@ -26,6 +26,17 @@ class ExerciseViewController: UIViewController, ExerciseSetViewModelDelegate, Ex
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if tableView == nil {
+            let tblv = UITableView()
+            view.addSubview(tblv)
+            tableView = tblv
+            tableView.translatesAutoresizingMaskIntoConstraints = false
+            tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        }
+        tableView.register(UINib(nibName: "ExerciseSetDataCell", bundle: nil), forCellReuseIdentifier: ExerciseSetReuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 75

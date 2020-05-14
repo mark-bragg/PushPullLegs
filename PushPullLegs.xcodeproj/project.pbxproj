@@ -32,6 +32,11 @@
 		49568BA424422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */; };
 		4957DFB4246B549F00574C89 /* WorkoutReadViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */; };
 		4957DFB6246B54F000574C89 /* WorkoutReadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */; };
+		4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */; };
+		4957DFBC246CF94200574C89 /* WorkoutDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */; };
+		4957DFBE246D049C00574C89 /* ExerciseDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */; };
+		4957DFC0246D0BA800574C89 /* ExerciseSetDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFBF246D0BA800574C89 /* ExerciseSetDataCell.xib */; };
+		4957DFC2246D0FDC00574C89 /* WorkoutLogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFC1246D0FDC00574C89 /* WorkoutLogTableViewCell.xib */; };
 		496A844B240173A20082D677 /* AppStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496A844A240173A20082D677 /* AppStates.swift */; };
 		496A844D2402313F0082D677 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496A844C2402313F0082D677 /* StateMachine.swift */; };
 		496A844F2402315F0082D677 /* StateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496A844E2402315F0082D677 /* StateMachineTests.swift */; };
@@ -119,6 +124,11 @@
 		49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewModelTests.swift; sourceTree = "<group>"; };
 		4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutReadViewModelTests.swift; sourceTree = "<group>"; };
 		4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutReadViewModel.swift; sourceTree = "<group>"; };
+		4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDataViewController.swift; sourceTree = "<group>"; };
+		4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkoutDataViewController.xib; sourceTree = "<group>"; };
+		4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseDataCell.xib; sourceTree = "<group>"; };
+		4957DFBF246D0BA800574C89 /* ExerciseSetDataCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseSetDataCell.xib; sourceTree = "<group>"; };
+		4957DFC1246D0FDC00574C89 /* WorkoutLogTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkoutLogTableViewCell.xib; sourceTree = "<group>"; };
 		496A844A240173A20082D677 /* AppStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStates.swift; sourceTree = "<group>"; };
 		496A844C2402313F0082D677 /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StateMachine.swift; path = View/StateMachine.swift; sourceTree = "<group>"; };
 		496A844E2402315F0082D677 /* StateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachineTests.swift; sourceTree = "<group>"; };
@@ -249,6 +259,11 @@
 			children = (
 				49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */,
 				4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */,
+				4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */,
+				4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */,
+				4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */,
+				4957DFBF246D0BA800574C89 /* ExerciseSetDataCell.xib */,
+				4957DFC1246D0FDC00574C89 /* WorkoutLogTableViewCell.xib */,
 			);
 			path = "Data Presentation";
 			sourceTree = "<group>";
@@ -625,10 +640,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4957DFBC246CF94200574C89 /* WorkoutDataViewController.xib in Resources */,
+				4957DFBE246D049C00574C89 /* ExerciseDataCell.xib in Resources */,
 				49453375244FC88B00FA1665 /* DataPresentation.storyboard in Resources */,
 				4911325D246B13C100D689DD /* TypeSelectorViewController.xib in Resources */,
+				4957DFC2246D0FDC00574C89 /* WorkoutLogTableViewCell.xib in Resources */,
 				490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */,
 				49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */,
+				4957DFC0246D0BA800574C89 /* ExerciseSetDataCell.xib in Resources */,
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
 				490D88DE2451DE32005FFEA3 /* Workout.storyboard in Resources */,
 				490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */,
@@ -675,6 +694,7 @@
 				496A844D2402313F0082D677 /* StateMachine.swift in Sources */,
 				4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */,
 				49BE39D4244E914500B6E3C4 /* SegueIdentifiers.swift in Sources */,
+				4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */,
 				49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */,
 				49EF4BB423F8390A0071687D /* Date+Helpers.swift in Sources */,
 				49028D24243D85AC005EC078 /* AppConfigurationViewController.swift in Sources */,
