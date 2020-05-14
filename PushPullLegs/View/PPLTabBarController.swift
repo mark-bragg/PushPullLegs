@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PPLTabBarControllerViewController: UITabBarController {
+class PPLTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
