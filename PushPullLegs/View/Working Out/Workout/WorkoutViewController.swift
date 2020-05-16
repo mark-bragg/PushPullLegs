@@ -53,7 +53,6 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination
         if segue.identifier == SegueIdentifier.navigateToExerciseDetail.rawValue, let vc = vc as? ExerciseViewController {
-            // TODO: open already performed Exercise instead of creating a new ExerciseTemplate
             if let exerciseTemplate = viewModel.getSelected() as? ExerciseTemplate {
                 let vm = ExerciseViewModel(exerciseTemplate: exerciseTemplate)
                 vc.viewModel = vm

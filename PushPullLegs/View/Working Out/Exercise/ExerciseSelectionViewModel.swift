@@ -45,6 +45,7 @@ class ExerciseSelectionViewModel: NSObject, ReloadProtocol {
         for index in selectedIndices {
             templateManagement.addToWorkout(exercise: exercises[index])
         }
+        reload()
     }
     
     func selectedExercises() -> [ExerciseTemplate] {
