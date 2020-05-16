@@ -72,6 +72,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
     }
     
     func reload() {
+        viewModel.exerciseTemplatesAdded()
         tableView.reloadData()
     }
 
