@@ -47,12 +47,19 @@ class AppConfigurationViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: segueIdentifierForRow(indexPath.row), sender: self)
+        if let segueId = segueIdentifierForRow(indexPath.row) {
+            tableView.deselectRow(at: indexPath, animated: true)
+            performSegue(withIdentifier: segueId.rawValue, sender: self)
+        }
     }
     
-    func segueIdentifierForRow(_ row: Int) -> String {
-        return row == 0 ? "EditWorkoutListSegue" : "EditExerciseList"
+    func segueIdentifierForRow(_ row: Int) -> SegueIdentifier? {
+        switch row {
+        case 0: return SegueIdentifier.editWorkoutList
+        case 1: return SegueIdentifier.editExerciseList
+        default: break
+        }
+        return nil
     }
     
     func configureEditWorkoutList(cell: UITableViewCell) {
