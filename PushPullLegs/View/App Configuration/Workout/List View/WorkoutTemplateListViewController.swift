@@ -38,7 +38,7 @@ class WorkoutTemplateListViewController: UIViewController, UITableViewDataSource
             return
         }
         viewModel.select(indexPath)
-        performSegue(withIdentifier: EditWorkoutSegue, sender: self)
+        performSegue(withIdentifier: SegueIdentifier.editWorkout.rawValue, sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -47,7 +47,7 @@ class WorkoutTemplateListViewController: UIViewController, UITableViewDataSource
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         if segue.identifier == EditWorkoutSegue, let vc = segue.destination as? WorkoutTemplateEditViewController {
+        if segue.identifier == SegueIdentifier.editWorkout.rawValue, let vc = segue.destination as? WorkoutTemplateEditViewController {
             vc.viewModel = WorkoutTemplateEditViewModel(withType: viewModel.selectedType(), templateManagement: TemplateManagement())
         }
     }

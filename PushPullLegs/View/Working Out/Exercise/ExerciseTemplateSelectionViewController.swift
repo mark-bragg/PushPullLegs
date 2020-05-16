@@ -32,7 +32,7 @@ class ExerciseTemplateSelectionViewController: UIViewController, UITableViewDele
     }
     
     @IBAction func createExerciseTemplate(_ sender: Any) {
-        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: CreateTemplateExerciseSegue) as? ExerciseTemplateCreationViewController {
+        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: SegueIdentifier.createTemplateExercise.rawValue) as? ExerciseTemplateCreationViewController {
             vc.viewModel = ExerciseTemplateCreationViewModel(withType: viewModel.exerciseType, management: TemplateManagement())
             vc.modalPresentationStyle = .formSheet
             present(vc, animated: true, completion: nil)

@@ -8,23 +8,19 @@
 
 import Foundation
 
-let WorkoutEntityName = "Workout"
-let ExerciseEntityName = "Exercise"
-let ExerciseSetEntityName = "ExerciseSet"
-
-let ProgramEntityName = "Program"
-let WorkoutTemplateEntityName = "WorkoutTemplate"
-let ExerciseTemplateEntityName = "ExerciseTemplate"
+enum EntityName: String {
+    case workout = "Workout"
+    case exercise = "Exercise"
+    case exerciseSet = "ExerciseSet"
+    case workoutTemplate = "WorkoutTemplate"
+    case exerciseTemplate = "ExerciseTemplate"
+}
 
 enum ExerciseType: String {
     case push = "Push"
     case pull = "Pull"
     case legs = "Legs"
     case error = "EXERCISE TYPE ERROR"
-}
-
-enum ProgramError: Error {
-    case duplicateProgram
 }
 
 enum TemplateError: Error {

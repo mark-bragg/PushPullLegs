@@ -85,14 +85,6 @@ extension ExerciseSet {
 }
 
 extension Double {
-//    func rounded(toPlaces places:Int) -> Double {
-//        let divisor = pow(10.0, Double(places))
-//        let val = self * divisor
-//        let toReturn = val.rounded()
-//        let toReturn2: Int = Int(toReturn) / Int(divisor)
-//        return Double(toReturn2)
-//    }
-    
     func truncateDigitsAfterDecimal(afterDecimalDigits: Int) -> Double {
        return Double(String(format: "%.\(afterDecimalDigits)f", self))!
     }

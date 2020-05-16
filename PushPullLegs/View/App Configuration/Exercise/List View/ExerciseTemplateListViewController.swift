@@ -21,7 +21,7 @@ class ExerciseTemplateListViewController: UIViewController, UITableViewDelegate,
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == CreateTemplateExerciseSegue,
+        if segue.identifier == SegueIdentifier.createTemplateExercise.rawValue,
             let vc = segue.destination as? ExerciseTemplateCreationViewController {
             vc.showExerciseType = true
             vc.viewModel = ExerciseTemplateCreationViewModel(management: viewModel.templateManagement)
