@@ -8,12 +8,14 @@
 
 import Foundation
 
-// MARK: Exercise
-let GetExerciseTypeSegue = "GetExerciseTypeSegue"
-let NavigateToExerciseDetailSegue = "NavigateToExerciseDetailSegue"
-let AddExerciseOnTheFlySegue = "AddExerciseOnTheFlySegue"
-let CreateTemplateExerciseSegue = "CreateTemplateExerciseSegue"
+enum SegueIdentifier: String {
+    // MARK: Exercise
+    case getExerciseType = "GetExerciseTypeSegue"
+    case navigateToExerciseDetail = "NavigateToExerciseDetailSegue"
+    case addExerciseOnTheFly = "AddExerciseOnTheFlySegue"
+    case createTemplateExercise = "CreateTemplateExerciseSegue"
 
-// MARK: Workout
-let StartWorkoutSegue = "StartWorkoutSegue"
-let EditWorkoutSegue = "EditWorkoutSegue"
+    // MARK: Workout
+    case startWorkout = "StartWorkoutSegue"
+    case editWorkout = "EditWorkoutSegue"
+}

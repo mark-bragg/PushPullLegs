@@ -11,7 +11,7 @@ import CoreData
 class ExerciseDataManager: DataManager {
     override init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
         super.init(backgroundContext: backgroundContext)
-        entityName = ExerciseEntityName
+        entityName = .exercise
     }
     
     override func create(name: String?, keyValuePairs pairs: [String : Any] = [:]) {
@@ -23,7 +23,7 @@ class ExerciseDataManager: DataManager {
     
     func insertSet(duration: Int, weight: Double, reps: Int, exercise: Exercise, completion: (_ exerciseSet: ExerciseSet) -> Void ) {
         backgroundContext.performAndWait {
-            if let set = NSEntityDescription.insertNewObject(forEntityName: ExerciseSetEntityName, into: backgroundContext) as? ExerciseSet,
+            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseSet.rawValue, into: backgroundContext) as? ExerciseSet,
                 let exerciseInContext = fetch(exercise) as? Exercise {
                 set.duration = Int16(duration)
                 set.weight = weight
@@ -37,7 +37,7 @@ class ExerciseDataManager: DataManager {
     
     func addSet(_ exercise: Exercise) {
         backgroundContext.performAndWait {
-            if let set = NSEntityDescription.insertNewObject(forEntityName: ExerciseSetEntityName, into: backgroundContext) as? ExerciseSet,
+            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseSet.rawValue, into: backgroundContext) as? ExerciseSet,
                 let exerciseInContext = fetch(exercise) as? Exercise {
                 exerciseInContext.addToSets(set)
                 try? backgroundContext.save()

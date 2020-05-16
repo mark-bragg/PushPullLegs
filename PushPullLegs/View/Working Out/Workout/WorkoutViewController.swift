@@ -32,7 +32,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
     
     @IBAction func addExercise(_ sender: Any) {
         if exerciseSelectionViewModel.rowCount() > 0 {
-            performSegue(withIdentifier: AddExerciseOnTheFlySegue, sender: self)
+            performSegue(withIdentifier: SegueIdentifier.addExerciseOnTheFly.rawValue, sender: self)
         } else {
             if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateExerciseViewController") as? ExerciseTemplateCreationViewController {
                 vc.showExerciseType = false
@@ -44,7 +44,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
         }
     }
     
-    
+    // TODO: present save confirmation alert vc to finish workout
     @IBAction func done(_ sender: Any) {
         viewModel.finishWorkout()
         navigationController?.popViewController(animated: true)
@@ -52,7 +52,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination
-        if segue.identifier == NavigateToExerciseDetailSegue, let vc = vc as? ExerciseViewController {
+        if segue.identifier == SegueIdentifier.navigateToExerciseDetail.rawValue, let vc = vc as? ExerciseViewController {
             // TODO: open already performed Exercise instead of creating a new ExerciseTemplate
             if let exerciseTemplate = viewModel.getSelected() as? ExerciseTemplate {
                 let vm = ExerciseViewModel(exerciseTemplate: exerciseTemplate)
@@ -65,7 +65,7 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
                 vm.reloader = vc
                 vc.readOnly = true
             }
-        } else if segue.identifier == AddExerciseOnTheFlySegue, let vc = vc as? ExerciseTemplateSelectionViewController {
+        } else if segue.identifier == SegueIdentifier.addExerciseOnTheFly.rawValue, let vc = vc as? ExerciseTemplateSelectionViewController {
             vc.viewModel = exerciseSelectionViewModel
             vc.delegate = viewModel
         }
@@ -103,7 +103,7 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.selectedIndex = indexPath
-        performSegue(withIdentifier: NavigateToExerciseDetailSegue, sender: self)
+        performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail.rawValue, sender: self)
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

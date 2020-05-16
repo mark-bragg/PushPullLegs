@@ -38,6 +38,7 @@ class ExerciseTemplateCreationViewModel {
         do {
             try management.addExerciseTemplate(name: name, type: exerciseType)
         } catch {
+            // TODO: present duplicate exercise error to user
             print(error)
             return
         }

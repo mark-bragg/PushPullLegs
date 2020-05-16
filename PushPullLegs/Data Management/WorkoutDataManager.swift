@@ -12,7 +12,7 @@ class WorkoutDataManager: DataManager {
     
     override init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
         super.init(backgroundContext: backgroundContext)
-        entityName = "Workout"
+        entityName = EntityName.workout
     }
     
     func add(_ exercise: Exercise, to workout: Workout) {
@@ -36,7 +36,7 @@ class WorkoutDataManager: DataManager {
     }
     
     private func fetchLatestWorkout() -> Workout? {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
         request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
         request.fetchLimit = 1
         do {
@@ -51,7 +51,7 @@ class WorkoutDataManager: DataManager {
     }
     
     func previousWorkout(before date: Date? = nil) -> Workout? {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
         request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
         request.fetchLimit = 2
         if let date = date {
@@ -72,7 +72,7 @@ class WorkoutDataManager: DataManager {
     }
     
     func workouts() -> [Workout] {
-        let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
         if let wkts = try? backgroundContext.fetch(req) as? [Workout] {
             return wkts
         }

@@ -12,7 +12,7 @@ import CoreData
 class DataManager {
     var creation: Any?
     let backgroundContext: NSManagedObjectContext
-    var entityName: String!
+    var entityName: EntityName!
     init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
         self.backgroundContext = backgroundContext
     }
@@ -29,7 +29,7 @@ class DataManager {
     }
     
     func exists(name: String) -> Bool {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
         request.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
         do {
             let result = try backgroundContext.fetch(request)
@@ -42,7 +42,7 @@ class DataManager {
     
     func create(name: String?, keyValuePairs pairs: [String: Any] = [:]) {
         backgroundContext.performAndWait {
-            let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: backgroundContext)
+            let object = NSEntityDescription.insertNewObject(forEntityName: entityNameString(), into: backgroundContext)
             if let name = name {
                 object.setValue(name, forKey: "name")
             }
@@ -81,5 +81,9 @@ class DataManager {
                 print(error)
             }
         }
+    }
+    
+    func entityNameString() -> String {
+        return entityName.rawValue
     }
 }
