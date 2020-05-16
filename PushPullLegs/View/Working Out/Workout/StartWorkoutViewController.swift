@@ -37,6 +37,7 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     func select(type: ExerciseType) {
         exerciseType = type
         performSegue(withIdentifier: SegueIdentifier.startWorkout.rawValue, sender: self)
+        exerciseType = nil
     }
 
 }

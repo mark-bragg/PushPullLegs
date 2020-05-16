@@ -18,4 +18,8 @@ enum SegueIdentifier: String {
     // MARK: Workout
     case startWorkout = "StartWorkoutSegue"
     case editWorkout = "EditWorkoutSegue"
+    
+    // MARK: App Configuration
+    case editWorkoutList = "EditWorkoutListSegue"
+    case editExerciseList = "EditExerciseList"
 }
