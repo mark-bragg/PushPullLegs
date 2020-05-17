@@ -41,7 +41,10 @@ class ExerciseViewController: UIViewController, ExerciseSetViewModelDelegate, Ex
         tableView.dataSource = self
         tableView.rowHeight = 75
         if readOnly {
+            navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
             navigationItem.rightBarButtonItem = nil
+        } else {
+            navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(done(_:)))
         }
     }
     
@@ -60,7 +63,7 @@ class ExerciseViewController: UIViewController, ExerciseSetViewModelDelegate, Ex
     }
     
     @IBAction func done(_ sender: Any) {
-        if readOnly {
+        if readOnly || viewModel.rowCount() == 0 {
             self.navigationController?.popViewController(animated: true)
         } else {
             presentExerciseCompletionConfirmation()
@@ -98,9 +101,8 @@ class ExerciseViewController: UIViewController, ExerciseSetViewModelDelegate, Ex
     }
     
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
-        dismiss(animated: true, completion: {
-            
-        })
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
+        dismiss(animated: true, completion: nil)
         
     }
     

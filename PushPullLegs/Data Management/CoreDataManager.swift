@@ -16,10 +16,6 @@ protocol CoreDataManagement {
 }
 
 class CoreDataManager: CoreDataManagement {
-    private init() {
-        
-    }
-    
     static let shared = CoreDataManager()
     private var storeType: String!
     lazy var persistentContainer: NSPersistentContainer! = { [unowned self] in

@@ -33,17 +33,7 @@ class WorkoutDataViewController: UIViewController, UITableViewDelegate, UITableV
             cell.textLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
             cell.detailTextLabel?.text = "Total volume: \(vm.detailText(indexPath: indexPath)!)"
             cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-            var imageName: String
-            var tint: UIColor
-            if vm.exerciseVolumeComparison(row: indexPath.row) == .increase {
-                imageName = "arrow.up"
-                tint = .green
-            } else {
-                imageName = "arrow.down"
-                tint = .red
-            }
-            cell.imageView?.image = UIImage.init(systemName: imageName)?.withRenderingMode(.alwaysTemplate)//.withTintColor(tint)
-            cell.imageView?.tintColor = tint
+            cell.setWorkoutProgressionImage(vm.exerciseVolumeComparison(row: indexPath.row))
         }
         return cell
     }

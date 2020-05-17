@@ -526,6 +526,38 @@ class WorkoutEditViewModelTests: XCTestCase {
         XCTAssert(progression == .increase)
     }
     
+    func testDeleteWorkout() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        let name = "exercise"
+        dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let set1 = (10, 2, 60.0)
+        let exercise1 = dbHelper.createExercise(name, sets: [set1])
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut.deleteWorkout()
+        let workouts = dbHelper.fetchWorkouts()
+        XCTAssert(workouts.count == 0)
+    }
+    
+    func testDeleteWorkout_twoWorkoutsPreviouslySaved_bothWorkoutsStillExist() {
+        dbHelper.insertWorkoutTemplate(type: .push)
+        let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
+        let name = "exercise"
+        dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
+        let _ = dbHelper.createWorkout(name: .push, date: Date().addingTimeInterval(-(60 * 60 * 24)))
+        let _ = dbHelper.createWorkout(name: .push, date: Date().addingTimeInterval(-(60 * 60 * 24 * 2)))
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let workoutDeletedId = sut.workoutId
+        let workoutsBeforeDeletion = dbHelper.fetchWorkouts()
+        XCTAssert(workoutsBeforeDeletion.count == 3)
+        XCTAssert(workoutsBeforeDeletion.contains(where: { $0.objectID == workoutDeletedId }))
+        sut.deleteWorkout()
+        let workoutsAfterDeletion = dbHelper.fetchWorkouts()
+        XCTAssert(workoutsAfterDeletion.count == 2)
+        XCTAssert(!workoutsAfterDeletion.contains(where: { $0.objectID == workoutDeletedId }))
+    }
+    
 }
 
 func assertEqual(_ v1: Int, _ v2: Int) {
