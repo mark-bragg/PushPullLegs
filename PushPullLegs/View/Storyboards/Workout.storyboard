@@ -91,11 +91,6 @@
                         <viewLayoutGuide key="safeArea" id="88y-8u-y0f"/>
                     </view>
                     <navigationItem key="navigationItem" id="cwV-od-IJw">
-                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="Rnt-k8-4NJ">
-                            <connections>
-                                <action selector="done:" destination="k8C-Wq-1Pq" id="4pR-tD-g4W"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="uA8-oD-urJ">
                             <connections>
                                 <action selector="addExercise:" destination="k8C-Wq-1Pq" id="ehm-yv-xs3"/>
@@ -135,11 +130,6 @@
                         <viewLayoutGuide key="safeArea" id="3e9-eM-vj1"/>
                     </view>
                     <navigationItem key="navigationItem" id="nVz-z3-uNB">
-                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="I8P-Bt-Y8h">
-                            <connections>
-                                <action selector="done:" destination="Uez-uh-2ED" id="2cg-L8-7fG"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="LAV-w4-spj">
                             <connections>
                                 <action selector="addSet:" destination="Uez-uh-2ED" id="dn2-ax-0av"/>

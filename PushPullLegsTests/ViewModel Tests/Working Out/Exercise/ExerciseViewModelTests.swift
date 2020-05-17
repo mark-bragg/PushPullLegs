@@ -49,23 +49,21 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     }
     
     func testFinishedSet_setUpdated_rowCountUpdated() {
+        sut.collectSet(duration: 10, weight: 10, reps: 10)
         let exercise = dbHelper.fetchExercises().first!
-        assertFinishedSet(20, 150, 8, exercise, 1)
+        assertFinishedSet(20, 150, 8, exercise, 2)
     }
     
     func testFinishedTenSets_setsUpdated_rowCountUpdated() {
+        sut.collectSet(duration: 10, weight: 10, reps: 10)
         let exercise = dbHelper.fetchExercises().first!
         for i in 1..<10 {
             let (d, w, r) = (Int.random(in: 1...65), Double.random(in: 50...500), Int.random(in: 3...20))
-            assertFinishedSet(d, w, r, exercise, i)
+            assertFinishedSet(d, w, r, exercise, i+1)
         }
     }
     
     func testDataForRow_oneFinishedSet() {
-        guard let _ = dbHelper.fetchExercises().first else {
-            XCTFail()
-            return
-        }
         sut.collectSet(duration: 35, weight: 135, reps: 12)
         XCTAssert(sut.rowCount() == 1)
         let dataForRow = sut.dataForRow(0)
@@ -76,10 +74,6 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     }
     
     func testTitleForRow_tenFinishedSets() {
-        guard let _ = dbHelper.fetchExercises().first else {
-            XCTFail()
-            return
-        }
         for i in 0...9 {
             let d = Int.random(in: 10...100)
             let w = Double.random(in: 20...500).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
@@ -107,6 +101,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     func testExerciseComplete_exerciseCompletionDelegateCalled() {
         exerciseCompletionExpectation = XCTestExpectation(description: "ExerciseViewModelDelegate func exerciseCompleted(_ exercise: Exercise)")
         sut.delegate = self
+        sut.collectSet(duration: 10, weight: 10, reps: 10)
         sut.exerciseCompleted()
         wait(for: [exerciseCompletionExpectation!], timeout: 1)
     }

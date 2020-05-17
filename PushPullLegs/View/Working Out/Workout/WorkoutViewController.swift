@@ -10,7 +10,7 @@ import UIKit
 
 let ExerciseToDoCellReuseIdentifier = "ExerciseToDoCellReuseIdentifier"
 
-class WorkoutViewController: UIViewController, ReloadProtocol {
+class WorkoutViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     var viewModel: WorkoutEditViewModel!
@@ -23,6 +23,8 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
         navigationItem.title = viewModel.exerciseType.rawValue
         exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: viewModel.exerciseType, templateManagement: TemplateManagement())
         tableView.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(done(_:)))
+        viewModel.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,8 +48,23 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
     
     // TODO: present save confirmation alert vc to finish workout
     @IBAction func done(_ sender: Any) {
-        viewModel.finishWorkout()
-        navigationController?.popViewController(animated: true)
+        guard viewModel.rowsForSection(1) > 0 else {
+            viewModel.deleteWorkout()
+            navigationController?.popViewController(animated: true)
+            return
+        }
+        let alert = UIAlertController.init(title: "Workout Complete?", message: "Once you save a workout, you cannot edit it later.", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
+            if self.viewModel.rowsForSection(1) == 0 {
+                self.viewModel.finishWorkout()
+            }
+            self.navigationController?.popViewController(animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+            self.viewModel.deleteWorkout()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -69,12 +86,19 @@ class WorkoutViewController: UIViewController, ReloadProtocol {
             vc.delegate = viewModel
         }
     }
-    
+}
+
+extension WorkoutViewController: WorkoutEditViewModelDelegate {
+    func workoutEditViewModelCompletedFirstExercise(_ model: WorkoutEditViewModel) {
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
+    }
+}
+
+extension WorkoutViewController: ReloadProtocol {
     func reload() {
         viewModel.exerciseTemplatesAdded()
         tableView.reloadData()
     }
-
 }
 
 extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
@@ -90,8 +114,7 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = dequeuCell(section: indexPath.section)
         if indexPath.section == 1 {
             cell.detailTextLabel?.text = "Total volume: \(viewModel.detailText(indexPath: indexPath)!)"
-            let color: UIColor = viewModel.exerciseVolumeComparison(row: indexPath.row) == .increase ? .green : .red
-            cell.imageView?.image = color.getImage(size: CGSize(width: 20, height: 20))
+            cell.setWorkoutProgressionImage(viewModel.exerciseVolumeComparison(row: indexPath.row))
         }
         cell.textLabel?.text = viewModel.titleForIndexPath(indexPath)
         return cell
@@ -113,12 +136,3 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
         return "done"
     }
 }
-
-extension UIColor {
-func getImage(size: CGSize) -> UIImage {
-    let renderer = UIGraphicsImageRenderer(size: size)
-    return renderer.image(actions: { rendererContext in
-        self.setFill()
-        rendererContext.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
-    })
-}}

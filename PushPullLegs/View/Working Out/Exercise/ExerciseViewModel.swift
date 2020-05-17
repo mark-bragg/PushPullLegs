@@ -31,15 +31,14 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
     weak var reloader: ReloadProtocol?
     weak var delegate: ExerciseViewModelDelegate?
     private let exerciseManager: ExerciseDataManager
-    private let exercise: Exercise
+    private var exercise: Exercise!
     private var finishedCellData = [FinishedSetCellData]()
+    private var exerciseName: String!
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
         exerciseManager = dataManager
-        exerciseManager.create(name: exerciseTemplate.name!)
-        exercise = exerciseManager.creation as! Exercise
+        exerciseName = exerciseTemplate.name!
         super.init()
-        collectFinishedCellData()
     }
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exercise: Exercise) {
@@ -54,6 +53,10 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
     }
     
     func collectSet(duration: Int, weight: Double, reps: Int) {
+        if finishedCellData.count == 0 {
+            exerciseManager.create(name: exerciseName)
+            exercise = exerciseManager.creation as? Exercise
+        }
         exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: exercise) { exerciseSet in
             finishedCellData.append(FinishedSetCellData(withExerciseSet: exerciseSet))
             reloader?.reload()

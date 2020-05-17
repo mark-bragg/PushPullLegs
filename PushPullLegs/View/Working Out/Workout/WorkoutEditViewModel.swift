@@ -14,10 +14,15 @@ enum ExerciseVolumeComparison {
     case noChange
 }
 
+protocol WorkoutEditViewModelDelegate: NSObject {
+    func workoutEditViewModelCompletedFirstExercise(_ model: WorkoutEditViewModel)
+}
+
 class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate, ExerciseViewModelDelegate {
     
     private var exercisesToDo = [ExerciseTemplate]()
     private var startingTime: Date!
+    weak var delegate: WorkoutEditViewModelDelegate?
     
     init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
         super.init(withCoreDataManagement: coreDataManagement)
@@ -112,6 +117,9 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
         guard let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout else { return }
         workoutManager.add(exercise, to: workout)
         reload()
+        if exercisesDone.count == 1 {
+            delegate?.workoutEditViewModelCompletedFirstExercise(self)
+        }
     }
     
     private func computeExerciseType() -> ExerciseType {
@@ -125,6 +133,11 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
         default:
             return .push
         }
+    }
+
+    func deleteWorkout() {
+        guard let workout = try? coreDataManager.backgroundContext.existingObject(with: workoutId) as? Workout else { return }
+        workoutManager.delete(workout)
     }
 }
 
