@@ -19,6 +19,7 @@ class AppConfigurationViewController: UIViewController, UITableViewDataSource, U
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: defaultCellIdentifier)
+        navigationItem.title = "Settings"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
