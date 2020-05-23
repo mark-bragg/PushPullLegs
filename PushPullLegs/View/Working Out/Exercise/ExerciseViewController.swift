@@ -144,14 +144,11 @@ extension ExerciseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(origin: .zero, size: CGSize(width: tableView.frame.width, height: 60)))
+        var titles = [String]()
         for i in 0...2 {
-            let label = UILabel(frame: CGRect(x: CGFloat(i) * tableView.frame.width/3.0, y: 0, width: tableView.frame.width / 3.0, height: 40))
-            label.text = headerLabelText(i)
-            view.addSubview(label)
-            label.textAlignment = .center
-            label.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
+            titles.append(headerLabelText(i))
         }
+        let view = tableHeaderView(titles: titles)
         return view
     }
     
@@ -171,6 +168,34 @@ extension ExerciseViewController: UITableViewDelegate, UITableViewDataSource {
         cell.repsLabel.text = "\(data.reps)"
         cell.timeLabel.text = "\(data.duration)"
         return cell
+    }
+
+}
+extension UIViewController {
+    func tableHeaderView(titles: [String]) -> UIView {
+        let headerHeight: CGFloat = 60.0
+        let headerView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: headerHeight)))
+        var i = 0
+        let widthDenominator = CGFloat(titles.count)
+        let labelWidth = headerView.frame.width / widthDenominator
+        for title in titles {
+            let label = UILabel.headerLabel(title)
+            label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight)
+            headerView.addSubview(label)
+            i += 1
+        }
+        headerView.backgroundColor = UIColor.lightGray
+        return headerView
+    }
+}
+
+extension UILabel {
+    static func headerLabel(_ text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
+        return label
     }
 }
 

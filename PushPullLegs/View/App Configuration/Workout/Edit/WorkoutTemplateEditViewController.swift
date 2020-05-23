@@ -51,7 +51,9 @@ class WorkoutTemplateEditViewController: UIViewController, UITableViewDelegate, 
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.setSelected(false, animated: true)
             if indexPath.section == 0 {
-                viewModel.unselected(indexPath: indexPath)
+                if viewModel.sectionCount() == 2 { viewModel.selected(indexPath: indexPath) } else {
+                    viewModel.selected(indexPath: indexPath)
+                }
             } else {
                 viewModel.selected(indexPath: indexPath)
             }
@@ -60,11 +62,16 @@ class WorkoutTemplateEditViewController: UIViewController, UITableViewDelegate, 
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return viewModel.sectionCount()
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.titleForSection(section)
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let title = viewModel.titleForSection(section) else { return nil }
+        return tableHeaderView(titles: [title])
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
     }
     
     func reload() {

@@ -120,6 +120,10 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
     func dequeuCell(section: Int) -> UITableViewCell {
         return tableView.dequeueReusableCell(withIdentifier: section == 0 ? ExerciseToDoCellReuseIdentifier : ExerciseDataCellReuseIdentifier)!
     }
@@ -129,10 +133,7 @@ extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
         performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail.rawValue, sender: self)
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "to do"
-        }
-        return "done"
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return tableHeaderView(titles: [section == 0 ? "TODO" : "DONE"])
     }
 }
