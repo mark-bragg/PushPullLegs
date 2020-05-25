@@ -10,14 +10,6 @@ import XCTest
 import CoreData
 @testable import PushPullLegs
 
-/*
- func workoutTitleForRow(_ row: Int) -> String
- func rowCount() -> Int
- func select(_ indexPath: IndexPath)
- func selectedWorkout() -> WorkoutTemplate
- func getExerciseType() -> ExerciseType
- */
-
 class WorkoutTemplateListViewModelTests: XCTestCase {
 
     var sut: WorkoutTemplateListViewModel!
@@ -30,14 +22,14 @@ class WorkoutTemplateListViewModelTests: XCTestCase {
     }
 
     func testWorkoutTitleForRow_row0row1row2_pushPullLegsReturned() {
-        let titles = [sut.workoutTitleForRow(0), sut.workoutTitleForRow(1), sut.workoutTitleForRow(2)]
+        let titles = [sut.title(indexPath: IndexPath(row: 0, section: 0)), sut.title(indexPath: IndexPath(row: 1, section: 0)), sut.title(indexPath: IndexPath(row: 2, section: 0))]
         XCTAssert(titles.contains(ExerciseType.push.rawValue))
         XCTAssert(titles.contains(ExerciseType.pull.rawValue))
         XCTAssert(titles.contains(ExerciseType.legs.rawValue))
     }
     
     func testRowCount() {
-        XCTAssert(sut.rowCount() == 3)
+        XCTAssert(sut.rowCount(section: 0) == 3)
     }
     
     func testSelect() {

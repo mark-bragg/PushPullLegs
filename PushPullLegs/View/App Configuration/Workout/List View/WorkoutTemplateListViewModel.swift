@@ -8,8 +8,7 @@
 
 import Foundation
 
-class WorkoutTemplateListViewModel {
-    
+class WorkoutTemplateListViewModel: NSObject, ViewModel {
     private let templateManagement: TemplateManagement
     private var workouts: [WorkoutTemplate]!
     private var selected: Int!
@@ -20,15 +19,11 @@ class WorkoutTemplateListViewModel {
         workouts = templateManagement.workoutTemplates()
     }
     
-    func workoutTitleForRow(_ row: Int) -> String {
-        guard let title = workouts[row].name else {
-            // TODO: handle unnamed workout error
-            return "ERROR!"
-        }
-        return title
+    func title(indexPath: IndexPath) -> String? {
+        return workouts[indexPath.row].name
     }
     
-    func rowCount() -> Int {
+    func rowCount(section: Int) -> Int {
         return workouts.count
     }
     

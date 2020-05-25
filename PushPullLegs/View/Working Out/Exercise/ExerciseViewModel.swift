@@ -26,7 +26,7 @@ protocol ExerciseViewModelDelegate: NSObject {
     func exerciseViewModel(_ viewMode: ExerciseViewModel, completed exercise: Exercise)
 }
 
-class ExerciseViewModel: NSObject, ExerciseSetCollector {
+class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
     
     weak var reloader: ReloadProtocol?
     weak var delegate: ExerciseViewModelDelegate?
@@ -48,10 +48,6 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
         collectFinishedCellData()
     }
     
-    func rowCount() -> Int {
-        return finishedCellData.count
-    }
-    
     func collectSet(duration: Int, weight: Double, reps: Int) {
         if finishedCellData.count == 0 {
             exerciseManager.create(name: exerciseName)
@@ -61,6 +57,14 @@ class ExerciseViewModel: NSObject, ExerciseSetCollector {
             finishedCellData.append(FinishedSetCellData(withExerciseSet: exerciseSet))
             reloader?.reload()
         }
+    }
+    
+    func rowCount(section: Int) -> Int {
+        return finishedCellData.count
+    }
+    
+    func title(indexPath: IndexPath) -> String? {
+        return nil
     }
     
     func dataForRow(_ row: Int) -> FinishedSetCellData {

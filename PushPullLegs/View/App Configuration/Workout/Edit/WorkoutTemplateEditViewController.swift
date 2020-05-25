@@ -10,10 +10,9 @@ import UIKit
 
 let exerciseCellReuseIdentifier = "ExerciseCell"
 
-class WorkoutTemplateEditViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ReloadProtocol {
+class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol {
 
     @IBOutlet weak var tableView: UITableView!
-    var viewModel: WorkoutTemplateEditViewModel!
     var currentSegueId: String!
     
     override func viewDidLoad() {
@@ -30,17 +29,17 @@ class WorkoutTemplateEditViewController: UIViewController, UITableViewDelegate, 
             return
         }
         currentSegueId = id
-        let vm = ExerciseTemplateCreationViewModel(withType: viewModel.type(), management: viewModel.templateManagement)
+        let vm = ExerciseTemplateCreationViewModel(withType: workoutTemplateEditViewModel().type(), management: workoutTemplateEditViewModel().templateManagement)
         vm.reloader = self
         vc.viewModel = vm
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.rowCount(section: section)
+    private func workoutTemplateEditViewModel() -> WorkoutTemplateEditViewModel {
+        return viewModel as! WorkoutTemplateEditViewModel
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let text = viewModel.title(indexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let text = workoutTemplateEditViewModel().title(indexPath: indexPath)
         let cell = UITableViewCell(style: .default, reuseIdentifier: exerciseCellReuseIdentifier)
         cell.textLabel?.text = text
         cell.textLabel?.textAlignment = .left
@@ -51,24 +50,23 @@ class WorkoutTemplateEditViewController: UIViewController, UITableViewDelegate, 
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.setSelected(false, animated: true)
             if indexPath.section == 0 {
-                viewModel.unselected(indexPath: indexPath)
+                if workoutTemplateEditViewModel().sectionCount() == 2 { workoutTemplateEditViewModel().selected(indexPath: indexPath) } else {
+                    workoutTemplateEditViewModel().selected(indexPath: indexPath)
+                }
             } else {
-                viewModel.selected(indexPath: indexPath)
+                workoutTemplateEditViewModel().selected(indexPath: indexPath)
             }
             reload()
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.titleForSection(section)
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let title = workoutTemplateEditViewModel().titleForSection(section) else { return nil }
+        return tableHeaderView(titles: [title])
     }
     
     func reload() {
-        viewModel.reload()
+        workoutTemplateEditViewModel().reload()
         tableView.reloadData()
     }
     

@@ -37,16 +37,16 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
         return 2
     }
     
-    override func rowsForSection(_ section: Int) -> Int {
+    override func rowCount(section: Int) -> Int {
         return section == 0 ? exercisesToDo.count : exercisesDone.count
     }
     
-    override func titleForIndexPath(_ indexPath: IndexPath) -> String {
+    override func title(indexPath: IndexPath) -> String? {
         if indexPath.section < 2 {
             if indexPath.section == 0 && indexPath.row < exercisesToDo.count, let name = exercisesToDo[indexPath.row].name {
                 return name
             } else {
-                return super.titleForIndexPath(indexPath)
+                return super.title(indexPath: indexPath)
             }
         }
         return "ERROR: SECTION COUNT IS LARGER THAN 2"

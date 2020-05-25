@@ -87,13 +87,25 @@ class ExerciseTemplateListViewModelTests: XCTestCase, ExerciseTemplateListViewMo
         let pullExercises = dbHelper.fetchExerciseTemplates()?.filter({  $0.type! == ExerciseType.pull.rawValue }).map({ $0.name! })
         let legsExercises = dbHelper.fetchExerciseTemplates()?.filter({  $0.type! == ExerciseType.legs.rawValue }).map({ $0.name! })
         for j in 0..<rowCounts[.push]! {
-            XCTAssert((pushExercises?.contains(sut.title(indexPath: IndexPath(row: j, section: 0))))!)
+            guard let title = sut.title(indexPath: IndexPath(row: j, section: 0)) else {
+                XCTFail()
+                return
+            }
+            XCTAssert((pushExercises?.contains(title))!)
         }
         for j in 0..<rowCounts[.pull]! {
-            XCTAssert((pullExercises?.contains(sut.title(indexPath: IndexPath(row: j, section: 1))))!)
+            guard let title = sut.title(indexPath: IndexPath(row: j, section: 1)) else {
+                XCTFail()
+                return
+            }
+            XCTAssert((pullExercises?.contains(title))!)
         }
         for j in 0..<rowCounts[.legs]! {
-            XCTAssert((legsExercises?.contains(sut.title(indexPath: IndexPath(row: j, section: 2))))!)
+            guard let title = sut.title(indexPath: IndexPath(row: j, section: 2)) else {
+                XCTFail()
+                return
+            }
+            XCTAssert((legsExercises?.contains(title))!)
         }
     }
     

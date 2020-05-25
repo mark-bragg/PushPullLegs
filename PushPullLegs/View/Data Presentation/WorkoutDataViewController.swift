@@ -23,13 +23,13 @@ class WorkoutDataViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let vm = viewModel else { return 0 }
-        return vm.rowsForSection(section)
+        return vm.rowCount(section: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ExerciseDataCellReuseIdentifier)!
         if let vm = viewModel {
-            cell.textLabel?.text = vm.titleForIndexPath(indexPath)
+            cell.textLabel?.text = vm.title(indexPath: indexPath)
             cell.textLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
             cell.detailTextLabel?.text = "Total volume: \(vm.detailText(indexPath: indexPath)!)"
             cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 20, weight: .regular)
@@ -43,8 +43,10 @@ class WorkoutDataViewController: UIViewController, UITableViewDelegate, UITableV
         vm.selectedIndex = indexPath
         let exerciseVm = ExerciseViewModel(exercise: vm.getSelected() as! Exercise)
         let vc = ExerciseViewController()
+        vc.readOnly = true
         vc.viewModel = exerciseVm
         navigationController?.pushViewController(vc, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
