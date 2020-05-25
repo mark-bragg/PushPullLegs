@@ -10,15 +10,12 @@ import UIKit
 
 let WorkoutLogCellReuseIdentifier = "WorkoutLogCellReuseIdentifier"
 
-class WorkoutLogViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class WorkoutLogViewController: PPLTableViewController {
     
     weak var tableView: UITableView!
-    var workouts = [Workout]()
-    let formatter = DateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        formatter.dateFormat = "MM/dd/YY"
         navigationItem.title = "Workouts"
     }
     
@@ -26,50 +23,66 @@ class WorkoutLogViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewWillAppear(animated)
         let tbl = UITableView(frame: view.frame)
         view.addSubview(tbl)
+        viewModel = WorkoutLogViewModel()
         tableView = tbl
-        tableView.rowHeight = 75.0
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "WorkoutLogTableViewCell", bundle: nil), forCellReuseIdentifier: WorkoutLogCellReuseIdentifier)
-        workouts = WorkoutDataManager().workouts().sorted(by: {$0.dateCreated! > $1.dateCreated!})
         tableView.reloadData()
+    }
+    
+    private func workoutLogViewModel() -> WorkoutLogViewModel {
+        return viewModel as! WorkoutLogViewModel
     }
 
     // MARK: - Table view data source
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60))
-        let nameTitle = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width/2.0, height: 40))
-        nameTitle.text = "Name"
-        let dateTitle = UILabel(frame: CGRect(x: nameTitle.frame.width, y: 0, width: view.frame.width/2.0, height: 40))
-        dateTitle.text = "Date"
-        for lbl in [dateTitle, nameTitle] {
-            lbl.textAlignment = .center
-            lbl.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
-            view.addSubview(lbl)
-        }
-        return view
+        return tableHeaderView(titles: workoutLogViewModel().tableHeaderTitles())
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return workouts.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WorkoutLogCellReuseIdentifier) as! WorkoutLogTableViewCell
-        cell.nameLabel?.text = workouts[indexPath.row].name!
-        cell.dateLabel?.text = formatter.string(from: workouts[indexPath.row].dateCreated!)
+        cell.nameLabel?.text = viewModel.title(indexPath: indexPath)
+        cell.dateLabel?.text = workoutLogViewModel().dateLabel(indexPath: indexPath)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = WorkoutDataViewController()
-        vc.viewModel = WorkoutReadViewModel(withCoreDataManagement: CoreDataManager.shared, workout: workouts[indexPath.row])
+        vc.viewModel = WorkoutReadViewModel(withCoreDataManagement: CoreDataManager.shared, workout: workoutLogViewModel().workouts[indexPath.row])
         
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
 
+}
+
+class WorkoutLogViewModel: NSObject, ViewModel {
+    var workouts = [Workout]()
+    let formatter = DateFormatter()
+    
+    init(withDataManager dataManager: WorkoutDataManager = WorkoutDataManager()) {
+        super.init()
+        formatter.dateFormat = "MM/dd/YY"
+        workouts = WorkoutDataManager().workouts().sorted(by: {$0.dateCreated! > $1.dateCreated!})
+    }
+    
+    func rowCount(section: Int) -> Int {
+        return workouts.count
+    }
+    
+    func title(indexPath: IndexPath) -> String? {
+        return workouts[indexPath.row].name!
+    }
+    
+    func dateLabel(indexPath: IndexPath) -> String? {
+        return formatter.string(from: workouts[indexPath.row].dateCreated!)
+    }
+    
+    func tableHeaderTitles() -> [String] {
+        return ["Name", "Date"]
+    }
 }
 
 class WorkoutLogTableViewCell: UITableViewCell {

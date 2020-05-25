@@ -181,7 +181,7 @@ extension UIViewController {
             headerView.addSubview(label)
             i += 1
         }
-        headerView.backgroundColor = UIColor.lightGray
+        headerView.backgroundColor = UIColor.darkGray
         return headerView
     }
 }

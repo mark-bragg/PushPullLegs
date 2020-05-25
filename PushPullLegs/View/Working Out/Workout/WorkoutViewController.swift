@@ -61,7 +61,7 @@ class WorkoutViewController: PPLTableViewController {
     }
     
     @IBAction func addExercise(_ sender: Any) {
-        if exerciseSelectionViewModel.rowCount() > 0 {
+        if exerciseSelectionViewModel.rowCount(section: 0) > 0 {
             performSegue(withIdentifier: SegueIdentifier.addExerciseOnTheFly.rawValue, sender: self)
         } else {
             if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateExerciseViewController") as? ExerciseTemplateCreationViewController {
