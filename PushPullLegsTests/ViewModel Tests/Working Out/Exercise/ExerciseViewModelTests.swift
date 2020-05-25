@@ -24,7 +24,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     
     func assertFinishedSet(_ d: Int, _ w: Double, _ r: Int, _ exercise: Exercise, _ rowCount: Int) {
         sut.collectSet(duration: d, weight: w, reps: r)
-        XCTAssert(sut.rowCount() == rowCount)
+        XCTAssert(sut.rowCount(section: 0) == rowCount)
         guard dbHelper.fetchSets(exercise)!.contains(where: { (set) -> Bool in
             return set.duration == d && set.weight == w && set.reps == r
         }) else {
@@ -35,17 +35,17 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     }
     
     func testRowCount_oneSetCollected() {
-        XCTAssert(sut.rowCount() == 0)
+        XCTAssert(sut.rowCount(section: 0) == 0)
         sut.collectSet(duration: 0, weight: 0, reps: 0)
-        XCTAssert(sut.rowCount() == 1, "\nexpected: 1\nactual: \(sut.rowCount())")
+        XCTAssert(sut.rowCount(section: 0) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 0))")
     }
     
     func testRowCount_tenSetsCollected() {
-        XCTAssert(sut.rowCount() == 0)
+        XCTAssert(sut.rowCount(section: 0) == 0)
         for _ in 0...9 {
             sut.collectSet(duration: 0, weight: 0, reps: 0)
         }
-        XCTAssert(sut.rowCount() == 10, "\nexpected: 10\nactual: \(sut.rowCount())")
+        XCTAssert(sut.rowCount(section: 0) == 10, "\nexpected: 10\nactual: \(sut.rowCount(section: 0))")
     }
     
     func testFinishedSet_setUpdated_rowCountUpdated() {
@@ -65,7 +65,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     
     func testDataForRow_oneFinishedSet() {
         sut.collectSet(duration: 35, weight: 135, reps: 12)
-        XCTAssert(sut.rowCount() == 1)
+        XCTAssert(sut.rowCount(section: 0) == 1)
         let dataForRow = sut.dataForRow(0)
         XCTAssert(dataForRow.duration == 35)
         XCTAssert(dataForRow.weight == 135)
@@ -79,7 +79,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
             let w = Double.random(in: 20...500).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
             let r = Int.random(in: 12...20)
             sut.collectSet(duration: d, weight: w, reps: r)
-            XCTAssert(sut.rowCount() == i + 1)
+            XCTAssert(sut.rowCount(section: 0) == i + 1)
             let dataForRow = sut.dataForRow(i)
             XCTAssert(dataForRow.duration == d)
             XCTAssert(dataForRow.weight == w)
@@ -90,12 +90,12 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     }
     
     func testCollectSet_deinit_reinitWithSet_onlyOneExerciseInDB_onlyOneSetPerTheExercise() {
-        XCTAssert(sut.rowCount() == 0)
+        XCTAssert(sut.rowCount(section: 0) == 0)
         sut.collectSet(duration: 0, weight: 0, reps: 0)
-        XCTAssert(sut.rowCount() == 1, "\nexpected: 1\nactual: \(sut.rowCount())")
+        XCTAssert(sut.rowCount(section: 0) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 0))")
         sut = ExerciseViewModel(withDataManager: ExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exercise: dbHelper.fetchExercises().first!)
         XCTAssert(dbHelper.fetchExercises().count == 1)
-        XCTAssert(sut.rowCount() == 1, "\nexpected: 1\nactual: \(sut.rowCount())")
+        XCTAssert(sut.rowCount(section: 0) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 0))")
     }
     
     func testExerciseComplete_exerciseCompletionDelegateCalled() {

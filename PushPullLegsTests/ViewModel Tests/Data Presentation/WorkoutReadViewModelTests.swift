@@ -31,17 +31,17 @@ class WorkoutReadViewModelTests: XCTestCase {
         let date = Date()
         let workout = dbHelper.createWorkout(name: .push, date: date)
         sut = WorkoutReadViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
-        XCTAssert(sut.rowsForSection(0) == 0)
+        XCTAssert(sut.rowCount(section: 0) == 0)
     }
     
     func testRowsForSection_fiveReturned() {
-        XCTAssert(sut.rowsForSection(0) == 5)
+        XCTAssert(sut.rowCount(section: 0) == 5)
     }
     
     func testTitleForIndexPath() {
         var i = 0
         for name in exerciseNames {
-            XCTAssert(sut.titleForIndexPath(IndexPath(row: i, section: 0)) == name)
+            XCTAssert(sut.title(indexPath: IndexPath(row: i, section: 0)) == name)
             i += 1
         }
     }

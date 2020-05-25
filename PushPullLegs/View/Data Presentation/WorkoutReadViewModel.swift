@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class WorkoutReadViewModel: NSObject {
+class WorkoutReadViewModel: NSObject, ViewModel {
     
     var exerciseType: ExerciseType!
     var workoutManager: WorkoutDataManager
@@ -28,15 +28,16 @@ class WorkoutReadViewModel: NSObject {
         super.init()
     }
     
-    func sectionCount() -> Int {
-        return 1
-    }
-
-    func rowsForSection(_ section: Int) -> Int {
+    func rowCount(section: Int) -> Int {
         return exercisesDone.count
     }
     
-    func titleForIndexPath(_ indexPath: IndexPath) -> String {
+    func sectionCount() -> Int {
+        return 1
+    }
+    
+    
+    func title(indexPath: IndexPath) -> String? {
         if indexPath.row < exercisesDone.count, let name = exercisesDone[indexPath.row].name {
             return name
         }

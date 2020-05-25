@@ -108,8 +108,8 @@ class WorkoutEditViewModelTests: XCTestCase {
     
     func testRowsForSection_zeroExercises_zeroRowsForBothSections() {
         sut = WorkoutEditViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack )
-        XCTAssert(sut.rowsForSection(0) == 0, "\nexpected: 0\nactual: \(sut.rowsForSection(0))")
-        XCTAssert(sut.rowsForSection(1) == 0)
+        XCTAssert(sut.rowCount(section: 0) == 0, "\nexpected: 0\nactual: \(sut.rowCount(section: 0))")
+        XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testRowsForSection_zeroExercisesDone_oneExerciseToDo_oneRowForSectionZero_zeroRowsForSectionOne() {
@@ -117,8 +117,8 @@ class WorkoutEditViewModelTests: XCTestCase {
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         dbHelper.addExerciseTemplate("exercise to do", to: workoutTemplate, addToWorkout: true)
         sut = WorkoutEditViewModel(withType: nil,coreDataManagement: dbHelper.coreDataStack)
-        assertEqual(sut.rowsForSection(0), 1)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 1)
+        XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testRowsForSection_zeroExercisesDone_tenExercisesToDo_tenRowsForSectionZero_zeroRowsForSectionOne() {
@@ -127,16 +127,16 @@ class WorkoutEditViewModelTests: XCTestCase {
             dbHelper.addExerciseTemplate("exercise to do #\(i)", to: dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         }
         sut = WorkoutEditViewModel(withType: nil,coreDataManagement: dbHelper.coreDataStack)
-        assertEqual(sut.rowsForSection(0), 10)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 10)
+        XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testRowsForSection_oneExerciseDone_zeroExercisesToDo_zeroRowsForSectionZero_oneRowForSectionOne() {
         sut = WorkoutEditViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack)
         dbHelper.addExercise("exercise done", to: dbHelper.fetchWorkouts().first!)
         sut.exerciseTemplatesAdded()
-        XCTAssert(sut.rowsForSection(0) == 0)
-        XCTAssert(sut.rowsForSection(1) == 1)
+        XCTAssert(sut.rowCount(section: 0) == 0)
+        XCTAssert(sut.rowCount(section: 1) == 1)
     }
     
     func testRowsForSection_tenExercisesDone_fiveExercisesToDo_fiveRowsForSectionZero_tenRowsForSectionOne() {
@@ -150,8 +150,8 @@ class WorkoutEditViewModelTests: XCTestCase {
             dbHelper.addExercise("done \(i)", to: dbHelper.fetchWorkouts().first!)
         }
         sut.reload()
-        let done = sut.rowsForSection(1)
-        let todo = sut.rowsForSection(0)
+        let done = sut.rowCount(section: 1)
+        let todo = sut.rowCount(section: 0)
         XCTAssert(todo == 5, "\nexpected: 5\nactual: \(todo)")
         XCTAssert(done == 10, "\nexpected: 10\nactual: \(done)")
     }
@@ -173,12 +173,12 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut.reload()
         var row = 0
         for name in todoNames.sorted(by: { $0 < $1 }) {
-            XCTAssert(sut.titleForIndexPath(IndexPath(row: row, section: 0)) == name, "\nexpected: \(name)\nactual: \(sut.titleForIndexPath(IndexPath(row: row, section: 0)))")
+            XCTAssert(sut.title(indexPath: IndexPath(row: row, section: 0)) == name, "\nexpected: \(name)\nactual: \(sut.title(indexPath: IndexPath(row: row, section: 0))!)")
             row += 1
         }
         row = 0
         for name in doneNames.sorted(by: { $0 < $1 }) {
-            XCTAssert(sut.titleForIndexPath(IndexPath(row: row, section: 1)) == name)
+            XCTAssert(sut.title(indexPath: IndexPath(row: row, section: 1)) == name)
             row += 1
         }
     }
@@ -223,15 +223,15 @@ class WorkoutEditViewModelTests: XCTestCase {
         let name = "to be added"
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: false)
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
-        assertEqual(sut.rowsForSection(0), 5)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 5)
+        XCTAssert(sut.rowCount(section: 1) == 0)
         guard let exerciseToBeAdded = dbHelper.fetchExerciseTemplates()?.first(where: { $0.name! == name })! else {
             XCTFail()
             return
         }
         sut.addExercise(templates: [exerciseToBeAdded])
-        assertEqual(sut.rowsForSection(0), 6)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 6)
+        XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testAddExercises_exerciseTemplatesAdded() {
@@ -244,8 +244,8 @@ class WorkoutEditViewModelTests: XCTestCase {
         }
         
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
-        assertEqual(sut.rowsForSection(0), 5)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 5)
+        XCTAssert(sut.rowCount(section: 1) == 0)
         var toAddNames = [String]()
         for i in 0...4 {
             toAddNames.append("to be added \(i)")
@@ -256,8 +256,8 @@ class WorkoutEditViewModelTests: XCTestCase {
             return
         }
         sut.addExercise(templates: exercisesToBeAdded)
-        assertEqual(sut.rowsForSection(0), 10)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 10)
+        XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testAddZeroExercises_zeroExerciseTemplatesAdded() {
@@ -270,11 +270,11 @@ class WorkoutEditViewModelTests: XCTestCase {
         }
         
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
-        assertEqual(sut.rowsForSection(0), 5)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 5)
+        XCTAssert(sut.rowCount(section: 1) == 0)
         sut.addExercise(templates: [])
-        assertEqual(sut.rowsForSection(0), 5)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 5)
+        XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testExercisesAdded_oneExercise_changesRecognized() {
@@ -287,16 +287,16 @@ class WorkoutEditViewModelTests: XCTestCase {
         }
         let name = "to be added"
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
-        XCTAssert(sut.rowsForSection(0) == 5)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        XCTAssert(sut.rowCount(section: 0) == 5)
+        XCTAssert(sut.rowCount(section: 1) == 0)
         dbHelper.addExerciseTemplate(name, to: workoutTemplate, addToWorkout: true)
         guard let _ = dbHelper.fetchExerciseTemplates()?.first(where: { $0.name! == name })! else {
             XCTFail()
             return
         }
         sut.exerciseTemplatesAdded()
-        assertEqual(sut.rowsForSection(0), 6)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 6)
+        XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testExercisesAdded_5Exercises_changesRecognized() {
@@ -309,16 +309,16 @@ class WorkoutEditViewModelTests: XCTestCase {
         }
         
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
-        assertEqual(sut.rowsForSection(0), 5)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 5)
+        XCTAssert(sut.rowCount(section: 1) == 0)
         var toAddNames = [String]()
         for i in 0...4 {
             toAddNames.append("to be added \(i)")
             dbHelper.addExerciseTemplate(toAddNames.last!, to: workoutTemplate, addToWorkout: true)
         }
         sut.exerciseTemplatesAdded()
-        assertEqual(sut.rowsForSection(0), 10)
-        XCTAssert(sut.rowsForSection(1) == 0)
+        assertEqual(sut.rowCount(section: 0), 10)
+        XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testSelectedIndexPath_sectionZero_getSelected_templateReturned() {
@@ -356,8 +356,8 @@ class WorkoutEditViewModelTests: XCTestCase {
         let exerciseToTest = sut.getSelected() as! Exercise
         let exerciseTester = dbHelper.fetchExercises().first(where: { $0.name! == todoNames[0] })
         XCTAssert(exerciseToTest == exerciseTester)
-        XCTAssert(sut.rowsForSection(0) == 4)
-        XCTAssert(sut.rowsForSection(1) == 1)
+        XCTAssert(sut.rowCount(section: 0) == 4)
+        XCTAssert(sut.rowCount(section: 1) == 1)
     }
     
     func testSelectedIndexPath_sectionZero_workoutHasExerciseAndTemplate_getSelected_exerciseReturned() {
@@ -379,8 +379,8 @@ class WorkoutEditViewModelTests: XCTestCase {
         let tempToTest = sut.getSelected() as! ExerciseTemplate
         let tempTester = dbHelper.fetchExerciseTemplates()?.first(where: { $0.name! == todoNames[1] })
         XCTAssert(tempToTest == tempTester)
-        XCTAssert(sut.rowsForSection(0) == 4)
-        XCTAssert(sut.rowsForSection(1) == 1)
+        XCTAssert(sut.rowCount(section: 0) == 4)
+        XCTAssert(sut.rowCount(section: 1) == 1)
     }
     
     func testExerciseViewModelCompletedExercise_dataUpdated() {
@@ -395,12 +395,12 @@ class WorkoutEditViewModelTests: XCTestCase {
         let name = todoNames.remove(at: 2)
         let exercise = dbHelper.createExercise(name)
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
-        XCTAssert(sut.rowsForSection(0) == 4, "\nexpected: 4\nactual: \(sut.rowsForSection(0))")
-        XCTAssert(sut.rowsForSection(1) == 1, "\nexpected: 1\nactual: \(sut.rowsForSection(1))")
+        XCTAssert(sut.rowCount(section: 0) == 4, "\nexpected: 4\nactual: \(sut.rowCount(section: 0))")
+        XCTAssert(sut.rowCount(section: 1) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 1))")
         for i in 0...3 {
-            XCTAssert(sut.titleForIndexPath(IndexPath(row: i, section: 0)) == todoNames[i])
+            XCTAssert(sut.title(indexPath: IndexPath(row: i, section: 0)) == todoNames[i])
         }
-        XCTAssert(sut.titleForIndexPath(IndexPath(row: 0, section: 1)) == name)
+        XCTAssert(sut.title(indexPath: IndexPath(row: 0, section: 1)) == name)
     }
     
     func testExerciseViewModelCompletedExercises_dataUpdated() {
@@ -415,23 +415,23 @@ class WorkoutEditViewModelTests: XCTestCase {
         let name1 = todoNames.remove(at: 2)
         var exercise = dbHelper.createExercise(name1)
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
-        XCTAssert(sut.rowsForSection(0) == 4, "\nexpected: 4\nactual: \(sut.rowsForSection(0))")
-        XCTAssert(sut.rowsForSection(1) == 1, "\nexpected: 1\nactual: \(sut.rowsForSection(1))")
+        XCTAssert(sut.rowCount(section: 0) == 4, "\nexpected: 4\nactual: \(sut.rowCount(section: 0))")
+        XCTAssert(sut.rowCount(section: 1) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 1))")
         for i in 0...3 {
-            XCTAssert(sut.titleForIndexPath(IndexPath(row: i, section: 0)) == todoNames[i])
+            XCTAssert(sut.title(indexPath: IndexPath(row: i, section: 0)) == todoNames[i])
         }
-        XCTAssert(sut.titleForIndexPath(IndexPath(row: 0, section: 1)) == name1)
+        XCTAssert(sut.title(indexPath: IndexPath(row: 0, section: 1)) == name1)
         
         let name2 = todoNames.remove(at: 2)
         exercise = dbHelper.createExercise(name2)
         sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
-        XCTAssert(sut.rowsForSection(0) == 3, "\nexpected: 3\nactual: \(sut.rowsForSection(0))")
-        XCTAssert(sut.rowsForSection(1) == 2, "\nexpected: 2\nactual: \(sut.rowsForSection(1))")
+        XCTAssert(sut.rowCount(section: 0) == 3, "\nexpected: 3\nactual: \(sut.rowCount(section: 0))")
+        XCTAssert(sut.rowCount(section: 1) == 2, "\nexpected: 2\nactual: \(sut.rowCount(section: 1))")
         for i in 0...2 {
-            XCTAssert(sut.titleForIndexPath(IndexPath(row: i, section: 0)) == todoNames[i])
+            XCTAssert(sut.title(indexPath: IndexPath(row: i, section: 0)) == todoNames[i])
         }
-        XCTAssert(sut.titleForIndexPath(IndexPath(row: 0, section: 1)) == name1, "\nexpected: \(name1)\nactual: \(sut.titleForIndexPath(IndexPath(row: 0, section: 0)))")
-        XCTAssert(sut.titleForIndexPath(IndexPath(row: 1, section: 1)) == name2, "\nexpected: \(name2)\nactual: \(sut.titleForIndexPath(IndexPath(row: 0, section: 1)))")
+        XCTAssert(sut.title(indexPath: IndexPath(row: 0, section: 1)) == name1, "\nexpected: \(name1)\nactual: \(sut.title(indexPath: IndexPath(row: 0, section: 0))!)")
+        XCTAssert(sut.title(indexPath: IndexPath(row: 1, section: 1)) == name2, "\nexpected: \(name2)\nactual: \(sut.title(indexPath: IndexPath(row: 0, section: 1))!)")
     }
     
     func testDetailTextForIndexPath_correctVolumeReturnedForCompletedExercise() {

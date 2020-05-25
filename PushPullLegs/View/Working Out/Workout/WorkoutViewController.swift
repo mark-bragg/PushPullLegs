@@ -10,21 +10,49 @@ import UIKit
 
 let ExerciseToDoCellReuseIdentifier = "ExerciseToDoCellReuseIdentifier"
 
-class WorkoutViewController: UIViewController {
+class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    var viewModel: ViewModel!
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        guard let count = viewModel.sectionCount?() else { return 1 }
+        return count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.rowCount(section: section)
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
+    }
+}
+
+class WorkoutViewController: PPLTableViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    var viewModel: WorkoutEditViewModel!
     private var exerciseSelectionViewModel: ExerciseSelectionViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        navigationItem.title = viewModel.exerciseType.rawValue
-        exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: viewModel.exerciseType, templateManagement: TemplateManagement())
+        workoutEditViewModel().delegate = self
+        navigationItem.title = workoutEditViewModel().exerciseType.rawValue
+        exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: workoutEditViewModel().exerciseType, templateManagement: TemplateManagement())
         tableView.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(done(_:)))
-        viewModel.delegate = self
+    }
+    
+    func workoutEditViewModel() -> WorkoutEditViewModel {
+        return viewModel as! WorkoutEditViewModel
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,7 +66,7 @@ class WorkoutViewController: UIViewController {
         } else {
             if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateExerciseViewController") as? ExerciseTemplateCreationViewController {
                 vc.showExerciseType = false
-                vc.viewModel = ExerciseTemplateCreationViewModel(withType: viewModel.exerciseType, management: TemplateManagement())
+                vc.viewModel = ExerciseTemplateCreationViewModel(withType: workoutEditViewModel().exerciseType, management: TemplateManagement())
                 vc.viewModel?.reloader = self
                 vc.modalPresentationStyle = .pageSheet
                 present(vc, animated: true, completion: nil)
@@ -48,20 +76,21 @@ class WorkoutViewController: UIViewController {
     
     // TODO: present save confirmation alert vc to finish workout
     @IBAction func done(_ sender: Any) {
-        guard viewModel.rowsForSection(1) > 0 else {
-            viewModel.deleteWorkout()
+        guard viewModel.rowCount(section: 1) > 0 else {
+            workoutEditViewModel().deleteWorkout()
             navigationController?.popViewController(animated: true)
             return
         }
         let alert = UIAlertController.init(title: "Workout Complete?", message: "Once you save a workout, you cannot edit it later.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
-            if self.viewModel.rowsForSection(1) == 0 {
-                self.viewModel.finishWorkout()
+            if self.viewModel.rowCount(section: 1) == 0 {
+                self.workoutEditViewModel().finishWorkout()
             }
             self.navigationController?.popViewController(animated: true)
         }))
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
-            self.viewModel.deleteWorkout()
+            self.workoutEditViewModel().deleteWorkout()
+            self.navigationController?.popViewController(animated: true)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -70,12 +99,12 @@ class WorkoutViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination
         if segue.identifier == SegueIdentifier.navigateToExerciseDetail.rawValue, let vc = vc as? ExerciseViewController {
-            if let exerciseTemplate = viewModel.getSelected() as? ExerciseTemplate {
+            if let exerciseTemplate = workoutEditViewModel().getSelected() as? ExerciseTemplate {
                 let vm = ExerciseViewModel(exerciseTemplate: exerciseTemplate)
                 vc.viewModel = vm
                 vm.reloader = vc
-                vm.delegate = viewModel
-            } else if let exercise = viewModel.getSelected() as? Exercise {
+                vm.delegate = workoutEditViewModel()
+            } else if let exercise = workoutEditViewModel().getSelected() as? Exercise {
                 let vm = ExerciseViewModel(exercise: exercise)
                 vc.viewModel = vm
                 vm.reloader = vc
@@ -83,8 +112,35 @@ class WorkoutViewController: UIViewController {
             }
         } else if segue.identifier == SegueIdentifier.addExerciseOnTheFly.rawValue, let vc = vc as? ExerciseTemplateSelectionViewController {
             vc.viewModel = exerciseSelectionViewModel
-            vc.delegate = viewModel
+            vc.delegate = workoutEditViewModel()
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = dequeuCell(section: indexPath.section)
+        if indexPath.section == 1 {
+            cell.detailTextLabel?.text = "Total volume: \(workoutEditViewModel().detailText(indexPath: indexPath)!)"
+            cell.setWorkoutProgressionImage(workoutEditViewModel().exerciseVolumeComparison(row: indexPath.row))
+        }
+        cell.textLabel?.text = viewModel.title(indexPath: indexPath)
+        return cell
+    }
+    
+    func dequeuCell(section: Int) -> UITableViewCell {
+        return tableView.dequeueReusableCell(withIdentifier: section == 0 ? ExerciseToDoCellReuseIdentifier : ExerciseDataCellReuseIdentifier)!
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        workoutEditViewModel().selectedIndex = indexPath
+        performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail.rawValue, sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return tableHeaderView(titles: [section == 0 ? "TODO" : "DONE"])
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return workoutEditViewModel().rowCount(section: section) > 0 ? super.tableView(tableView, heightForHeaderInSection: section) : 0
     }
 }
 
@@ -96,44 +152,7 @@ extension WorkoutViewController: WorkoutEditViewModelDelegate {
 
 extension WorkoutViewController: ReloadProtocol {
     func reload() {
-        viewModel.exerciseTemplatesAdded()
+        workoutEditViewModel().exerciseTemplatesAdded()
         tableView.reloadData()
-    }
-}
-
-extension WorkoutViewController: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.sectionCount()
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.rowsForSection(section)
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = dequeuCell(section: indexPath.section)
-        if indexPath.section == 1 {
-            cell.detailTextLabel?.text = "Total volume: \(viewModel.detailText(indexPath: indexPath)!)"
-            cell.setWorkoutProgressionImage(viewModel.exerciseVolumeComparison(row: indexPath.row))
-        }
-        cell.textLabel?.text = viewModel.titleForIndexPath(indexPath)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
-    }
-    
-    func dequeuCell(section: Int) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: section == 0 ? ExerciseToDoCellReuseIdentifier : ExerciseDataCellReuseIdentifier)!
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.selectedIndex = indexPath
-        performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail.rawValue, sender: self)
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableHeaderView(titles: [section == 0 ? "TODO" : "DONE"])
     }
 }

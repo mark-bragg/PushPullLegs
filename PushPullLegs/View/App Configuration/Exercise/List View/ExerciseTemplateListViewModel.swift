@@ -23,7 +23,7 @@ protocol ExerciseTemplateListViewModelDelegate {
     func viewModelFailedToSaveExerciseWithNameAlreadyExists(_ model: ExerciseTemplateListViewModel)
 }
 
-class ExerciseTemplateListViewModel: NSObject, ReloadProtocol {
+class ExerciseTemplateListViewModel: NSObject, ViewModel, ReloadProtocol {
     
     let templateManagement: TemplateManagement
     private var pushExercises = [ExerciseTemplate]()
@@ -41,11 +41,11 @@ class ExerciseTemplateListViewModel: NSObject, ReloadProtocol {
         return exercisesForSection(section).count
     }
     
-    func title(indexPath: IndexPath) -> String {
+    func title(indexPath: IndexPath) -> String? {
         return exercisesForSection(indexPath.section)[indexPath.row].name!
     }
     
-    func titleForSection(_ section: Int) -> String {
+    func titleForSection(_ section: Int) -> String? {
         switch section {
         case 0:
             return ExerciseType.push.rawValue
@@ -59,7 +59,8 @@ class ExerciseTemplateListViewModel: NSObject, ReloadProtocol {
     }
     
     func deleteExercise(indexPath: IndexPath) {
-        templateManagement.deleteExerciseTemplate(name: title(indexPath: indexPath))
+        guard let name = title(indexPath: indexPath) else { return }
+        templateManagement.deleteExerciseTemplate(name: name)
     }
     
     private func exercisesForSection(_ section: Int) -> [ExerciseTemplate] {
