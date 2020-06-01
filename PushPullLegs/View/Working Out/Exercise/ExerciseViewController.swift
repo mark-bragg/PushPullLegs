@@ -150,7 +150,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     
     private func headerLabelText(_ index: Int) -> String {
         if index == 0 {
-            return "Weight"
+            return "Pounds"
         } else if index == 1 {
             return "Reps"
         }
@@ -181,7 +181,7 @@ extension UIViewController {
             headerView.addSubview(label)
             i += 1
         }
-        headerView.backgroundColor = UIColor.lightGray
+        headerView.backgroundColor = traitCollection.userInterfaceStyle == .light ? UIColor.lightGray : UIColor.darkGray
         return headerView
     }
 }

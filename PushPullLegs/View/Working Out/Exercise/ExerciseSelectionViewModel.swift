@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ExerciseSelectionViewModel: NSObject, ReloadProtocol {
+class ExerciseSelectionViewModel: NSObject, ViewModel, ReloadProtocol {
     
     private var exercises = [ExerciseTemplate]()
     private var selectedIndices = [Int]()
@@ -22,12 +22,12 @@ class ExerciseSelectionViewModel: NSObject, ReloadProtocol {
         reload()
     }
     
-    func rowCount() -> Int {
+    func rowCount(section: Int) -> Int {
         return exercises.count
     }
     
-    func titleForRow(_ row: Int) -> String {
-        guard let name = exercises[row].name else {
+    func title(indexPath: IndexPath) -> String? {
+        guard let name = exercises[indexPath.row].name else {
             return "ERROR"
         }
         return name

@@ -24,7 +24,6 @@
 		4929DB112454DB0C009DCC7F /* RepsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */; };
 		4937729324001807005F566A /* DBUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4937729224001807005F566A /* DBUtilities.swift */; };
 		493C2C712455E5D2005308AF /* WeightCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */; };
-		49453375244FC88B00FA1665 /* DataPresentation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49453374244FC88B00FA1665 /* DataPresentation.storyboard */; };
 		49453378244FC8FA00FA1665 /* WorkoutLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */; };
 		4945337A244FCC1900FA1665 /* PPLTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453379244FCC1900FA1665 /* PPLTabBarController.swift */; };
 		4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4945337B2450895500FA1665 /* ExerciseViewModel.swift */; };
@@ -59,7 +58,7 @@
 		49E67600244CECC8001F5974 /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E675FF244CECC8001F5974 /* DBHelper.swift */; };
 		49EF4B7923F8381F0071687D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7823F8381F0071687D /* AppDelegate.swift */; };
 		49EF4B7B23F8381F0071687D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7A23F8381F0071687D /* SceneDelegate.swift */; };
-		49EF4B8023F8381F0071687D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B7E23F8381F0071687D /* Main.storyboard */; };
+		49EF4B8023F8381F0071687D /* AppConfiguration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B7E23F8381F0071687D /* AppConfiguration.storyboard */; };
 		49EF4B8523F838370071687D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8423F838370071687D /* Assets.xcassets */; };
 		49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8623F838370071687D /* LaunchScreen.storyboard */; };
 		49EF4B9E23F838380071687D /* PushPullLegsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B9D23F838380071687D /* PushPullLegsUITests.swift */; };
@@ -115,7 +114,6 @@
 		4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsCollectionViewController.swift; sourceTree = "<group>"; };
 		4937729224001807005F566A /* DBUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUtilities.swift; sourceTree = "<group>"; };
 		493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCollectionViewController.swift; sourceTree = "<group>"; };
-		49453374244FC88B00FA1665 /* DataPresentation.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DataPresentation.storyboard; sourceTree = "<group>"; };
 		49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewController.swift; sourceTree = "<group>"; };
 		49453379244FCC1900FA1665 /* PPLTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTabBarController.swift; sourceTree = "<group>"; };
 		4945337B2450895500FA1665 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
@@ -151,7 +149,7 @@
 		49EF4B7523F8381F0071687D /* PushPullLegs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushPullLegs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EF4B7823F8381F0071687D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49EF4B7A23F8381F0071687D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		49EF4B7F23F8381F0071687D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		49EF4B7F23F8381F0071687D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AppConfiguration.storyboard; sourceTree = "<group>"; };
 		49EF4B8423F838370071687D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49EF4B8723F838370071687D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		49EF4B8923F838370071687D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -379,8 +377,7 @@
 			isa = PBXGroup;
 			children = (
 				49EF4B8623F838370071687D /* LaunchScreen.storyboard */,
-				49EF4B7E23F8381F0071687D /* Main.storyboard */,
-				49453374244FC88B00FA1665 /* DataPresentation.storyboard */,
+				49EF4B7E23F8381F0071687D /* AppConfiguration.storyboard */,
 				490D88DD2451DE32005FFEA3 /* Workout.storyboard */,
 				4957DFCB2470407A00574C89 /* StoryboardIdentifiers.swift */,
 				49BE39D3244E914400B6E3C4 /* SegueIdentifiers.swift */,
@@ -631,7 +628,6 @@
 			files = (
 				4957DFBC246CF94200574C89 /* WorkoutDataViewController.xib in Resources */,
 				4957DFBE246D049C00574C89 /* ExerciseDataCell.xib in Resources */,
-				49453375244FC88B00FA1665 /* DataPresentation.storyboard in Resources */,
 				4911325D246B13C100D689DD /* TypeSelectorViewController.xib in Resources */,
 				4957DFC2246D0FDC00574C89 /* WorkoutLogTableViewCell.xib in Resources */,
 				490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */,
@@ -640,7 +636,7 @@
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
 				490D88DE2451DE32005FFEA3 /* Workout.storyboard in Resources */,
 				490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */,
-				49EF4B8023F8381F0071687D /* Main.storyboard in Resources */,
+				49EF4B8023F8381F0071687D /* AppConfiguration.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,12 +753,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		49EF4B7E23F8381F0071687D /* Main.storyboard */ = {
+		49EF4B7E23F8381F0071687D /* AppConfiguration.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				49EF4B7F23F8381F0071687D /* Base */,
 			);
-			name = Main.storyboard;
+			name = AppConfiguration.storyboard;
 			sourceTree = "<group>";
 		};
 		49EF4B8623F838370071687D /* LaunchScreen.storyboard */ = {

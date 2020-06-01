@@ -20,7 +20,7 @@ class ExerciseSelectionViewModelTests: XCTestCase {
 
     func testRowCount_noExercisesToAdd_zeroReturned() {
         sut = ExerciseSelectionViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
-        XCTAssert(sut.rowCount() == 0)
+        XCTAssert(sut.rowCount(section: 0) == 0)
     }
     
     func testRowCount_fiveExercisesToAdd_fiveReturned() {
@@ -28,7 +28,7 @@ class ExerciseSelectionViewModelTests: XCTestCase {
             dbHelper.addExerciseTemplate(name: "ex \(i)", type: .push)
         }
         sut = ExerciseSelectionViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
-        XCTAssert(sut.rowCount() == 5)
+        XCTAssert(sut.rowCount(section: 0) == 5)
     }
     
     func testRowCount_fiveExercisesToAdd_fiveExercisesAdded_fiveReturned() {
@@ -38,7 +38,7 @@ class ExerciseSelectionViewModelTests: XCTestCase {
             dbHelper.addExerciseTemplate("ex \(100 + i)", to: push, addToWorkout: true)
         }
         sut = ExerciseSelectionViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
-        XCTAssert(sut.rowCount() == 5)
+        XCTAssert(sut.rowCount(section: 0) == 5)
     }
     
     func testTitleForRow() {
@@ -49,7 +49,7 @@ class ExerciseSelectionViewModelTests: XCTestCase {
         }
         sut = ExerciseSelectionViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
         for i in 0...4 {
-            XCTAssert(names.contains(sut.titleForRow(i)))
+            XCTAssert(names.contains(sut.title(indexPath: IndexPath(row: i, section: 0))!))
         }
     }
     
@@ -109,10 +109,10 @@ class ExerciseSelectionViewModelTests: XCTestCase {
             dbHelper.addExerciseTemplate(name: names.last!, type: .push)
         }
         sut = ExerciseSelectionViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
-        XCTAssert(sut.rowCount() == 5)
+        XCTAssert(sut.rowCount(section: 0) == 5)
         dbHelper.addExerciseTemplate("to add to workout", to: dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseType.push.rawValue })!, addToWorkout: true)
         sut.reload()
-        XCTAssert(sut.rowCount() == 5, "\nexpected: 6\nactual: \(sut.rowCount())")
+        XCTAssert(sut.rowCount(section: 0) == 5, "\nexpected: 6\nactual: \(sut.rowCount(section: 0))")
     }
 
     func testSelected_commitChanges_templateUpdated() {
