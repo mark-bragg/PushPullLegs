@@ -12,16 +12,31 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
 
     private var exerciseType: ExerciseType?
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if AppState.shared.workoutInProgress {
+            self.navigateToNextWorkout()
+        }
+    }
+    
     @IBAction func startWorkout(_ sender: Any) {
         if PPLDefaults.instance.workoutTypePromptSwitchValue() {
-            let typeVC = TypeSelectorViewController()
-            typeVC.delegate = self
-            typeVC.modalPresentationStyle = .pageSheet
-            typeVC.isModalInPresentation = true
-            present(typeVC, animated: true, completion: nil)
+            presentTypeSelector()
         } else {
-            performSegue(withIdentifier: SegueIdentifier.startWorkout.rawValue, sender: self)
+            navigateToNextWorkout()
         }
+    }
+    
+    func presentTypeSelector() {
+        let typeVC = TypeSelectorViewController()
+        typeVC.delegate = self
+        typeVC.modalPresentationStyle = .pageSheet
+        typeVC.isModalInPresentation = true
+        present(typeVC, animated: true, completion: nil)
+    }
+    
+    func navigateToNextWorkout() {
+        performSegue(withIdentifier: SegueIdentifier.startWorkout.rawValue, sender: self)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -30,6 +45,7 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
             vc.isModalInPresentation = true
         } else if segue.identifier == SegueIdentifier.startWorkout.rawValue, let vc = segue.destination as? WorkoutViewController {
             vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
+            AppState.shared.workoutInProgress = true
             vc.hidesBottomBarWhenPushed = true
         }
     }

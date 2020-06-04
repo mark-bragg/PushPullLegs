@@ -47,6 +47,7 @@
 		4993789C243B87B500EAD55E /* TypeSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993789B243B87B500EAD55E /* TypeSelectorViewController.swift */; };
 		4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993789D243B964200EAD55E /* ReloadProtocol.swift */; };
 		4997C1DB2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */; };
+		49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB1D7A24849C980003CFA1 /* AppState.swift */; };
 		49BE39D4244E914500B6E3C4 /* SegueIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BE39D3244E914400B6E3C4 /* SegueIdentifiers.swift */; };
 		49CEF20A2447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */; };
 		49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */; };
@@ -137,6 +138,7 @@
 		4993789B243B87B500EAD55E /* TypeSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeSelectorViewController.swift; sourceTree = "<group>"; };
 		4993789D243B964200EAD55E /* ReloadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadProtocol.swift; sourceTree = "<group>"; };
 		4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewController.swift; sourceTree = "<group>"; };
+		49AB1D7A24849C980003CFA1 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		49BE39D3244E914400B6E3C4 /* SegueIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueIdentifiers.swift; sourceTree = "<group>"; };
 		49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModelTests.swift; sourceTree = "<group>"; };
 		49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModel.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 				49EF4B7A23F8381F0071687D /* SceneDelegate.swift */,
 				496A84472400EE790082D677 /* Resources */,
 				490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */,
+				49AB1D7A24849C980003CFA1 /* AppState.swift */,
 			);
 			path = PushPullLegs;
 			sourceTree = "<group>";
@@ -697,6 +700,7 @@
 				49EF4BB023F838F60071687D /* ExerciseDataManager.swift in Sources */,
 				49EF4BB223F838FE0071687D /* WorkoutDataManager.swift in Sources */,
 				490D88E32452832F005FFEA3 /* QuantityCollectionViewController.swift in Sources */,
+				49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */,
 				4957DFB6246B54F000574C89 /* WorkoutReadViewModel.swift in Sources */,
 				4973C11E244BB593009460F2 /* ExerciseViewController.swift in Sources */,
 				49EF4B7923F8381F0071687D /* AppDelegate.swift in Sources */,
