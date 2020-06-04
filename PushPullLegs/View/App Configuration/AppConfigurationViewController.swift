@@ -98,15 +98,24 @@ class AppConfigurationViewModel: NSObject, ViewModel {
 }
 
 class PPLDefaults: NSObject {
-    let user_details_suite_name = "User Details"
-    let prompt_user_for_workout_type = "Prompt User For Workout Type"
-    let kUserDetailsPromptForWorkoutType = "kUserDetailsPromptForWorkoutType"
+    private let user_details_suite_name = "User Details"
+    private let prompt_user_for_workout_type = "Prompt User For Workout Type"
+    private let kUserDetailsPromptForWorkoutType = "kUserDetailsPromptForWorkoutType"
+    private let kWorkoutInProgress = "kWorkoutInProgress"
     override private init() {
         super.init()
         setupUserDetails()
     }
     static let instance = PPLDefaults()
     private var userDetails: UserDefaults!
+    
+    func isWorkoutInProgress() -> Bool {
+        return userDetails.bool(forKey: kWorkoutInProgress)
+    }
+    
+    func setWorkoutInProgress(_ value: Bool) {
+        userDetails.set(value, forKey: kWorkoutInProgress)
+    }
     
     func workoutTypePromptSwitchValue() -> Bool {
         return userDetails.bool(forKey: kUserDetailsPromptForWorkoutType)

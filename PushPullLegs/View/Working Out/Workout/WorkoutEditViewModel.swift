@@ -26,11 +26,17 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
     
     init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
         super.init(withCoreDataManagement: coreDataManagement)
-        exerciseType = type != nil ? type : computeExerciseType() 
-        exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
         startingTime = Date()
-        workoutManager.create(name: exerciseType.rawValue, keyValuePairs: ["dateCreated": startingTime!])
-        workoutId = (workoutManager.creation as? Workout)?.objectID
+        if AppState.shared.workoutInProgress, let workout = workoutManager.previousWorkout(before: startingTime) {
+            exerciseType = ExerciseType(rawValue: workout.name!)
+            workoutId = workout.objectID
+            startingTime = workout.dateCreated!
+        } else {
+            exerciseType = type != nil ? type : computeExerciseType()
+            workoutManager.create(name: exerciseType.rawValue, keyValuePairs: ["dateCreated": startingTime!])
+            workoutId = (workoutManager.creation as? Workout)?.objectID
+        }
+        exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
     }
     
     override func sectionCount() -> Int {
@@ -68,6 +74,7 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
     func finishWorkout() {
         let workout = workoutManager.backgroundContext.object(with: workoutId)
         workoutManager.update(workout, keyValuePairs: ["duration": Int(startingTime.timeIntervalSinceNow * -1)])
+        AppState.shared.workoutInProgress = false
     }
     
     func addExercise(templates: [ExerciseTemplate]) {
@@ -138,6 +145,7 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
     func deleteWorkout() {
         guard let workout = try? coreDataManager.backgroundContext.existingObject(with: workoutId) as? Workout else { return }
         workoutManager.delete(workout)
+        AppState.shared.workoutInProgress = false
     }
 }
 
