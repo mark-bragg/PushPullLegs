@@ -103,7 +103,7 @@
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="93b-sJ-1A0">
                                         <rect key="frame" x="0.0" y="61.5" width="374" height="53.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="alphabet"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="alphabet"/>
                                         <connections>
                                             <action selector="textFieldDidChangeEditing:" destination="4mJ-9v-zh2" eventType="editingChanged" id="1ga-zH-Pjf"/>
                                         </connections>
