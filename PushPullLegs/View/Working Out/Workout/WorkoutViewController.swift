@@ -48,7 +48,7 @@ class WorkoutViewController: PPLTableViewController {
         navigationItem.title = workoutEditViewModel().exerciseType.rawValue
         exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: workoutEditViewModel().exerciseType, templateManagement: TemplateManagement())
         tableView.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(done(_:)))
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(cancel(_:)))
     }
     
     func workoutEditViewModel() -> WorkoutEditViewModel {
@@ -58,6 +58,9 @@ class WorkoutViewController: PPLTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reload()
+        if viewModel.rowCount(section: 1) > 0 {
+            navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
+        }
     }
     
     @IBAction func addExercise(_ sender: Any) {
@@ -74,7 +77,6 @@ class WorkoutViewController: PPLTableViewController {
         }
     }
     
-    // TODO: present save confirmation alert vc to finish workout
     @IBAction func done(_ sender: Any) {
         guard viewModel.rowCount(section: 1) > 0 else {
             workoutEditViewModel().deleteWorkout()
@@ -83,17 +85,19 @@ class WorkoutViewController: PPLTableViewController {
         }
         let alert = UIAlertController.init(title: "Workout Complete?", message: "Once you save a workout, you cannot edit it later.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
-            if self.viewModel.rowCount(section: 1) == 0 {
-                self.workoutEditViewModel().finishWorkout()
-            }
+            self.workoutEditViewModel().finishWorkout()
             self.navigationController?.popViewController(animated: true)
         }))
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
-            self.workoutEditViewModel().deleteWorkout()
-            self.navigationController?.popViewController(animated: true)
+            self.cancel(self)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func cancel(_ sender: Any) {
+        self.workoutEditViewModel().deleteWorkout()
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
