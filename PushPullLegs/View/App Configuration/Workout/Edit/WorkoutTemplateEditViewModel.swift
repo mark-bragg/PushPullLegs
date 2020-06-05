@@ -121,4 +121,5 @@ class WorkoutTemplateEditViewModel: NSObject, ViewModel, ReloadProtocol {
     
     @objc optional func sectionCount() -> Int
     @objc optional func titleForSection(_ section: Int) -> String?
+    @objc optional func title() -> String?
 }

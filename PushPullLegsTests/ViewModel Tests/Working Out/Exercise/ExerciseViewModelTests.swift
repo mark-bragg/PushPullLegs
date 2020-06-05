@@ -20,6 +20,15 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         dbHelper.addExerciseTemplate(name: exerciseTemplateName, type: .push)
         let template = dbHelper.fetchExerciseTemplates()!.first!
         sut = ExerciseViewModel(withDataManager: ExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exerciseTemplate: template)
+        assertTitle()
+    }
+    
+    func assertTitle() {
+        guard let title = sut.title() else {
+            XCTFail()
+            return
+        }
+        XCTAssert(title == exerciseTemplateName)
     }
     
     func assertFinishedSet(_ d: Int, _ w: Double, _ r: Int, _ exercise: Exercise, _ rowCount: Int) {

@@ -45,6 +45,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(done(_:)))
         }
+        navigationItem.title = exerciseViewModel().title()
     }
     
     func exerciseViewModel() -> ExerciseViewModel {

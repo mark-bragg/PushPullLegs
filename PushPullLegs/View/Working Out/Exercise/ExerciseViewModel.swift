@@ -76,6 +76,10 @@ class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
         delegate?.exerciseViewModel(self, completed: exercise)
     }
     
+    func title() -> String? {
+        return exerciseName
+    }
+    
     private func collectFinishedCellData() {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
         for set in sets {
