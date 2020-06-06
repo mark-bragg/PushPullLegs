@@ -52,4 +52,10 @@ extension String {
         corrected.removeLast()
         return corrected
     }
+    
+    static func format(seconds: Int) -> String {
+        let minutes = seconds / 60
+        let seconds = seconds % 60
+        return String(format: "%01d:%02d", minutes, seconds)
+    }
 }

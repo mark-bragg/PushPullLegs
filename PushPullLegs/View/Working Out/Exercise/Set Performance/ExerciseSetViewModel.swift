@@ -43,24 +43,19 @@ class ExerciseSetViewModel: NSObject {
     var completedExerciseSet: Bool {
         return state == .finished
     }
-    // TODO: maybe we need this
-//    var canceledExerciseSet: Bool {
-//        return self.state == .canceled
-//    }
-    private var startingTime: Date!
     private var totalTime: Int!
-    private var queue: DispatchQueue?
     private var weight: Double!
     private var state: ExerciseSetState
+    private var stopWatch: PPLStopWatch!
     
     override init() {
-        queue = DispatchQueue(label: "timer queue")
         state = .notStarted
         super.init()
-    }
-    
-    deinit {
-        queue = nil
+        weak var weakSelf = self
+        stopWatch = PPLStopWatch(withHandler: { (seconds) in
+            guard let strongSelf = weakSelf else { return }
+            strongSelf.timerDelegate?.timerUpdate(String.format(seconds: seconds))
+        })
     }
     
     func startSetWithWeight(_ weight: Double) {
@@ -70,10 +65,9 @@ class ExerciseSetViewModel: NSObject {
             print("invalid state error")
             return
         }
+        stopWatch.start()
         self.weight = weight
-        startingTime = Date()
         delegate?.exerciseSetViewModelStartedSet(self)
-        beginTimerTextUpdates()
     }
     
     func stopTimer() {
@@ -83,9 +77,9 @@ class ExerciseSetViewModel: NSObject {
             print("invalid state error")
             return
         }
+        stopWatch.stop()
+        totalTime = Int(stopWatch.currentTime())
         delegate?.exerciseSetViewModelStoppedTimer(self)
-        queue = nil
-        totalTime = Int(self.startingTime.timeIntervalSinceNow * -1)
     }
     
     func finishSetWithReps(_ reps: Int) {
@@ -123,18 +117,5 @@ class ExerciseSetViewModel: NSObject {
             throw ExerciseStateError()
         }
         state = newValue
-    }
-    
-    private func beginTimerTextUpdates() {
-        queue!.async { [weak self] in
-            guard let self = self else { return }
-            while self.state == .inProgress {
-                let interval = Int(self.startingTime.timeIntervalSinceNow * -1)
-                let minutes = interval / 60
-                let seconds = interval % 60
-                self.timerDelegate?.timerUpdate(String(format: "%01d:%02d", minutes, seconds))
-                sleep(1)
-            }
-        }
     }
 }
