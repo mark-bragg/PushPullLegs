@@ -14,6 +14,7 @@ class PPLStopWatch {
     private var queue: DispatchQueue?
     var timeBetweenReadings: UInt32 = 1
     var handler: ((Int) -> Void)?
+    private var running = false
     
     init(withHandler handler: ((Int) -> Void)? = nil) {
         self.handler = handler
@@ -26,6 +27,7 @@ class PPLStopWatch {
     }
     
     func stop() {
+        running = false
         queue?.suspend()
     }
     
@@ -34,6 +36,7 @@ class PPLStopWatch {
     }
     
     private func beginUpdating() {
+        running = true
         queue!.async { [weak self] in
             guard let self = self else { return }
             while let handler = self.handler {
@@ -41,5 +44,9 @@ class PPLStopWatch {
                 sleep(self.timeBetweenReadings)
             }
         }
+    }
+    
+    func isRunning() -> Bool {
+        return running
     }
 }
