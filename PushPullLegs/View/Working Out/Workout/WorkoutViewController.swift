@@ -10,31 +10,6 @@ import UIKit
 
 let ExerciseToDoCellReuseIdentifier = "ExerciseToDoCellReuseIdentifier"
 
-class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var viewModel: ViewModel!
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        guard let count = viewModel.sectionCount?() else { return 1 }
-        return count
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.rowCount(section: section)
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
-    }
-}
-
 class WorkoutViewController: PPLTableViewController {
 
     @IBOutlet weak var tableView: UITableView!
@@ -123,8 +98,10 @@ class WorkoutViewController: PPLTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeuCell(section: indexPath.section)
         if indexPath.section == 1 {
-            cell.detailTextLabel?.text = "Total volume: \(workoutEditViewModel().detailText(indexPath: indexPath)!)"
+            cell.detailTextLabel?.text = "Total work: \(workoutEditViewModel().detailText(indexPath: indexPath)!)"
             cell.setWorkoutProgressionImage(workoutEditViewModel().exerciseVolumeComparison(row: indexPath.row))
+        } else {
+            cell.textLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
         }
         cell.textLabel?.text = viewModel.title(indexPath: indexPath)
         return cell

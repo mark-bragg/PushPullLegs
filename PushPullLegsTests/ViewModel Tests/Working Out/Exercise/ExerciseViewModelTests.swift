@@ -115,8 +115,19 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         wait(for: [exerciseCompletionExpectation!], timeout: 1)
     }
     
+    func testInitWithExercise_titleIsCorrect() {
+        let name = "testing testing 1 2"
+        let exercise = dbHelper.createExercise(name, sets: nil)
+        sut = ExerciseViewModel(withDataManager: MockExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exercise: exercise)
+        XCTAssert(sut.title() == name)
+    }
+    
     func exerciseViewModel(_ viewMode: ExerciseViewModel, completed exercise: Exercise) {
         exerciseCompletionExpectation?.fulfill()
     }
 
+}
+
+class MockExerciseDataManager: ExerciseDataManager {
+    
 }

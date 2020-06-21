@@ -77,7 +77,10 @@ class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
     }
     
     func title() -> String? {
-        return exerciseName
+        guard let name = exerciseName else {
+            return exercise.name
+        }
+        return name
     }
     
     private func collectFinishedCellData() {

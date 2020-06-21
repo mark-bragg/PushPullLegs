@@ -50,6 +50,7 @@
 		4997C1DB2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */; };
 		49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB1D7A24849C980003CFA1 /* AppState.swift */; };
 		49CEF20A2447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */; };
+		49E2501F249F1B60001F7B70 /* PPLTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */; };
 		49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */; };
 		49E3832B23FA09BF00F7A502 /* TemplateManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3832A23FA09BF00F7A502 /* TemplateManagement.swift */; };
 		49E3832D23FA0A0000F7A502 /* TemplateManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3832C23FA0A0000F7A502 /* TemplateManagementTests.swift */; };
@@ -141,6 +142,7 @@
 		4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewController.swift; sourceTree = "<group>"; };
 		49AB1D7A24849C980003CFA1 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModelTests.swift; sourceTree = "<group>"; };
+		49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewController.swift; sourceTree = "<group>"; };
 		49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModel.swift; sourceTree = "<group>"; };
 		49E3832A23FA09BF00F7A502 /* TemplateManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManagement.swift; sourceTree = "<group>"; };
 		49E3832C23FA0A0000F7A502 /* TemplateManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManagementTests.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 				4993789D243B964200EAD55E /* ReloadProtocol.swift */,
 				49453379244FCC1900FA1665 /* PPLTabBarController.swift */,
 				490D88EC2453CA29005FFEA3 /* KeyboardObserving.swift */,
+				49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -706,6 +709,7 @@
 				49EF4B7923F8381F0071687D /* AppDelegate.swift in Sources */,
 				49EF4BAE23F838F60071687D /* CoreDataManager.swift in Sources */,
 				49EF4B7B23F8381F0071687D /* SceneDelegate.swift in Sources */,
+				49E2501F249F1B60001F7B70 /* PPLTableViewController.swift in Sources */,
 				4957DFCE24710A0400574C89 /* UITableViewCell+ExerciseDataCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

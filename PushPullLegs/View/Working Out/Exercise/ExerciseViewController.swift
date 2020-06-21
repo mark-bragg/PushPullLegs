@@ -225,24 +225,6 @@ class RestTimerView: UIView {
     }
 }
 
-extension UIViewController {
-    func tableHeaderView(titles: [String]) -> UIView {
-        let headerHeight: CGFloat = 60.0
-        let headerView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: headerHeight)))
-        var i = 0
-        let widthDenominator = CGFloat(titles.count)
-        let labelWidth = headerView.frame.width / widthDenominator
-        for title in titles {
-            let label = UILabel.headerLabel(title)
-            label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight)
-            headerView.addSubview(label)
-            i += 1
-        }
-        headerView.backgroundColor = traitCollection.userInterfaceStyle == .light ? UIColor.lightGray : UIColor.darkGray
-        return headerView
-    }
-}
-
 extension UILabel {
     static func headerLabel(_ text: String) -> UILabel {
         let label = UILabel()
