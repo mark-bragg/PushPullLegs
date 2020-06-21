@@ -36,7 +36,7 @@ class AppConfigurationViewController: PPLTableViewController {
             return UITableViewCell()
         }
         if indexPath.row == 2 {
-            configureStartNextWorkoutPromptSwitch(cell: cell)
+            configureKilogramsPoundsSwitch(cell: cell)
         } else if indexPath.row == 3 {
             configureStartNextWorkoutPromptSwitch(cell: cell)
         } else {
@@ -68,16 +68,39 @@ class AppConfigurationViewController: PPLTableViewController {
     
     func configureKilogramsPoundsSwitch(cell: UITableViewCell) {
         let switchView = UISwitch()
-        // TODO: present prompt to confirm user wants to update entire db with updated units
-        // TODO: update database, present spinner for duration of update
         switchView.setOn(PPLDefaults.instance.isKilograms(), animated: false)
-        switchView.addTarget(self, action: #selector(toggleKilogramsPoundsValue), for: .valueChanged)
+        switchView.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
         cell.accessoryView = switchView
         cell.selectionStyle = .none
     }
 
-    @objc func toggleKilogramsPoundsValue() {
-        PPLDefaults.instance.toggleKilograms()
+    @objc func toggleKilogramsPoundsValue(_ switchView: UISwitch) {
+        let isKilograms = PPLDefaults.instance.isKilograms()
+        var title = "Change Unit from "
+        if isKilograms {
+            title.append("Kilograms to Pounds?")
+        } else {
+            title.append("Pounds to Kilograms?")
+        }
+        let message = "This may take some time to update the database"
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            PPLDefaults.instance.toggleKilograms()
+            self.tableView.reloadData()
+            // TODO: update database, present spinner for duration of update
+            let spinner = UIActivityIndicatorView(frame: self.view.frame)
+            spinner.style = .large
+            let fxView = UIVisualEffectView(frame: self.view.frame)
+            fxView.effect = UIBlurEffect(style: .systemUltraThinMaterialLight)
+            self.tabBarController?.tabBar.isHidden = true
+            fxView.contentView.addSubview(spinner)
+            self.view.addSubview(fxView)
+            spinner.startAnimating()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            switchView.setOn(!switchView.isOn, animated: true)
+        }))
+        present(alert, animated: true)
     }
     
     func configureStartNextWorkoutPromptSwitch(cell: UITableViewCell) {
@@ -90,6 +113,7 @@ class AppConfigurationViewController: PPLTableViewController {
 
     @objc func toggleWorkoutTypePromptValue() {
         PPLDefaults.instance.toggleWorkoutTypePromptValue()
+        tableView.reloadData()
     }
     
 }
@@ -106,9 +130,15 @@ class AppConfigurationViewModel: NSObject, ViewModel {
         case 1:
             return "Edit Exercise List"
         case 2:
-            return "Kilograms/Pounds"
+            if PPLDefaults.instance.isKilograms() {
+                return "Kilograms"
+            }
+            return "Pounds"
         default:
-            return "Custom Workout Choice"
+            if PPLDefaults.instance.workoutTypePromptSwitchValue() {
+                return "Custom Workout Choice"
+            }
+            return "Start Next Workout in Program"
         }
     }
     
@@ -121,6 +151,7 @@ class PPLDefaults: NSObject {
     private let kUserDetailsKilogramsPounds = "kUserDetailsKilogramsPounds"
     private let kUserDetailsPromptForWorkoutType = "kUserDetailsPromptForWorkoutType"
     private let kWorkoutInProgress = "kWorkoutInProgress"
+    private let kIsInstalled = "kIsInstalled"
     override private init() {
         super.init()
         setupUserDetails()
@@ -128,8 +159,20 @@ class PPLDefaults: NSObject {
     static let instance = PPLDefaults()
     private var userDetails: UserDefaults!
     
+    private func isInstalled() -> Bool {
+        let isInstalled = userDetails.bool(forKey: kIsInstalled)
+        if !isInstalled {
+            userDetails.set(false, forKey: kUserDetailsKilogramsPounds)
+            userDetails.set(true, forKey: kIsInstalled)
+        }
+        return isInstalled
+    }
+    
     func isKilograms() -> Bool {
-        return userDetails.bool(forKey: kUserDetailsKilogramsPounds)
+        if isInstalled() {
+            return userDetails.bool(forKey: kUserDetailsKilogramsPounds)
+        }
+        return false
     }
     
     @objc func toggleKilograms() {
