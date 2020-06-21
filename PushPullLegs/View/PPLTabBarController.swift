@@ -13,13 +13,13 @@ class PPLTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         var controllers = [UIViewController]()
-        if let workoutNavVC = UIStoryboard(name: "Workout", bundle: nil).instantiateInitialViewController() {
+        if let workoutNavVC = UIStoryboard(name: StoryboardFileName.workout, bundle: nil).instantiateInitialViewController() {
             controllers.append(workoutNavVC)
         }
         
         controllers.append(UINavigationController(rootViewController: WorkoutLogViewController()))
             
-        if let appConfigNavVC = UIStoryboard(name: "AppConfiguration", bundle: nil).instantiateInitialViewController() {
+        if let appConfigNavVC = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateInitialViewController() {
             controllers.append(appConfigNavVC)
         }
         viewControllers = controllers

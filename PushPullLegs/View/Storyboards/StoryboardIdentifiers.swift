@@ -8,6 +8,27 @@
 
 import Foundation
 
-enum StoryboardIdentifiers: String {
-    case createExerciseViewController = "CreateExerciseViewController"
+class StoryboardFileName {
+    static let appConfiguration = "AppConfiguration"
+    static let workout = "Workout"
+}
+
+class ViewControllerIdentifier {
+    static let createExerciseViewController = "CreateExerciseViewController"
+}
+
+class SegueIdentifier {
+    // MARK: Exercise
+    static let getExerciseType = "GetExerciseTypeSegue"
+    static let navigateToExerciseDetail = "NavigateToExerciseDetailSegue"
+    static let addExerciseOnTheFly = "AddExerciseOnTheFlySegue"
+    static let createTemplateExercise = "CreateTemplateExerciseSegue"
+
+    // MARK: Workout
+    static let startWorkout = "StartWorkoutSegue"
+    static let editWorkout = "EditWorkoutSegue"
+    
+    // MARK: App Configuration
+    static let editWorkoutList = "EditWorkoutListSegue"
+    static let editExerciseList = "EditExerciseList"
 }

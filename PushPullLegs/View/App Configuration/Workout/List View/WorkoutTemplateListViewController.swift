@@ -40,7 +40,7 @@ class WorkoutTemplateListViewController: PPLTableViewController {
             return
         }
         workoutTemplateListViewModel().select(indexPath)
-        performSegue(withIdentifier: SegueIdentifier.editWorkout.rawValue, sender: self)
+        performSegue(withIdentifier: SegueIdentifier.editWorkout, sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -49,7 +49,7 @@ class WorkoutTemplateListViewController: PPLTableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifier.editWorkout.rawValue, let vc = segue.destination as? WorkoutTemplateEditViewController {
+        if segue.identifier == SegueIdentifier.editWorkout, let vc = segue.destination as? WorkoutTemplateEditViewController {
             vc.viewModel = WorkoutTemplateEditViewModel(withType: workoutTemplateListViewModel().selectedType(), templateManagement: TemplateManagement())
         }
     }

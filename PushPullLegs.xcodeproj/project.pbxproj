@@ -49,7 +49,6 @@
 		4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993789D243B964200EAD55E /* ReloadProtocol.swift */; };
 		4997C1DB2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */; };
 		49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB1D7A24849C980003CFA1 /* AppState.swift */; };
-		49BE39D4244E914500B6E3C4 /* SegueIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BE39D3244E914400B6E3C4 /* SegueIdentifiers.swift */; };
 		49CEF20A2447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */; };
 		49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */; };
 		49E3832B23FA09BF00F7A502 /* TemplateManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E3832A23FA09BF00F7A502 /* TemplateManagement.swift */; };
@@ -141,7 +140,6 @@
 		4993789D243B964200EAD55E /* ReloadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadProtocol.swift; sourceTree = "<group>"; };
 		4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewController.swift; sourceTree = "<group>"; };
 		49AB1D7A24849C980003CFA1 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		49BE39D3244E914400B6E3C4 /* SegueIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueIdentifiers.swift; sourceTree = "<group>"; };
 		49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModelTests.swift; sourceTree = "<group>"; };
 		49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModel.swift; sourceTree = "<group>"; };
 		49E3832A23FA09BF00F7A502 /* TemplateManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManagement.swift; sourceTree = "<group>"; };
@@ -384,7 +382,6 @@
 				49EF4B7E23F8381F0071687D /* AppConfiguration.storyboard */,
 				490D88DD2451DE32005FFEA3 /* Workout.storyboard */,
 				4957DFCB2470407A00574C89 /* StoryboardIdentifiers.swift */,
-				49BE39D3244E914400B6E3C4 /* SegueIdentifiers.swift */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -684,7 +681,6 @@
 				4973C11A244BADFC009460F2 /* StartWorkoutViewController.swift in Sources */,
 				49F8EF30244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift in Sources */,
 				4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */,
-				49BE39D4244E914500B6E3C4 /* SegueIdentifiers.swift in Sources */,
 				4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */,
 				49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */,
 				49EF4BB423F8390A0071687D /* Date+Helpers.swift in Sources */,

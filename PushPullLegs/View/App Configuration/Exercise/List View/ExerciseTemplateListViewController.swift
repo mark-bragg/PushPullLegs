@@ -25,7 +25,7 @@ class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifier.createTemplateExercise.rawValue,
+        if segue.identifier == SegueIdentifier.createTemplateExercise,
             let vc = segue.destination as? ExerciseTemplateCreationViewController {
             vc.showExerciseType = true
             vc.viewModel = ExerciseTemplateCreationViewModel(management: exerciseTemplateListViewModel().templateManagement)

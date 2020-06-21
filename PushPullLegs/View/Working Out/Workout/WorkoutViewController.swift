@@ -65,9 +65,9 @@ class WorkoutViewController: PPLTableViewController {
     
     @IBAction func addExercise(_ sender: Any) {
         if exerciseSelectionViewModel.rowCount(section: 0) > 0 {
-            performSegue(withIdentifier: SegueIdentifier.addExerciseOnTheFly.rawValue, sender: self)
+            performSegue(withIdentifier: SegueIdentifier.addExerciseOnTheFly, sender: self)
         } else {
-            if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateExerciseViewController") as? ExerciseTemplateCreationViewController {
+            if let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateViewController(withIdentifier: ViewControllerIdentifier.createExerciseViewController) as? ExerciseTemplateCreationViewController {
                 vc.showExerciseType = false
                 vc.viewModel = ExerciseTemplateCreationViewModel(withType: workoutEditViewModel().exerciseType, management: TemplateManagement())
                 vc.viewModel?.reloader = self
@@ -102,7 +102,7 @@ class WorkoutViewController: PPLTableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination
-        if segue.identifier == SegueIdentifier.navigateToExerciseDetail.rawValue, let vc = vc as? ExerciseViewController {
+        if segue.identifier == SegueIdentifier.navigateToExerciseDetail, let vc = vc as? ExerciseViewController {
             if let exerciseTemplate = workoutEditViewModel().getSelected() as? ExerciseTemplate {
                 let vm = ExerciseViewModel(exerciseTemplate: exerciseTemplate)
                 vc.viewModel = vm
@@ -114,7 +114,7 @@ class WorkoutViewController: PPLTableViewController {
                 vm.reloader = vc
                 vc.readOnly = true
             }
-        } else if segue.identifier == SegueIdentifier.addExerciseOnTheFly.rawValue, let vc = vc as? ExerciseTemplateSelectionViewController {
+        } else if segue.identifier == SegueIdentifier.addExerciseOnTheFly, let vc = vc as? ExerciseTemplateSelectionViewController {
             vc.viewModel = exerciseSelectionViewModel
             vc.delegate = workoutEditViewModel()
         }
@@ -136,7 +136,7 @@ class WorkoutViewController: PPLTableViewController {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         workoutEditViewModel().selectedIndex = indexPath
-        performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail.rawValue, sender: self)
+        performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail, sender: self)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

@@ -36,7 +36,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     @IBAction func createExerciseTemplate(_ sender: Any) {
-        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: StoryboardIdentifiers.createExerciseViewController.rawValue) as? ExerciseTemplateCreationViewController {
+        if let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateViewController(withIdentifier: ViewControllerIdentifier.createExerciseViewController) as? ExerciseTemplateCreationViewController {
             vc.viewModel = ExerciseTemplateCreationViewModel(withType: exerciseSelectionViewModel().exerciseType, management: TemplateManagement())
             vc.modalPresentationStyle = .formSheet
             present(vc, animated: true, completion: nil)

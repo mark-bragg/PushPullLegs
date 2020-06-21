@@ -47,7 +47,7 @@ class AppConfigurationViewController: PPLTableViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let segueId = segueIdentifierForRow(indexPath.row) {
             tableView.deselectRow(at: indexPath, animated: true)
-            performSegue(withIdentifier: segueId.rawValue, sender: self)
+            performSegue(withIdentifier: segueId, sender: self)
         }
     }
     
@@ -55,7 +55,7 @@ class AppConfigurationViewController: PPLTableViewController {
         return 0
     }
     
-    func segueIdentifierForRow(_ row: Int) -> SegueIdentifier? {
+    func segueIdentifierForRow(_ row: Int) -> String? {
         switch row {
         case 0: return SegueIdentifier.editWorkoutList
         case 1: return SegueIdentifier.editExerciseList

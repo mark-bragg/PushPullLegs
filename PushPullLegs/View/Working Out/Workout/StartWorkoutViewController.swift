@@ -36,14 +36,14 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     }
     
     func navigateToNextWorkout() {
-        performSegue(withIdentifier: SegueIdentifier.startWorkout.rawValue, sender: self)
+        performSegue(withIdentifier: SegueIdentifier.startWorkout, sender: self)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? TypeSelectorViewController {
             vc.delegate = self
             vc.isModalInPresentation = true
-        } else if segue.identifier == SegueIdentifier.startWorkout.rawValue, let vc = segue.destination as? WorkoutViewController {
+        } else if segue.identifier == SegueIdentifier.startWorkout, let vc = segue.destination as? WorkoutViewController {
             vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
             AppState.shared.workoutInProgress = true
             vc.hidesBottomBarWhenPushed = true
@@ -52,7 +52,7 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     
     func select(type: ExerciseType) {
         exerciseType = type
-        performSegue(withIdentifier: SegueIdentifier.startWorkout.rawValue, sender: self)
+        performSegue(withIdentifier: SegueIdentifier.startWorkout, sender: self)
         exerciseType = nil
     }
 
