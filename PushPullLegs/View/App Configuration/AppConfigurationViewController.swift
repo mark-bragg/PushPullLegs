@@ -28,14 +28,16 @@ class AppConfigurationViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: defaultCellIdentifier) else {
             return UITableViewCell()
         }
-        if indexPath.row == 2{
+        if indexPath.row == 2 {
+            configureStartNextWorkoutPromptSwitch(cell: cell)
+        } else if indexPath.row == 3 {
             configureStartNextWorkoutPromptSwitch(cell: cell)
         } else {
             cell.accessoryType = .disclosureIndicator
@@ -64,6 +66,20 @@ class AppConfigurationViewController: PPLTableViewController {
         return nil
     }
     
+    func configureKilogramsPoundsSwitch(cell: UITableViewCell) {
+        let switchView = UISwitch()
+        // TODO: present prompt to confirm user wants to update entire db with updated units
+        // TODO: update database, present spinner for duration of update
+        switchView.setOn(PPLDefaults.instance.isKilograms(), animated: false)
+        switchView.addTarget(self, action: #selector(toggleKilogramsPoundsValue), for: .valueChanged)
+        cell.accessoryView = switchView
+        cell.selectionStyle = .none
+    }
+
+    @objc func toggleKilogramsPoundsValue() {
+        PPLDefaults.instance.toggleKilograms()
+    }
+    
     func configureStartNextWorkoutPromptSwitch(cell: UITableViewCell) {
         let switchView = UISwitch()
         switchView.setOn(PPLDefaults.instance.workoutTypePromptSwitchValue(), animated: false)
@@ -80,7 +96,7 @@ class AppConfigurationViewController: PPLTableViewController {
 
 class AppConfigurationViewModel: NSObject, ViewModel {
     func rowCount(section: Int) -> Int {
-        return 3
+        return 4
     }
     
     func title(indexPath: IndexPath) -> String? {
@@ -89,8 +105,10 @@ class AppConfigurationViewModel: NSObject, ViewModel {
             return "Edit Workout List"
         case 1:
             return "Edit Exercise List"
+        case 2:
+            return "Kilograms/Pounds"
         default:
-            return "Prompt for workout type when starting next workout"
+            return "Custom Workout Choice"
         }
     }
     
@@ -100,6 +118,7 @@ class AppConfigurationViewModel: NSObject, ViewModel {
 class PPLDefaults: NSObject {
     private let user_details_suite_name = "User Details"
     private let prompt_user_for_workout_type = "Prompt User For Workout Type"
+    private let kUserDetailsKilogramsPounds = "kUserDetailsKilogramsPounds"
     private let kUserDetailsPromptForWorkoutType = "kUserDetailsPromptForWorkoutType"
     private let kWorkoutInProgress = "kWorkoutInProgress"
     override private init() {
@@ -108,6 +127,15 @@ class PPLDefaults: NSObject {
     }
     static let instance = PPLDefaults()
     private var userDetails: UserDefaults!
+    
+    func isKilograms() -> Bool {
+        return userDetails.bool(forKey: kUserDetailsKilogramsPounds)
+    }
+    
+    @objc func toggleKilograms() {
+        let newValue = !userDetails.bool(forKey: kUserDetailsKilogramsPounds)
+        userDetails.set(newValue, forKey: kUserDetailsKilogramsPounds)
+    }
     
     func isWorkoutInProgress() -> Bool {
         return userDetails.bool(forKey: kWorkoutInProgress)
