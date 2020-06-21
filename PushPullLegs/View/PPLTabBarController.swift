@@ -9,25 +9,36 @@
 import UIKit
 
 class PPLTabBarController: UITabBarController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        var controllers = [UIViewController]()
-        if let workoutNavVC = UIStoryboard(name: StoryboardFileName.workout, bundle: nil).instantiateInitialViewController() {
-            controllers.append(workoutNavVC)
-        }
-        
-        controllers.append(UINavigationController(rootViewController: WorkoutLogViewController()))
-            
-        if let appConfigNavVC = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateInitialViewController() {
-            controllers.append(appConfigNavVC)
-        }
-        viewControllers = controllers
+        viewControllers = [
+            workoutNavigationController(),
+            workoutLogNavigationController(),
+            appConfigurationNavigationController()
+        ]
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+    }
+    
+    fileprivate func workoutNavigationController() -> UINavigationController {
+        let vc = UIStoryboard(name: StoryboardFileName.workout, bundle: nil).instantiateInitialViewController() as! UINavigationController
+        vc.tabBarItem = UITabBarItem(title: EntityName.workout.rawValue, image: UIImage(named: "curlbar"), selectedImage: nil)
+        return vc
+    }
+    
+    fileprivate func workoutLogNavigationController() -> UINavigationController {
+        let vc = UINavigationController(rootViewController: WorkoutLogViewController())
+        vc.tabBarItem = UITabBarItem(title: "Database", image: UIImage(named: "database"), selectedImage: nil)
+        return vc
+    }
+    
+    fileprivate func appConfigurationNavigationController() -> UINavigationController {
+        let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateInitialViewController() as! UINavigationController
+        vc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "gear"), selectedImage: nil)
+        return vc
     }
 
 }
