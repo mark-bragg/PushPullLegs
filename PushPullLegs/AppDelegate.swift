@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import GoogleMobileAds
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // MARK: NSInMemoryStoreType for testing purposes
         CoreDataManager.shared.setup(completion: nil)
         CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
         return true
     }
 

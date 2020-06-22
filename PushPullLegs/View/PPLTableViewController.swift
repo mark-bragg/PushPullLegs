@@ -6,14 +6,34 @@
 //  Copyright © 2020 Mark Bragg. All rights reserved.
 //
 
+import GoogleMobileAds
 import UIKit
 
-class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PPLAdViewModel: NSObject {
+    
+}
+
+class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
+    
+    var isAdvertising = true
+    
     var viewModel: ViewModel!
     
     override
     func viewDidLoad() {
         super.viewDidLoad()
+        if isAdvertising && hidesBottomBarWhenPushed {
+            let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            view.addSubview(bannerView)
+            bannerView.translatesAutoresizingMaskIntoConstraints = false
+            bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            bannerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+            bannerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+            bannerView.rootViewController = self
+            bannerView.load(GADRequest())
+            bannerView.delegate = self
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

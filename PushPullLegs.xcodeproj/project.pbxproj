@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27726E338C3D3572B2D10D19 /* Pods_PushPullLegs_PushPullLegsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 266C7EE7C48E3F09D8B8D769 /* Pods_PushPullLegs_PushPullLegsUITests.framework */; };
 		49028D24243D85AC005EC078 /* AppConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D23243D85AC005EC078 /* AppConfigurationViewController.swift */; };
 		49028D26243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D25243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift */; };
 		49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D2A243DA206005EC078 /* WorkoutTemplateEditViewModel.swift */; };
@@ -79,6 +80,8 @@
 		49F8EF292447754900B6BD45 /* ExerciseTemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF282447754700B6BD45 /* ExerciseTemplateListViewController.swift */; };
 		49F8EF2E2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF2D2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift */; };
 		49F8EF30244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF2F244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift */; };
+		6344E6784DEC24F8D43486C0 /* Pods_PushPullLegs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3861DCF756C6822B283C0AD /* Pods_PushPullLegs.framework */; };
+		D9E3EEAC50D1DA04B158C942 /* Pods_PushPullLegsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF971240BA72F40F9944AA59 /* Pods_PushPullLegsTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +102,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		266C7EE7C48E3F09D8B8D769 /* Pods_PushPullLegs_PushPullLegsUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PushPullLegs_PushPullLegsUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27BD1CA96B3BE0BFCC770B35 /* Pods-PushPullLegsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegsTests.debug.xcconfig"; path = "Target Support Files/Pods-PushPullLegsTests/Pods-PushPullLegsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		49028D23243D85AC005EC078 /* AppConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurationViewController.swift; sourceTree = "<group>"; };
 		49028D25243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateEditViewController.swift; sourceTree = "<group>"; };
 		49028D2A243DA206005EC078 /* WorkoutTemplateEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateEditViewModel.swift; sourceTree = "<group>"; };
@@ -177,6 +182,13 @@
 		49F8EF282447754700B6BD45 /* ExerciseTemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateListViewController.swift; sourceTree = "<group>"; };
 		49F8EF2D2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateListViewModelTests.swift; sourceTree = "<group>"; };
 		49F8EF2F244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateListViewModel.swift; sourceTree = "<group>"; };
+		7F3F290DF0486DAAA1185EAD /* Pods-PushPullLegs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs.release.xcconfig"; path = "Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs.release.xcconfig"; sourceTree = "<group>"; };
+		8E2FF6CDBFF2263E3318756D /* Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig"; path = "Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig"; sourceTree = "<group>"; };
+		8FD10F045597D8F71850FC44 /* Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig"; path = "Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		9B6FAD279D331E12AB08D13E /* Pods-PushPullLegs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs.debug.xcconfig"; path = "Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs.debug.xcconfig"; sourceTree = "<group>"; };
+		B3861DCF756C6822B283C0AD /* Pods_PushPullLegs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PushPullLegs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF971240BA72F40F9944AA59 /* Pods_PushPullLegsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PushPullLegsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6B242260C7DC2271BABD79F /* Pods-PushPullLegsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegsTests.release.xcconfig"; path = "Target Support Files/Pods-PushPullLegsTests/Pods-PushPullLegsTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6344E6784DEC24F8D43486C0 /* Pods_PushPullLegs.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,6 +204,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9E3EEAC50D1DA04B158C942 /* Pods_PushPullLegsTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +212,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27726E338C3D3572B2D10D19 /* Pods_PushPullLegs_PushPullLegsUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +428,8 @@
 				49EF4B9123F838380071687D /* PushPullLegsTests */,
 				49EF4B9C23F838380071687D /* PushPullLegsUITests */,
 				49EF4B7623F8381F0071687D /* Products */,
+				8D8F617318F0F23D90079219 /* Pods */,
+				CDA679AB1CC11F56992E85E0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -528,6 +545,30 @@
 			path = Exercise;
 			sourceTree = "<group>";
 		};
+		8D8F617318F0F23D90079219 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9B6FAD279D331E12AB08D13E /* Pods-PushPullLegs.debug.xcconfig */,
+				7F3F290DF0486DAAA1185EAD /* Pods-PushPullLegs.release.xcconfig */,
+				8FD10F045597D8F71850FC44 /* Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig */,
+				8E2FF6CDBFF2263E3318756D /* Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig */,
+				27BD1CA96B3BE0BFCC770B35 /* Pods-PushPullLegsTests.debug.xcconfig */,
+				C6B242260C7DC2271BABD79F /* Pods-PushPullLegsTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		CDA679AB1CC11F56992E85E0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B3861DCF756C6822B283C0AD /* Pods_PushPullLegs.framework */,
+				266C7EE7C48E3F09D8B8D769 /* Pods_PushPullLegs_PushPullLegsUITests.framework */,
+				BF971240BA72F40F9944AA59 /* Pods_PushPullLegsTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -535,9 +576,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49EF4BA223F838380071687D /* Build configuration list for PBXNativeTarget "PushPullLegs" */;
 			buildPhases = (
+				8FD02F5137C9D5FAAA587221 /* [CP] Check Pods Manifest.lock */,
 				49EF4B7123F8381F0071687D /* Sources */,
 				49EF4B7223F8381F0071687D /* Frameworks */,
 				49EF4B7323F8381F0071687D /* Resources */,
+				D2A45A37ABB53C91F4BB2F9F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -552,6 +595,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49EF4BA523F838380071687D /* Build configuration list for PBXNativeTarget "PushPullLegsTests" */;
 			buildPhases = (
+				C545DED859D1688C7CA43180 /* [CP] Check Pods Manifest.lock */,
 				49EF4B8A23F838380071687D /* Sources */,
 				49EF4B8B23F838380071687D /* Frameworks */,
 				49EF4B8C23F838380071687D /* Resources */,
@@ -570,9 +614,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49EF4BA823F838380071687D /* Build configuration list for PBXNativeTarget "PushPullLegsUITests" */;
 			buildPhases = (
+				8EBC292FB69213CDA492BC6A /* [CP] Check Pods Manifest.lock */,
 				49EF4B9523F838380071687D /* Sources */,
 				49EF4B9623F838380071687D /* Frameworks */,
 				49EF4B9723F838380071687D /* Resources */,
+				3EF434DA5C07AAAB7BC3128F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -661,6 +707,109 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3EF434DA5C07AAAB7BC3128F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8EBC292FB69213CDA492BC6A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PushPullLegs-PushPullLegsUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8FD02F5137C9D5FAAA587221 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PushPullLegs-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C545DED859D1688C7CA43180 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PushPullLegsTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D2A45A37ABB53C91F4BB2F9F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		49EF4B7123F8381F0071687D /* Sources */ = {
@@ -896,6 +1045,7 @@
 		};
 		49EF4BA323F838380071687D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9B6FAD279D331E12AB08D13E /* Pods-PushPullLegs.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -914,6 +1064,7 @@
 		};
 		49EF4BA423F838380071687D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7F3F290DF0486DAAA1185EAD /* Pods-PushPullLegs.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -932,6 +1083,7 @@
 		};
 		49EF4BA623F838380071687D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 27BD1CA96B3BE0BFCC770B35 /* Pods-PushPullLegsTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -954,6 +1106,7 @@
 		};
 		49EF4BA723F838380071687D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C6B242260C7DC2271BABD79F /* Pods-PushPullLegsTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -976,6 +1129,7 @@
 		};
 		49EF4BA923F838380071687D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FD10F045597D8F71850FC44 /* Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -996,6 +1150,7 @@
 		};
 		49EF4BAA23F838380071687D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8E2FF6CDBFF2263E3318756D /* Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
