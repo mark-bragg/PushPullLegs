@@ -39,7 +39,6 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         tableView.register(UINib(nibName: "ExerciseSetDataCell", bundle: nil), forCellReuseIdentifier: ExerciseSetReuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 75
         if readOnly {
             navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
             navigationItem.rightBarButtonItem = nil
@@ -127,7 +126,6 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     
     func presentModally(_ vc: UIViewController) {
         vc.modalPresentationStyle = .formSheet
-        vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true, completion: nil)
         vc.presentationController?.delegate = self
     }
@@ -154,19 +152,10 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var titles = [String]()
         for i in 0...2 {
-            titles.append(headerLabelText(i))
+            titles.append(exerciseViewModel().headerLabelText(i))
         }
         let view = tableHeaderView(titles: titles)
         return view
-    }
-    
-    private func headerLabelText(_ index: Int) -> String {
-        if index == 0 {
-            return "Pounds"
-        } else if index == 1 {
-            return "Reps"
-        }
-        return "Time"
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

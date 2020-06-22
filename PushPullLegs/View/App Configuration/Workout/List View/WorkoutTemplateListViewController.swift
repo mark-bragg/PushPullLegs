@@ -28,7 +28,7 @@ class WorkoutTemplateListViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: workoutTitleCellReuseIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: workoutTitleCellReuseIdentifier)!
         cell.textLabel?.text = viewModel.title(indexPath: indexPath)
         cell.accessoryType = .disclosureIndicator
         cell.frame = CGRect.update(height: tableView.frame.height / 3.0, rect: cell.frame)

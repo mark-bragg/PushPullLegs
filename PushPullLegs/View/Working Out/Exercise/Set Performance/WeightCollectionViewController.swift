@@ -21,8 +21,9 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
     }
     
     override func buttonTapped(_ sender: Any) {
+        let converter = PPLDefaults.instance.isKilograms() ? 2.20462 : 1.0
         if let t = textField.text, let weight = Double(t) {
-            exerciseSetViewModel?.startSetWithWeight(weight)
+            exerciseSetViewModel?.startSetWithWeight(weight * converter)
         }
     }
     

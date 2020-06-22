@@ -23,6 +23,7 @@ class WorkoutLogViewController: PPLTableViewController {
         super.viewWillAppear(animated)
         let tbl = UITableView(frame: view.frame)
         view.addSubview(tbl)
+        tbl.rowHeight = 75
         viewModel = WorkoutLogViewModel()
         tableView = tbl
         tableView.delegate = self

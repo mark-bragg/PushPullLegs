@@ -9,6 +9,7 @@
 import UIKit
 
 let exerciseCellReuseIdentifier = "ExerciseCell"
+let AppConfigurationCellReuseIdentifier = "AppConfigurationCellReuseIdentifier"
 
 class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol {
 
@@ -40,7 +41,7 @@ class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let text = workoutTemplateEditViewModel().title(indexPath: indexPath)
-        let cell = UITableViewCell(style: .default, reuseIdentifier: exerciseCellReuseIdentifier)
+        let cell = UITableViewCell(style: .default, reuseIdentifier: AppConfigurationCellReuseIdentifier)
         cell.textLabel?.text = text
         cell.textLabel?.textAlignment = .left
         return cell

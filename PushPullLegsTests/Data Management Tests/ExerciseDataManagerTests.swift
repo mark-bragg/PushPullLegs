@@ -60,10 +60,14 @@ class ExerciseDataManagerTests: XCTestCase {
         }
     }
     
-    func test_addSet_setAdded() {
+    func test_insertSet_setInserted() {
+        let expectation = XCTestExpectation(description: "completion expectation")
         setExpectation(description: "add set to exercise")
         let exercise = dbHelper.createExercise()
-        sut.addSet(exercise)
+        sut.insertSet(duration: 60, weight: 224, reps: 13, exercise: exercise) { (set) in
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 60)
         waitForExpectations(timeout: 60) { (_) in
             guard let sets = self.dbHelper.fetchSets(exercise) else {
                 XCTFail("set not added to exercise")
@@ -87,11 +91,11 @@ class ExerciseDataManagerTests: XCTestCase {
         }
     }
     
-    func test_addMultipleSets_multipleSetsAdded() {
+    func test_insertMultipleSets_multipleSetsInserted() {
         let exercise = dbHelper.createExercise()
         for _ in 0...9 {
             setExpectation(description: "add multiple sets to exercise")
-            sut.addSet(exercise)
+            sut.insertSet(duration: 60, weight: 225, reps: 13, exercise: exercise, completion: nil)
         }
         waitForExpectations(timeout: 60) { (_) in
             guard let sets = self.dbHelper.fetchSets(exercise) else {
@@ -146,7 +150,7 @@ class ExerciseDataManagerTests: XCTestCase {
         }
     }
     
-    func test_deleteSets_addMoreSets() {
+    func test_deleteSets_insertMoreSets() {
         let exercise = dbHelper.createExercise()
         var sets = [ExerciseSet]()
         for _ in 0...9 {
@@ -158,7 +162,7 @@ class ExerciseDataManagerTests: XCTestCase {
         }
         for _ in 0...2 {
             setExpectation(description: "add to exercise")
-            sut.addSet(exercise)
+            sut.insertSet(duration: 60, weight: 225, reps: 13, exercise: exercise, completion: nil)
         }
         waitForExpectations(timeout: 60) { (_) in
             guard let fetchedSets = self.dbHelper.fetchSets(exercise) else {

@@ -11,6 +11,11 @@ import UIKit
 class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var viewModel: ViewModel!
     
+    override
+    func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let count = viewModel.sectionCount?() else { return 1 }
         return count

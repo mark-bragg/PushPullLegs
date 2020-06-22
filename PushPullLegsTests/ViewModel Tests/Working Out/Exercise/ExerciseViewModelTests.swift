@@ -35,7 +35,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         sut.collectSet(duration: d, weight: w, reps: r)
         XCTAssert(sut.rowCount(section: 0) == rowCount)
         guard dbHelper.fetchSets(exercise)!.contains(where: { (set) -> Bool in
-            return set.duration == d && set.weight == w && set.reps == r
+            return set.duration == d && set.weight == w.truncateDigitsAfterDecimal(afterDecimalDigits: 2) && set.reps == r
         }) else {
             XCTFail()
             return
@@ -120,6 +120,17 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         let exercise = dbHelper.createExercise(name, sets: nil)
         sut = ExerciseViewModel(withDataManager: MockExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exercise: exercise)
         XCTAssert(sut.title() == name)
+    }
+    
+    func testHeaderLabelText() {
+        if !PPLDefaults.instance.isKilograms() {
+            PPLDefaults.instance.toggleKilograms()
+        }
+        XCTAssert(sut.headerLabelText(0) == "Kilograms")
+        PPLDefaults.instance.toggleKilograms()
+        XCTAssert(sut.headerLabelText(0) == "Pounds")
+        XCTAssert(sut.headerLabelText(1) == "Reps")
+        XCTAssert(sut.headerLabelText(2) == "Time")
     }
     
     func exerciseViewModel(_ viewMode: ExerciseViewModel, completed exercise: Exercise) {

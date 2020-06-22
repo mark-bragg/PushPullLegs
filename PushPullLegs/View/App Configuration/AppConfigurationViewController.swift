@@ -75,32 +75,8 @@ class AppConfigurationViewController: PPLTableViewController {
     }
 
     @objc func toggleKilogramsPoundsValue(_ switchView: UISwitch) {
-        let isKilograms = PPLDefaults.instance.isKilograms()
-        var title = "Change Unit from "
-        if isKilograms {
-            title.append("Kilograms to Pounds?")
-        } else {
-            title.append("Pounds to Kilograms?")
-        }
-        let message = "This may take some time to update the database"
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-            PPLDefaults.instance.toggleKilograms()
-            self.tableView.reloadData()
-            // TODO: update database, present spinner for duration of update
-            let spinner = UIActivityIndicatorView(frame: self.view.frame)
-            spinner.style = .large
-            let fxView = UIVisualEffectView(frame: self.view.frame)
-            fxView.effect = UIBlurEffect(style: .systemUltraThinMaterialLight)
-            self.tabBarController?.tabBar.isHidden = true
-            fxView.contentView.addSubview(spinner)
-            self.view.addSubview(fxView)
-            spinner.startAnimating()
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
-            switchView.setOn(!switchView.isOn, animated: true)
-        }))
-        present(alert, animated: true)
+        PPLDefaults.instance.toggleKilograms()
+        self.tableView.reloadData()
     }
     
     func configureStartNextWorkoutPromptSwitch(cell: UITableViewCell) {

@@ -31,7 +31,7 @@ class WorkoutDataViewController: UIViewController, UITableViewDelegate, UITableV
         if let vm = viewModel {
             cell.textLabel?.text = vm.title(indexPath: indexPath)
             cell.textLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
-            cell.detailTextLabel?.text = "Total volume: \(vm.detailText(indexPath: indexPath)!)"
+            cell.detailTextLabel?.text = "Total Work: \(vm.detailText(indexPath: indexPath)!)"
             cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 20, weight: .regular)
             cell.setWorkoutProgressionImage(vm.exerciseVolumeComparison(row: indexPath.row))
         }
