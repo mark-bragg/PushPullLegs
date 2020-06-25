@@ -8,6 +8,8 @@
 
 import Foundation
 
+let interstitialAdID = "ca-app-pub-8150464109183976/1732105336"
+
 extension String {
     
     func cleanupPeriods() -> String {

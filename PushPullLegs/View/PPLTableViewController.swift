@@ -15,25 +15,30 @@ class PPLAdViewModel: NSObject {
 
 class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
     
-    var isAdvertising = true
-    
     var viewModel: ViewModel!
+    weak var bannerView: GADBannerView!
     
     override
     func viewDidLoad() {
         super.viewDidLoad()
-        if isAdvertising && hidesBottomBarWhenPushed {
-            let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-            view.addSubview(bannerView)
-            bannerView.translatesAutoresizingMaskIntoConstraints = false
-            bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-            bannerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-            bannerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-            bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-            bannerView.rootViewController = self
-            bannerView.load(GADRequest())
-            bannerView.delegate = self
+        if AppState.shared.isAdEnabled && AppState.shared.workoutInProgress {
+            addBannerView()
         }
+    }
+    
+    fileprivate func addBannerView() {
+        let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        view.addSubview(bannerView)
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        bannerView.delegate = self
+        self.bannerView = bannerView
+        positionBannerView()
+    }
+    
+    func positionBannerView(yOffset: CGFloat = 0.0) {
+        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + yOffset), width: bannerView.frame.width, height: bannerView.frame.height)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

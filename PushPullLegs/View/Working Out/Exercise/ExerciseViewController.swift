@@ -23,6 +23,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     var exerciseSetViewModel: ExerciseSetViewModel?
     var readOnly = false
     weak var restTimerView: RestTimerView!
+    private let timerHeight: CGFloat = 75.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,7 +119,10 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     }
     
     func setupRestTimerView() {
-        let timerView = RestTimerView(frame: CGRect(x: 0, y: view.frame.height - 75, width: view.frame.width, height: 75))
+        if (AppState.shared.isAdEnabled) {
+            positionBannerView(yOffset: timerHeight)
+        }
+        let timerView = RestTimerView(frame: CGRect(x: 0, y: view.frame.height - timerHeight, width: view.frame.width, height: timerHeight))
         view.addSubview(timerView)
         restTimerView = timerView
         restTimerView.restartTimer()
