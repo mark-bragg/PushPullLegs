@@ -21,8 +21,19 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     override
     func viewDidLoad() {
         super.viewDidLoad()
-        if AppState.shared.isAdEnabled && AppState.shared.workoutInProgress {
+        if let nvc = navigationController {
+            hidesBottomBarWhenPushed = nvc.viewControllers[0] != self
+        }
+        if AppState.shared.isAdEnabled {
             addBannerView()
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view.bringSubviewToFront(bannerView)
+        if let tbc = tabBarController, !hidesBottomBarWhenPushed {
+            positionBannerView(yOffset: tbc.tabBar.frame.height)
         }
     }
     

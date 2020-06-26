@@ -17,17 +17,19 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if AppState.shared.isAdEnabled {
+            if interstitial == nil || interstitial!.hasBeenUsed {
+                interstitial = createAndLoadInterstitial()
+            }
+            if let interstitial = interstitial,
+                interstitial.isReady && didNavigateToWorkout {
+                interstitial.present(fromRootViewController: self)
+            }
+            didNavigateToWorkout = false
+        }
         if AppState.shared.workoutInProgress {
             self.navigateToNextWorkout()
         }
-        if AppState.shared.isAdEnabled {
-            if let interstitial = interstitial, interstitial.isReady && didNavigateToWorkout {
-                interstitial.present(fromRootViewController: self)
-            } else {
-                interstitial = createAndLoadInterstitial()
-            }
-        }
-        didNavigateToWorkout = false
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {

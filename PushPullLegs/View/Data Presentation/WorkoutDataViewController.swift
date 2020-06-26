@@ -10,10 +10,9 @@ import UIKit
 
 let ExerciseDataCellReuseIdentifier = "ExerciseDataCellReuseIdentifier"
 
-class WorkoutDataViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class WorkoutDataViewController: PPLTableViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    var viewModel: WorkoutReadViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,14 +20,14 @@ class WorkoutDataViewController: UIViewController, UITableViewDelegate, UITableV
         navigationItem.title = "Exercises"
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let vm = viewModel else { return 0 }
         return vm.rowCount(section: section)
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ExerciseDataCellReuseIdentifier)!
-        if let vm = viewModel {
+        if let vm = workoutReadViewModel() {
             cell.textLabel?.text = vm.title(indexPath: indexPath)
             cell.textLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
             cell.detailTextLabel?.text = "Total Work: \(vm.detailText(indexPath: indexPath)!)"
@@ -38,8 +37,12 @@ class WorkoutDataViewController: UIViewController, UITableViewDelegate, UITableV
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    } 
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let vm = viewModel else { return }
+        guard let vm = workoutReadViewModel() else { return }
         vm.selectedIndex = indexPath
         let exerciseVm = ExerciseViewModel(exercise: vm.getSelected() as! Exercise)
         let vc = ExerciseViewController()
@@ -47,6 +50,10 @@ class WorkoutDataViewController: UIViewController, UITableViewDelegate, UITableV
         vc.viewModel = exerciseVm
         navigationController?.pushViewController(vc, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func workoutReadViewModel() -> WorkoutReadViewModel? {
+        return viewModel as? WorkoutReadViewModel
     }
 
 }
