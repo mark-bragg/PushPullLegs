@@ -4,3 +4,4 @@ Podfile
 Podfile.lock
 Pods/
 PushPullLegs.xcworkspace/
+PushPullLegs/Resources/Info.plist
