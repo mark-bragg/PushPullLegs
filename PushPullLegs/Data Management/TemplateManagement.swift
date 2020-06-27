@@ -30,8 +30,11 @@ class TemplateManagement {
         coreDataManager.mainContext.performAndWait {
             let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.exerciseTemplate.rawValue)
             req.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
-            if let template = try? coreDataManager.backgroundContext.fetch(req).first as? ExerciseTemplate {
-                coreDataManager.backgroundContext.delete(template)
+            if
+                let exerciseTemplate = try? coreDataManager.backgroundContext.fetch(req).first as? ExerciseTemplate
+            {
+                removeFromWorkout(exercise: exerciseTemplate)
+                coreDataManager.backgroundContext.delete(exerciseTemplate)
                 try? coreDataManager.backgroundContext.save()
             }
         }

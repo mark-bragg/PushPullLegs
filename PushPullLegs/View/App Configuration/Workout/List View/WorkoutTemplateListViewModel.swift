@@ -16,7 +16,7 @@ class WorkoutTemplateListViewModel: NSObject, ViewModel {
     
     init(withTemplateManagement management: TemplateManagement) {
         templateManagement = management
-        workouts = templateManagement.workoutTemplates()
+        workouts = templateManagement.workoutTemplates()?.sorted(by: sorter).reversed()
     }
     
     func title(indexPath: IndexPath) -> String? {

@@ -31,8 +31,10 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        view.bringSubviewToFront(bannerView)
-        if let tbc = tabBarController, !hidesBottomBarWhenPushed {
+        if let bannerView = bannerView, view.subviews.contains(bannerView) {
+            view.bringSubviewToFront(bannerView)
+        }
+        if let tbc = tabBarController, !hidesBottomBarWhenPushed && bannerView != nil {
             positionBannerView(yOffset: tbc.tabBar.frame.height)
         }
     }

@@ -15,7 +15,6 @@ class ExerciseTypeButton: UIButton {
 class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var exerciseTypeLabel: UILabel!
     @IBOutlet weak var pushButton: ExerciseTypeButton!
     @IBOutlet weak var pullButton: ExerciseTypeButton!
     @IBOutlet weak var legsButton: ExerciseTypeButton!
@@ -27,15 +26,13 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        nameLabel.text = "Exercise Name"
         if showExerciseType {
-            exerciseTypeLabel.text = "Exercise Type"
             setupExerciseTypeButtons()
+            saveButton.setTitle("Select Type", for: .normal)
         } else {
             hideExerciseType()
         }
         saveButton.isEnabled = false
-        self.isModalInPresentation = true
     }
 
     @IBAction func save(_ sender: Any) {
@@ -46,10 +43,6 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
             guard let self = self else { return }
             self.dismiss(animated: true, completion: nil)
         })
-    }
-    
-    @IBAction func cancel(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
     }
     
     func setupExerciseTypeButtons() {
@@ -74,6 +67,9 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     @IBAction func tappedExerciseTypeButton(_ sender: ExerciseTypeButton) {
+        if saveButton.title(for: .normal) != "Save" {
+            saveButton.setTitle("Save", for: .normal)
+        }
         sender.isSelected = true
         viewModel?.selectedType(sender.exerciseType)
         updateButtonsWithSelection(sender)
@@ -90,8 +86,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     func hideExerciseType() {
-        exerciseTypeLabel.isHidden = true
-        typeSelectionStackView.isHidden = true
+        typeSelectionStackView.removeFromSuperview()
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {

@@ -151,10 +151,23 @@ class DBHelper {
     try? coreDataStack.mainContext.save()
     }
     
-    func addExerciseTemplate(name: String = TempName, type: ExerciseType = .push) {
+    func addExerciseTemplate(name: String = TempName, type: ExerciseType = .push, addToWorkout: Bool = false) {
         let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.backgroundContext) as! ExerciseTemplate
         temp.name = name
         temp.type = type.rawValue
+        if addToWorkout {
+            if let wkt = fetchWorkoutTemplates().first(where: { $0.name == type.rawValue }) {
+                var names = wkt.exerciseNames
+                if names != nil {
+                    names!.append(name)
+                } else {
+                    names = [name]
+                }
+                wkt.exerciseNames = names
+            } else {
+                addWorkoutTemplate(type: type, exerciseNames: [name])
+            }
+        }
         try? coreDataStack.backgroundContext.save()
     }
     
@@ -163,6 +176,16 @@ class DBHelper {
             return temps
         }
         return nil
+    }
+    
+    func removeExerciseTemplate(type: ExerciseType, name: String) {
+        guard let exTemp = fetchExerciseTemplates()?.first(where: { (temp) -> Bool in
+            temp.name == name
+        }) else {
+            return
+        }
+        coreDataStack.mainContext.delete(exTemp)
+        try? coreDataStack.mainContext.save()
     }
     
     // MARK: ExerciseSet

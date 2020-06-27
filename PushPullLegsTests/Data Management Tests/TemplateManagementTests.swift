@@ -95,16 +95,24 @@ class TemplateManagementTests: XCTestCase {
     }
     
     func testDeleteExerciseTemplate_templateDeleted() {
-        addExerciseTemplate()
-        guard let temps = dbHelper.fetchExerciseTemplates() else {
+        dbHelper.addWorkoutTemplate(type: .push, exerciseNames: [TempName])
+        guard
+            let push = dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseType.push.rawValue }),
+            let temps = dbHelper.fetchExerciseTemplates() else
+        {
             XCTFail()
             return
         }
+        XCTAssert(push.exerciseNames!.count == 1)
         XCTAssert(temps.count == 1)
         sut.deleteExerciseTemplate(name: TempName)
-        guard let temps2 = dbHelper.fetchExerciseTemplates() else {
+        guard
+            let push2 = dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseType.push.rawValue }),
+            let temps2 = dbHelper.fetchExerciseTemplates() else
+        {
             return
         }
+        XCTAssert(push2.exerciseNames!.count == 0)
         XCTAssert(temps2.count == 0)
     }
     

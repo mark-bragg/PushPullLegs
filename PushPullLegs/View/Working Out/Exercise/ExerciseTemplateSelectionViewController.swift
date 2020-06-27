@@ -20,11 +20,13 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
+        tableView.delegate = self
+        tableView.dataSource = self
         navigationItem.title = "Select Exercises"
     }
     
     private func exerciseSelectionViewModel() -> ExerciseSelectionViewModel {
-        return viewModel as! ExerciseSelectionViewModel
+        viewModel as! ExerciseSelectionViewModel
     }
     
     @IBAction func done(_ sender: Any) {
@@ -51,6 +53,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if let cell = tableView.cellForRow(at: indexPath) {
             if cell.accessoryType == .none {
                 exerciseSelectionViewModel().selected(row: indexPath.row)
@@ -63,7 +66,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        0
     }
 
 }
