@@ -127,8 +127,6 @@ class WorkoutReadViewModelTests: XCTestCase {
         }
     }
     
-    
-    // TODO: figure this shit out
     func testExerciseVolumeComparison_threeAscendingVolumeWorkoutsInHistory_increaseForAllThree() {
         var previousWorkouts = [Workout]()
         for i in 1...2 {

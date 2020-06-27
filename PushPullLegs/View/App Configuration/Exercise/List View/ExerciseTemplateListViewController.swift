@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol {
+class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol, UIAdaptivePresentationControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -29,8 +29,13 @@ class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol
             let vc = segue.destination as? ExerciseTemplateCreationViewController {
             vc.showExerciseType = true
             vc.viewModel = ExerciseTemplateCreationViewModel(management: exerciseTemplateListViewModel().templateManagement)
+            vc.presentationController?.delegate = self
             vc.viewModel?.reloader = self
         }
+    }
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        reload()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
