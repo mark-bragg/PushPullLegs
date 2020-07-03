@@ -89,7 +89,6 @@ class TemplateManagement {
             // TODO: ERROR empty exerciseNames should not be empty
             return
         }
-        
         exerciseNames.removeAll(where: {$0 == exercise.name})
         workout.exerciseNames = exerciseNames
         try? self.coreDataManager.mainContext.save()

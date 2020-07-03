@@ -152,9 +152,6 @@ class DBHelper {
     }
     
     func addExerciseTemplate(name: String = TempName, type: ExerciseType = .push, addToWorkout: Bool = false) {
-        let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.backgroundContext) as! ExerciseTemplate
-        temp.name = name
-        temp.type = type.rawValue
         if addToWorkout {
             if let wkt = fetchWorkoutTemplates().first(where: { $0.name == type.rawValue }) {
                 var names = wkt.exerciseNames
@@ -164,9 +161,16 @@ class DBHelper {
                     names = [name]
                 }
                 wkt.exerciseNames = names
+                let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.backgroundContext) as! ExerciseTemplate
+                temp.name = name
+                temp.type = type.rawValue
             } else {
                 addWorkoutTemplate(type: type, exerciseNames: [name])
             }
+        } else {
+            let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.backgroundContext) as! ExerciseTemplate
+            temp.name = name
+            temp.type = type.rawValue
         }
         try? coreDataStack.backgroundContext.save()
     }
