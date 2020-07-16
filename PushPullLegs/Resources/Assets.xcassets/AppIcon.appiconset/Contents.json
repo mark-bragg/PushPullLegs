@@ -3,55 +3,55 @@
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "PPL Icon@2x-3.png",
+      "filename" : "icon_notification_2x.png",
       "scale" : "2x"
     },
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "PPL Icon@3x-3.png",
+      "filename" : "icon_notification_3x.png",
       "scale" : "3x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "PPL Icon@2x-2.png",
+      "filename" : "icon_settings_2x.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "PPL Icon@3x-2.png",
+      "filename" : "icon_settings_3x.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "PPL Icon@2x-1.png",
+      "filename" : "icon_spotlight_2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "PPL Icon@3x-1.png",
+      "filename" : "icon_spotlight_3x.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "PPL Icon@2x.png",
+      "filename" : "icon_iphone_app_2x.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "PPL Icon@3x.png",
+      "filename" : "icon_iphone_app_3x.png",
       "scale" : "3x"
     },
     {
       "size" : "1024x1024",
       "idiom" : "ios-marketing",
-      "filename" : "app store icon.png",
+      "filename" : "icon_app_store.png",
       "scale" : "1x"
     }
   ],

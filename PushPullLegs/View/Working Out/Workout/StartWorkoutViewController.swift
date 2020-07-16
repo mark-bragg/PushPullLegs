@@ -15,6 +15,11 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     private var interstitial: GADInterstitial?
     private var didNavigateToWorkout: Bool = false
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.backgroundColor = PPLColor.Grey
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if AppState.shared.isAdEnabled {

@@ -12,19 +12,9 @@ let ExerciseToDoCellReuseIdentifier = "ExerciseToDoCellReuseIdentifier"
 
 class WorkoutViewController: PPLTableViewController {
 
-    @IBOutlet weak var tableView: UITableView!
     private var exerciseSelectionViewModel: ExerciseSelectionViewModel!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
-        workoutEditViewModel().delegate = self
-        navigationItem.title = workoutEditViewModel().exerciseType.rawValue
-        exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: workoutEditViewModel().exerciseType, templateManagement: TemplateManagement())
-        tableView.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(cancel(_:)))
-    }
+    private let section1 = 0
+    private let section2 = 1
     
     func workoutEditViewModel() -> WorkoutEditViewModel {
         return viewModel as! WorkoutEditViewModel
@@ -32,10 +22,20 @@ class WorkoutViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reload()
-        if viewModel.rowCount(section: 1) > 0 {
-            navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
+        workoutEditViewModel().delegate = self
+        navigationItem.title = workoutEditViewModel().exerciseType.rawValue
+        exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: workoutEditViewModel().exerciseType, templateManagement: TemplateManagement())
+        tableView.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
+        if let exerciseInProgressName = AppState.shared.exerciseInProgress {
+            for i in 0..<workoutEditViewModel().rowCount(section: section2) {
+                let indexPath = IndexPath(row: i, section: section2)
+                if workoutEditViewModel().title(indexPath: indexPath) == exerciseInProgressName {
+                    workoutEditViewModel().selectedIndex = indexPath
+                }
+            }
+            performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail, sender: self)
         }
+        reload()
     }
     
     @IBAction func addExercise(_ sender: Any) {
@@ -70,6 +70,14 @@ class WorkoutViewController: PPLTableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    override func pop() {
+        if viewModel.rowCount(section: 1) > 0 {
+            done(self)
+        } else {
+            cancel(self)
+        }
+    }
+    
     @objc func cancel(_ sender: Any) {
         self.workoutEditViewModel().deleteWorkout()
         self.navigationController?.popViewController(animated: true)
@@ -87,7 +95,7 @@ class WorkoutViewController: PPLTableViewController {
                 let vm = ExerciseViewModel(exercise: exercise)
                 vc.viewModel = vm
                 vm.reloader = vc
-                vc.readOnly = true
+                vc.readOnly = AppState.shared.exerciseInProgress == nil
             }
         } else if segue.identifier == SegueIdentifier.addExerciseOnTheFly, let vc = vc as? ExerciseTemplateSelectionViewController {
             vc.viewModel = exerciseSelectionViewModel
@@ -96,14 +104,23 @@ class WorkoutViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = dequeuCell(section: indexPath.section)
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        let title = viewModel.title(indexPath: indexPath)
+        cell.greenBackground.removeAllSubviews()
         if indexPath.section == 1 {
-            cell.detailTextLabel?.text = "Total work: \(workoutEditViewModel().detailText(indexPath: indexPath)!)"
-            cell.setWorkoutProgressionImage(workoutEditViewModel().exerciseVolumeComparison(row: indexPath.row))
+            let vc = ExerciseDataCellViewController()
+            vc.exerciseName = title
+            vc.workText = "Total work: \(workoutEditViewModel().detailText(indexPath: indexPath)!)"
+            vc.preferredContentSize = cell.greenBackground.bounds.size
+            cell.greenBackground.addSubview(vc.view)
         } else {
-            cell.textLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+            let label = PPLNameLabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            cell.greenBackground.addSubview(label)
+            label.centerXAnchor.constraint(equalTo: cell.greenBackground.centerXAnchor).isActive = true
+            label.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
+            label.text = title
         }
-        cell.textLabel?.text = viewModel.title(indexPath: indexPath)
         return cell
     }
     
@@ -135,5 +152,13 @@ extension WorkoutViewController: ReloadProtocol {
     func reload() {
         workoutEditViewModel().exerciseTemplatesAdded()
         tableView.reloadData()
+    }
+}
+
+extension UIView {
+    func removeAllSubviews() {
+        for v in subviews {
+            v.removeFromSuperview()
+        }
     }
 }

@@ -13,20 +13,66 @@ class PPLAdViewModel: NSObject {
     
 }
 
+class PPLTableView: UITableView {
+    
+    override func dequeueReusableCell(withIdentifier identifier: String) -> UITableViewCell? {
+        guard let cell = super.dequeueReusableCell(withIdentifier: identifier) else { return nil }
+        cell.backgroundColor = .clear
+        cell.focusStyle = .custom
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        backgroundColor = PPLColor.Grey
+        separatorStyle = .none
+    }
+    
+}
+
+let PPLTableViewCellIdentifier = "PPLTableViewCellIdentifier"
+
 class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
     
     var viewModel: ViewModel!
+    weak var tableView: PPLTableView!
     weak var bannerView: GADBannerView!
     
-    override
-    func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = PPLColor.Grey
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView = view.subviews.first(where: { $0.isKind(of: PPLTableView.self) }) as? PPLTableView
+        if tableView == nil {
+            let tableView = PPLTableView(frame: view.bounds)
+            self.tableView = tableView
+            view.addSubview(tableView)
+        }
+        tableView.register(UINib(nibName: "PPLTableViewCell", bundle: nil), forCellReuseIdentifier: PPLTableViewCellIdentifier)
+        tableView.delegate = self
+        tableView.dataSource = self
         if let nvc = navigationController {
             hidesBottomBarWhenPushed = nvc.viewControllers[0] != self
         }
         if AppState.shared.isAdEnabled {
             addBannerView()
         }
+        let footer = UIView(frame: .zero)
+        footer.backgroundColor = tableView.backgroundColor
+        tableView.tableFooterView = footer
+        if let vcs = navigationController?.viewControllers, vcs.count > 1 {
+            let swipey = UISwipeGestureRecognizer(target: self, action: #selector(pop))
+            swipey.direction = .right
+            view.addGestureRecognizer(swipey)
+        }
+    }
+    
+    @objc func pop() {
+        navigationController?.popViewController(animated: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -55,12 +101,13 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        guard let count = viewModel.sectionCount?() else { return 1 }
+        guard let vm = viewModel, let count = vm.sectionCount?() else { return 1 }
         return count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.rowCount(section: section)
+        guard let vm = viewModel else { return 1 }
+        return vm.rowCount(section: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -84,13 +131,14 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         for title in titles {
             let label = UILabel.headerLabel(title)
             label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight)
-            label.layer.borderColor = UIColor.darkGray.cgColor
-            label.layer.borderWidth = 2.0
-            label.backgroundColor = .systemBackground
-            label.textColor = .systemBlue
+            label.layer.backgroundColor = PPLColor.Grey?.cgColor
+            label.textColor = UIColor.white
             headerView.addSubview(label)
             i += 1
         }
+        headerView.layer.shadowRadius = 50
+        headerView.layer.shadowColor = UIColor.black.cgColor
+        headerView.layer.shadowOffset = CGSize(width: 50, height: -50)
         return headerView
     }
 }

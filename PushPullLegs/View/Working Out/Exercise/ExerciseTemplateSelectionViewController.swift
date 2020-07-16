@@ -13,15 +13,11 @@ protocol ExerciseTemplateSelectionDelegate: NSObject {
 }
 
 class ExerciseTemplateSelectionViewController: PPLTableViewController {
-
-    @IBOutlet weak var tableView: UITableView!
     weak var delegate: ExerciseTemplateSelectionDelegate?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
-        tableView.delegate = self
-        tableView.dataSource = self
         navigationItem.title = "Select Exercises"
     }
     

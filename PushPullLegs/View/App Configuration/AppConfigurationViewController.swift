@@ -11,16 +11,11 @@ import UIKit
 let defaultCellIdentifier = "DefaultTableViewCell"
 
 class AppConfigurationViewController: PPLTableViewController {
-
-    @IBOutlet weak var tableView: UITableView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel = AppConfigurationViewModel()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: defaultCellIdentifier)
-        navigationItem.title = "Settings"
+        tableView.rowHeight = tableView.frame.height / 4
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,18 +27,39 @@ class AppConfigurationViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: defaultCellIdentifier) else {
-            return UITableViewCell()
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         if indexPath.row == 2 {
             configureKilogramsPoundsSwitch(cell: cell)
         } else if indexPath.row == 3 {
             configureStartNextWorkoutPromptSwitch(cell: cell)
         } else {
-            cell.accessoryType = .disclosureIndicator
+            let indicator = UIImage.init(systemName: "chevron.right")!
+            let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.lightGrey!, renderingMode: .alwaysOriginal))
+            cell.greenBackground.addSubview(indicatorView)
+            indicatorView.translatesAutoresizingMaskIntoConstraints = false
+            indicatorView.trailingAnchor.constraint(equalTo: cell.greenBackground.trailingAnchor, constant: -20).isActive = true
+            indicatorView.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
         }
-        cell.textLabel?.text = viewModel.title(indexPath: indexPath)
+        var textLabel = cell.greenBackground.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        if textLabel == nil {
+            textLabel = PPLNameLabel()
+            textLabel?.numberOfLines = 2
+            textLabel?.translatesAutoresizingMaskIntoConstraints = false
+            cell.greenBackground.addSubview(textLabel!)
+            textLabel?.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
+            textLabel?.leadingAnchor.constraint(equalTo: cell.greenBackground.leadingAnchor, constant: 20).isActive = true
+            textLabel?.trailingAnchor.constraint(equalTo: nameLabelTrailingAnchor(cell.greenBackground), constant: 5).isActive = true
+        }
+        textLabel?.text = viewModel.title(indexPath: indexPath)
+        cell.frame = CGRect.update(height: tableView.frame.height / 4.0, rect: cell.frame)
         return cell
+    }
+    
+    fileprivate func nameLabelTrailingAnchor(_ view: UIView) -> NSLayoutXAxisAnchor {
+        if let iv = view.subviews.first(where: { $0.isKind(of: UIImageView.self) }) {
+            return iv.trailingAnchor
+        }
+        return view.subviews.first(where: { $0.isKind(of: UISwitch.self) })!.leadingAnchor
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -51,6 +67,10 @@ class AppConfigurationViewController: PPLTableViewController {
             tableView.deselectRow(at: indexPath, animated: true)
             performSegue(withIdentifier: segueId, sender: self)
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return tableView.frame.height / 4.0
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -66,12 +86,11 @@ class AppConfigurationViewController: PPLTableViewController {
         return nil
     }
     
-    func configureKilogramsPoundsSwitch(cell: UITableViewCell) {
-        let switchView = UISwitch()
-        switchView.setOn(PPLDefaults.instance.isKilograms(), animated: false)
-        switchView.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
-        cell.accessoryView = switchView
-        cell.selectionStyle = .none
+    func configureKilogramsPoundsSwitch(cell: PPLTableViewCell) {
+        if let _ = cell.greenBackground.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
+        let switchV = switchView(cell)
+        switchV.setOn(PPLDefaults.instance.isKilograms(), animated: false)
+        switchV.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
     }
 
     @objc func toggleKilogramsPoundsValue(_ switchView: UISwitch) {
@@ -79,17 +98,30 @@ class AppConfigurationViewController: PPLTableViewController {
         self.tableView.reloadData()
     }
     
-    func configureStartNextWorkoutPromptSwitch(cell: UITableViewCell) {
-        let switchView = UISwitch()
-        switchView.setOn(PPLDefaults.instance.workoutTypePromptSwitchValue(), animated: false)
-        switchView.addTarget(self, action: #selector(toggleWorkoutTypePromptValue), for: .valueChanged)
-        cell.accessoryView = switchView
-        cell.selectionStyle = .none
+    func configureStartNextWorkoutPromptSwitch(cell: PPLTableViewCell) {
+        if let _ = cell.greenBackground.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
+        let switchV = switchView(cell)
+        switchV.setOn(PPLDefaults.instance.workoutTypePromptSwitchValue(), animated: false)
+        switchV.addTarget(self, action: #selector(toggleWorkoutTypePromptValue(_:)), for: .valueChanged)
     }
 
-    @objc func toggleWorkoutTypePromptValue() {
+    @objc func toggleWorkoutTypePromptValue(_ switchView: UISwitch) {
         PPLDefaults.instance.toggleWorkoutTypePromptValue()
         tableView.reloadData()
+    }
+    
+    fileprivate func switchView(_ cell: PPLTableViewCell) -> UISwitch {
+        let switchView = UISwitch()
+        switchView.layer.masksToBounds = true
+        switchView.layer.borderWidth = 2.0
+        switchView.layer.cornerRadius = 16
+        switchView.layer.borderColor = PPLColor.lightGrey?.cgColor
+        cell.greenBackground.addSubview(switchView)
+        switchView.translatesAutoresizingMaskIntoConstraints = false
+        switchView.trailingAnchor.constraint(equalTo: cell.greenBackground.trailingAnchor, constant: -20).isActive = true
+        switchView.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
+        cell.selectionStyle = .none
+        return switchView
     }
     
 }
@@ -119,71 +151,4 @@ class AppConfigurationViewModel: NSObject, ViewModel {
     }
     
     
-}
-
-class PPLDefaults: NSObject {
-    private let user_details_suite_name = "User Details"
-    private let prompt_user_for_workout_type = "Prompt User For Workout Type"
-    private let kUserDetailsKilogramsPounds = "kUserDetailsKilogramsPounds"
-    private let kUserDetailsPromptForWorkoutType = "kUserDetailsPromptForWorkoutType"
-    private let kWorkoutInProgress = "kWorkoutInProgress"
-    private let kIsInstalled = "kIsInstalled"
-    override private init() {
-        super.init()
-        setupUserDetails()
-    }
-    static let instance = PPLDefaults()
-    private var userDetails: UserDefaults!
-    
-    private func isInstalled() -> Bool {
-        let isInstalled = userDetails.bool(forKey: kIsInstalled)
-        if !isInstalled {
-            userDetails.set(false, forKey: kUserDetailsKilogramsPounds)
-            userDetails.set(true, forKey: kIsInstalled)
-        }
-        return isInstalled
-    }
-    
-    func isKilograms() -> Bool {
-        if isInstalled() {
-            return userDetails.bool(forKey: kUserDetailsKilogramsPounds)
-        }
-        return false
-    }
-    
-    @objc func toggleKilograms() {
-        let newValue = !userDetails.bool(forKey: kUserDetailsKilogramsPounds)
-        userDetails.set(newValue, forKey: kUserDetailsKilogramsPounds)
-    }
-    
-    func isWorkoutInProgress() -> Bool {
-        return userDetails.bool(forKey: kWorkoutInProgress)
-    }
-    
-    func setWorkoutInProgress(_ value: Bool) {
-        userDetails.set(value, forKey: kWorkoutInProgress)
-    }
-    
-    func workoutTypePromptSwitchValue() -> Bool {
-        return userDetails.bool(forKey: kUserDetailsPromptForWorkoutType)
-    }
-    
-    func setupUserDetails() {
-        if let details = UserDefaults(suiteName: user_details_suite_name) {
-            userDetails = details
-        } else {
-            UserDefaults.standard.addSuite(named: user_details_suite_name)
-            addWorkoutTypePromptBool()
-            setupUserDetails()
-        }
-    }
-    
-    func addWorkoutTypePromptBool() {
-        userDetails.set(true, forKey: kUserDetailsPromptForWorkoutType)
-    }
-    
-    @objc func toggleWorkoutTypePromptValue() {
-        let newValue = !userDetails.bool(forKey: kUserDetailsPromptForWorkoutType)
-        userDetails.set(newValue, forKey: kUserDetailsPromptForWorkoutType)
-    }
 }

@@ -11,13 +11,10 @@ import UIKit
 let ExerciseDataCellReuseIdentifier = "ExerciseDataCellReuseIdentifier"
 
 class WorkoutDataViewController: PPLTableViewController {
-
-    @IBOutlet weak var tableView: UITableView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
-        navigationItem.title = "Exercises"
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -26,20 +23,21 @@ class WorkoutDataViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ExerciseDataCellReuseIdentifier)!
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         if let vm = workoutReadViewModel() {
-            cell.textLabel?.text = vm.title(indexPath: indexPath)
-            cell.textLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
-            cell.detailTextLabel?.text = "Total Work: \(vm.detailText(indexPath: indexPath)!)"
-            cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-            cell.setWorkoutProgressionImage(vm.exerciseVolumeComparison(row: indexPath.row))
+            let vc = ExerciseDataCellViewController()
+            vc.preferredContentSize = cell.greenBackground.bounds.size
+            vc.exerciseName = vm.title(indexPath: indexPath)
+            vc.workText = "Total Work: \(vm.detailText(indexPath: indexPath)!)"
+            vc.progress = vm.exerciseVolumeComparison(row: indexPath.row)
+            cell.greenBackground.addSubview(vc.view)
         }
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    } 
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        tableHeaderView(titles: ["Exercises"])
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let vm = workoutReadViewModel() else { return }

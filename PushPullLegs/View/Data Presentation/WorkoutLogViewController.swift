@@ -12,23 +12,16 @@ let WorkoutLogCellReuseIdentifier = "WorkoutLogCellReuseIdentifier"
 
 class WorkoutLogViewController: PPLTableViewController {
     
-    weak var tableView: UITableView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Workouts"
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let tbl = UITableView(frame: view.frame)
+        let tbl = PPLTableView(frame: view.frame)
         view.addSubview(tbl)
         tbl.rowHeight = 75
         viewModel = WorkoutLogViewModel()
         tableView = tbl
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "WorkoutLogTableViewCell", bundle: nil), forCellReuseIdentifier: WorkoutLogCellReuseIdentifier)
         tableView.reloadData()
     }
     
@@ -43,9 +36,17 @@ class WorkoutLogViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: WorkoutLogCellReuseIdentifier) as! WorkoutLogTableViewCell
-        cell.nameLabel?.text = viewModel.title(indexPath: indexPath)
-        cell.dateLabel?.text = workoutLogViewModel().dateLabel(indexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        let contentFrame = cell.frame
+        let nameLabel = PPLNameLabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width / 2, height: contentFrame.height))
+        let dateLabel = PPLNameLabel(frame: CGRect(x: nameLabel.frame.width, y: 0, width: tableView.frame.width / 2, height: contentFrame.height))
+        nameLabel.text = viewModel.title(indexPath: indexPath)
+        dateLabel.text = workoutLogViewModel().dateLabel(indexPath: indexPath)
+        for lbl in [nameLabel, dateLabel] {
+            lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+            lbl.textAlignment = .center
+            cell.contentView.addSubview(lbl)
+        }
         return cell
     }
     
@@ -55,6 +56,7 @@ class WorkoutLogViewController: PPLTableViewController {
         
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
@@ -86,7 +88,15 @@ class WorkoutLogViewModel: NSObject, ViewModel {
     }
 }
 
-class WorkoutLogTableViewCell: UITableViewCell {
-    @IBOutlet var nameLabel: UILabel!
-    @IBOutlet var dateLabel: UILabel!
+class PPLNameLabel: UILabel {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        textColor = PPLColor.textBlue
+        font = UIFont.systemFont(ofSize: 23, weight: .medium)
+    }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        textColor = PPLColor.textBlue
+        font = UIFont.systemFont(ofSize: 23, weight: .medium)
+    }
 }

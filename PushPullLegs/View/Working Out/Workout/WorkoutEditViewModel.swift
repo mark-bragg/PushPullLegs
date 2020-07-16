@@ -37,6 +37,7 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
             workoutId = (workoutManager.creation as? Workout)?.objectID
         }
         exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
+        reload()
     }
     
     override func sectionCount() -> Int {
@@ -120,7 +121,7 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
         }
     }
     
-    func exerciseViewModel(_ viewMode: ExerciseViewModel, completed exercise: Exercise) {
+    func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise) {
         guard let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout else { return }
         workoutManager.add(exercise, to: workout)
         reload()

@@ -13,14 +13,10 @@ let AppConfigurationCellReuseIdentifier = "AppConfigurationCellReuseIdentifier"
 
 class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol {
 
-    @IBOutlet weak var tableView: UITableView!
     var currentSegueId: String!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -40,10 +36,8 @@ class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol 
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let text = workoutTemplateEditViewModel().title(indexPath: indexPath)
-        let cell = UITableViewCell(style: .default, reuseIdentifier: AppConfigurationCellReuseIdentifier)
-        cell.textLabel?.text = text
-        cell.textLabel?.textAlignment = .left
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        label(forCell: cell).text = workoutTemplateEditViewModel().title(indexPath: indexPath)
         return cell
     }
     

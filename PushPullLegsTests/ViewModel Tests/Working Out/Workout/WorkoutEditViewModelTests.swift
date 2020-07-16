@@ -394,7 +394,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let name = todoNames.remove(at: 2)
         let exercise = dbHelper.createExercise(name)
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), started: exercise)
         XCTAssert(sut.rowCount(section: 0) == 4, "\nexpected: 4\nactual: \(sut.rowCount(section: 0))")
         XCTAssert(sut.rowCount(section: 1) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 1))")
         for i in 0...3 {
@@ -414,7 +414,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let name1 = todoNames.remove(at: 2)
         var exercise = dbHelper.createExercise(name1)
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), started: exercise)
         XCTAssert(sut.rowCount(section: 0) == 4, "\nexpected: 4\nactual: \(sut.rowCount(section: 0))")
         XCTAssert(sut.rowCount(section: 1) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 1))")
         for i in 0...3 {
@@ -424,7 +424,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         
         let name2 = todoNames.remove(at: 2)
         exercise = dbHelper.createExercise(name2)
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), started: exercise)
         XCTAssert(sut.rowCount(section: 0) == 3, "\nexpected: 3\nactual: \(sut.rowCount(section: 0))")
         XCTAssert(sut.rowCount(section: 1) == 2, "\nexpected: 2\nactual: \(sut.rowCount(section: 1))")
         for i in 0...2 {
@@ -442,7 +442,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set = (10, 1, 60.0)
         let exercise = dbHelper.createExercise(name, sets: [set, set, set])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), started: exercise)
         guard let volume = sut.detailText(indexPath: IndexPath(row: 0, section: 1)) else {
             XCTFail()
             return
@@ -458,7 +458,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set = (10, 1, 60.0)
         let exercise = dbHelper.createExercise(name, sets: [set, set, set])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), completed: exercise)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise), started: exercise)
         XCTAssert(sut.detailText(indexPath: IndexPath(row: 0, section: 0)) == nil)
     }
     
@@ -470,11 +470,11 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 1, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), started: exercise1)
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set2 = (10, 1, 60.0)
         let exercise2 = dbHelper.createExercise(name, sets: [set2])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), started: exercise2)
         let progression = sut.exerciseVolumeComparison(row: 0)
         XCTAssert(progression == .noChange)
     }
@@ -487,11 +487,11 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 1, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), started: exercise1)
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set2 = (10, 2, 60.0)
         let exercise2 = dbHelper.createExercise(name, sets: [set2])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), started: exercise2)
         let progression = sut.exerciseVolumeComparison(row: 0)
         XCTAssert(progression == .increase)
     }
@@ -504,11 +504,11 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 2, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), started: exercise1)
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set2 = (10, 1, 60.0)
         let exercise2 = dbHelper.createExercise(name, sets: [set2])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), completed: exercise2)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise2), started: exercise2)
         let progression = sut.exerciseVolumeComparison(row: 0)
         XCTAssert(progression == .decrease)
     }
@@ -521,7 +521,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 2, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), started: exercise1)
         let progression = sut.exerciseVolumeComparison(row: 0)
         XCTAssert(progression == .increase)
     }
@@ -534,7 +534,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
         let set1 = (10, 2, 60.0)
         let exercise1 = dbHelper.createExercise(name, sets: [set1])
-        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), completed: exercise1)
+        sut.exerciseViewModel(ExerciseViewModelMock(withExercise: exercise1), started: exercise1)
         sut.deleteWorkout()
         let workouts = dbHelper.fetchWorkouts()
         XCTAssert(workouts.count == 0)
