@@ -23,4 +23,5 @@ class PPLColor: AssetIdentifier {
     static let DarkGreen = UIColor(named: "ppl_dark_green")
     static let textBlue = UIColor(named: "ppl_text_blue")
     static let darkGrey = UIColor(named: "ppl_dark_grey")
+    static let darkGreyText = UIColor(named: "ppl_dark_grey_text")
 }
