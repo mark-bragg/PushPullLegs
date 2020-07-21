@@ -26,6 +26,8 @@ class PPLTableViewCell: UITableViewCell {
             self.rootView.removeShadow()
         } else {
             self.rootView.addShadow()
+            self.rootView.layer.borderColor = UIColor.white.cgColor
+            self.rootView.layer.borderWidth = 2
         }
     }
 
@@ -33,6 +35,8 @@ class PPLTableViewCell: UITableViewCell {
         UIView.animate(withDuration: 0.05, animations: {
             if !selected {
                 self.rootView.addShadow()
+                self.rootView.layer.borderColor = UIColor.white.cgColor
+                self.rootView.layer.borderWidth = 2
             }
         })
     }
@@ -42,16 +46,16 @@ class PPLTableViewCell: UITableViewCell {
 extension CGSize {
     static var shadowOffset = CGSize(width: -5, height: 5)
     static var shadowOffsetAddButton = CGSize(width: -10, height: 10)
+    static var shadowOffsetTableHeader = CGSize(width: -7, height: 7)
 }
 
 extension UIView {
-    func addShadow() {
+    func addShadow(_ offset: CGSize = .shadowOffset) {
         layer.shadowOffset = .shadowOffset
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 2.0
         layer.shadowOpacity = 0.75
-        layer.borderColor = UIColor.white.cgColor
-        layer.borderWidth = 2
+        
     }
     
     func removeShadow() {

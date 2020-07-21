@@ -203,17 +203,19 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         var i = 0
         let widthDenominator = CGFloat(titles.count)
         let labelWidth = headerView.frame.width / widthDenominator
+        let gradientTop = CAGradientLayer()
+        gradientTop.frame = headerView.layer.bounds
+        gradientTop.colors = [PPLColor.textBlue!.cgColor, PPLColor.Grey!.cgColor, PPLColor.Grey!.cgColor, PPLColor.textBlue!.cgColor, UIColor.clear.cgColor]
+        gradientTop.locations = [0.0, 0.15, 0.85, 0.99, 1.0]
+        headerView.layer.addSublayer(gradientTop)
         for title in titles {
             let label = UILabel.headerLabel(title)
             label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight)
-            label.layer.backgroundColor = PPLColor.Grey?.cgColor
             label.textColor = UIColor.white
             headerView.addSubview(label)
             i += 1
         }
-        headerView.layer.shadowRadius = 50
-        headerView.layer.shadowColor = UIColor.black.cgColor
-        headerView.layer.shadowOffset = CGSize(width: 50, height: -50)
+        headerView.addShadow(.shadowOffsetTableHeader)
         return headerView
     }
 }
