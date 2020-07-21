@@ -33,22 +33,23 @@ class AppConfigurationViewController: PPLTableViewController {
         } else if indexPath.row == 3 {
             configureStartNextWorkoutPromptSwitch(cell: cell)
         } else {
+            cell.selectionStyle = .default
             let indicator = UIImage.init(systemName: "chevron.right")!
             let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.lightGrey!, renderingMode: .alwaysOriginal))
-            cell.greenBackground.addSubview(indicatorView)
+            cell.rootView.addSubview(indicatorView)
             indicatorView.translatesAutoresizingMaskIntoConstraints = false
-            indicatorView.trailingAnchor.constraint(equalTo: cell.greenBackground.trailingAnchor, constant: -20).isActive = true
-            indicatorView.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
+            indicatorView.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -20).isActive = true
+            indicatorView.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
         }
-        var textLabel = cell.greenBackground.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
             textLabel?.numberOfLines = 2
             textLabel?.translatesAutoresizingMaskIntoConstraints = false
-            cell.greenBackground.addSubview(textLabel!)
-            textLabel?.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
-            textLabel?.leadingAnchor.constraint(equalTo: cell.greenBackground.leadingAnchor, constant: 20).isActive = true
-            textLabel?.trailingAnchor.constraint(equalTo: nameLabelTrailingAnchor(cell.greenBackground), constant: 5).isActive = true
+            cell.rootView.addSubview(textLabel!)
+            textLabel?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
+            textLabel?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
+            textLabel?.trailingAnchor.constraint(equalTo: nameLabelTrailingAnchor(cell.rootView), constant: 5).isActive = true
         }
         textLabel?.text = viewModel.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 4.0, rect: cell.frame)
@@ -62,9 +63,9 @@ class AppConfigurationViewController: PPLTableViewController {
         return view.subviews.first(where: { $0.isKind(of: UISwitch.self) })!.leadingAnchor
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        super.tableView(tableView, didSelectRowAt: indexPath)
         if let segueId = segueIdentifierForRow(indexPath.row) {
-            tableView.deselectRow(at: indexPath, animated: true)
             performSegue(withIdentifier: segueId, sender: self)
         }
     }
@@ -87,7 +88,8 @@ class AppConfigurationViewController: PPLTableViewController {
     }
     
     func configureKilogramsPoundsSwitch(cell: PPLTableViewCell) {
-        if let _ = cell.greenBackground.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
+        if let _ = cell.rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
+        cell.rootView.isUserInteractionEnabled = true
         let switchV = switchView(cell)
         switchV.setOn(PPLDefaults.instance.isKilograms(), animated: false)
         switchV.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
@@ -99,7 +101,8 @@ class AppConfigurationViewController: PPLTableViewController {
     }
     
     func configureStartNextWorkoutPromptSwitch(cell: PPLTableViewCell) {
-        if let _ = cell.greenBackground.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
+        if let _ = cell.rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
+        cell.rootView.isUserInteractionEnabled = true
         let switchV = switchView(cell)
         switchV.setOn(PPLDefaults.instance.workoutTypePromptSwitchValue(), animated: false)
         switchV.addTarget(self, action: #selector(toggleWorkoutTypePromptValue(_:)), for: .valueChanged)
@@ -116,10 +119,10 @@ class AppConfigurationViewController: PPLTableViewController {
         switchView.layer.borderWidth = 2.0
         switchView.layer.cornerRadius = 16
         switchView.layer.borderColor = PPLColor.lightGrey?.cgColor
-        cell.greenBackground.addSubview(switchView)
+        cell.rootView.addSubview(switchView)
         switchView.translatesAutoresizingMaskIntoConstraints = false
-        switchView.trailingAnchor.constraint(equalTo: cell.greenBackground.trailingAnchor, constant: -20).isActive = true
-        switchView.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
+        switchView.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -20).isActive = true
+        switchView.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
         cell.selectionStyle = .none
         return switchView
     }

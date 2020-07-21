@@ -23,12 +23,9 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     var readOnly = false
     weak var restTimerView: RestTimerView!
     private let timerHeight: CGFloat = 75.0
-    weak var addButton: UIControl!
-    private let addButtonSize = CGSize(width: 75, height: 75)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,76 +35,6 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         }
         navigationItem.title = exerciseViewModel().title()
         tableView.allowsSelection = false
-    }
-    
-    private func setupAddButton() {
-        attachAddButton()
-        positionAddButton()
-        addPlusSign()
-        addButtonShadow()
-    }
-    
-    private func attachAddButton() {
-        let button = getAddButton()
-        view.addSubview(button)
-        self.addButton = button
-    }
-    
-    private func getAddButton() -> UIControl {
-        let button = UIControl()
-        let layer = button.layer
-        button.clipsToBounds = false
-        layer.backgroundColor = PPLColor.lightGrey?.cgColor
-        layer.cornerRadius = addButtonSize.height / 2
-        return button
-    }
-    
-    private func positionAddButton() {
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
-        addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
-        addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -15).isActive = true
-        addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
-    }
-    
-    private func addPlusSign() {
-        addButton.addTarget(self, action: #selector(addSet(_:)), for: .touchUpInside)
-        addButton.addTarget(self, action: #selector(addTouchDown(_:)), for: .touchDown)
-        addButton.addTarget(self, action: #selector(addRelease), for: .touchUpOutside)
-        let plusSign = UILabel(frame: CGRect(origin: .zero, size: addButtonSize))
-        plusSign.text = "+"
-        plusSign.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        plusSign.textColor = .white
-        plusSign.textAlignment = .center
-        addButton.addSubview(plusSign)
-    }
-    
-    @objc func addTouchDown(_ sender: Any) {
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            guard let btn = self?.addButton else { return }
-            btn.layer.shadowOpacity = 0.0
-            btn.layer.borderColor = PPLColor.darkGrey?.cgColor
-        }
-    }
-    
-    @objc func addRelease(_ sender: Any) {
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            guard let btn = self?.addButton else { return }
-            btn.layer.shadowOpacity = 0.3
-            btn.layer.borderColor = UIColor.white.cgColor
-        }
-    }
-    
-    private func addButtonShadow() {
-        let layer = addButton.layer
-        layer.borderColor = UIColor.white.cgColor
-        layer.borderWidth = 0.5
-        layer.shadowPath = UIBezierPath.init(roundedRect: CGRect(origin: .zero, size: addButtonSize), cornerRadius: addButtonSize.height / 2).cgPath
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.3
-        layer.shadowOffset = CGSize(width: -4, height: -2)
-        layer.shadowRadius = 2
-        layer.shouldRasterize = true
     }
     
     override func pop() {
@@ -123,18 +50,22 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         return viewModel as! ExerciseViewModel
     }
     
+    override func addAction(_ sender: Any) {
+        super.addAction(sender)
+        exerciseSetViewModel = ExerciseSetViewModel()
+        exerciseSetViewModel?.delegate = self
+        exerciseSetViewModel?.setCollector = exerciseViewModel()
+        let wc = WeightCollectionViewController()
+        wc.exerciseSetViewModel = exerciseSetViewModel
+        presentModally(wc)
+        weightCollector = wc
+        if let v = restTimerView {
+            v.removeFromSuperview()
+        }
+    }
+    
     @IBAction func addSet(_ sender: Any) {
-        addRelease(sender)
-//        exerciseSetViewModel = ExerciseSetViewModel()
-//        exerciseSetViewModel?.delegate = self
-//        exerciseSetViewModel?.setCollector = exerciseViewModel()
-//        let wc = WeightCollectionViewController()
-//        wc.exerciseSetViewModel = exerciseSetViewModel
-//        presentModally(wc)
-//        weightCollector = wc
-//        if let v = restTimerView {
-//            v.removeFromSuperview()
-//        }
+        
     }
     
     @IBAction func done(_ sender: Any) {

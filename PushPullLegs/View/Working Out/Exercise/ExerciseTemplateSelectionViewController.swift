@@ -48,8 +48,8 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         return cell!
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        super.tableView(tableView, didSelectRowAt: indexPath)
         if let cell = tableView.cellForRow(at: indexPath) {
             if cell.accessoryType == .none {
                 exerciseSelectionViewModel().selected(row: indexPath.row)

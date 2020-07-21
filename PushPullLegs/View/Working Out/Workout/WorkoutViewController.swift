@@ -35,10 +35,12 @@ class WorkoutViewController: PPLTableViewController {
             }
             performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail, sender: self)
         }
+        setupAddButton()
         reload()
     }
     
-    @IBAction func addExercise(_ sender: Any) {
+    override func addAction(_ sender: Any) {
+        super.addAction(sender)
         if exerciseSelectionViewModel.rowCount(section: 0) > 0 {
             performSegue(withIdentifier: SegueIdentifier.addExerciseOnTheFly, sender: self)
         } else {
@@ -52,7 +54,23 @@ class WorkoutViewController: PPLTableViewController {
         }
     }
     
+    @IBAction func addExercise(_ sender: Any) {
+        
+    }
+    
     @IBAction func done(_ sender: Any) {
+        
+    }
+    
+    override func pop() {
+        if viewModel.rowCount(section: 1) > 0 {
+            presentFinishWorkoutPrompt()
+        } else {
+            cancel(self)
+        }
+    }
+    
+    func presentFinishWorkoutPrompt() {
         guard viewModel.rowCount(section: 1) > 0 else {
             workoutEditViewModel().deleteWorkout()
             navigationController?.popViewController(animated: true)
@@ -68,14 +86,6 @@ class WorkoutViewController: PPLTableViewController {
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
-    }
-    
-    override func pop() {
-        if viewModel.rowCount(section: 1) > 0 {
-            done(self)
-        } else {
-            cancel(self)
-        }
     }
     
     @objc func cancel(_ sender: Any) {
@@ -106,19 +116,20 @@ class WorkoutViewController: PPLTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         let title = viewModel.title(indexPath: indexPath)
-        cell.greenBackground.removeAllSubviews()
+        cell.rootView.removeAllSubviews()
         if indexPath.section == 1 {
             let vc = ExerciseDataCellViewController()
             vc.exerciseName = title
             vc.workText = "Total work: \(workoutEditViewModel().detailText(indexPath: indexPath)!)"
-            vc.preferredContentSize = cell.greenBackground.bounds.size
-            cell.greenBackground.addSubview(vc.view)
+            vc.preferredContentSize = cell.rootView.bounds.size
+            cell.rootView.addSubview(vc.view)
+            cell.setSelected(true, animated: false)
         } else {
             let label = PPLNameLabel()
             label.translatesAutoresizingMaskIntoConstraints = false
-            cell.greenBackground.addSubview(label)
-            label.centerXAnchor.constraint(equalTo: cell.greenBackground.centerXAnchor).isActive = true
-            label.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
+            cell.rootView.addSubview(label)
+            label.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
+            label.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
             label.text = title
         }
         return cell
@@ -128,7 +139,8 @@ class WorkoutViewController: PPLTableViewController {
         return tableView.dequeueReusableCell(withIdentifier: section == 0 ? ExerciseToDoCellReuseIdentifier : ExerciseDataCellReuseIdentifier)!
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        super.tableView(tableView, didSelectRowAt: indexPath)
         workoutEditViewModel().selectedIndex = indexPath
         performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail, sender: self)
     }

@@ -30,13 +30,13 @@ class WorkoutTemplateListViewController: PPLTableViewController {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard !tableView.isEditing else {
             return
         }
+        super.tableView(tableView, didSelectRowAt: indexPath)
         workoutTemplateListViewModel().select(indexPath)
         performSegue(withIdentifier: SegueIdentifier.editWorkout, sender: self)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -62,14 +62,14 @@ extension CGRect {
 
 extension UIViewController {
     func label(forCell cell: PPLTableViewCell) -> PPLNameLabel {
-        var label = cell.greenBackground.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        var label = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if label == nil {
             label = PPLNameLabel()
-            cell.greenBackground.addSubview(label!)
+            cell.rootView.addSubview(label!)
             label?.translatesAutoresizingMaskIntoConstraints = false
-            label?.centerYAnchor.constraint(equalTo: cell.greenBackground.centerYAnchor).isActive = true
-            label?.centerXAnchor.constraint(equalTo: cell.greenBackground.centerXAnchor).isActive = true
-            label?.leadingAnchor.constraint(equalTo: cell.greenBackground.leadingAnchor, constant: 20).isActive = true
+            label?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
+            label?.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
+            label?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
             label?.font = UIFont.systemFont(ofSize: 26, weight: .semibold)
             label?.textAlignment = .center
         }

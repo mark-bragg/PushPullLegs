@@ -9,36 +9,14 @@
 import GoogleMobileAds
 import UIKit
 
-class PPLAdViewModel: NSObject {
-    
-}
-
-class PPLTableView: UITableView {
-    
-    override func dequeueReusableCell(withIdentifier identifier: String) -> UITableViewCell? {
-        guard let cell = super.dequeueReusableCell(withIdentifier: identifier) else { return nil }
-        cell.backgroundColor = .clear
-        cell.focusStyle = .custom
-        cell.selectionStyle = .none
-        return cell
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        backgroundColor = PPLColor.Grey
-        separatorStyle = .none
-    }
-    
-}
-
-let PPLTableViewCellIdentifier = "PPLTableViewCellIdentifier"
-
 class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
     
     var viewModel: ViewModel!
     weak var tableView: PPLTableView!
     weak var bannerView: GADBannerView!
     weak var noDataView: UIView!
+    weak var addButton: PPLAddButton!
+    private let addButtonSize = CGSize(width: 75, height: 75)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,10 +32,37 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         addBackNavigationGesture()
     }
     
+    @objc func addAction(_ sender: Any) {
+        // no-op
+    }
+    
     fileprivate func hideBottomBar() {
         if let nvc = navigationController {
             hidesBottomBarWhenPushed = nvc.viewControllers[0] != self
         }
+    }
+    
+    func setupAddButton() {
+        attachAddButton()
+        positionAddButton()
+    }
+    
+    private func attachAddButton() {
+        guard self.addButton == nil else {
+            return
+        }
+        let button = PPLAddButton(frame: .zero)
+        button.addTarget(self, action: #selector(addAction(_:)), for: .touchUpInside)
+        view.addSubview(button)
+        self.addButton = button
+    }
+    
+    private func positionAddButton() {
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
+        addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
+        addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -15).isActive = true
+        addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
     }
     
     fileprivate func setupTableView() {
@@ -185,7 +190,11 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return 95
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)!.setSelected(true, animated: true)
     }
     
     func tableHeaderView(titles: [String]) -> UIView {

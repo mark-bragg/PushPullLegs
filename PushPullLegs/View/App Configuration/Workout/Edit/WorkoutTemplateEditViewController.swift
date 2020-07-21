@@ -17,6 +17,12 @@ class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupAddButton()
+    }
+    
+    override func addAction(_ sender: Any) {
+        super.addAction(sender)
+        performSegue(withIdentifier: SegueIdentifier.createTemplateExercise, sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -41,18 +47,16 @@ class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol 
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            cell.setSelected(false, animated: true)
-            if indexPath.section == 0 {
-                if workoutTemplateEditViewModel().sectionCount() == 2 { workoutTemplateEditViewModel().selected(indexPath: indexPath) } else {
-                    workoutTemplateEditViewModel().selected(indexPath: indexPath)
-                }
-            } else {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        super.tableView(tableView, didSelectRowAt: indexPath)
+        if indexPath.section == 0 {
+            if workoutTemplateEditViewModel().sectionCount() == 2 { workoutTemplateEditViewModel().selected(indexPath: indexPath) } else {
                 workoutTemplateEditViewModel().selected(indexPath: indexPath)
             }
-            reload()
+        } else {
+            workoutTemplateEditViewModel().selected(indexPath: indexPath)
         }
+        reload()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

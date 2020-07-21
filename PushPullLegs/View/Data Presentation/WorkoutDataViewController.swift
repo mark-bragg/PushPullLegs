@@ -26,11 +26,11 @@ class WorkoutDataViewController: PPLTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         if let vm = workoutReadViewModel() {
             let vc = ExerciseDataCellViewController()
-            vc.preferredContentSize = cell.greenBackground.bounds.size
+            vc.preferredContentSize = cell.rootView.bounds.size
             vc.exerciseName = vm.title(indexPath: indexPath)
             vc.workText = "Total Work: \(vm.detailText(indexPath: indexPath)!)"
             vc.progress = vm.exerciseVolumeComparison(row: indexPath.row)
-            cell.greenBackground.addSubview(vc.view)
+            cell.rootView.addSubview(vc.view)
         }
         return cell
     }
@@ -39,7 +39,8 @@ class WorkoutDataViewController: PPLTableViewController {
         tableHeaderView(titles: ["Exercises"])
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        super.tableView(tableView, didSelectRowAt: indexPath)
         guard let vm = workoutReadViewModel() else { return }
         vm.selectedIndex = indexPath
         let exerciseVm = ExerciseViewModel(exercise: vm.getSelected() as! Exercise)

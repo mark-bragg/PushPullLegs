@@ -50,13 +50,13 @@ class WorkoutLogViewController: PPLTableViewController {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        super.tableView(tableView, didSelectRowAt: indexPath)
         let vc = WorkoutDataViewController()
         vc.viewModel = WorkoutReadViewModel(withCoreDataManagement: CoreDataManager.shared, workout: workoutLogViewModel().workouts[indexPath.row])
         
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }

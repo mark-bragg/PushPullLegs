@@ -25,6 +25,8 @@
 		491DD62B248C565C0001F9F8 /* PPLStopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */; };
 		4929DB112454DB0C009DCC7F /* RepsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */; };
 		49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */; };
+		49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8624C28C64005FF7A8 /* PPLTableView.swift */; };
+		49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8824C29886005FF7A8 /* PPLAddButton.swift */; };
 		4937729324001807005F566A /* DBUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4937729224001807005F566A /* DBUtilities.swift */; };
 		493C2C712455E5D2005308AF /* WeightCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */; };
 		49453378244FC8FA00FA1665 /* WorkoutLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */; };
@@ -126,6 +128,8 @@
 		491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLStopWatch.swift; sourceTree = "<group>"; };
 		4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsCollectionViewController.swift; sourceTree = "<group>"; };
 		49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushPullLegs.xcdatamodel; sourceTree = "<group>"; };
+		49359B8624C28C64005FF7A8 /* PPLTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableView.swift; sourceTree = "<group>"; };
+		49359B8824C29886005FF7A8 /* PPLAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAddButton.swift; sourceTree = "<group>"; };
 		4937729224001807005F566A /* DBUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUtilities.swift; sourceTree = "<group>"; };
 		493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCollectionViewController.swift; sourceTree = "<group>"; };
 		49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewController.swift; sourceTree = "<group>"; };
@@ -402,6 +406,8 @@
 				49453379244FCC1900FA1665 /* PPLTabBarController.swift */,
 				4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */,
 				4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */,
+				49359B8624C28C64005FF7A8 /* PPLTableView.swift */,
+				49359B8824C29886005FF7A8 /* PPLAddButton.swift */,
 			);
 			path = "Base Classes";
 			sourceTree = "<group>";
@@ -847,6 +853,7 @@
 				49453378244FC8FA00FA1665 /* WorkoutLogViewController.swift in Sources */,
 				491DD62B248C565C0001F9F8 /* PPLStopWatch.swift in Sources */,
 				4989BA5A24BB905F001C17B3 /* PPLTableViewCell.swift in Sources */,
+				49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */,
 				490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */,
 				4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */,
 				49E675FA244CDA54001F5974 /* ExerciseTemplateSelectionViewController.swift in Sources */,
@@ -861,6 +868,7 @@
 				49EF4BB423F8390A0071687D /* Date+Helpers.swift in Sources */,
 				49028D24243D85AC005EC078 /* AppConfigurationViewController.swift in Sources */,
 				49E3832B23FA09BF00F7A502 /* TemplateManagement.swift in Sources */,
+				49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */,
 				4937729324001807005F566A /* DBUtilities.swift in Sources */,
 				49E675FE244CDAB6001F5974 /* ExerciseSelectionViewModel.swift in Sources */,
 				4973C11C244BB068009460F2 /* WorkoutViewController.swift in Sources */,
