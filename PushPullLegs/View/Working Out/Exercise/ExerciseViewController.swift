@@ -16,7 +16,6 @@ protocol ExercisingViewController: UIViewController {
 
 class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate, ReloadProtocol {
 
-    @IBOutlet weak var tableView: UITableView!
     weak var weightCollector: WeightCollectionViewController!
     weak var exerciseTimer: ExerciseTimerViewController!
     weak var repsCollector: RepsCollectionViewController!
@@ -27,37 +26,32 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if tableView == nil {
-            let tblv = UITableView()
-            view.addSubview(tblv)
-            tableView = tblv
-            tableView.translatesAutoresizingMaskIntoConstraints = false
-            tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        }
-        tableView.register(UINib(nibName: "ExerciseSetDataCell", bundle: nil), forCellReuseIdentifier: ExerciseSetReuseIdentifier)
-        tableView.delegate = self
-        tableView.dataSource = self
-        if readOnly {
-            navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
-            navigationItem.rightBarButtonItem = nil
-        } else {
-            navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(done(_:)))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if !readOnly && addButton == nil {
+            setupAddButton()
         }
         navigationItem.title = exerciseViewModel().title()
+        tableView.allowsSelection = false
+    }
+    
+    override func pop() {
+        if readOnly || exerciseViewModel().rowCount(section: 0) == 0 {
+            super.pop()
+            AppState.shared.exerciseInProgress = nil
+        } else {
+            presentExerciseCompletionConfirmation()
+        }
     }
     
     func exerciseViewModel() -> ExerciseViewModel {
         return viewModel as! ExerciseViewModel
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    @IBAction func addSet(_ sender: Any) {
+    override func addAction(_ sender: Any) {
+        super.addAction(sender)
         exerciseSetViewModel = ExerciseSetViewModel()
         exerciseSetViewModel?.delegate = self
         exerciseSetViewModel?.setCollector = exerciseViewModel()
@@ -70,19 +64,19 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         }
     }
     
+    @IBAction func addSet(_ sender: Any) {
+        
+    }
+    
     @IBAction func done(_ sender: Any) {
-        if readOnly || exerciseViewModel().rowCount(section: 0) == 0 {
-            self.navigationController?.popViewController(animated: true)
-        } else {
-            presentExerciseCompletionConfirmation()
-        }
+        
     }
     
     func presentExerciseCompletionConfirmation() {
         let alert = UIAlertController(title: "Exercise Completed?", message: "A completed exercise cannot be edited", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { (action) in
-            self.exerciseViewModel().exerciseCompleted()
             self.navigationController?.popViewController(animated: true)
+            AppState.shared.exerciseInProgress = nil
         }))
         alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Default action"), style: .cancel))
         present(alert, animated: true, completion: nil)
@@ -111,6 +105,9 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
         dismiss(animated: true, completion: { self.reload() })
         setupRestTimerView()
+        if exerciseViewModel().rowCount() > 0 {
+            AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel().title() : nil
+        }
     }
     
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel) {
@@ -163,11 +160,20 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ExerciseSetReuseIdentifier) as! ExerciseSetTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         let data = exerciseViewModel().dataForRow(indexPath.row)
-        cell.weightLabel.text = "\(data.weight)"
-        cell.repsLabel.text = "\(data.reps)"
-        cell.timeLabel.text = "\(data.duration)"
+        let contentFrame = cell.frame
+        let weightLabel = PPLNameLabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width / 3, height: contentFrame.height))
+        let repsLabel = PPLNameLabel(frame: CGRect(x: weightLabel.frame.width, y: 0, width: tableView.frame.width / 3, height: contentFrame.height))
+        let timeLabel = PPLNameLabel(frame: CGRect(x: weightLabel.frame.width * 2, y: 0, width: tableView.frame.width / 3, height: contentFrame.height))
+        weightLabel.text = "\(data.weight)"
+        repsLabel.text = "\(data.reps)"
+        timeLabel.text = "\(data.duration)"
+        for lbl in [weightLabel, repsLabel, timeLabel] {
+            lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+            lbl.textAlignment = .center
+            cell.contentView.addSubview(lbl)
+        }
         return cell
     }
     

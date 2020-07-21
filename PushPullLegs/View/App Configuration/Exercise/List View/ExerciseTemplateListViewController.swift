@@ -8,16 +8,17 @@
 
 import UIKit
 
+fileprivate let PushTag = 1
+fileprivate let PullTag = 2
+fileprivate let LegsTag = 3
+
 class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol, UIAdaptivePresentationControllerDelegate {
     
-    @IBOutlet weak var tableView: UITableView!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel = ExerciseTemplateListViewModel(withTemplateManagement: TemplateManagement())
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
+        setupAddButton()
+        tableView.allowsSelection = false
     }
     
     private func exerciseTemplateListViewModel() -> ExerciseTemplateListViewModel {
@@ -46,14 +47,29 @@ class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol
         guard let title = exerciseTemplateListViewModel().titleForSection(section) else {
             return nil
         }
-        return tableHeaderView(titles: [title])
+        let headerView = tableHeaderView(titles: [title])
+        return headerView
+    }
+    
+    override func addAction(_ sender: Any) {
+        super.addAction(sender)
+        performSegue(withIdentifier: SegueIdentifier.createTemplateExercise, sender: self)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: exerciseCellReuseIdentifier)
-        cell.textLabel?.text = viewModel.title(indexPath: indexPath)
-        cell.textLabel?.textAlignment = .center
-        cell.selectionStyle = .none
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        if textLabel == nil {
+            textLabel = PPLNameLabel()
+            textLabel?.textAlignment = .center
+            cell.rootView.addSubview(textLabel!)
+            cell.selectionStyle = .none
+            textLabel?.translatesAutoresizingMaskIntoConstraints = false
+            textLabel?.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: 10).isActive = true
+            textLabel?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: -10).isActive = true
+            textLabel?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor, constant: 0).isActive = true
+        }
+        textLabel?.text = viewModel.title(indexPath: indexPath)
         return cell
     }
     

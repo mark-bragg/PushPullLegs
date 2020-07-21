@@ -13,14 +13,10 @@ let workoutTitleCellReuseIdentifier = "WorkoutTitleCell"
 class WorkoutTemplateListViewController: PPLTableViewController {
     
     var firstLoad = true
-    @IBOutlet weak var tableView: UITableView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel = WorkoutTemplateListViewModel(withTemplateManagement: TemplateManagement())
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: workoutTitleCellReuseIdentifier)
     }
     
     private func workoutTemplateListViewModel() -> WorkoutTemplateListViewModel {
@@ -28,20 +24,19 @@ class WorkoutTemplateListViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: workoutTitleCellReuseIdentifier)!
-        cell.textLabel?.text = viewModel.title(indexPath: indexPath)
-        cell.accessoryType = .disclosureIndicator
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        label(forCell: cell).text = viewModel.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 3.0, rect: cell.frame)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard !tableView.isEditing else {
             return
         }
+        super.tableView(tableView, didSelectRowAt: indexPath)
         workoutTemplateListViewModel().select(indexPath)
         performSegue(withIdentifier: SegueIdentifier.editWorkout, sender: self)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -62,5 +57,22 @@ class WorkoutTemplateListViewController: PPLTableViewController {
 extension CGRect {
     static func update(height: CGFloat , rect: CGRect) -> CGRect {
         return CGRect(x: rect.origin.x, y: rect.origin.y, width: rect.size.width, height: height)
+    }
+}
+
+extension UIViewController {
+    func label(forCell cell: PPLTableViewCell) -> PPLNameLabel {
+        var label = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        if label == nil {
+            label = PPLNameLabel()
+            cell.rootView.addSubview(label!)
+            label?.translatesAutoresizingMaskIntoConstraints = false
+            label?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
+            label?.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
+            label?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
+            label?.font = UIFont.systemFont(ofSize: 26, weight: .semibold)
+            label?.textAlignment = .center
+        }
+        return label!
     }
 }

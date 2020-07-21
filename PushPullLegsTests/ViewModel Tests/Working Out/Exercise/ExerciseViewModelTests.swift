@@ -111,7 +111,6 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         exerciseCompletionExpectation = XCTestExpectation(description: "ExerciseViewModelDelegate func exerciseCompleted(_ exercise: Exercise)")
         sut.delegate = self
         sut.collectSet(duration: 10, weight: 10, reps: 10)
-        sut.exerciseCompleted()
         wait(for: [exerciseCompletionExpectation!], timeout: 1)
     }
     
@@ -133,7 +132,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         XCTAssert(sut.headerLabelText(2) == "Time")
     }
     
-    func exerciseViewModel(_ viewMode: ExerciseViewModel, completed exercise: Exercise) {
+    func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise) {
         exerciseCompletionExpectation?.fulfill()
     }
 

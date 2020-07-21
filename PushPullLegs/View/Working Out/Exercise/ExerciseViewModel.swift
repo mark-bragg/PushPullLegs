@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import Combine
 
-struct FinishedSetCellData {
+struct FinishedSetDataModel {
     var duration: Int
     var weight: Double
     var reps: Int
@@ -26,7 +27,7 @@ struct FinishedSetCellData {
 }
 
 protocol ExerciseViewModelDelegate: NSObject {
-    func exerciseViewModel(_ viewMode: ExerciseViewModel, completed exercise: Exercise)
+    func exerciseViewModel(_ viewModel: ExerciseViewModel, started exercise: Exercise)
 }
 
 class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
@@ -35,7 +36,7 @@ class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
     weak var delegate: ExerciseViewModelDelegate?
     private let exerciseManager: ExerciseDataManager
     private var exercise: Exercise!
-    private var finishedCellData = [FinishedSetCellData]()
+    private var finishedCellData = [FinishedSetDataModel]()
     private var exerciseName: String!
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
@@ -55,15 +56,16 @@ class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
         if finishedCellData.count == 0 {
             exerciseManager.create(name: exerciseName)
             exercise = exerciseManager.creation as? Exercise
+            delegate?.exerciseViewModel(self, started: exercise)
         }
         exerciseManager.insertSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
             guard let self = self else { return }
-            self.finishedCellData.append(FinishedSetCellData(withExerciseSet: exerciseSet))
+            self.finishedCellData.append(FinishedSetDataModel(withExerciseSet: exerciseSet))
             self.reloader?.reload()
         }
     }
     
-    func rowCount(section: Int) -> Int {
+    func rowCount(section: Int = 0) -> Int {
         return finishedCellData.count
     }
     
@@ -71,13 +73,8 @@ class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
         return nil
     }
     
-    func dataForRow(_ row: Int) -> FinishedSetCellData {
+    func dataForRow(_ row: Int) -> FinishedSetDataModel {
         return finishedCellData[row]
-    }
-    
-    func exerciseCompleted() {
-        guard let exercise = exerciseManager.fetch(exercise) as? Exercise else { return }
-        delegate?.exerciseViewModel(self, completed: exercise)
     }
     
     func title() -> String? {
@@ -99,7 +96,7 @@ class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
     private func collectFinishedCellData() {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
         for set in sets {
-            finishedCellData.append(FinishedSetCellData(withExerciseSet: set))
+            finishedCellData.append(FinishedSetDataModel(withExerciseSet: set))
         }
     }
     

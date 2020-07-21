@@ -24,6 +24,11 @@ class AppState {
             PPLDefaults.instance.setWorkoutInProgress(newValue)
         }
     }
+    var exerciseInProgress: String? {
+        willSet {
+            PPLDefaults.instance.setExerciseInProgress(newValue)
+        }
+    }
     var isAdEnabled: Bool {
         get {
             return ProcessInfo.processInfo.arguments.contains(ADVERTISE)
@@ -32,5 +37,6 @@ class AppState {
     private let ADVERTISE = "ADVERTISE"
     private init() {
         workoutInProgress = PPLDefaults.instance.isWorkoutInProgress()
+        exerciseInProgress = PPLDefaults.instance.exerciseInProgress()
     }
 }
