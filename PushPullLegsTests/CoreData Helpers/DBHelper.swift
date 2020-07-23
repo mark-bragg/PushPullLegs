@@ -20,7 +20,7 @@ class DBHelper {
     
     // MARK: Workout
     func insertWorkout(name: ExerciseType = .push) {
-        let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.backgroundContext) as! Workout
+        let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.mainContext) as! Workout
         workout.name = name.rawValue
         workout.dateCreated = Date()
         try? coreDataStack.backgroundContext.save()

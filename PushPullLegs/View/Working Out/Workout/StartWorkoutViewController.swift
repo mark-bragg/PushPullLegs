@@ -17,7 +17,7 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        view.backgroundColor = PPLColor.Grey
+//        view.backgroundColor = PPLColor.Grey
     }
     
     override func viewDidAppear(_ animated: Bool) {

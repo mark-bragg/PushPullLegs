@@ -23,6 +23,7 @@ class PPLTableView: UITableView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        backgroundColor = .clear
         backgroundColor = PPLColor.Grey
         separatorStyle = .none
     }

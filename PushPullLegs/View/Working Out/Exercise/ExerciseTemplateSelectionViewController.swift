@@ -25,9 +25,14 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         viewModel as! ExerciseSelectionViewModel
     }
     
-    @IBAction func done(_ sender: Any) {
+    override func pop() {
+        super.pop()
         exerciseSelectionViewModel().commitChanges()
         delegate?.exerciseTemplatesAdded()
+    }
+    
+    @IBAction func done(_ sender: Any) {
+        
         navigationController?.popViewController(animated: true)
     }
     
@@ -40,23 +45,27 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: exerciseCellReuseIdentifier)
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: exerciseCellReuseIdentifier)
-        }
-        cell?.textLabel?.text = exerciseSelectionViewModel().title(indexPath: indexPath)
-        return cell!
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        cell.rootView.removeAllSubviews()
+        let label = UILabel(frame: cell.rootView.bounds)
+        label.text = exerciseSelectionViewModel().title(indexPath: indexPath)
+        cell.rootView.addSubview(label)
+        label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        label.textAlignment = .center
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         super.tableView(tableView, didSelectRowAt: indexPath)
         if let cell = tableView.cellForRow(at: indexPath) {
-            if cell.accessoryType == .none {
-                exerciseSelectionViewModel().selected(row: indexPath.row)
-                cell.accessoryType = .checkmark
-            } else {
+            if exerciseSelectionViewModel().isSelected(row: indexPath.row) {
                 exerciseSelectionViewModel().deselected(row: indexPath.row)
-                cell.accessoryType = .none
+                cell.setHighlighted(false, animated: true)
+//                cell.accessoryType = .checkmark
+            } else {
+                exerciseSelectionViewModel().selected(row: indexPath.row)
+//                cell.accessoryType = .none
+                cell.setHighlighted(true, animated: true)
             }
         }
     }

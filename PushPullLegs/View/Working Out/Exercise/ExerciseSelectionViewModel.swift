@@ -33,6 +33,10 @@ class ExerciseSelectionViewModel: NSObject, ViewModel, ReloadProtocol {
         return name
     }
     
+    func isSelected(row: Int) -> Bool {
+        return selectedIndices.contains(row)
+    }
+    
     func selected(row: Int) {
         selectedIndices.append(row)
     }

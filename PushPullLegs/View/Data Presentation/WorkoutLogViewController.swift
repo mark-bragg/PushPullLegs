@@ -14,14 +14,21 @@ class WorkoutLogViewController: PPLTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Workouts"
-        let tbl = PPLTableView(frame: view.frame)
+        let tbl = PPLTableView()
         view.addSubview(tbl)
+        tbl.translatesAutoresizingMaskIntoConstraints = false
         tbl.rowHeight = 75
-        viewModel = WorkoutLogViewModel()
         tableView = tbl
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel = WorkoutLogViewModel()
+        tableView.backgroundColor = .clear
+        constrainToView(tableView)
         tableView.reloadData()
     }
     
@@ -37,7 +44,8 @@ class WorkoutLogViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        let contentFrame = cell.frame
+        cell.rootView.removeAllSubviews()
+        let contentFrame = cell.rootView.frame
         let nameLabel = PPLNameLabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width / 2, height: contentFrame.height))
         let dateLabel = PPLNameLabel(frame: CGRect(x: nameLabel.frame.width, y: 0, width: tableView.frame.width / 2, height: contentFrame.height))
         nameLabel.text = viewModel.title(indexPath: indexPath)
@@ -45,7 +53,7 @@ class WorkoutLogViewController: PPLTableViewController {
         for lbl in [nameLabel, dateLabel] {
             lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
             lbl.textAlignment = .center
-            cell.contentView.addSubview(lbl)
+            cell.rootView.addSubview(lbl)
         }
         return cell
     }
@@ -98,5 +106,16 @@ class PPLNameLabel: UILabel {
         super.init(coder: coder)
         textColor = PPLColor.textBlue
         font = UIFont.systemFont(ofSize: 23, weight: .medium)
+    }
+}
+
+
+extension UIViewController {
+    func constrainToView(_ subview: UIView) {
+        let guide = view.safeAreaLayoutGuide
+        subview.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
+        subview.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+        subview.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        subview.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
     }
 }

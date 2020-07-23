@@ -402,11 +402,11 @@
 		4989BA5C24BB93FD001C17B3 /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
-				49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */,
 				49453379244FCC1900FA1665 /* PPLTabBarController.swift */,
+				49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */,
+				49359B8624C28C64005FF7A8 /* PPLTableView.swift */,
 				4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */,
 				4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */,
-				49359B8624C28C64005FF7A8 /* PPLTableView.swift */,
 				49359B8824C29886005FF7A8 /* PPLAddButton.swift */,
 			);
 			path = "Base Classes";

@@ -71,7 +71,7 @@ extension UIView {
 class ShadowBackground: UIView {
     var isSelected = false
     override func layoutSubviews() {
-        layer.shadowPath = UIBezierPath.init(roundedRect: bounds, cornerRadius: bounds.size.height / 2).cgPath
+        layer.shadowPath = UIBezierPath.init(roundedRect: bounds, cornerRadius: bounds.size.height / 4).cgPath
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.75
         layer.shadowOffset = .shadowOffset

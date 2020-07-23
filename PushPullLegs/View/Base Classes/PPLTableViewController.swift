@@ -14,13 +14,12 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     var viewModel: ViewModel!
     weak var tableView: PPLTableView!
     weak var bannerView: GADBannerView!
-    weak var noDataView: UIView!
+    weak var noDataView: NoDataView!
     weak var addButton: PPLAddButton!
     private let addButtonSize = CGSize(width: 75, height: 75)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = PPLColor.Grey
         addNoDataView()
     }
     
@@ -30,6 +29,11 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         hideBottomBar()
         addBannerView()
         addBackNavigationGesture()
+        view.backgroundColor = PPLColor.Grey
+        let ndv = NoDataView(frame: view.bounds)
+        tableView.addSubview(ndv)
+        ndv.isHidden = true
+        noDataView = ndv
     }
     
     @objc func addAction(_ sender: Any) {
@@ -111,24 +115,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func addNoDataView() {
-        let noDataView = UIView(frame: view.bounds)
-        noDataView.addSubview(styledNoDataLabel(frame: view.bounds))
-        view.addSubview(noDataView)
-        self.noDataView = noDataView
-        hideNoDataView()
-    }
-    
-    func styledNoDataLabel(frame: CGRect) -> UILabel {
-        let label = UILabel(frame: frame)
-        let strokeTextAttributes = [
-            NSAttributedString.Key.strokeColor : PPLColor.lightGrey!,
-            NSAttributedString.Key.foregroundColor : PPLColor.darkGreyText!,
-            NSAttributedString.Key.strokeWidth : -1.0,
-            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 72)
-            ] as [NSAttributedString.Key : Any]
-        label.textAlignment = .center
-        label.attributedText = NSMutableAttributedString(string: "No Data", attributes: strokeTextAttributes)
-        return label
+        
     }
     
     func showNoDataView() {
@@ -182,7 +169,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        return PPLTableViewCell()
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -194,7 +181,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.cellForRow(at: indexPath)!.setSelected(true, animated: true)
+        tableView.cellForRow(at: indexPath)!.setHighlighted(true, animated: true)
     }
     
     func tableHeaderView(titles: [String]) -> UIView {
@@ -217,5 +204,25 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         }
         headerView.addShadow(.shadowOffsetTableHeader)
         return headerView
+    }
+}
+
+class NoDataView: UIView {
+    override func layoutSubviews() {
+        addSubview(styledNoDataLabel(frame: bounds))
+        backgroundColor = PPLColor.Grey
+    }
+    
+    func styledNoDataLabel(frame: CGRect) -> UILabel {
+        let label = UILabel(frame: frame)
+        let strokeTextAttributes = [
+            NSAttributedString.Key.strokeColor : PPLColor.lightGrey!,
+            NSAttributedString.Key.foregroundColor : PPLColor.darkGreyText!,
+            NSAttributedString.Key.strokeWidth : -1.0,
+            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 72)
+            ] as [NSAttributedString.Key : Any]
+        label.textAlignment = .center
+        label.attributedText = NSMutableAttributedString(string: "No Data", attributes: strokeTextAttributes)
+        return label
     }
 }

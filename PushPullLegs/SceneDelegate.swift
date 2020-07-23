@@ -19,11 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         window?.rootViewController = PPLTabBarController()
-        window?.overrideUserInterfaceStyle = .light
-        // TODO: get workout in progress
-        // collect WIP date from user defaults
-        // delete date from user defaults
-        // fetch workout where date = date
+        window?.overrideUserInterfaceStyle = .dark
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

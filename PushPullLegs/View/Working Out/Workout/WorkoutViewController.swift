@@ -163,6 +163,9 @@ extension WorkoutViewController: WorkoutEditViewModelDelegate {
 extension WorkoutViewController: ReloadProtocol {
     func reload() {
         workoutEditViewModel().exerciseTemplatesAdded()
+        if noDataView != nil && workoutEditViewModel().rowCount(section: 0) + workoutEditViewModel().rowCount(section: 1) > 0 {
+            noDataView.removeFromSuperview()
+        }
         tableView.reloadData()
     }
 }
