@@ -34,6 +34,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.addSubview(ndv)
         ndv.isHidden = true
         noDataView = ndv
+        tableView.reloadData()
     }
     
     @objc func addAction(_ sender: Any) {

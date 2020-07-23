@@ -49,7 +49,6 @@ class WorkoutDataViewController: PPLTableViewController {
         vc.readOnly = true
         vc.viewModel = exerciseVm
         navigationController?.pushViewController(vc, animated: true)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func workoutReadViewModel() -> WorkoutReadViewModel? {
