@@ -61,10 +61,8 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
             if exerciseSelectionViewModel().isSelected(row: indexPath.row) {
                 exerciseSelectionViewModel().deselected(row: indexPath.row)
                 cell.setHighlighted(false, animated: true)
-//                cell.accessoryType = .checkmark
             } else {
                 exerciseSelectionViewModel().selected(row: indexPath.row)
-//                cell.accessoryType = .none
                 cell.setHighlighted(true, animated: true)
             }
         }
