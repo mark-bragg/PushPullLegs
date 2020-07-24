@@ -55,10 +55,14 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     private func positionAddButton() {
+        var y: CGFloat = -15
+        if AppState.shared.isAdEnabled {
+            y -= bannerView.frame.size.height
+        }
         addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
         addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
-        addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -15).isActive = true
+        addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: y).isActive = true
         addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
     }
     

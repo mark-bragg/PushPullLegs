@@ -116,10 +116,12 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     }
     
     func setupRestTimerView() {
+        var yOffset: CGFloat = 15
         if (AppState.shared.isAdEnabled) {
+            yOffset += bannerView.frame.size.height
             positionBannerView(yOffset: 0)
         }
-        let timerView = RestTimerView(frame: CGRect(x: 15, y: view.frame.height - timerHeight - 15, width: timerHeight, height: timerHeight))
+        let timerView = RestTimerView(frame: CGRect(x: 15, y: view.frame.height - timerHeight - yOffset, width: timerHeight, height: timerHeight))
         view.addSubview(timerView)
         restTimerView = timerView
         restTimerView.restartTimer()
@@ -212,6 +214,8 @@ class RestTimerView: UIView {
             setupTimerLabel()
         }
         layer.backgroundColor = UIColor.systemRed.cgColor
+        layer.borderColor = UIColor.white.cgColor
+        layer.borderWidth = 1.5
         layer.cornerRadius = frame.height/2
         addShadow(.shadowOffsetAddButton)
     }
