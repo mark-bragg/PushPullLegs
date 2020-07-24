@@ -46,12 +46,17 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        cell.rootView.removeAllSubviews()
-        let label = UILabel(frame: cell.rootView.bounds)
-        label.text = exerciseSelectionViewModel().title(indexPath: indexPath)
-        cell.rootView.addSubview(label)
-        label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
-        label.textAlignment = .center
+        var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        if textLabel == nil {
+            textLabel = PPLNameLabel()
+            textLabel?.textAlignment = .center
+            cell.rootView.addSubview(textLabel!)
+            textLabel?.translatesAutoresizingMaskIntoConstraints = false
+            textLabel?.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: 10).isActive = true
+            textLabel?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: -10).isActive = true
+            textLabel?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor, constant: 0).isActive = true
+        }
+        textLabel!.text = exerciseSelectionViewModel().title(indexPath: indexPath)
         return cell
     }
     
@@ -68,8 +73,8 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        0
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        super.tableHeaderView(titles: ["Select Exercises To Add"])
     }
 
 }
