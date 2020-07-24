@@ -18,11 +18,6 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     weak var addButton: PPLAddButton!
     private let addButtonSize = CGSize(width: 75, height: 75)
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        addNoDataView()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupTableView()
@@ -30,10 +25,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         addBannerView()
         addBackNavigationGesture()
         view.backgroundColor = PPLColor.Grey
-        let ndv = NoDataView(frame: view.bounds)
-        tableView.addSubview(ndv)
-        ndv.isHidden = true
-        noDataView = ndv
+        addNoDataView()
         tableView.reloadData()
     }
     
@@ -105,18 +97,23 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard let count = viewModel.sectionCount?() else {return}
-        var isThereData = false
         for i in 0..<count {
             if viewModel.rowCount(section: i) > 0 {
-                isThereData = true
-                break
+                hideNoDataView()
+                return
             }
         }
-        noDataView.isHidden = isThereData
+        showNoDataView()
     }
     
     func addNoDataView() {
-        
+        guard noDataView == nil else {
+            return
+        }
+        let ndv = NoDataView(frame: view.bounds)
+        view.addSubview(ndv)
+        ndv.isHidden = true
+        noDataView = ndv
     }
     
     func showNoDataView() {
