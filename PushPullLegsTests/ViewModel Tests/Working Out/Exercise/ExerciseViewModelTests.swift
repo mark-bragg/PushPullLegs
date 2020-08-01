@@ -72,16 +72,61 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         }
     }
     
-    func testDataForRow_oneFinishedSet() {
+    func testWeightForRow_oneFinishedSet() {
         sut.collectSet(duration: 35, weight: 135, reps: 12)
         XCTAssert(sut.rowCount(section: 0) == 1)
-        let dataForRow = sut.dataForRow(0)
-        XCTAssert(dataForRow.duration == 35)
-        XCTAssert(dataForRow.weight == 135)
-        XCTAssert(dataForRow.reps == 12)
-        XCTAssert(dataForRow.volume == (35 * 135 * 12) / 60)
+        let weight = sut.weightForRow(0)
+        XCTAssert(weight == 135)
     }
     
+    func testDurationForRow_oneFinishedSet() {
+        sut.collectSet(duration: 35, weight: 135, reps: 12)
+        XCTAssert(sut.rowCount(section: 0) == 1)
+        let duration = sut.durationForRow(0)
+        XCTAssert(duration == "0:35")
+    }
+    
+    func testRepsForRow_oneFinishedSet() {
+        sut.collectSet(duration: 35, weight: 135, reps: 12)
+        XCTAssert(sut.rowCount(section: 0) == 1)
+        let reps = sut.repsForRow(0)
+        XCTAssert(reps == 12)
+    }
+    
+    func testVolumeForRow_oneFinishedSet() {
+        sut.collectSet(duration: 35, weight: 135, reps: 12)
+        XCTAssert(sut.rowCount(section: 0) == 1)
+        let volume = sut.volumeForRow(0)
+        XCTAssert(volume == (35 * 135 * 12) / 60)
+    }
+    
+    func testWeightForRow_tenFinishedSets() {
+        for i in 0...9 {
+            let w = Double.random(in: 20...500).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
+            sut.collectSet(duration: 0, weight: w, reps: 0)
+            XCTAssert(sut.rowCount(section: 0) == i + 1)
+            XCTAssert(sut.weightForRow(i) == w)
+        }
+    }
+    
+    func testDurationForRow_tenFinishedSets() {
+        for i in 0...9 {
+            let d = Int.random(in: 10...100)
+            sut.collectSet(duration: d, weight: 0, reps: 0)
+            XCTAssert(sut.rowCount(section: 0) == i + 1)
+            XCTAssert(sut.durationForRow(i) == String.format(seconds: d))
+        }
+    }
+    
+    func testRepsForRow_tenFinishedSets() {
+        for i in 0...9 {
+            let r = Int.random(in: 12...20)
+            sut.collectSet(duration: 0, weight: 0, reps: r)
+            XCTAssert(sut.rowCount(section: 0) == i + 1)
+            XCTAssert(sut.repsForRow(i) == r)
+        }
+    }
+
     func testTitleForRow_tenFinishedSets() {
         for i in 0...9 {
             let d = Int.random(in: 10...100)
@@ -89,12 +134,11 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
             let r = Int.random(in: 12...20)
             sut.collectSet(duration: d, weight: w, reps: r)
             XCTAssert(sut.rowCount(section: 0) == i + 1)
-            let dataForRow = sut.dataForRow(i)
-            XCTAssert(dataForRow.duration == d)
-            XCTAssert(dataForRow.weight == w)
-            XCTAssert(dataForRow.reps == r)
+            XCTAssert(sut.durationForRow(i) == String.format(seconds: d))
+            XCTAssert(sut.weightForRow(i) == w)
+            XCTAssert(sut.repsForRow(i) == r)
             let volume = ((Double(d) * w * Double(r)) / 60.0).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
-            XCTAssert(dataForRow.volume.distance(to: volume) <= 0.02, "\nexpected: \(volume)\nactual: \(dataForRow.volume)")
+            XCTAssert(sut.volumeForRow(i).distance(to: volume) <= 0.02, "\nexpected: \(volume)\nactual: \(sut.volumeForRow(i))")
         }
     }
     
@@ -125,9 +169,9 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         if !PPLDefaults.instance.isKilograms() {
             PPLDefaults.instance.toggleKilograms()
         }
-        XCTAssert(sut.headerLabelText(0) == "Kilograms")
+        XCTAssert(sut.headerLabelText(0) == "Kg")
         PPLDefaults.instance.toggleKilograms()
-        XCTAssert(sut.headerLabelText(0) == "Pounds")
+        XCTAssert(sut.headerLabelText(0) == "lbs")
         XCTAssert(sut.headerLabelText(1) == "Reps")
         XCTAssert(sut.headerLabelText(2) == "Time")
     }

@@ -73,8 +73,20 @@ class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
         return nil
     }
     
-    func dataForRow(_ row: Int) -> FinishedSetDataModel {
-        return finishedCellData[row]
+    func weightForRow(_ row: Int) -> Double {
+        return finishedCellData[row].weight
+    }
+    
+    func durationForRow(_ row: Int) -> String {
+        return String.format(seconds: finishedCellData[row].duration)
+    }
+    
+    func repsForRow(_ row: Int) -> Int {
+        return finishedCellData[row].reps
+    }
+    
+    func volumeForRow(_ row: Int) -> Double {
+        return finishedCellData[row].volume
     }
     
     func title() -> String? {
@@ -86,7 +98,7 @@ class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
     
     func headerLabelText(_ index: Int) -> String {
         if index == 0 {
-            return PPLDefaults.instance.isKilograms() ? "Kilograms" : "Pounds"
+            return PPLDefaults.instance.isKilograms() ? "Kg" : "lbs"
         } else if index == 1 {
             return "Reps"
         }

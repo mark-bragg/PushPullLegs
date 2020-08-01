@@ -163,22 +163,44 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        let data = exerciseViewModel().dataForRow(indexPath.row)
-        let contentFrame = cell.frame
-        let weightLabel = PPLNameLabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width / 3, height: contentFrame.height))
-        let repsLabel = PPLNameLabel(frame: CGRect(x: weightLabel.frame.width, y: 0, width: tableView.frame.width / 3, height: contentFrame.height))
-        let timeLabel = PPLNameLabel(frame: CGRect(x: weightLabel.frame.width * 2, y: 0, width: tableView.frame.width / 3, height: contentFrame.height))
-        weightLabel.text = "\(data.weight)"
-        repsLabel.text = "\(data.reps)"
-        timeLabel.text = "\(data.duration)"
-        for lbl in [weightLabel, repsLabel, timeLabel] {
-            lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
-            lbl.textAlignment = .center
-            cell.contentView.addSubview(lbl)
-        }
+        let labels = cell.labels(width: tableView.frame.width / 3)
+        labels.w.text = "\(exerciseViewModel().weightForRow(indexPath.row))"
+        labels.r.text = "\(exerciseViewModel().repsForRow(indexPath.row))"
+        labels.t.text = exerciseViewModel().durationForRow(indexPath.row)
         return cell
     }
     
+}
+
+extension PPLTableViewCell {
+    
+    fileprivate static let WEIGHT_LABEL_TAG = 123
+    fileprivate static let DURATION_LABEL_TAG = 234
+    fileprivate static let REPS_LABEL_TAG = 345
+    
+    fileprivate func labels(width: CGFloat) -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
+        guard
+            let weight = contentView.viewWithTag(PPLTableViewCell.WEIGHT_LABEL_TAG) as? PPLNameLabel,
+            let reps = contentView.viewWithTag(PPLTableViewCell.REPS_LABEL_TAG) as? PPLNameLabel,
+            let time = contentView.viewWithTag(PPLTableViewCell.DURATION_LABEL_TAG) as? PPLNameLabel
+        else { return insertLabels(width) }
+        return (weight, reps, time)
+    }
+    
+    fileprivate func insertLabels(_ width: CGFloat) -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
+        let weightLabel =  PPLNameLabel(frame: CGRect(x: 0, y: 0, width: width, height: rootView.frame.height))
+        weightLabel.tag = PPLTableViewCell.WEIGHT_LABEL_TAG
+        let repsLabel = PPLNameLabel(frame: CGRect(x: width, y: 0, width: width, height: rootView.frame.height))
+        repsLabel.tag = PPLTableViewCell.REPS_LABEL_TAG
+        let timeLabel = PPLNameLabel(frame: CGRect(x: width * 2, y: 0, width: width, height: rootView.frame.height))
+        timeLabel.tag = PPLTableViewCell.DURATION_LABEL_TAG
+        for lbl in [weightLabel, repsLabel, timeLabel] {
+            lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+            lbl.textAlignment = .center
+            rootView.addSubview(lbl)
+        }
+        return (weightLabel, repsLabel, timeLabel)
+    }
 }
 
 class RestTimerView: UIView {
