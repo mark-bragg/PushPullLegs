@@ -20,9 +20,10 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
         characterLimit = 7
     }
     
-    override func buttonTapped(_ sender: Any) {
-        let converter = PPLDefaults.instance.isKilograms() ? 2.20462 : 1.0
+    override func buttonReleased(_ sender: Any) {
         if let t = textField.text, let weight = Double(t) {
+            super.buttonReleased(sender)
+            let converter = PPLDefaults.instance.isKilograms() ? 2.20462 : 1.0
             exerciseSetViewModel?.startSetWithWeight(weight * converter)
         }
     }

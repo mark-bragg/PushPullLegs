@@ -31,9 +31,7 @@ protocol ExerciseSetViewModelDelegate: NSObject {
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel)
 }
 
-struct ExerciseStateError: Error {
-    
-}
+struct ExerciseStateError: Error { }
 
 class ExerciseSetViewModel: NSObject {
     

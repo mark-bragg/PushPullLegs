@@ -8,11 +8,11 @@
 
 import UIKit
 
-class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, KeyboardObserver {
+class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var button: PPLButton!
     
     private var performingTextCorrection = false
     var characterLimit = 0
@@ -25,26 +25,21 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, K
         super.init(coder: coder)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        textField.delegate = self
-        KeyboardObserving.instance.addKeyboardObserver(self)
-        button.isEnabled = false
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        textField.delegate = self
+        button.disable()
+        view.backgroundColor = PPLColor.grey
         textField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        KeyboardObserving.instance.removeKeyboardObserver(self)
     }
     
     @IBAction func editingChanged(_ sender: Any) {
         guard let text = textField.text, !text.isEmpty else {
-            button.isEnabled = false
+            button.disable()
             return
         }
         if !performingTextCorrection {
@@ -52,7 +47,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, K
             performTextFieldCorrection(text)
         }
         performingTextCorrection = false
-        button.isEnabled = true
+        button.enable()
     }
     
     func performTextFieldCorrection(_ text: String) {
@@ -61,13 +56,8 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, K
         textField.replace(uiRange, withText: correctedText)
     }
     
-    @IBAction func buttonTapped(_ sender: Any) {
-    }
-    
-    func keyboardHeight(_ height: CGFloat) {
-        if let heightConstraint = stackView.constraints.first(where: { $0.identifier == "height" }) {
-            heightConstraint.constant = view.frame.height - yPositionWithinScreen() - height
-        }
+    @IBAction func buttonReleased(_ sender: Any) {
+        // no-op
     }
 }
 

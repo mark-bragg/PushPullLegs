@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 
-// TODO: continue layer/shadow stuff maybe move cell shadow to uiview extension or to the ppltableviewcell class
-
 class PPLTableView: UITableView {
     
     override func dequeueReusableCell(withIdentifier identifier: String) -> UITableViewCell? {
@@ -24,7 +22,7 @@ class PPLTableView: UITableView {
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundColor = .clear
-        backgroundColor = PPLColor.Grey
+        backgroundColor = PPLColor.grey
         separatorStyle = .none
     }
     

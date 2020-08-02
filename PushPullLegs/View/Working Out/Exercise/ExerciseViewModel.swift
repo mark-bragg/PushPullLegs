@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-struct FinishedSetDataModel {
+fileprivate struct FinishedSetDataModel {
     var duration: Int
     var weight: Double
     var reps: Int

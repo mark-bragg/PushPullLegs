@@ -12,11 +12,12 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
 
     var exerciseSetViewModel: ExerciseSetViewModel?
     @IBOutlet weak var timerLabel: UILabel!
-    @IBOutlet weak var finishButton: UIButton!
+    @IBOutlet weak var finishButton: PPLButton!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         finishButton.setTitle("Finish Set", for: .normal)
+        finishButton.style()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

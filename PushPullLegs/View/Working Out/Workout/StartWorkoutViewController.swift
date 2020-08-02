@@ -15,11 +15,6 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     private var interstitial: GADInterstitial?
     private var didNavigateToWorkout: Bool = false
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        view.backgroundColor = PPLColor.Grey
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if AppState.shared.isAdEnabled {
@@ -55,7 +50,6 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
         let typeVC = TypeSelectorViewController()
         typeVC.delegate = self
         typeVC.modalPresentationStyle = .pageSheet
-        typeVC.isModalInPresentation = true
         present(typeVC, animated: true, completion: nil)
     }
     
@@ -65,10 +59,7 @@ class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? TypeSelectorViewController {
-            vc.delegate = self
-            vc.isModalInPresentation = true
-        } else if segue.identifier == SegueIdentifier.startWorkout, let vc = segue.destination as? WorkoutViewController {
+        if segue.identifier == SegueIdentifier.startWorkout, let vc = segue.destination as? WorkoutViewController {
             vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
             AppState.shared.workoutInProgress = true
             vc.hidesBottomBarWhenPushed = true

@@ -24,7 +24,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         hideBottomBar()
         addBannerView()
         addBackNavigationGesture()
-        view.backgroundColor = PPLColor.Grey
+        view.backgroundColor = PPLColor.grey
         addNoDataView()
         tableView.reloadData()
     }
@@ -194,7 +194,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         let labelWidth = headerView.frame.width / widthDenominator
         let gradientTop = CAGradientLayer()
         gradientTop.frame = headerView.layer.bounds
-        gradientTop.colors = [PPLColor.textBlue!.cgColor, PPLColor.Grey!.cgColor, PPLColor.Grey!.cgColor, PPLColor.textBlue!.cgColor, UIColor.clear.cgColor]
+        gradientTop.colors = [PPLColor.textBlue!.cgColor, PPLColor.grey!.cgColor, PPLColor.grey!.cgColor, PPLColor.textBlue!.cgColor, UIColor.clear.cgColor]
         gradientTop.locations = [0.0, 0.15, 0.85, 0.99, 1.0]
         headerView.layer.addSublayer(gradientTop)
         for title in titles {
@@ -212,7 +212,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
 class NoDataView: UIView {
     override func layoutSubviews() {
         addSubview(styledNoDataLabel(frame: bounds))
-        backgroundColor = PPLColor.Grey
+        backgroundColor = PPLColor.grey
     }
     
     func styledNoDataLabel(frame: CGRect) -> UILabel {

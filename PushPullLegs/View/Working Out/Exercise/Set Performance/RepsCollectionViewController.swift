@@ -20,8 +20,9 @@ class RepsCollectionViewController: QuantityCollectionViewController, Exercising
         characterLimit = 3
     }
     
-    override func buttonTapped(_ sender: Any) {
+    override func buttonReleased(_ sender: Any) {
         if let t = textField.text, let reps = Int(t) {
+            super.buttonReleased(sender)
             exerciseSetViewModel?.finishSetWithReps(reps)
         }
     }

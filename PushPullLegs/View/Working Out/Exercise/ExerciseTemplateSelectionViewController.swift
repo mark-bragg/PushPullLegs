@@ -32,7 +32,6 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     @IBAction func done(_ sender: Any) {
-        
         navigationController?.popViewController(animated: true)
     }
     

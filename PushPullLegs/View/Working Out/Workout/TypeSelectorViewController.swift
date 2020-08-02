@@ -21,7 +21,7 @@ class TypeSelectorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = PPLColor.grey
         for (btn, type) in [(pushButton, ExerciseType.push), (pullButton, ExerciseType.pull), (legsButton, ExerciseType.legs)] {
             btn?.titleLabel?.text = type.rawValue
             btn?.exerciseType = type
@@ -29,6 +29,7 @@ class TypeSelectorViewController: UIViewController {
     }
     
     @IBAction func typeSelected(_ sender: ExerciseTypeButton) {
+        sender.selection()
         dismissWithType(sender.exerciseType)
     }
     

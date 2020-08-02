@@ -30,7 +30,7 @@ class PPLAddButton: UIControl {
         super.layoutSubviews()
         style()
         addPlusSign()
-        addShadow1()
+        addShadow()
     }
     
     private func style() {
@@ -60,9 +60,6 @@ class PPLAddButton: UIControl {
         UIView.animate(withDuration: 0.25) { [weak self] in
             guard let self = self else { return }
             self.layer.shadowOffset = .shadowOffset
-            self.layer.shadowRadius = 0
-            self.layer.borderColor = PPLColor.darkGrey?.cgColor
-            (self.viewWithTag(333) as! UILabel).font = UIFont.systemFont(ofSize: 25, weight: .bold)
         }
     }
     
@@ -70,17 +67,15 @@ class PPLAddButton: UIControl {
         UIView.animate(withDuration: 0.25) { [weak self] in
             guard let self = self else { return }
             self.layer.shadowOffset = .shadowOffsetAddButton
-            self.layer.borderColor = UIColor.white.cgColor
-            (self.viewWithTag(333) as! UILabel).font = UIFont.systemFont(ofSize: 28, weight: .bold)
         }
     }
     
-    private func addShadow1() {
+    private func addShadow() {
         if layer.shadowOffset == .shadowOffsetAddButton {
             return
         }
         layer.borderColor = UIColor.white.cgColor
-        layer.borderWidth = 0.5
+        layer.borderWidth = 1
         layer.shadowPath = UIBezierPath.init(roundedRect: CGRect(origin: .zero, size: layer.frame.size), cornerRadius: layer.frame.size.height / 2).cgPath
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.3

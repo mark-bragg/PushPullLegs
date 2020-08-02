@@ -51,6 +51,7 @@ extension CGSize {
 
 extension UIView {
     func addShadow(_ offset: CGSize = .shadowOffset) {
+        removeShadow()
         layer.shadowOffset = .shadowOffset
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 2.0

@@ -149,7 +149,7 @@
                                     <constraint firstAttribute="height" constant="300" identifier="height" id="r5b-ls-cL1"/>
                                 </constraints>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vcp-kt-Xce">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vcp-kt-Xce" customClass="PPLButton" customModule="PushPullLegs" customModuleProvider="target">
                                 <rect key="frame" x="117" y="332" width="180" height="65"/>
                                 <color key="backgroundColor" name="ppl_dark_grey"/>
                                 <constraints>

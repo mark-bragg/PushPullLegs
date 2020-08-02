@@ -29,21 +29,21 @@ class PPLTabBarController: UITabBarController {
     fileprivate func workoutNavigationController() -> UINavigationController {
         let vc = UIStoryboard(name: StoryboardFileName.workout, bundle: nil).instantiateInitialViewController() as! UINavigationController
         vc.tabBarItem = UITabBarItem(title: EntityName.workout.rawValue, image: UIImage(named: "curlbar"), selectedImage: nil)
-        vc.tabBarItem.badgeColor = PPLColor.Green
+        vc.tabBarItem.badgeColor = PPLColor.green
         return vc
     }
     
     fileprivate func workoutLogNavigationController() -> UINavigationController {
         let vc = UINavigationController(rootViewController: WorkoutLogViewController())
         vc.tabBarItem = UITabBarItem(title: "Database", image: UIImage(named: "database"), selectedImage: nil)
-        vc.tabBarItem.badgeColor = PPLColor.Green
+        vc.tabBarItem.badgeColor = PPLColor.green
         return vc
     }
     
     fileprivate func appConfigurationNavigationController() -> UINavigationController {
         let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateInitialViewController() as! UINavigationController
         vc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "gear"), selectedImage: nil)
-        vc.tabBarItem.badgeColor = PPLColor.Green
+        vc.tabBarItem.badgeColor = PPLColor.green
         return vc
     }
 

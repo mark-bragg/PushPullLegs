@@ -8,10 +8,6 @@
 
 import UIKit
 
-class ExerciseTypeButton: UIButton {
-    var exerciseType: ExerciseType! = nil
-}
-
 class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var textField: UITextField!
@@ -19,44 +15,29 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     @IBOutlet weak var pullButton: ExerciseTypeButton!
     @IBOutlet weak var legsButton: ExerciseTypeButton!
     @IBOutlet weak var typeSelectionStackView: UIStackView!
-    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var saveButton: PPLButton!
     @IBOutlet weak var parentStackView: UIStackView!
     
-    let disabledSaveWhiteColor: UIColor = UIColor(white: 0.75, alpha: 0.5)
     var showExerciseType: Bool = false
     var viewModel: ExerciseTemplateCreationViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = PPLColor.Grey
+        view.backgroundColor = PPLColor.grey
         if showExerciseType {
             setupExerciseTypeButtons()
             saveButton.setTitle("Select Type", for: .normal)
         } else {
             hideExerciseType()
         }
-        styleSaveButton()
-        styleTypeButtons()
+        styleButtons()
     }
     
-    func styleSaveButton() {
-        saveButton.isEnabled = false
-        saveButton.layer.cornerRadius = saveButton.frame.height/2
-        saveButton.layer.borderColor = disabledSaveWhiteColor.cgColor
-        saveButton.layer.borderWidth = 1.0
-        saveButton.setTitleColor(disabledSaveWhiteColor, for: .disabled)
-        saveButton.setTitleColor(PPLColor.textBlue, for: .normal)
-    }
-    
-    func styleTypeButtons() {
-        for btn in [pushButton, pullButton, legsButton] {
-            btn!.layer.cornerRadius = saveButton.frame.height/2
-            btn!.layer.borderColor = UIColor.white.cgColor
-            btn!.layer.borderWidth = 1.0
-            btn!.setTitleColor(PPLColor.textBlue, for: .normal)
-            btn?.backgroundColor = PPLColor.darkGrey
-            btn?.addShadow()
+    func styleButtons() {
+        for btn in [saveButton, pushButton, pullButton, legsButton] {
+            btn?.style()
         }
+        saveButton.disable()
     }
     
     @IBAction func touchDownSaveButton(_ sender: UIButton) {
@@ -99,19 +80,17 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         if saveButton.title(for: .normal) != "Save" {
             saveButton.setTitle("Save", for: .normal)
         }
-        sender.isSelected = true
-        sender.removeShadow()
+//        sender.selection()
         viewModel?.selectedType(sender.exerciseType)
         updateButtonsWithSelection(sender)
     }
     
     func updateButtonsWithSelection(_ button: ExerciseTypeButton) {
-        button.isSelected = true
+        button.selection()
         for btn in [pushButton, pullButton, legsButton] {
             btn?.removeShadow()
             if btn != button {
-                btn?.isSelected = false
-                btn?.addShadow()
+                btn?.deselection()
             }
         }
         enableSaveButton(textField.text)
@@ -143,18 +122,9 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
             return
         }
         if text != nil && vm.isTypeSelected(), text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != "" {
-            // enable save button
-            saveButton.isEnabled = true
+            saveButton.enable()
         } else {
-            saveButton.isEnabled = false
-        }
-        if saveButton.isEnabled {
-            saveButton.removeShadow()
-            saveButton.addShadow()
-            saveButton.layer.borderColor = UIColor.white.cgColor
-        } else {
-            saveButton.removeShadow()
-            saveButton.layer.borderColor = disabledSaveWhiteColor.cgColor
+            saveButton.disable()
         }
     }
     
