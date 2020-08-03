@@ -39,15 +39,20 @@ class WorkoutLogViewController: PPLTableViewController {
     // MARK: - Table view data source
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableHeaderView(titles: workoutLogViewModel().tableHeaderTitles())
+        let header = tableHeaderView(titles: workoutLogViewModel().tableHeaderTitles())
+        let leftLabel = header.subviews.first(where: { $0.frame.origin.x == 0 })!
+        let rightLabel = header.subviews.first(where: { $0.frame.origin.x != 0 })!
+        leftLabel.frame = CGRect(x: 20, y: leftLabel.frame.origin.y, width: leftLabel.frame.width - 20, height: leftLabel.frame.height)
+        rightLabel.frame = CGRect(x: leftLabel.frame.width + 20, y: rightLabel.frame.origin.y, width: rightLabel.frame.width - 20, height: leftLabel.frame.height)
+        return header
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         cell.rootView.removeAllSubviews()
         let contentFrame = cell.rootView.frame
-        let nameLabel = PPLNameLabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width / 2, height: contentFrame.height))
-        let dateLabel = PPLNameLabel(frame: CGRect(x: nameLabel.frame.width, y: 0, width: tableView.frame.width / 2, height: contentFrame.height))
+        let nameLabel = PPLNameLabel(frame: CGRect(x: 20, y: 0, width: tableView.frame.width / 2 - 20, height: contentFrame.height))
+        let dateLabel = PPLNameLabel(frame: CGRect(x: nameLabel.frame.width + 20, y: 0, width: tableView.frame.width / 2 - 20, height: contentFrame.height))
         nameLabel.text = viewModel.title(indexPath: indexPath)
         dateLabel.text = workoutLogViewModel().dateLabel(indexPath: indexPath)
         for lbl in [nameLabel, dateLabel] {
@@ -55,6 +60,7 @@ class WorkoutLogViewController: PPLTableViewController {
             lbl.textAlignment = .center
             cell.rootView.addSubview(lbl)
         }
+        cell.addDisclosureIndicator()
         return cell
     }
     

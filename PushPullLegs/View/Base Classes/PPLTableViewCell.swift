@@ -41,6 +41,15 @@ class PPLTableViewCell: UITableViewCell {
         })
     }
     
+    func addDisclosureIndicator() {
+        let indicator = UIImage.init(systemName: "chevron.right")!
+        let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.lightGrey!, renderingMode: .alwaysOriginal))
+        rootView.addSubview(indicatorView)
+        indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        indicatorView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -20).isActive = true
+        indicatorView.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
+    }
+    
 }
 
 extension CGSize {

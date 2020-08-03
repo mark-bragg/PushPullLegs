@@ -23,17 +23,33 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dcw-hj-xTd">
                     <rect key="frame" x="20" y="50" width="374" height="300"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sKe-kH-4E8">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lgt-Xx-Awz">
                             <rect key="frame" x="0.0" y="0.0" width="374" height="150"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="56"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="sKe-kH-4E8">
+                                    <rect key="frame" x="62" y="41.5" width="250" height="67"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="250" id="byn-Bv-KTf"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="56"/>
+                                    <color key="textColor" name="ppl_text_blue"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="sKe-kH-4E8" firstAttribute="centerX" secondItem="lgt-Xx-Awz" secondAttribute="centerX" id="Fx8-7N-6bb"/>
+                                <constraint firstItem="sKe-kH-4E8" firstAttribute="centerY" secondItem="lgt-Xx-Awz" secondAttribute="centerY" id="gAC-Hc-9Mo"/>
+                            </constraints>
+                        </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ygk-s9-0SH">
                             <rect key="frame" x="0.0" y="150" width="374" height="150"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EiU-Zn-Lwz" customClass="PPLButton" customModule="PushPullLegs" customModuleProvider="target">
-                                    <rect key="frame" x="123" y="42" width="128" height="66"/>
+                                <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EiU-Zn-Lwz" customClass="PPLButton" customModule="PushPullLegs" customModuleProvider="target">
+                                    <rect key="frame" x="62" y="42" width="250" height="66"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="250" id="Tvb-b1-lCH"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="45"/>
                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <state key="normal" title="Button">

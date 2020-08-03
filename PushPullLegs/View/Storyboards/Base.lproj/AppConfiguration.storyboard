@@ -96,64 +96,89 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="exercise name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="93b-sJ-1A0">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bx3-0N-nKa">
                                         <rect key="frame" x="0.0" y="102.5" width="374" height="95"/>
-                                        <color key="backgroundColor" name="ppl_dark_grey"/>
-                                        <color key="textColor" name="ppl_text_blue"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="alphabet"/>
-                                        <connections>
-                                            <action selector="textFieldDidChangeEditing:" destination="4mJ-9v-zh2" eventType="editingChanged" id="1ga-zH-Pjf"/>
-                                        </connections>
-                                    </textField>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="uFZ-KF-R6l">
+                                        <subviews>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="exercise name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="93b-sJ-1A0">
+                                                <rect key="frame" x="52" y="19" width="270" height="57.5"/>
+                                                <color key="backgroundColor" name="ppl_dark_grey"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="57.5" id="Oaj-sT-LCH"/>
+                                                </constraints>
+                                                <color key="textColor" name="ppl_text_blue"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="alphabet"/>
+                                                <connections>
+                                                    <action selector="textFieldDidChangeEditing:" destination="4mJ-9v-zh2" eventType="editingChanged" id="1ga-zH-Pjf"/>
+                                                </connections>
+                                            </textField>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="93b-sJ-1A0" firstAttribute="centerX" secondItem="Bx3-0N-nKa" secondAttribute="centerX" id="3jE-a7-C4A"/>
+                                            <constraint firstItem="93b-sJ-1A0" firstAttribute="centerY" secondItem="Bx3-0N-nKa" secondAttribute="centerY" id="sYo-QJ-hnF"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X6Z-j0-sot">
                                         <rect key="frame" x="0.0" y="205.5" width="374" height="94.5"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Pg-Z4-Ul6" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="116.5" height="94.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" title="Button">
-                                                    <color key="titleColor" name="ppl_text_blue"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="tappedExerciseTypeButton:" destination="4mJ-9v-zh2" eventType="touchUpInside" id="UkJ-k2-9Zf"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xUM-OC-Ux3" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                                <rect key="frame" x="128.5" y="0.0" width="117" height="94.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" title="Button">
-                                                    <color key="titleColor" name="ppl_text_blue"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="tappedExerciseTypeButton:" destination="4mJ-9v-zh2" eventType="touchUpInside" id="GIh-ga-jo9"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVc-sk-V3x" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                                <rect key="frame" x="257.5" y="0.0" width="116.5" height="94.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" title="Button">
-                                                    <color key="titleColor" name="ppl_text_blue"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="tappedExerciseTypeButton:" destination="4mJ-9v-zh2" eventType="touchUpInside" id="pev-tt-86K"/>
-                                                </connections>
-                                            </button>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="uFZ-KF-R6l">
+                                                <rect key="frame" x="2" y="16" width="370" height="62.5"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Pg-Z4-Ul6" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="115.5" height="62.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button">
+                                                            <color key="titleColor" name="ppl_text_blue"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="tappedExerciseTypeButton:" destination="4mJ-9v-zh2" eventType="touchUpInside" id="UkJ-k2-9Zf"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xUM-OC-Ux3" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
+                                                        <rect key="frame" x="127.5" y="0.0" width="115" height="62.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button">
+                                                            <color key="titleColor" name="ppl_text_blue"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="tappedExerciseTypeButton:" destination="4mJ-9v-zh2" eventType="touchUpInside" id="GIh-ga-jo9"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVc-sk-V3x" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
+                                                        <rect key="frame" x="254.5" y="0.0" width="115.5" height="62.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button">
+                                                            <color key="titleColor" name="ppl_text_blue"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="tappedExerciseTypeButton:" destination="4mJ-9v-zh2" eventType="touchUpInside" id="pev-tt-86K"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
-                                    </stackView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="uFZ-KF-R6l" secondAttribute="bottom" constant="16" id="8Jv-aB-xBL"/>
+                                            <constraint firstItem="uFZ-KF-R6l" firstAttribute="top" secondItem="X6Z-j0-sot" secondAttribute="top" constant="16" id="JfM-7o-1gS"/>
+                                            <constraint firstAttribute="trailing" secondItem="uFZ-KF-R6l" secondAttribute="trailing" constant="2" id="RMi-s9-qYC"/>
+                                            <constraint firstItem="uFZ-KF-R6l" firstAttribute="leading" secondItem="X6Z-j0-sot" secondAttribute="leading" constant="2" id="syn-mZ-lu7"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" identifier="height" id="r5b-ls-cL1"/>
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vcp-kt-Xce" customClass="PPLButton" customModule="PushPullLegs" customModuleProvider="target">
-                                <rect key="frame" x="117" y="332" width="180" height="65"/>
+                                <rect key="frame" x="82" y="332" width="250" height="65"/>
                                 <color key="backgroundColor" name="ppl_dark_grey"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="Y7z-NR-gnz"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="Y7z-NR-gnz"/>
                                     <constraint firstAttribute="height" constant="65" id="Ztr-rM-ZJa"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
@@ -171,6 +196,7 @@
                             <constraint firstItem="Xak-vB-DYc" firstAttribute="top" secondItem="mRL-fb-f1A" secondAttribute="top" constant="20" id="6v9-Db-8tr"/>
                             <constraint firstItem="Xak-vB-DYc" firstAttribute="leading" secondItem="mRL-fb-f1A" secondAttribute="leading" constant="20" id="90l-jB-aNy"/>
                             <constraint firstItem="vcp-kt-Xce" firstAttribute="top" secondItem="Xak-vB-DYc" secondAttribute="bottom" constant="12" id="P58-qN-mfJ"/>
+                            <constraint firstItem="93b-sJ-1A0" firstAttribute="width" secondItem="vcp-kt-Xce" secondAttribute="width" multiplier="1.08056" id="c7X-pX-zE7"/>
                             <constraint firstItem="mRL-fb-f1A" firstAttribute="trailing" secondItem="Xak-vB-DYc" secondAttribute="trailing" constant="20" id="gwu-fG-V1n"/>
                             <constraint firstItem="vcp-kt-Xce" firstAttribute="centerX" secondItem="mRL-fb-f1A" secondAttribute="centerX" id="tJV-pV-2Db"/>
                         </constraints>

@@ -11,6 +11,8 @@ import UIKit
 
 class PPLButton : UIButton {
     
+    var radius: CGFloat = 0
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -67,8 +69,8 @@ class PPLButton : UIButton {
     
     func style() {
         contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-        layer.cornerRadius = frame.height/2
-        layer.borderWidth = 1.0
+        layer.cornerRadius = radius != 0 ? radius : frame.height/2
+        layer.borderWidth = 2.0
         setTitleColor(PPLColor.disabledSaveWhiteColor, for: .disabled)
         setTitleColor(PPLColor.textBlue, for: .normal)
         titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)

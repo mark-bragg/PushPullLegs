@@ -32,6 +32,7 @@ class WorkoutDataViewController: PPLTableViewController {
             vc.workText = "Total Work: \(vm.detailText(indexPath: indexPath)!)"
             vc.progress = vm.exerciseVolumeComparison(row: indexPath.row)
             cell.rootView.addSubview(vc.view)
+            cell.addDisclosureIndicator()
         }
         return cell
     }

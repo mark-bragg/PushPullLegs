@@ -132,6 +132,7 @@ class WorkoutViewController: PPLTableViewController {
             label.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
             label.text = title
         }
+        cell.addDisclosureIndicator()
         return cell
     }
     

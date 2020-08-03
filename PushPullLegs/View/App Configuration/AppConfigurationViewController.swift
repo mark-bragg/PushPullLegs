@@ -34,12 +34,7 @@ class AppConfigurationViewController: PPLTableViewController {
             configureStartNextWorkoutPromptSwitch(cell: cell)
         } else {
             cell.selectionStyle = .default
-            let indicator = UIImage.init(systemName: "chevron.right")!
-            let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.lightGrey!, renderingMode: .alwaysOriginal))
-            cell.rootView.addSubview(indicatorView)
-            indicatorView.translatesAutoresizingMaskIntoConstraints = false
-            indicatorView.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -20).isActive = true
-            indicatorView.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
+            cell.addDisclosureIndicator()
         }
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
@@ -57,10 +52,10 @@ class AppConfigurationViewController: PPLTableViewController {
     }
     
     fileprivate func nameLabelTrailingAnchor(_ view: UIView) -> NSLayoutXAxisAnchor {
-        if let iv = view.subviews.first(where: { $0.isKind(of: UIImageView.self) }) {
-            return iv.trailingAnchor
+        if let iv = view.subviews.first(where: { $0.isKind(of: UISwitch.self) }) {
+            return iv.leadingAnchor
         }
-        return view.subviews.first(where: { $0.isKind(of: UISwitch.self) })!.leadingAnchor
+        return view.trailingAnchor
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -27,6 +27,7 @@ class WorkoutTemplateListViewController: PPLTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         label(forCell: cell).text = viewModel.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 3.0, rect: cell.frame)
+        cell.addDisclosureIndicator()
         return cell
     }
     

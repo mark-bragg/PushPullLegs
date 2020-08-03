@@ -39,7 +39,6 @@
 		4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */; };
 		4957DFBC246CF94200574C89 /* WorkoutDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */; };
 		4957DFBE246D049C00574C89 /* ExerciseDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */; };
-		4957DFC0246D0BA800574C89 /* ExerciseSetDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFBF246D0BA800574C89 /* ExerciseSetDataCell.xib */; };
 		4957DFCC2470407A00574C89 /* StoryboardIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFCB2470407A00574C89 /* StoryboardIdentifiers.swift */; };
 		4973C11A244BADFC009460F2 /* StartWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C119244BADFC009460F2 /* StartWorkoutViewController.swift */; };
 		4973C11C244BB068009460F2 /* WorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C11B244BB068009460F2 /* WorkoutViewController.swift */; };
@@ -141,7 +140,6 @@
 		4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDataViewController.swift; sourceTree = "<group>"; };
 		4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkoutDataViewController.xib; sourceTree = "<group>"; };
 		4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseDataCell.xib; sourceTree = "<group>"; };
-		4957DFBF246D0BA800574C89 /* ExerciseSetDataCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseSetDataCell.xib; sourceTree = "<group>"; };
 		4957DFCB2470407A00574C89 /* StoryboardIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardIdentifiers.swift; sourceTree = "<group>"; };
 		4973C119244BADFC009460F2 /* StartWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartWorkoutViewController.swift; sourceTree = "<group>"; };
 		4973C11B244BB068009460F2 /* WorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutViewController.swift; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 				4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */,
 				4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */,
 				4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */,
-				4957DFBF246D0BA800574C89 /* ExerciseSetDataCell.xib */,
 				4989BA5F24BB94B0001C17B3 /* ExerciseDataCellViewController.xib */,
 				4989BA6124BB9A10001C17B3 /* ExerciseDataCellViewController.swift */,
 			);
@@ -709,7 +706,6 @@
 				4989BA6024BB94B0001C17B3 /* ExerciseDataCellViewController.xib in Resources */,
 				490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */,
 				49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */,
-				4957DFC0246D0BA800574C89 /* ExerciseSetDataCell.xib in Resources */,
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
 				4989BA5B24BB905F001C17B3 /* PPLTableViewCell.xib in Resources */,
 				490D88DE2451DE32005FFEA3 /* Workout.storyboard in Resources */,

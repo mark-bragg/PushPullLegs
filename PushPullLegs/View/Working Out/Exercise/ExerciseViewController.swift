@@ -261,9 +261,3 @@ extension UILabel {
         return label
     }
 }
-
-class ExerciseSetTableViewCell: UITableViewCell {
-    @IBOutlet weak var weightLabel: UILabel!
-    @IBOutlet weak var repsLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-}

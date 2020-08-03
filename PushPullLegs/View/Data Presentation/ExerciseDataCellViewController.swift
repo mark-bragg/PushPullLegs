@@ -34,7 +34,6 @@ class ExerciseDataCellViewController: UIViewController {
     @IBOutlet weak var progressIndicatorImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var totalWorkTextLabel: UILabel!
-    @IBOutlet weak var navigationIndicator: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

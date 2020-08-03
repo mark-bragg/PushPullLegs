@@ -25,6 +25,7 @@ class TypeSelectorViewController: UIViewController {
         for (btn, type) in [(pushButton, ExerciseType.push), (pullButton, ExerciseType.pull), (legsButton, ExerciseType.legs)] {
             btn?.titleLabel?.text = type.rawValue
             btn?.exerciseType = type
+            btn?.radius = (btn?.frame.height)! / 4
         }
     }
     

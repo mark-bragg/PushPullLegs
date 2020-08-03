@@ -80,7 +80,6 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         if saveButton.title(for: .normal) != "Save" {
             saveButton.setTitle("Save", for: .normal)
         }
-//        sender.selection()
         viewModel?.selectedType(sender.exerciseType)
         updateButtonsWithSelection(sender)
     }
@@ -97,7 +96,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     func hideExerciseType() {
-        typeSelectionStackView.removeFromSuperview()
+        typeSelectionStackView.superview?.removeFromSuperview()
         parentStackView.removeConstraint(parentStackView.constraints.first(where: { $0.identifier == "height" })!)
         parentStackView
             .heightAnchor
