@@ -75,7 +75,7 @@ class WorkoutLogViewController: PPLTableViewController {
 
 }
 
-class WorkoutLogViewModel: NSObject, ViewModel {
+class WorkoutLogViewModel: NSObject, PPLTableViewModel {
     var workouts = [Workout]()
     let formatter = DateFormatter()
     

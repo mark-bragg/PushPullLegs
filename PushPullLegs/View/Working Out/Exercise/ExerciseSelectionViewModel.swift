@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ExerciseSelectionViewModel: NSObject, ViewModel, ReloadProtocol {
+class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     private var exercises = [ExerciseTemplate]()
     private var selectedIndices = [Int]()

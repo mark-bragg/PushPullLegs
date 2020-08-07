@@ -124,7 +124,7 @@ class AppConfigurationViewController: PPLTableViewController {
     
 }
 
-class AppConfigurationViewModel: NSObject, ViewModel {
+class AppConfigurationViewModel: NSObject, PPLTableViewModel {
     func rowCount(section: Int) -> Int {
         return 4
     }

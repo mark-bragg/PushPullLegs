@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class WorkoutReadViewModel: NSObject, ViewModel {
+class WorkoutReadViewModel: NSObject, PPLTableViewModel {
     
     var exerciseType: ExerciseType!
     var workoutManager: WorkoutDataManager

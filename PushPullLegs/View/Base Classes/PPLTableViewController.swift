@@ -11,7 +11,7 @@ import UIKit
 
 class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
     
-    var viewModel: ViewModel!
+    var viewModel: PPLTableViewModel!
     weak var tableView: PPLTableView!
     weak var bannerView: GADBannerView!
     weak var noDataView: NoDataView!

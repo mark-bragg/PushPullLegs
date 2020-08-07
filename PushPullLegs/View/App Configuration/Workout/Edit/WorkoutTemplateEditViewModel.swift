@@ -13,7 +13,7 @@ protocol WorkoutCreationDelegate {
     func workout(name: String)
 }
 
-class WorkoutTemplateEditViewModel: NSObject, ViewModel, ReloadProtocol {
+class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     private var selectedExercises = [ExerciseTemplate]()
     private var unselectedExercises = [ExerciseTemplate]()
     private var selectedIndices = [Int]()
@@ -116,13 +116,4 @@ class WorkoutTemplateEditViewModel: NSObject, ViewModel, ReloadProtocol {
         selectedExercises.sort(by: sorter)
         unselectedExercises.sort(by: sorter)
     }
-}
-
-@objc protocol ViewModel: NSObjectProtocol {
-    func rowCount(section: Int) -> Int
-    func title(indexPath: IndexPath) -> String?
-    
-    @objc optional func sectionCount() -> Int
-    @objc optional func titleForSection(_ section: Int) -> String?
-    @objc optional func title() -> String?
 }

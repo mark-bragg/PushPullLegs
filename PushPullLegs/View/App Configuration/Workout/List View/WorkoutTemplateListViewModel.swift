@@ -8,7 +8,7 @@
 
 import Foundation
 
-class WorkoutTemplateListViewModel: NSObject, ViewModel {
+class WorkoutTemplateListViewModel: NSObject, PPLTableViewModel {
     private let templateManagement: TemplateManagement
     private var workouts: [WorkoutTemplate]!
     private var selected: Int!

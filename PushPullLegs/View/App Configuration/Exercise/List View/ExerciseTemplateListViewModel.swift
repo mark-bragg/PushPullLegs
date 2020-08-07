@@ -23,7 +23,7 @@ protocol ExerciseTemplateListViewModelDelegate {
     func viewModelFailedToSaveExerciseWithNameAlreadyExists(_ model: ExerciseTemplateListViewModel)
 }
 
-class ExerciseTemplateListViewModel: NSObject, ViewModel, ReloadProtocol {
+class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     let templateManagement: TemplateManagement
     private var pushExercises = [ExerciseTemplate]()

@@ -30,7 +30,7 @@ protocol ExerciseViewModelDelegate: NSObject {
     func exerciseViewModel(_ viewModel: ExerciseViewModel, started exercise: Exercise)
 }
 
-class ExerciseViewModel: NSObject, ViewModel, ExerciseSetCollector {
+class ExerciseViewModel: NSObject, PPLTableViewModel, ExerciseSetCollector {
     
     weak var reloader: ReloadProtocol?
     weak var delegate: ExerciseViewModelDelegate?
