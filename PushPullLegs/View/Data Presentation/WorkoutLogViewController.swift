@@ -82,7 +82,7 @@ class WorkoutLogViewModel: NSObject, PPLTableViewModel {
     init(withDataManager dataManager: WorkoutDataManager = WorkoutDataManager()) {
         super.init()
         formatter.dateFormat = "MM/dd/YY"
-        workouts = WorkoutDataManager().workouts().sorted(by: {$0.dateCreated! > $1.dateCreated!})
+        workouts = WorkoutDataManager().workouts()
     }
     
     func rowCount(section: Int) -> Int {

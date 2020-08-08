@@ -71,8 +71,9 @@ class WorkoutDataManager: DataManager {
         return nil
     }
     
-    func workouts() -> [Workout] {
+    func workouts(ascending: Bool = false) -> [Workout] {
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
+        req.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: ascending)]
         if let wkts = try? backgroundContext.fetch(req) as? [Workout] {
             return wkts
         }
