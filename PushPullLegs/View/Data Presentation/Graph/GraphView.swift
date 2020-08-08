@@ -14,6 +14,11 @@ class GraphView: UIControl, ObservableObject {
     private var circle = CAShapeLayer()
     private var circleLine = CAShapeLayer()
     private let circleRadius: CGFloat = 10.0
+    private var lineWidth: CGFloat {
+        get {
+            return 5.0
+        }
+    }
     private var drawingCircle = false
     private var linePoints = [CGPoint]()
     private var touchPoint: CGPoint?
@@ -107,7 +112,7 @@ class GraphView: UIControl, ObservableObject {
         axesPath.addLine(to: CGPoint(x: frame.width * 0.975, y: frame.height * 0.975))
         axesLayer.path = axesPath.cgPath
         axesLayer.strokeColor = UIColor.white.cgColor
-        axesLayer.lineWidth = 8.0
+        axesLayer.lineWidth = lineWidth
         axesLayer.fillColor = UIColor.clear.cgColor
     }
     
@@ -133,7 +138,7 @@ class GraphView: UIControl, ObservableObject {
         }
         lineLayer.path = path.cgPath
         lineLayer.strokeColor = UIColor.white.cgColor
-        lineLayer.lineWidth = 6.0
+        lineLayer.lineWidth = lineWidth
         lineLayer.fillColor = UIColor.clear.cgColor
     }
 }

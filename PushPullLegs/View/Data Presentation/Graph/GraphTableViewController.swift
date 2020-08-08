@@ -21,13 +21,15 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tbv = UITableView(frame: view.frame)
+        view.backgroundColor = PPLColor.grey
+        let tbv = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - (tabBarController?.tabBar.frame.height ?? 0)))
+        tbv.backgroundColor = PPLColor.grey
         tbv.isScrollEnabled = false
         view.addSubview(tbv)
         tbv.dataSource = self
         tbv.delegate = self
-        tbv.rowHeight = view.frame.height / 4.25
-        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: tbv.rowHeight)
+        tbv.rowHeight = tbv.frame.height / 4.25
+        let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: tbv.rowHeight - 16)
         pushVc = GraphViewController(type: .push, frame: frame)
         pullVc = GraphViewController(type: .pull, frame: frame)
         legsVc = GraphViewController(type: .legs, frame: frame)
@@ -98,25 +100,61 @@ extension GraphTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.contentView.addSubview(viewForRow(indexPath.row))
+        let view = viewForRow(indexPath.row)
+        cell.contentView.addSubview(view)
+        cell.contentView.backgroundColor = PPLColor.grey
+        if view.isKind(of: UILabel.self) {
+            constrain(view, toInsideOf: cell.contentView)
+        } else {
+            addControlToCell(cell)
+        }
+        cell.selectionStyle = .none
         return cell
     }
     
     func viewForRow(_ row: Int) -> UIView {
+        var view: UIView
         switch row {
         case 0:
-            return pushVc.view
+            view = pushVc.view
         case 1:
-            return pullVc.view
+            view = pullVc.view
         case 2:
-            return legsVc.view
+            view = legsVc.view
         default:
-            let lbl = UILabel()
-            lbl.text = "Start next workout"
-            lbl.sizeToFit()
-            return lbl
+            view = startNextWorkoutLabel()
         }
+        return view
     }
+    
+    private func startNextWorkoutLabel() -> UILabel {
+        let lbl = UILabel()
+        lbl.text = "Start next workout"
+        lbl.font = UIFont.systemFont(ofSize: 26, weight: .black)
+        lbl.textAlignment = .center
+        lbl.backgroundColor = PPLColor.lightGrey
+        return lbl
+    }
+    
+    func addControlToCell(_ cell: UITableViewCell) {
+        let control = UIControl()
+        cell.addSubview(control)
+        constrain(control, toInsideOf: cell)
+        control.addTarget(self, action: #selector(showGraph(row:)), for: .touchUpInside)
+    }
+    
+    @objc private func showGraph(row: Int) {
+        // TODO: present graphVC
+    }
+    
+    func constrain(_ subview: UIView, toInsideOf superview: UIView) {
+        subview.translatesAutoresizingMaskIntoConstraints = false
+        subview.topAnchor.constraint(equalTo: superview.topAnchor, constant: 8).isActive = true
+        subview.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -8).isActive = true
+        subview.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: 8).isActive = true
+        subview.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -8).isActive = true
+    }
+    
 }
 
 extension GraphTableViewController: UITableViewDelegate {

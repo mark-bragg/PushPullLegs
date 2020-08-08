@@ -39,12 +39,30 @@ class GraphViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if let frame = frame {
             view.frame = frame
         }
+        view.backgroundColor = PPLColor.grey
         addViews()
         if isInteractive {
             bind()
+        }
+    }
+    
+    var needConstraints = true
+    override func viewDidLayoutSubviews() {
+        if needConstraints, let superview = view.superview {
+            needConstraints = false
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
+            view.bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
+            view.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+            view.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
         }
     }
     
@@ -56,6 +74,7 @@ class GraphViewController: UIViewController {
     
     func addContainerView() {
         let containerView = UIView(frame: view.frame)
+        containerView.layoutMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         view.addSubview(containerView)
         self.containerView = containerView
     }
@@ -86,6 +105,7 @@ class GraphViewController: UIViewController {
         titleLabel = label()
         titleLabel.text = viewModel.title()
         titleLabel.sizeToFit()
+        titleLabel.textColor = .black
         labels.append(titleLabel)
         if isInteractive {
             dateLabel = label()
@@ -98,7 +118,7 @@ class GraphViewController: UIViewController {
         let labelStack = UIStackView(arrangedSubviews: labels)
         labelStack.axis = .vertical
         labelStack.distribution = .fillEqually
-        labelStack.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: titleLabel.frame.height * CGFloat(labels.count))
+        labelStack.frame = CGRect(x: 0, y: 8, width: view.frame.width, height: titleLabel.frame.height * CGFloat(labels.count))
         view.addSubview(labelStack)
         self.labelStack = labelStack
     }
