@@ -43,12 +43,12 @@ class WorkoutGraphViewModelTests: XCTestCase {
         XCTAssert(sut.pointCount() == count)
     }
     
-    func testDate_noExercises_nilReturned() {
+    func testDates_noExercises_nilReturned() {
         sut = WorkoutGraphViewModel(type: .push, dataManager: WorkoutDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
-        XCTAssert(sut.date(0) == nil)
+        XCTAssert(sut.dates() == nil)
     }
     
-    func testDate() {
+    func testDates() {
         let count = 100
         var dates = [String]()
         let formatter = DateFormatter()
@@ -61,17 +61,18 @@ class WorkoutGraphViewModelTests: XCTestCase {
             dates.append(formatter.string(from: date))
         }
         sut = WorkoutGraphViewModel(type: .push, dataManager: WorkoutDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
+        let sutDates = sut.dates()!
         for i in 0..<count {
-            XCTAssert(sut.date(i)! == dates[i])
+            XCTAssert(sutDates[i] == dates[i])
         }
     }
     
-    func testVolume_noWorkouts() {
+    func testVolumes_noWorkouts() {
         sut = WorkoutGraphViewModel(type: .push, dataManager: WorkoutDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
-        XCTAssert(sut.volume(0) == nil)
+        XCTAssert(sut.volumes() == nil)
     }
     
-    func testVolume() {
+    func testVolumes() {
         let count = 100
         var wkt: Workout?
         var volumes = [Double]()
@@ -88,8 +89,9 @@ class WorkoutGraphViewModelTests: XCTestCase {
             volumes.append((Double(d * r) * w / 60).truncateDigitsAfterDecimal(afterDecimalDigits: 2))
         }
         sut = WorkoutGraphViewModel(type: .push, dataManager: WorkoutDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
+        let sutVolumes = sut.volumes()!
         for i in 0..<count {
-            XCTAssert(sut.volume(i) == volumes[i], "\nexpected: \(volumes[i])\nactual: \(sut.volume(i)!)")
+            XCTAssert(sutVolumes[i] == CGFloat(volumes[i]), "\nexpected: \(volumes[i])\nactual: \(sutVolumes[i])")
         }
     }
 

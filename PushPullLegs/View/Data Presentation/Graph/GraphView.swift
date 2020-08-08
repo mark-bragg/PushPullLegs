@@ -10,26 +10,16 @@ import Foundation
 import UIKit
 
 class GraphView: UIControl, ObservableObject {
-    var circle = CAShapeLayer()
-    var circleLine = CAShapeLayer()
-    let circleRadius: CGFloat = 10.0
-    var drawingCircle = false
-    var linePoints = [CGPoint]()
-    weak var dataSource: GraphViewDataSource!
+    var yValues: [CGFloat]?
+    private var circle = CAShapeLayer()
+    private var circleLine = CAShapeLayer()
+    private let circleRadius: CGFloat = 10.0
+    private var drawingCircle = false
+    private var linePoints = [CGPoint]()
     private var touchPoint: CGPoint?
     @Published private(set) var index: Int?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addTargets()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        addTargets()
-    }
-    
-    private func addTargets() {
+    func setInteractivity() {
         addTarget(self, action: #selector(touchUp(_:)), for: .touchDragExit)
         addTarget(self, action: #selector(touchUp(_:)), for: .touchUpInside)
         addTarget(self, action: #selector(touchDown(_:with:)), for: .touchDown)
@@ -122,10 +112,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     func drawLine() {
-        var yValues = [CGFloat]()
-        for i in 0..<dataSource.numberOfDataPoints() {
-            yValues.append(dataSource.y(for: i))
-        }
+        guard let yValues = yValues else { return }
         let xSpacing = (frame.width * 0.95) / CGFloat(yValues.count)
         let biggestY = yValues.max()!
         let normalizedYs = yValues.map { (y) -> CGFloat in

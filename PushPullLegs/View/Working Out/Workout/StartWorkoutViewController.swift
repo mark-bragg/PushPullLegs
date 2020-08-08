@@ -7,69 +7,10 @@
 //
 
 import UIKit
-import GoogleMobileAds
 
-class StartWorkoutViewController: UIViewController, TypeSelectorDelegate {
 
-    private var exerciseType: ExerciseType?
-    private var interstitial: GADInterstitial?
-    private var didNavigateToWorkout: Bool = false
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if AppState.shared.isAdEnabled {
-            if interstitial == nil || interstitial!.hasBeenUsed {
-                interstitial = createAndLoadInterstitial()
-            }
-            if let interstitial = interstitial,
-                interstitial.isReady && didNavigateToWorkout {
-                interstitial.present(fromRootViewController: self)
-            }
-            didNavigateToWorkout = false
-        }
-        if AppState.shared.workoutInProgress {
-            self.navigateToNextWorkout()
-        }
-    }
-    
-    func createAndLoadInterstitial() -> GADInterstitial {
-      let interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
-      interstitial.load(GADRequest())
-      return interstitial
-    }
-    
-    @IBAction func startWorkout(_ sender: Any) {
-        if PPLDefaults.instance.workoutTypePromptSwitchValue() {
-            presentTypeSelector()
-        } else {
-            navigateToNextWorkout()
-        }
-    }
-    
-    func presentTypeSelector() {
-        let typeVC = TypeSelectorViewController()
-        typeVC.delegate = self
-        typeVC.modalPresentationStyle = .pageSheet
-        present(typeVC, animated: true, completion: nil)
-    }
-    
-    func navigateToNextWorkout() {
-        performSegue(withIdentifier: SegueIdentifier.startWorkout, sender: self)
-        didNavigateToWorkout = true
-    }
+class StartWorkoutViewController: UIViewController {
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifier.startWorkout, let vc = segue.destination as? WorkoutViewController {
-            vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
-            AppState.shared.workoutInProgress = true
-            vc.hidesBottomBarWhenPushed = true
-        }
-    }
     
-    func select(type: ExerciseType) {
-        exerciseType = type
-        performSegue(withIdentifier: SegueIdentifier.startWorkout, sender: self)
-        exerciseType = nil
-    }
 
 }

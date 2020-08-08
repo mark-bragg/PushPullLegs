@@ -31,10 +31,6 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         delegate?.exerciseTemplatesAdded()
     }
     
-    @IBAction func done(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
-    }
-    
     @IBAction func createExerciseTemplate(_ sender: Any) {
         if let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateViewController(withIdentifier: ViewControllerIdentifier.createExerciseViewController) as? ExerciseTemplateCreationViewController {
             vc.viewModel = ExerciseTemplateCreationViewModel(withType: exerciseSelectionViewModel().exerciseType, management: TemplateManagement())

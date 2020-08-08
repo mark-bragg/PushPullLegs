@@ -42,7 +42,10 @@ class WorkoutViewController: PPLTableViewController {
     override func addAction(_ sender: Any) {
         super.addAction(sender)
         if exerciseSelectionViewModel.rowCount(section: 0) > 0 {
-            performSegue(withIdentifier: SegueIdentifier.addExerciseOnTheFly, sender: self)
+            let vc = ExerciseTemplateSelectionViewController()
+            vc.viewModel = exerciseSelectionViewModel
+            vc.delegate = workoutEditViewModel()
+            navigationController?.pushViewController(vc, animated: true)
         } else {
             if let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateViewController(withIdentifier: ViewControllerIdentifier.createExerciseViewController) as? ExerciseTemplateCreationViewController {
                 vc.showExerciseType = false
@@ -52,14 +55,6 @@ class WorkoutViewController: PPLTableViewController {
                 present(vc, animated: true, completion: nil)
             }
         }
-    }
-    
-    @IBAction func addExercise(_ sender: Any) {
-        
-    }
-    
-    @IBAction func done(_ sender: Any) {
-        
     }
     
     override func pop() {
@@ -93,26 +88,6 @@ class WorkoutViewController: PPLTableViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination
-        if segue.identifier == SegueIdentifier.navigateToExerciseDetail, let vc = vc as? ExerciseViewController {
-            if let exerciseTemplate = workoutEditViewModel().getSelected() as? ExerciseTemplate {
-                let vm = ExerciseViewModel(exerciseTemplate: exerciseTemplate)
-                vc.viewModel = vm
-                vm.reloader = vc
-                vm.delegate = workoutEditViewModel()
-            } else if let exercise = workoutEditViewModel().getSelected() as? Exercise {
-                let vm = ExerciseViewModel(exercise: exercise)
-                vc.viewModel = vm
-                vm.reloader = vc
-                vc.readOnly = AppState.shared.exerciseInProgress == nil
-            }
-        } else if segue.identifier == SegueIdentifier.addExerciseOnTheFly, let vc = vc as? ExerciseTemplateSelectionViewController {
-            vc.viewModel = exerciseSelectionViewModel
-            vc.delegate = workoutEditViewModel()
-        }
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         let title = viewModel.title(indexPath: indexPath)
@@ -143,7 +118,19 @@ class WorkoutViewController: PPLTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         super.tableView(tableView, didSelectRowAt: indexPath)
         workoutEditViewModel().selectedIndex = indexPath
-        performSegue(withIdentifier: SegueIdentifier.navigateToExerciseDetail, sender: self)
+        let vc = ExerciseViewController()
+        if let exerciseTemplate = workoutEditViewModel().getSelected() as? ExerciseTemplate {
+            let vm = ExerciseViewModel(exerciseTemplate: exerciseTemplate)
+            vc.viewModel = vm
+            vm.reloader = vc
+            vm.delegate = workoutEditViewModel()
+        } else if let exercise = workoutEditViewModel().getSelected() as? Exercise {
+            let vm = ExerciseViewModel(exercise: exercise)
+            vc.viewModel = vm
+            vm.reloader = vc
+            vc.readOnly = AppState.shared.exerciseInProgress == nil
+        }
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -157,7 +144,7 @@ class WorkoutViewController: PPLTableViewController {
 
 extension WorkoutViewController: WorkoutEditViewModelDelegate {
     func workoutEditViewModelCompletedFirstExercise(_ model: WorkoutEditViewModel) {
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
+        // no-op
     }
 }
 

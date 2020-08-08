@@ -9,12 +9,7 @@
 import UIKit
 import Combine
 
-@objc protocol GraphViewDataSource {
-    func numberOfDataPoints() -> Int
-    func y(for index: Int) -> CGFloat
-}
-
-class GraphViewController: UIViewController, GraphViewDataSource {
+class GraphViewController: UIViewController {
 
     var viewModel: WorkoutGraphViewModel!
     weak var containerView: UIView!
@@ -24,21 +19,39 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     weak var volumeLabel: UILabel!
     var isInteractive = true
     private var cancellables: Set<AnyCancellable> = []
+    private var padding: CGFloat {
+        get {
+            return view.frame.width * 0.05
+        }
+    }
+    private var frame: CGRect?
+    weak var labelStack: UIStackView!
+    
+    init(type: ExerciseType, frame: CGRect? = nil) {
+        super.init(nibName: nil, bundle: nil)
+        viewModel = WorkoutGraphViewModel(type: type)
+        self.frame = frame
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TODO: remove this line
-        viewModel = WorkoutGraphViewModel(type: .push)
-        // TODO: you better remove it!
-        
+        if let frame = frame {
+            view.frame = frame
+        }
         addViews()
-        bind()
+        if isInteractive {
+            bind()
+        }
     }
     
     func addViews() {
         addContainerView()
-        addGraphView()
         addLabels()
+        addGraphView()
     }
     
     func addContainerView() {
@@ -48,20 +61,46 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     }
     
     func addGraphView() {
-        let graph = GraphView(frame: CGRect(x: view.frame.width * 0.05, y: view.frame.height * 0.245, width: view.frame.width * 0.95, height: view.frame.height * 0.695))
-        graph.dataSource = self
+        let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: view.frame.width - padding * 2, height: heightForGraph()))
         containerView.addSubview(graph)
         containerView.backgroundColor = PPLColor.textBlue
         view.addSubview(graph)
+        if isInteractive {
+            graph.setInteractivity()
+        }
         graphView = graph
         graph.backgroundColor = .clear
+        graph.yValues = viewModel.volumes()
+    }
+    
+    func yForGraph() -> CGFloat {
+        return labelStack.frame.origin.y + labelStack.frame.height
+    }
+    
+    func heightForGraph() -> CGFloat {
+        return view.frame.height - yForGraph()
     }
     
     private func addLabels() {
-        self.titleLabel = label(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 65))
-        self.titleLabel.text = viewModel.title()
-        self.dateLabel = label(frame: CGRect(x: 0, y: 65, width: view.frame.width, height: 65))
-        self.volumeLabel = label(frame: CGRect(x: 0, y: 130, width: view.frame.width, height: 65))
+        var labels = [UILabel]()
+        titleLabel = label()
+        titleLabel.text = viewModel.title()
+        titleLabel.sizeToFit()
+        labels.append(titleLabel)
+        if isInteractive {
+            dateLabel = label()
+            dateLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: titleLabel.frame.height)
+            labels.append(dateLabel)
+            volumeLabel = label()
+            volumeLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: titleLabel.frame.height)
+            labels.append(volumeLabel)
+        }
+        let labelStack = UIStackView(arrangedSubviews: labels)
+        labelStack.axis = .vertical
+        labelStack.distribution = .fillEqually
+        labelStack.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: titleLabel.frame.height * CGFloat(labels.count))
+        view.addSubview(labelStack)
+        self.labelStack = labelStack
     }
     
     func bind() {
@@ -72,7 +111,7 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     }
     
     func updateLabels(_ index: Int?) {
-        if let index = index, let date = viewModel.date(index), let volume = viewModel.volume(index) {
+        if let index = index, let date = viewModel.dates()?[index], let volume = viewModel.volumes()?[index] {
             dateLabel.text = date
             volumeLabel.text = "volume: \(volume)"
         } else {
@@ -82,17 +121,8 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         
     }
     
-    func numberOfDataPoints() -> Int {
-        return viewModel.pointCount()
-    }
-    
-    func y(for index: Int) -> CGFloat {
-        guard let volume = viewModel.volume(index) else { return 0 }
-        return CGFloat(volume)
-    }
-    
-    func label(frame: CGRect) -> UILabel {
-        let label = UILabel(frame: frame)
+    func label() -> UILabel {
+        let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         view.addSubview(label)

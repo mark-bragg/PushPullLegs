@@ -7,22 +7,23 @@
 //
 
 import Foundation
+import UIKit
 
 class WorkoutGraphViewModel: NSObject {
     
-    private var yValues = [Double]()
+    private var yValues = [CGFloat]()
     private var xValues = [String]()
     private var type: ExerciseType
     
     init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
         self.type = type
         super.init()
-        let workouts = dataManager.workouts(ascending: true)
+        let workouts = dataManager.workouts(ascending: true, types: [type])
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/YY"
         for workout in workouts {
             xValues.append(formatter.string(from: workout.dateCreated!))
-            yValues.append(workout.volume())
+            yValues.append(CGFloat(workout.volume()))
         }
     }
     
@@ -34,14 +35,14 @@ class WorkoutGraphViewModel: NSObject {
         xValues.count
     }
     
-    func date(_ index: Int) -> String? {
+    func dates() -> [String]? {
         guard pointCount() > 0 else { return nil }
-        return xValues[index]
+        return xValues
     }
     
-    func volume(_ index: Int) -> Double? {
+    func volumes() -> [CGFloat]? {
         guard pointCount() > 0 else { return nil }
-        return yValues[index]
+        return yValues
     }
     
     

@@ -33,7 +33,6 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         if !readOnly && addButton == nil {
             setupAddButton()
         }
-        navigationItem.title = exerciseViewModel().title()
         tableView.allowsSelection = false
     }
     
@@ -62,14 +61,6 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         if let v = restTimerView {
             v.removeFromSuperview()
         }
-    }
-    
-    @IBAction func addSet(_ sender: Any) {
-        
-    }
-    
-    @IBAction func done(_ sender: Any) {
-        
     }
     
     func presentExerciseCompletionConfirmation() {
@@ -102,7 +93,6 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     }
     
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
         dismiss(animated: true, completion: { self.reload() })
         setupRestTimerView()
         if exerciseViewModel().rowCount() > 0 {

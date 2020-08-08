@@ -275,6 +275,44 @@ class WorkoutDataManagerTests : XCTestCase {
         XCTAssert(workouts.count == 10)
     }
     
+    func testWorkouts_type() {
+        for _ in 0...9 {
+            sut.add(dbHelper.createExercise(), to: dbHelper.createWorkout(name: .push, date: Date()))
+            sut.add(dbHelper.createExercise(), to: dbHelper.createWorkout(name: .pull, date: Date()))
+            sut.add(dbHelper.createExercise(), to: dbHelper.createWorkout(name: .legs, date: Date()))
+        }
+        var workouts = sut.workouts(ascending: false, types: [.push])
+        XCTAssert(workouts.count == 10)
+        for wkt in workouts {
+            XCTAssert(wkt.name == ExerciseType.push.rawValue)
+        }
+        workouts = sut.workouts(ascending: false, types: [.pull])
+        XCTAssert(workouts.count == 10)
+        for wkt in workouts {
+            XCTAssert(wkt.name == ExerciseType.pull.rawValue)
+        }
+        workouts = sut.workouts(ascending: false, types: [.legs])
+        XCTAssert(workouts.count == 10)
+        for wkt in workouts {
+            XCTAssert(wkt.name == ExerciseType.legs.rawValue)
+        }
+        workouts = sut.workouts(ascending: false, types: [.push, .pull])
+        XCTAssert(workouts.count == 20)
+        for wkt in workouts {
+            XCTAssert(wkt.name == ExerciseType.push.rawValue || wkt.name == ExerciseType.pull.rawValue)
+        }
+        workouts = sut.workouts(ascending: false, types: [.pull, .legs])
+        XCTAssert(workouts.count == 20)
+        for wkt in workouts {
+            XCTAssert(wkt.name == ExerciseType.pull.rawValue || wkt.name == ExerciseType.legs.rawValue)
+        }
+        workouts = sut.workouts(ascending: false, types: [.push, .pull, .legs])
+        XCTAssert(workouts.count == 30)
+        for wkt in workouts {
+            XCTAssert(wkt.name == ExerciseType.push.rawValue || wkt.name == ExerciseType.pull.rawValue || wkt.name == ExerciseType.legs.rawValue)
+        }
+    }
+    
     func testGetPreviousWorkout_twoWorkouts_firstWorkoutReturned() {
         let date = Date()
         sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: date))

@@ -27,7 +27,7 @@ class PPLTabBarController: UITabBarController {
     }
     
     fileprivate func workoutNavigationController() -> UINavigationController {
-        let vc = UIStoryboard(name: StoryboardFileName.workout, bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let vc = UINavigationController(rootViewController: GraphTableViewController())
         vc.tabBarItem = UITabBarItem(title: EntityName.workout.rawValue, image: UIImage(named: "curlbar"), selectedImage: nil)
         vc.tabBarItem.badgeColor = PPLColor.green
         return vc
