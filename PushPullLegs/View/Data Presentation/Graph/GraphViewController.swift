@@ -37,11 +37,6 @@ class GraphViewController: UIViewController {
         super.init(coder: coder)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let frame = frame {
@@ -52,18 +47,14 @@ class GraphViewController: UIViewController {
         if isInteractive {
             bind()
         }
+        if navigationController != nil {
+            addBackNavigationGesture()
+        }
     }
     
     var needConstraints = true
     override func viewDidLayoutSubviews() {
-        if needConstraints, let superview = view.superview {
-            needConstraints = false
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
-            view.bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
-            view.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
-            view.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
-        }
+//        addConstraints()
     }
     
     func addViews() {
@@ -74,30 +65,28 @@ class GraphViewController: UIViewController {
     
     func addContainerView() {
         let containerView = UIView(frame: view.frame)
-        containerView.layoutMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         view.addSubview(containerView)
         self.containerView = containerView
+        addConstraints()
     }
     
-    func addGraphView() {
-        let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: view.frame.width - padding * 2, height: heightForGraph()))
-        containerView.addSubview(graph)
-        containerView.backgroundColor = PPLColor.textBlue
-        view.addSubview(graph)
-        if isInteractive {
-            graph.setInteractivity()
+    func addConstraints() {
+        if needConstraints, let view = isInteractive ? containerView : self.view, let superview = view.superview {
+            needConstraints = false
+            let insets: UIEdgeInsets
+            if !isInteractive {
+                insets = superview.safeAreaInsets
+                view.translatesAutoresizingMaskIntoConstraints = false
+                view.topAnchor.constraint(equalTo: superview.topAnchor, constant: insets.top).isActive = true
+                view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
+                view.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+                view.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
+            } else {
+                insets = SceneDelegate.shared.window!.safeAreaInsets
+                view.frame = CGRect(x: 0, y: insets.top, width: self.view.frame.width, height: self.view.frame.height - (insets.top + insets.bottom))
+            }
+            
         }
-        graphView = graph
-        graph.backgroundColor = .clear
-        graph.yValues = viewModel.volumes()
-    }
-    
-    func yForGraph() -> CGFloat {
-        return labelStack.frame.origin.y + labelStack.frame.height
-    }
-    
-    func heightForGraph() -> CGFloat {
-        return view.frame.height - yForGraph()
     }
     
     private func addLabels() {
@@ -105,7 +94,6 @@ class GraphViewController: UIViewController {
         titleLabel = label()
         titleLabel.text = viewModel.title()
         titleLabel.sizeToFit()
-        titleLabel.textColor = .black
         labels.append(titleLabel)
         if isInteractive {
             dateLabel = label()
@@ -119,8 +107,38 @@ class GraphViewController: UIViewController {
         labelStack.axis = .vertical
         labelStack.distribution = .fillEqually
         labelStack.frame = CGRect(x: 0, y: 8, width: view.frame.width, height: titleLabel.frame.height * CGFloat(labels.count))
-        view.addSubview(labelStack)
+        containerView.addSubview(labelStack)
         self.labelStack = labelStack
+    }
+    func label() -> UILabel {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
+        view.addSubview(label)
+        label.numberOfLines = 1
+        label.textColor = .darkText
+        return label
+    }
+    
+    func addGraphView() {
+        let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: containerView.frame.width - padding * 2, height: heightForGraph()))
+        containerView.addSubview(graph)
+        containerView.backgroundColor = PPLColor.textBlue
+        containerView.addSubview(graph)
+        if isInteractive {
+            graph.setInteractivity()
+        }
+        graphView = graph
+        graph.backgroundColor = .clear
+        graph.yValues = viewModel.volumes()
+    }
+    
+    func yForGraph() -> CGFloat {
+        return labelStack.frame.origin.y + labelStack.frame.height
+    }
+    
+    func heightForGraph() -> CGFloat {
+        return containerView.frame.height - yForGraph() - padding
     }
     
     func bind() {
@@ -141,14 +159,20 @@ class GraphViewController: UIViewController {
         
     }
     
-    func label() -> UILabel {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
-        view.addSubview(label)
-        label.numberOfLines = 1
-        label.textColor = .white
-        return label
+    fileprivate func addBackNavigationGesture() {
+        if let grs = view.gestureRecognizers, grs.contains(where: { $0.isKind(of: UISwipeGestureRecognizer.self ) }) { return }
+        if let vcs = navigationController?.viewControllers, vcs.count > 1 {
+//            let overlay = UIView(frame: view.frame)
+//            view.addSubview(overlay)
+//            overlay.isUserInteractionEnabled = true
+            let swipey = UISwipeGestureRecognizer(target: self, action: #selector(pop))
+            swipey.direction = .right
+            graphView.addGestureRecognizer(swipey)
+        }
+    }
+    
+    @objc private func pop() {
+        navigationController?.popViewController(animated: true)
     }
 
 }

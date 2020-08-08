@@ -124,6 +124,8 @@ class GraphView: UIControl, ObservableObject {
             CGFloat(y) / CGFloat(biggestY)
         }
         let path = UIBezierPath()
+        path.lineCapStyle = .round
+        path.lineJoinStyle = .round
         let lineLayer = CAShapeLayer()
         lineLayer.frame = layer.bounds
         layer.addSublayer(lineLayer)

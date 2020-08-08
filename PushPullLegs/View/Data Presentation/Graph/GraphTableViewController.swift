@@ -106,7 +106,7 @@ extension GraphTableViewController: UITableViewDataSource {
         if view.isKind(of: UILabel.self) {
             constrain(view, toInsideOf: cell.contentView)
         } else {
-            addControlToCell(cell)
+            addControlToCell(cell, indexPath.row)
         }
         cell.selectionStyle = .none
         return cell
@@ -136,30 +136,50 @@ extension GraphTableViewController: UITableViewDataSource {
         return lbl
     }
     
-    func addControlToCell(_ cell: UITableViewCell) {
+    func addControlToCell(_ cell: UITableViewCell, _ row: Int) {
         let control = UIControl()
+        control.tag = row
         cell.addSubview(control)
         constrain(control, toInsideOf: cell)
-        control.addTarget(self, action: #selector(showGraph(row:)), for: .touchUpInside)
+        control.addTarget(self, action: #selector(showGraph(_:)), for: .touchUpInside)
     }
     
-    @objc private func showGraph(row: Int) {
-        // TODO: present graphVC
+    @objc private func showGraph(_ control: UIControl) {
+        guard let nav = navigationController else { return }
+        let vc = GraphViewController(type: typeForRow(control.tag))
+        vc.isInteractive = true
+        vc.hidesBottomBarWhenPushed = true
+        nav.show(vc, sender: self)
     }
     
-    func constrain(_ subview: UIView, toInsideOf superview: UIView) {
-        subview.translatesAutoresizingMaskIntoConstraints = false
-        subview.topAnchor.constraint(equalTo: superview.topAnchor, constant: 8).isActive = true
-        subview.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -8).isActive = true
-        subview.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: 8).isActive = true
-        subview.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -8).isActive = true
+    func typeForRow(_ row: Int) -> ExerciseType {
+        switch row {
+        case 0:
+            return .push
+        case 1:
+            return .pull
+        default:
+            return .legs
+        }
     }
     
 }
 
 extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        startWorkout()
+        if indexPath.row == 3 {
+            startWorkout()
+        }
+    }
+}
+
+extension UIViewController {
+    func constrain(_ subview: UIView, toInsideOf superview: UIView, insets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)) {
+        subview.translatesAutoresizingMaskIntoConstraints = false
+        subview.topAnchor.constraint(equalTo: superview.topAnchor, constant: insets.top).isActive = true
+        subview.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
+        subview.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insets.left).isActive = true
+        subview.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insets.right).isActive = true
     }
 }
 
