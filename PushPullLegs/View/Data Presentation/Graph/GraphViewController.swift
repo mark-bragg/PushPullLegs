@@ -16,39 +16,52 @@ import Combine
 
 class GraphViewController: UIViewController, GraphViewDataSource {
 
+    var viewModel: WorkoutGraphViewModel!
+    weak var containerView: UIView!
     weak var graphView: GraphView!
     weak var titleLabel: UILabel!
     weak var dateLabel: UILabel!
     weak var volumeLabel: UILabel!
-    private let formatter = DateFormatter()
     var isInteractive = true
-    var dates = [Date]()
-    var volumes: [CGFloat] = [
-        1,1,1,1,2,2,3,3,3,4,6,6,6,5,6,7,7,8,8,9,9,9,9,9,9,8,8,8,9,10,10,10
-    ]
     private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for _ in 0..<volumes.count {
-            dates.append(Date())
-        }
-        let frame = view.frame
-        let containerView = UIView(frame: frame)
+        // TODO: remove this line
+        viewModel = WorkoutGraphViewModel(type: .push)
+        // TODO: you better remove it!
+        
+        addViews()
+        bind()
+    }
+    
+    func addViews() {
+        addContainerView()
+        addGraphView()
+        addLabels()
+    }
+    
+    func addContainerView() {
+        let containerView = UIView(frame: view.frame)
         view.addSubview(containerView)
-        let graph = GraphView(frame: CGRect(x: view.frame.width * 0.05, y: view.frame.height * 0.245, width: frame.width * 0.95, height: view.frame.height * 0.695))
+        self.containerView = containerView
+    }
+    
+    func addGraphView() {
+        let graph = GraphView(frame: CGRect(x: view.frame.width * 0.05, y: view.frame.height * 0.245, width: view.frame.width * 0.95, height: view.frame.height * 0.695))
         graph.dataSource = self
         containerView.addSubview(graph)
         containerView.backgroundColor = PPLColor.textBlue
         view.addSubview(graph)
         graphView = graph
-        graph.backgroundColor = PPLColor.textBlue
+        graph.backgroundColor = .clear
+    }
+    
+    private func addLabels() {
         self.titleLabel = label(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 65))
-        self.titleLabel.text = "Workout Name"
+        self.titleLabel.text = viewModel.title()
         self.dateLabel = label(frame: CGRect(x: 0, y: 65, width: view.frame.width, height: 65))
         self.volumeLabel = label(frame: CGRect(x: 0, y: 130, width: view.frame.width, height: 65))
-        formatter.dateFormat = "MM/dd/YY"
-        bind()
     }
     
     func bind() {
@@ -58,33 +71,24 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         }.store(in: &cancellables)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
-    
-    func numberOfDataPoints() -> Int {
-        return volumes.count
-    }
-    
-    func y(for index: Int) -> CGFloat {
-        return volumes[index]
-    }
-    
-    func addGraphView() {
-        
-    }
-    
-    func updateLabels(_
-        index: Int?) {
-        if let index = index {
-            dateLabel.text = formatter.string(from: dates[index])
-            volumeLabel.text = "volume: \(volumes[index])"
+    func updateLabels(_ index: Int?) {
+        if let index = index, let date = viewModel.date(index), let volume = viewModel.volume(index) {
+            dateLabel.text = date
+            volumeLabel.text = "volume: \(volume)"
         } else {
             dateLabel.text = nil
             volumeLabel.text = nil
         }
         
+    }
+    
+    func numberOfDataPoints() -> Int {
+        return viewModel.pointCount()
+    }
+    
+    func y(for index: Int) -> CGFloat {
+        guard let volume = viewModel.volume(index) else { return 0 }
+        return CGFloat(volume)
     }
     
     func label(frame: CGRect) -> UILabel {

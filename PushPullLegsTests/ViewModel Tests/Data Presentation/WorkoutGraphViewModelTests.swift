@@ -50,15 +50,19 @@ class WorkoutGraphViewModelTests: XCTestCase {
     
     func testDate() {
         let count = 100
-        var wkt: Workout?
-        var dates = [Date()]
+        var dates = [String]()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/YY"
+        var date = Date()
+        dates.append(formatter.string(from: date))
         for _ in 0..<count {
-            wkt = dbHelper.createWorkout(name: .push, date:dates.last!)
-            dates.append(wkt!.dateCreated!.addingTimeInterval(60 * 60 * 24))
+            let _ = dbHelper.createWorkout(name: .push, date:date)
+            date = date.addingTimeInterval(60 * 60 * 24)
+            dates.append(formatter.string(from: date))
         }
         sut = WorkoutGraphViewModel(type: .push, dataManager: WorkoutDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
         for i in 0..<count {
-            XCTAssert(sut.date(i) == dates[i])
+            XCTAssert(sut.date(i)! == dates[i])
         }
     }
     
