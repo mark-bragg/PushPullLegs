@@ -27,7 +27,6 @@
 		49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8824C29886005FF7A8 /* PPLAddButton.swift */; };
 		49359B8D24D60001005FF7A8 /* PPLButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8C24D60001005FF7A8 /* PPLButton.swift */; };
 		49359B9324D91E4E005FF7A8 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9224D91E4E005FF7A8 /* GraphViewController.swift */; };
-		49359B9524DCE3BA005FF7A8 /* GraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9424DCE3BA005FF7A8 /* GraphViewModel.swift */; };
 		49359B9724DCE3E7005FF7A8 /* PPLTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */; };
 		49359B9D24DD01AC005FF7A8 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49359B9C24DD01AC005FF7A8 /* Combine.framework */; };
 		49359BA024DD052F005FF7A8 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9F24DD052F005FF7A8 /* GraphView.swift */; };
@@ -136,7 +135,6 @@
 		49359B8824C29886005FF7A8 /* PPLAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAddButton.swift; sourceTree = "<group>"; };
 		49359B8C24D60001005FF7A8 /* PPLButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLButton.swift; sourceTree = "<group>"; };
 		49359B9224D91E4E005FF7A8 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
-		49359B9424DCE3BA005FF7A8 /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
 		49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewModel.swift; sourceTree = "<group>"; };
 		49359B9C24DD01AC005FF7A8 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
 		49359B9F24DD052F005FF7A8 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
@@ -291,7 +289,6 @@
 		49359B9E24DD0519005FF7A8 /* Graph */ = {
 			isa = PBXGroup;
 			children = (
-				49359B9424DCE3BA005FF7A8 /* GraphViewModel.swift */,
 				49359B9224D91E4E005FF7A8 /* GraphViewController.swift */,
 				49359B9F24DD052F005FF7A8 /* GraphView.swift */,
 				49680BDB24DD266500DFF1E0 /* WorkoutGraphViewModel.swift */,
@@ -901,7 +898,6 @@
 				49E3832B23FA09BF00F7A502 /* TemplateManagement.swift in Sources */,
 				49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */,
 				4937729324001807005F566A /* DBUtilities.swift in Sources */,
-				49359B9524DCE3BA005FF7A8 /* GraphViewModel.swift in Sources */,
 				49E675FE244CDAB6001F5974 /* ExerciseSelectionViewModel.swift in Sources */,
 				4973C11C244BB068009460F2 /* WorkoutViewController.swift in Sources */,
 				49359B8D24D60001005FF7A8 /* PPLButton.swift in Sources */,

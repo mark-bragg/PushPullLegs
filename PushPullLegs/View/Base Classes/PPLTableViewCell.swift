@@ -27,7 +27,7 @@ class PPLTableViewCell: UITableViewCell {
         } else {
             self.rootView.addShadow()
             self.rootView.layer.borderColor = UIColor.white.cgColor
-            self.rootView.layer.borderWidth = 2
+            self.rootView.layer.borderWidth = 4
         }
     }
 
@@ -36,7 +36,7 @@ class PPLTableViewCell: UITableViewCell {
             if !selected {
                 self.rootView.addShadow()
                 self.rootView.layer.borderColor = UIColor.white.cgColor
-                self.rootView.layer.borderWidth = 2
+                self.rootView.layer.borderWidth = 4
             }
         })
     }
@@ -86,8 +86,8 @@ class ShadowBackground: UIView {
         layer.shadowRadius = 2
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
-        layer.borderWidth = 2
+        layer.borderWidth = 4
         layer.borderColor = UIColor.white.cgColor
-        layer.cornerRadius = layer.bounds.height/4
+        layer.cornerRadius = layer.bounds.height/8
     }
 }

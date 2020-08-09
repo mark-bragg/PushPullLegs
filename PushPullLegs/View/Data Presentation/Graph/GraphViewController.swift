@@ -42,7 +42,6 @@ class GraphViewController: UIViewController {
         if let frame = frame {
             view.frame = frame
         }
-        view.backgroundColor = PPLColor.grey
         addViews()
         if isInteractive {
             bind()
@@ -81,6 +80,11 @@ class GraphViewController: UIViewController {
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
                 view.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
                 view.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
+                containerView.translatesAutoresizingMaskIntoConstraints = false
+                containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1.0, constant: padding).isActive = true
+                containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9, constant: 0).isActive = true
+                containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+                containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             } else {
                 insets = SceneDelegate.shared.window!.safeAreaInsets
                 view.frame = CGRect(x: 0, y: insets.top, width: self.view.frame.width, height: self.view.frame.height - (insets.top + insets.bottom))
@@ -116,17 +120,19 @@ class GraphViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         view.addSubview(label)
         label.numberOfLines = 1
-        label.textColor = .darkText
+        label.textColor = .white
         return label
     }
     
     func addGraphView() {
         let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: containerView.frame.width - padding * 2, height: heightForGraph()))
         containerView.addSubview(graph)
-        containerView.backgroundColor = PPLColor.textBlue
+        containerView.backgroundColor = isInteractive ? PPLColor.darkGrey : .clear
         containerView.addSubview(graph)
         if isInteractive {
             graph.setInteractivity()
+        } else {
+            constrain(graph, toInsideOf: containerView, insets: UIEdgeInsets(top: labelStack.frame.height, left: 8, bottom: 20, right: 8))
         }
         graphView = graph
         graph.backgroundColor = .clear
@@ -162,9 +168,6 @@ class GraphViewController: UIViewController {
     fileprivate func addBackNavigationGesture() {
         if let grs = view.gestureRecognizers, grs.contains(where: { $0.isKind(of: UISwipeGestureRecognizer.self ) }) { return }
         if let vcs = navigationController?.viewControllers, vcs.count > 1 {
-//            let overlay = UIView(frame: view.frame)
-//            view.addSubview(overlay)
-//            overlay.isUserInteractionEnabled = true
             let swipey = UISwipeGestureRecognizer(target: self, action: #selector(pop))
             swipey.direction = .right
             graphView.addGestureRecognizer(swipey)

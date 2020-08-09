@@ -23,6 +23,7 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
         super.viewDidLoad()
         view.backgroundColor = PPLColor.grey
         let tbv = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - (tabBarController?.tabBar.frame.height ?? 0)))
+        tbv.register(UINib(nibName: "PPLTableViewCell", bundle: nil), forCellReuseIdentifier: PPLTableViewCellIdentifier)
         tbv.backgroundColor = PPLColor.grey
         tbv.isScrollEnabled = false
         view.addSubview(tbv)
@@ -99,16 +100,16 @@ extension GraphTableViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        let view = viewForRow(indexPath.row)
-        cell.contentView.addSubview(view)
-        cell.contentView.backgroundColor = PPLColor.grey
-        if view.isKind(of: UILabel.self) {
-            constrain(view, toInsideOf: cell.contentView)
+        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        if indexPath.row == 3 {
+            addStartNextWorkoutLabel(rootView: cell.rootView)
         } else {
+            cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
+            let view = viewForRow(indexPath.row)
+            cell.rootView.addSubview(view)
             addControlToCell(cell, indexPath.row)
         }
-        cell.selectionStyle = .none
+        cell.addDisclosureIndicator()
         return cell
     }
     
@@ -119,21 +120,21 @@ extension GraphTableViewController: UITableViewDataSource {
             view = pushVc.view
         case 1:
             view = pullVc.view
-        case 2:
-            view = legsVc.view
         default:
-            view = startNextWorkoutLabel()
+            view = legsVc.view
         }
         return view
     }
     
-    private func startNextWorkoutLabel() -> UILabel {
+    private func addStartNextWorkoutLabel(rootView: UIView) {
         let lbl = UILabel()
         lbl.text = "Start next workout"
         lbl.font = UIFont.systemFont(ofSize: 26, weight: .black)
         lbl.textAlignment = .center
-        lbl.backgroundColor = PPLColor.lightGrey
-        return lbl
+        lbl.textColor = PPLColor.textBlue
+        lbl.backgroundColor = .clear
+        rootView.addSubview(lbl)
+        constrain(lbl, toInsideOf: rootView, insets: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
     }
     
     func addControlToCell(_ cell: UITableViewCell, _ row: Int) {
@@ -174,7 +175,8 @@ extension GraphTableViewController: UITableViewDelegate {
 }
 
 extension UIViewController {
-    func constrain(_ subview: UIView, toInsideOf superview: UIView, insets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)) {
+    func constrain(_ subview: UIView, toInsideOf superview: UIView, insets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 20
+        , right: 8)) {
         subview.translatesAutoresizingMaskIntoConstraints = false
         subview.topAnchor.constraint(equalTo: superview.topAnchor, constant: insets.top).isActive = true
         subview.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true

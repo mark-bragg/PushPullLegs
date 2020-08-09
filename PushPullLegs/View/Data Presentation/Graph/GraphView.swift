@@ -93,6 +93,14 @@ class GraphView: UIControl, ObservableObject {
         circle.cornerRadius = circle.frame.height / 2
         circleLine.frame = CGRect(x: touchPoint!.x, y: 0, width: 2.0, height: frame.height)
         circleLine.strokeColor = UIColor.black.cgColor
+        bringCircleToFront()
+    }
+    
+    private func bringCircleToFront() {
+        guard let maxZ = layer.sublayers?.max(by: { (layer1, layer2) -> Bool in
+            return layer1.zPosition > layer2.zPosition
+        })?.zPosition else { return }
+        circle.zPosition = maxZ + 1
     }
     
     @objc func editCircle(_ action: Selector) {
@@ -111,7 +119,7 @@ class GraphView: UIControl, ObservableObject {
         axesPath.addLine(to: CGPoint(x: frame.width * 0.025, y: frame.height * 0.975))
         axesPath.addLine(to: CGPoint(x: frame.width * 0.975, y: frame.height * 0.975))
         axesLayer.path = axesPath.cgPath
-        axesLayer.strokeColor = UIColor.white.cgColor
+        axesLayer.strokeColor = PPLColor.textBlue!.cgColor
         axesLayer.lineWidth = lineWidth
         axesLayer.fillColor = UIColor.clear.cgColor
     }
@@ -139,7 +147,7 @@ class GraphView: UIControl, ObservableObject {
             linePoints.append(point)
         }
         lineLayer.path = path.cgPath
-        lineLayer.strokeColor = UIColor.white.cgColor
+        lineLayer.strokeColor = PPLColor.textBlue!.cgColor
         lineLayer.lineWidth = lineWidth
         lineLayer.fillColor = UIColor.clear.cgColor
     }
