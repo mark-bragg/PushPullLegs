@@ -23,6 +23,8 @@ class GraphView: UIControl, ObservableObject {
     private var linePoints = [CGPoint]()
     private var touchPoint: CGPoint?
     @Published private(set) var index: Int?
+    private var firstLoad = true
+    private weak var lineLayer: CAShapeLayer!
     
     func setInteractivity() {
         addTarget(self, action: #selector(touchUp(_:)), for: .touchDragExit)
@@ -58,14 +60,18 @@ class GraphView: UIControl, ObservableObject {
     }
     
     override func draw(_ rect: CGRect) {
-        drawAxes()
-        drawLine()
-        if !layer.sublayers!.contains(circle) {
+        if firstLoad {
+            firstLoad = false
+            drawAxes()
             circle.backgroundColor = UIColor.white.cgColor
             circle.borderColor = PPLColor.grey!.cgColor
             circle.borderWidth = 2.5
             layer.addSublayer(circle)
+        } else {
+            eraseLine()
         }
+        
+        drawLine()
     }
 
     func addCircleLine() {
@@ -124,6 +130,10 @@ class GraphView: UIControl, ObservableObject {
         axesLayer.fillColor = UIColor.clear.cgColor
     }
     
+    func eraseLine() {
+        lineLayer.removeFromSuperlayer()
+    }
+    
     func drawLine() {
         guard let yValues = yValues else { return }
         let xSpacing = (frame.width * 0.95) / CGFloat(yValues.count)
@@ -137,6 +147,7 @@ class GraphView: UIControl, ObservableObject {
         let lineLayer = CAShapeLayer()
         lineLayer.frame = layer.bounds
         layer.addSublayer(lineLayer)
+        self.lineLayer = lineLayer
         var point = CGPoint(x: frame.width * 0.025, y: frame.height * 0.975)
         path.move(to: point)
         linePoints.append(point)

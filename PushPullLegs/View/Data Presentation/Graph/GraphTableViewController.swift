@@ -30,6 +30,7 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
         tbv.dataSource = self
         tbv.delegate = self
         tbv.rowHeight = tbv.frame.height / 4.25
+        tableView = tbv
         let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: tbv.rowHeight - 16)
         pushVc = GraphViewController(type: .push, frame: frame)
         pullVc = GraphViewController(type: .pull, frame: frame)
@@ -54,6 +55,9 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
         if AppState.shared.workoutInProgress {
             self.navigateToNextWorkout()
         }
+        pushVc.view.setNeedsLayout()
+        pullVc.view.setNeedsLayout()
+        legsVc.view.setNeedsLayout()
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {

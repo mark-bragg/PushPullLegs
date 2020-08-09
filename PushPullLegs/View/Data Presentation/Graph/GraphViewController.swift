@@ -26,6 +26,7 @@ class GraphViewController: UIViewController {
     }
     private var frame: CGRect?
     weak var labelStack: UIStackView!
+    private var firstLoad = true
     
     init(type: ExerciseType, frame: CGRect? = nil) {
         super.init(nibName: nil, bundle: nil)
@@ -39,21 +40,26 @@ class GraphViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let frame = frame {
-            view.frame = frame
-        }
-        addViews()
-        if isInteractive {
-            bind()
-        }
-        if navigationController != nil {
-            addBackNavigationGesture()
+        if firstLoad {
+            firstLoad = false
+            if let frame = frame {
+                view.frame = frame
+            }
+            addViews()
+            if isInteractive {
+                bind()
+            }
+            if navigationController != nil {
+                addBackNavigationGesture()
+            }
         }
     }
     
     var needConstraints = true
     override func viewDidLayoutSubviews() {
-//        addConstraints()
+        viewModel.reload()
+        graphView.yValues = viewModel.volumes()
+        graphView.setNeedsDisplay()
     }
     
     func addViews() {
@@ -132,7 +138,11 @@ class GraphViewController: UIViewController {
         if isInteractive {
             graph.setInteractivity()
         } else {
-            constrain(graph, toInsideOf: containerView, insets: UIEdgeInsets(top: labelStack.frame.height, left: 8, bottom: 20, right: 8))
+            graph.translatesAutoresizingMaskIntoConstraints = false
+            graph.topAnchor.constraint(equalTo: labelStack.bottomAnchor).isActive = true
+            graph.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -16).isActive = true
+            graph.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20).isActive = true
+            graph.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8).isActive = true
         }
         graphView = graph
         graph.backgroundColor = .clear

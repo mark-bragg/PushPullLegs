@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class WorkoutGraphViewModel: NSObject {
+class WorkoutGraphViewModel: NSObject, ReloadProtocol {
     
     private var yValues = [CGFloat]()
     private var xValues = [String]()
@@ -18,13 +18,7 @@ class WorkoutGraphViewModel: NSObject {
     init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
         self.type = type
         super.init()
-        let workouts = dataManager.workouts(ascending: true, types: [type])
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/YY"
-        for workout in workouts {
-            xValues.append(formatter.string(from: workout.dateCreated!))
-            yValues.append(CGFloat(workout.volume()))
-        }
+        reload()
     }
     
     func title() -> String {
@@ -45,5 +39,16 @@ class WorkoutGraphViewModel: NSObject {
         return yValues
     }
     
+    func reload() {
+        yValues.removeAll()
+        xValues.removeAll()
+        let workouts = WorkoutDataManager().workouts(ascending: true, types: [type])
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/YY"
+        for workout in workouts {
+            xValues.append(formatter.string(from: workout.dateCreated!))
+            yValues.append(CGFloat(workout.volume()))
+        }
+    }
     
 }

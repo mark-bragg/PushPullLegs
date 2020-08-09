@@ -77,9 +77,16 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     fileprivate func setTableView() {
         tableView = view.subviews.first(where: { $0.isKind(of: PPLTableView.self) }) as? PPLTableView
         if tableView == nil {
-            let tableView = PPLTableView(frame: view.bounds)
-            self.tableView = tableView
-            view.addSubview(tableView)
+            let tbl = PPLTableView()
+            view.addSubview(tbl)
+            tbl.translatesAutoresizingMaskIntoConstraints = false
+            tbl.rowHeight = 75
+            tbl.delegate = self
+            tbl.dataSource = self
+            tbl.reloadData()
+            view.addSubview(tbl)
+            tableView = tbl
+            constrainToView(tableView)
         }
     }
     
