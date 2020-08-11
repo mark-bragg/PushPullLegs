@@ -85,6 +85,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     @objc fileprivate func drawCircle() {
+        guard linePoints.count > 0 else { return }
         var closestPoint = linePoints.first!
         var index = 0
         for point in linePoints {
@@ -131,7 +132,9 @@ class GraphView: UIControl, ObservableObject {
     }
     
     func eraseLine() {
-        lineLayer.removeFromSuperlayer()
+        if let lineLayer = lineLayer, let sublayers = layer.sublayers, sublayers.contains(lineLayer) {
+            lineLayer.removeFromSuperlayer()
+        }
     }
     
     func drawLine() {
