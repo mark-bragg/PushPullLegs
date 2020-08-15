@@ -25,6 +25,7 @@ class GraphView: UIControl, ObservableObject {
     @Published private(set) var index: Int?
     private var firstLoad = true
     private weak var lineLayer: CAShapeLayer!
+    private var noDataView = NoDataView()
     
     func setInteractivity() {
         addTarget(self, action: #selector(touchUp(_:)), for: .touchDragExit)
@@ -60,6 +61,11 @@ class GraphView: UIControl, ObservableObject {
     }
     
     override func draw(_ rect: CGRect) {
+        guard hasData() else {
+            showNoDataView()
+            return
+        }
+        removeNoDataView()
         if firstLoad {
             firstLoad = false
             drawAxes()
@@ -70,8 +76,12 @@ class GraphView: UIControl, ObservableObject {
         } else {
             eraseLine()
         }
-        
         drawLine()
+    }
+    
+    func hasData() -> Bool {
+        guard let vals = yValues, vals.count > 0 else { return false }
+        return true
     }
 
     func addCircleLine() {
@@ -168,5 +178,20 @@ class GraphView: UIControl, ObservableObject {
             linePoints.append(point)
         }
         return path.cgPath
+    }
+    
+    func showNoDataView() {
+        if subviews.contains(noDataView) {
+            return
+        }
+        noDataView.frame = CGRect(origin: .zero, size: frame.size)
+        noDataView.lightBackground = false
+        addSubview(noDataView)
+    }
+    
+    func removeNoDataView() {
+        if subviews.contains(noDataView) {
+            noDataView.removeFromSuperview()
+        }
     }
 }
