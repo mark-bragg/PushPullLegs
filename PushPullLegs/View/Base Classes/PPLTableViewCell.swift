@@ -15,9 +15,31 @@ class PPLTableViewCell: UITableViewCell {
     @IBOutlet weak var rootView: ShadowBackground!
     var pplSelectionFlag = false
     
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        addControl()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        addControl()
+    }
+    
+    func addControl() {
+        if let _ = subviews.first(where: { $0.isKind(of: UIControl.self) }) { return }
+        let control = UIControl(frame: frame)
+        control.isUserInteractionEnabled = true
+        control.addTarget(self, action: #selector(deselect(_:)), for: .touchUpInside)
+        insertSubview(control, at: 0)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         rootView.isUserInteractionEnabled = false
+    }
+    
+    @objc func deselect(_ contro: UIControl) {
+        setHighlighted(false, animated: true)
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {

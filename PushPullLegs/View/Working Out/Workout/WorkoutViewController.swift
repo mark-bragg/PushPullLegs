@@ -20,17 +20,6 @@ class WorkoutViewController: PPLTableViewController {
         return viewModel as! WorkoutEditViewModel
     }
     
-    /*
-     let tbl = PPLTableView()
-     view.addSubview(tbl)
-     tbl.translatesAutoresizingMaskIntoConstraints = false
-     tbl.rowHeight = 75
-     tableView = tbl
-     tableView.delegate = self
-     tableView.dataSource = self
-     tableView.reloadData()
-     */
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         workoutEditViewModel().delegate = self
@@ -127,7 +116,6 @@ class WorkoutViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        super.tableView(tableView, didSelectRowAt: indexPath)
         workoutEditViewModel().selectedIndex = indexPath
         navigateToExercise()
     }

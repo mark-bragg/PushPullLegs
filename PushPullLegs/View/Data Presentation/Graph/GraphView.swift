@@ -163,7 +163,7 @@ class GraphView: UIControl, ObservableObject {
         linePoints.append(point)
         for index in 1..<yValues.count {
             let x = frame.width * 0.025 + xSpacing * CGFloat(index)
-            point = CGPoint(x: x, y: CGFloat((frame.height * 0.95) - normalizedYs[index] * (frame.height * 0.925)))
+            point = CGPoint(x: x, y: CGFloat((frame.height * 0.95) - normalizedYs[index] * (frame.height * 0.9)))
             path.addLine(to: point)
             linePoints.append(point)
         }

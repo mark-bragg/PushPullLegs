@@ -141,17 +141,16 @@ extension GraphTableViewController: UITableViewDataSource {
         constrain(lbl, toInsideOf: rootView, insets: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
     }
     
-    func addControlToCell(_ cell: UITableViewCell, _ row: Int) {
-        let control = UIControl()
+    func addControlToCell(_ cell: PPLTableViewCell, _ row: Int) {
+        guard let control = cell.subviews.first(where: { $0.isKind(of: UIControl.self) }) as? UIControl else { return }
         control.tag = row
-        cell.addSubview(control)
         constrain(control, toInsideOf: cell)
         control.addTarget(self, action: #selector(showGraph(_:)), for: .touchUpInside)
     }
     
-    @objc private func showGraph(_ control: UIControl) {
+    @objc private func showGraph(_ row: Int) {
         guard let nav = navigationController else { return }
-        let vc = GraphViewController(type: typeForRow(control.tag))
+        let vc = GraphViewController(type: typeForRow(row))
         vc.isInteractive = true
         vc.hidesBottomBarWhenPushed = true
         nav.show(vc, sender: self)
@@ -174,6 +173,8 @@ extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 3 {
             startWorkout()
+        } else {
+            showGraph(indexPath.row)
         }
     }
 }
@@ -187,9 +188,4 @@ extension UIViewController {
         subview.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insets.left).isActive = true
         subview.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insets.right).isActive = true
     }
-}
-
-class GraphTableViewCell: UITableViewCell {
-    
-    
 }

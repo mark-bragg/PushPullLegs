@@ -34,7 +34,7 @@
             <connections>
                 <outlet property="rootView" destination="ssm-Qu-aGf" id="sEc-uB-Ldk"/>
             </connections>
-            <point key="canvasLocation" x="139" y="125"/>
+            <point key="canvasLocation" x="136" y="126"/>
         </tableViewCell>
     </objects>
     <resources>

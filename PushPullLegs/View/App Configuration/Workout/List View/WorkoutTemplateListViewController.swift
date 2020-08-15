@@ -35,7 +35,6 @@ class WorkoutTemplateListViewController: PPLTableViewController {
         guard !tableView.isEditing else {
             return
         }
-        super.tableView(tableView, didSelectRowAt: indexPath)
         workoutTemplateListViewModel().select(indexPath)
         performSegue(withIdentifier: SegueIdentifier.editWorkout, sender: self)
     }

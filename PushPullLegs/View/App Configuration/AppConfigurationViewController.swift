@@ -59,7 +59,6 @@ class AppConfigurationViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        super.tableView(tableView, didSelectRowAt: indexPath)
         if let segueId = segueIdentifierForRow(indexPath.row) {
             performSegue(withIdentifier: segueId, sender: self)
         }
