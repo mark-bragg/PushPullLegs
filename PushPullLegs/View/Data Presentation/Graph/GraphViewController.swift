@@ -47,6 +47,7 @@ class GraphViewController: UIViewController {
             }
             addViews()
             if isInteractive {
+                view.backgroundColor = PPLColor.darkGrey
                 bind()
             }
             if navigationController != nil {

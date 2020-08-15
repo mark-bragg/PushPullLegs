@@ -138,31 +138,35 @@ class GraphView: UIControl, ObservableObject {
     }
     
     func drawLine() {
-        guard let yValues = yValues else { return }
+        let lineLayer = CAShapeLayer()
+        lineLayer.frame = layer.bounds
+        layer.addSublayer(lineLayer)
+        self.lineLayer = lineLayer
+        lineLayer.path = getPath()
+        lineLayer.lineJoin = .round
+        lineLayer.lineCap = .round
+        lineLayer.strokeColor = PPLColor.textBlue!.cgColor
+        lineLayer.lineWidth = lineWidth
+        lineLayer.fillColor = UIColor.clear.cgColor
+    }
+    
+    func getPath() -> CGPath {
+        guard let yValues = yValues else { return CGPath(ellipseIn: .zero, transform: nil) }
         let xSpacing = (frame.width * 0.95) / CGFloat(yValues.count)
         let biggestY = yValues.max()!
         let normalizedYs = yValues.map { (y) -> CGFloat in
             CGFloat(y) / CGFloat(biggestY)
         }
         let path = UIBezierPath()
-        path.lineCapStyle = .round
-        path.lineJoinStyle = .round
-        let lineLayer = CAShapeLayer()
-        lineLayer.frame = layer.bounds
-        layer.addSublayer(lineLayer)
-        self.lineLayer = lineLayer
-        var point = CGPoint(x: frame.width * 0.025, y: frame.height * 0.975)
+        var point = CGPoint(x: frame.width * 0.025, y: frame.height * 0.95)
         path.move(to: point)
         linePoints.append(point)
         for index in 1..<yValues.count {
             let x = frame.width * 0.025 + xSpacing * CGFloat(index)
-            point = CGPoint(x: x, y: CGFloat((frame.height * 0.975) - normalizedYs[index] * (frame.height * 0.95)))
+            point = CGPoint(x: x, y: CGFloat((frame.height * 0.95) - normalizedYs[index] * (frame.height * 0.925)))
             path.addLine(to: point)
             linePoints.append(point)
         }
-        lineLayer.path = path.cgPath
-        lineLayer.strokeColor = PPLColor.textBlue!.cgColor
-        lineLayer.lineWidth = lineWidth
-        lineLayer.fillColor = UIColor.clear.cgColor
+        return path.cgPath
     }
 }
