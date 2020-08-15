@@ -9,9 +9,11 @@
 import UIKit
 
 class NoDataView: UIView {
+    var lightBackground: Bool = true
+    
     override func layoutSubviews() {
         addSubview(styledNoDataLabel(frame: bounds))
-        backgroundColor = PPLColor.grey
+        backgroundColor = lightBackground ? PPLColor.grey : PPLColor.darkGrey
     }
     
     func styledNoDataLabel(frame: CGRect) -> UILabel {
@@ -19,7 +21,7 @@ class NoDataView: UIView {
         let strokeTextAttributes = [
             NSAttributedString.Key.strokeColor : PPLColor.lightGrey!,
             NSAttributedString.Key.foregroundColor : PPLColor.darkGreyText!,
-            NSAttributedString.Key.strokeWidth : -1.0,
+            NSAttributedString.Key.strokeWidth : -3.0,
             NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 72)
             ] as [NSAttributedString.Key : Any]
         label.textAlignment = .center
