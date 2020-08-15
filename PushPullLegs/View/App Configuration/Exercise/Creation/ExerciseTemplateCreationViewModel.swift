@@ -8,12 +8,18 @@
 
 import Foundation
 
-class ExerciseTemplateCreationViewModel {
+class ExerciseTemplateCreationViewModel: ObservableObject {
     
-    private var exerciseType: ExerciseType
+    @Published private(set) var exerciseType: ExerciseType
     private var management: TemplateManagement
     private var preSetType: Bool = false
     var reloader: ReloadProtocol?
+    @Published private(set) var isSaveEnabled: Bool = false
+    @Published var exerciseName: String? {
+        willSet {
+            isSaveEnabled = isTypeSelected() && exerciseNameIsValid(newValue)
+        }
+    }
     
     init(withType type: ExerciseType = .error, management: TemplateManagement) {
         self.exerciseType = type
@@ -25,6 +31,7 @@ class ExerciseTemplateCreationViewModel {
     
     func selectedType(_ type: ExerciseType) {
         exerciseType = type
+        isSaveEnabled = exerciseNameIsValid(exerciseName)
     }
     
     func isTypeSelected() -> Bool {
@@ -47,5 +54,10 @@ class ExerciseTemplateCreationViewModel {
         }
         completion()
         reloader?.reload()
+    }
+    
+    private func exerciseNameIsValid(_ name: String?) -> Bool {
+        guard let name = name?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) else { return false}
+        return name != "" && management.exerciseTemplate(name: name) == nil
     }
 }

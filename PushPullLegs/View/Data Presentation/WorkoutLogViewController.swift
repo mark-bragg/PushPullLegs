@@ -19,8 +19,6 @@ class WorkoutLogViewController: PPLTableViewController {
         tbl.translatesAutoresizingMaskIntoConstraints = false
         tbl.rowHeight = 75
         tableView = tbl
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.reloadData()
     }
     

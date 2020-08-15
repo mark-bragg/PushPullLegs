@@ -24,7 +24,7 @@ class PPLButton : UIButton {
     }
     
     func commonInit() {
-        addTarget(self, action: #selector(selection), for: .touchDown)
+        addTarget(self, action: #selector(touchDown), for: .touchDown)
         addTarget(self, action: #selector(deselection), for: .touchUpInside)
     }
     
@@ -55,6 +55,11 @@ class PPLButton : UIButton {
         removeShadow()
     }
     
+    @objc func touchDown() {
+        selection()
+        NotificationCenter.default.post(name: PPLButton.touchDownNotificationName(), object: self)
+    }
+    
     @objc func selection() {
         isSelected = true
         layer.borderColor = PPLColor.disabledSaveWhiteColor.cgColor
@@ -76,8 +81,20 @@ class PPLButton : UIButton {
         titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)
         backgroundColor = PPLColor.darkGrey
     }
+    
+    static func touchDownNotificationName() -> NSNotification.Name {
+        return NSNotification.Name("PPLButtonTouchUpInside")
+    }
 }
 
 class ExerciseTypeButton: PPLButton {
     var exerciseType: ExerciseType! = nil
+    
+    override func deselection() {
+        
+    }
+    
+    func releaseButton() {
+        super.deselection()
+    }
 }

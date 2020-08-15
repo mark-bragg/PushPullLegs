@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var nameLabel: UILabel!
@@ -17,7 +18,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     @IBOutlet weak var typeSelectionStackView: UIStackView!
     @IBOutlet weak var saveButton: PPLButton!
     @IBOutlet weak var parentStackView: UIStackView!
-    
+    private var cancellables: Set<AnyCancellable> = []
     var showExerciseType: Bool = false
     var viewModel: ExerciseTemplateCreationViewModel?
     
@@ -31,18 +32,99 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
             hideExerciseType()
         }
         styleButtons()
+        bind()
     }
     
-    func styleButtons() {
+    fileprivate func bind() {
+        bindButtons()
+        bindViewModel()
+    }
+    
+    fileprivate func bindButtons() {
+        NotificationCenter.default.addObserver(self, selector: #selector(pushButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: pushButton)
+        NotificationCenter.default.addObserver(self, selector: #selector(pullButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: pullButton)
+        NotificationCenter.default.addObserver(self, selector: #selector(legsButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: legsButton)
+        NotificationCenter.default.addObserver(self, selector: #selector(touchDownSaveButton(_:)), name: PPLButton.touchDownNotificationName(), object: saveButton)
+    }
+    
+    fileprivate func bindViewModel() {
+        guard let viewModel = viewModel else { return }
+        bindSaveButtonToViewModel(viewModel)
+        bindSanitizerToTextField(viewModel)
+        bindTypButtonDeselectionToViewModel(viewModel)
+        bindExerciseNameToTextField(viewModel)
+    }
+    
+    fileprivate func bindSaveButtonToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
+        viewModel.$isSaveEnabled.sink { [weak self] enabled in
+            guard let self = self else { return }
+            if enabled && !self.saveButton.isEnabled {
+                self.saveButton.enable()
+            } else if !enabled && self.saveButton.isEnabled {
+                self.saveButton.disable()
+            }
+        }
+        .store(in: &cancellables)
+    }
+    
+    fileprivate func bindSanitizerToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
+        viewModel.$exerciseName.sink { [weak self] name in
+            guard let self = self, let name = name else { return }
+            self.textField.text = ExerciseNameSanitizer().sanitize(name)
+        }
+        .store(in: &cancellables)
+    }
+    
+    fileprivate func bindTypButtonDeselectionToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
+        viewModel.$exerciseType.sink { [weak self] type in
+            guard let self = self else { return }
+            if self.saveButton.title(for: .normal) != "Save" {
+                self.saveButton.setTitle("Save", for: .normal)
+            }
+            self.deselectAllTypeButtons(except: type)
+        }
+        .store(in: &cancellables)
+    }
+    
+    fileprivate func bindExerciseNameToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
+        [UITextField.textDidChangeNotification,
+         UITextField.textDidBeginEditingNotification,
+         UITextField.textDidEndEditingNotification
+        ].forEach({ notif in
+            NotificationCenter.default.publisher(for: notif, object: textField)
+            .map( { ($0.object as! UITextField).text } )
+            .assign(to: \ExerciseTemplateCreationViewModel.exerciseName, on: viewModel)
+            .store(in: &cancellables)
+        })
+    }
+    
+    @objc fileprivate func pushButtonSelected(_ notification: Notification) {
+        viewModel?.selectedType(.push)
+    }
+    
+    @objc fileprivate func pullButtonSelected(_ notification: Notification) {
+        viewModel?.selectedType(.pull)
+    }
+    
+    @objc fileprivate func legsButtonSelected(_ notification: Notification) {
+        viewModel?.selectedType(.legs)
+    }
+    
+    @objc fileprivate func touchDownSaveButton(_ notification: Notification) {
+        save()
+    }
+    
+    fileprivate func deselectAllTypeButtons(except: ExerciseType) {
+        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs].filter({ $0 != except }) {
+            buttonForType(type)?.releaseButton()
+        }
+    }
+    
+    fileprivate func styleButtons() {
         for btn in [saveButton, pushButton, pullButton, legsButton] {
             btn?.style()
         }
         saveButton.disable()
-    }
-    
-    @IBAction func touchDownSaveButton(_ sender: UIButton) {
-        sender.removeShadow()
-        save()
     }
     
     @IBAction func save() {
@@ -55,7 +137,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         })
     }
     
-    func setupExerciseTypeButtons() {
+    fileprivate func setupExerciseTypeButtons() {
         for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs] {
             let btn = buttonForType(type)
             btn?.setTitle(type.rawValue, for: .normal)
@@ -63,7 +145,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         }
     }
     
-    private func buttonForType(_ type: ExerciseType) -> ExerciseTypeButton? {
+    fileprivate func buttonForType(_ type: ExerciseType) -> ExerciseTypeButton? {
         switch type {
         case .push:
             return pushButton
@@ -76,26 +158,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         }
     }
     
-    @IBAction func tappedExerciseTypeButton(_ sender: ExerciseTypeButton) {
-        if saveButton.title(for: .normal) != "Save" {
-            saveButton.setTitle("Save", for: .normal)
-        }
-        viewModel?.selectedType(sender.exerciseType)
-        updateButtonsWithSelection(sender)
-    }
-    
-    func updateButtonsWithSelection(_ button: ExerciseTypeButton) {
-        button.selection()
-        for btn in [pushButton, pullButton, legsButton] {
-            btn?.removeShadow()
-            if btn != button {
-                btn?.deselection()
-            }
-        }
-        enableSaveButton(textField.text)
-    }
-    
-    func hideExerciseType() {
+    fileprivate func hideExerciseType() {
         typeSelectionStackView.superview?.removeFromSuperview()
         parentStackView.removeConstraint(parentStackView.constraints.first(where: { $0.identifier == "height" })!)
         parentStackView
@@ -104,27 +167,26 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
             .isActive = true
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        enableSaveButton(textField.text)
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        enableSaveButton(textField.text)
-    }
-    
-    @IBAction func textFieldDidChangeEditing(_ sender: UITextField) {
-        enableSaveButton(textField.text)
-    }
-    
-    private func enableSaveButton(_ text: String?) {
-        guard let vm = viewModel else {
-            return
-        }
-        if text != nil && vm.isTypeSelected(), text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != "" {
-            saveButton.enable()
-        } else {
-            saveButton.disable()
-        }
-    }
-    
 }
+
+class ExerciseNameSanitizer: NSObject, StringSanitizer {
+    var characters: [String] = [" "]
+    
+    func sanitize(_ string: String) -> String {
+        var sanitized = string
+        while sanitized.first == " " {
+            sanitized.removeFirst()
+        }
+        sanitized.removeAll(where: { !($0.isLetter || $0.isWhitespace) })
+        while sanitized.suffix(2) == "  " {
+            sanitized.removeLast()
+        }
+        return sanitized
+    }
+}
+
+protocol StringSanitizer: NSObject {
+    var characters: [String] { get set }
+    func sanitize(_ string: String) -> String
+}
+

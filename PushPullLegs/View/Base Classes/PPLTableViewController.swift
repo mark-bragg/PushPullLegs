@@ -8,8 +8,9 @@
 
 import GoogleMobileAds
 import UIKit
+import Combine
 
-class PPLTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
+class PPLTableViewController: UIViewController {
     
     var viewModel: PPLTableViewModel!
     weak var tableView: PPLTableView!
@@ -18,6 +19,7 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     weak var addButton: PPLAddButton!
     private let addButtonSize = CGSize(width: 75, height: 75)
     
+    // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupTableView()
@@ -29,10 +31,38 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.reloadData()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let bannerView = bannerView, view.subviews.contains(bannerView) {
+            view.bringSubviewToFront(bannerView)
+        }
+        if let tbc = tabBarController, !hidesBottomBarWhenPushed && bannerView != nil {
+            positionBannerView(yOffset: tbc.tabBar.frame.height)
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard let count = viewModel.sectionCount?() else {return}
+        for i in 0..<count {
+            if viewModel.rowCount(section: i) > 0 {
+                hideNoDataView()
+                return
+            }
+        }
+        showNoDataView()
+    }
+    
+    // MARK: @objc
     @objc func addAction(_ sender: Any) {
         // no-op
     }
     
+    @objc func pop() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    // MARK: subview manipulation
     fileprivate func hideBottomBar() {
         if let nvc = navigationController {
             hidesBottomBarWhenPushed = nvc.viewControllers[0] != self
@@ -69,9 +99,9 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     fileprivate func setupTableView() {
         setTableView()
         tableView.register(UINib(nibName: "PPLTableViewCell", bundle: nil), forCellReuseIdentifier: PPLTableViewCellIdentifier)
+        addTableFooter()
         tableView.delegate = self
         tableView.dataSource = self
-        addTableFooter()
     }
     
     fileprivate func setTableView() {
@@ -81,8 +111,6 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
             view.addSubview(tbl)
             tbl.translatesAutoresizingMaskIntoConstraints = false
             tbl.rowHeight = 75
-            tbl.delegate = self
-            tbl.dataSource = self
             tbl.reloadData()
             view.addSubview(tbl)
             tableView = tbl
@@ -105,18 +133,6 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        guard let count = viewModel.sectionCount?() else {return}
-        for i in 0..<count {
-            if viewModel.rowCount(section: i) > 0 {
-                hideNoDataView()
-                return
-            }
-        }
-        showNoDataView()
-    }
-    
     func addNoDataView() {
         guard noDataView == nil else {
             return
@@ -133,64 +149,6 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     
     func hideNoDataView() {
         noDataView.isHidden = true
-    }
-    
-    @objc func pop() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if let bannerView = bannerView, view.subviews.contains(bannerView) {
-            view.bringSubviewToFront(bannerView)
-        }
-        if let tbc = tabBarController, !hidesBottomBarWhenPushed && bannerView != nil {
-            positionBannerView(yOffset: tbc.tabBar.frame.height)
-        }
-    }
-    
-    fileprivate func addBannerView() {
-        guard AppState.shared.isAdEnabled else {
-            return
-        }
-        let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        view.addSubview(bannerView)
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
-        bannerView.delegate = self
-        self.bannerView = bannerView
-        positionBannerView()
-    }
-    
-    func positionBannerView(yOffset: CGFloat = 0.0) {
-        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + yOffset), width: bannerView.frame.width, height: bannerView.frame.height)
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        guard let vm = viewModel, let count = vm.sectionCount?() else { return 1 }
-        return count
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let vm = viewModel else { return 1 }
-        return vm.rowCount(section: section)
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return PPLTableViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 95
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.cellForRow(at: indexPath)!.setHighlighted(true, animated: true)
     }
     
     func tableHeaderView(titles: [String]) -> UIView {
@@ -216,22 +174,51 @@ class PPLTableViewController: UIViewController, UITableViewDelegate, UITableView
     }
 }
 
-class NoDataView: UIView {
-    override func layoutSubviews() {
-        addSubview(styledNoDataLabel(frame: bounds))
-        backgroundColor = PPLColor.grey
+extension PPLTableViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)!.setHighlighted(true, animated: true)
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
     }
     
-    func styledNoDataLabel(frame: CGRect) -> UILabel {
-        let label = UILabel(frame: frame)
-        let strokeTextAttributes = [
-            NSAttributedString.Key.strokeColor : PPLColor.lightGrey!,
-            NSAttributedString.Key.foregroundColor : PPLColor.darkGreyText!,
-            NSAttributedString.Key.strokeWidth : -1.0,
-            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 72)
-            ] as [NSAttributedString.Key : Any]
-        label.textAlignment = .center
-        label.attributedText = NSMutableAttributedString(string: "No Data", attributes: strokeTextAttributes)
-        return label
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 95
+    }
+}
+
+extension PPLTableViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        guard let vm = viewModel, let count = vm.sectionCount?() else { return 1 }
+        return count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let vm = viewModel else { return 1 }
+        return vm.rowCount(section: section)
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return PPLTableViewCell()
+    }
+}
+
+extension PPLTableViewController: GADBannerViewDelegate {
+    fileprivate func addBannerView() {
+        guard AppState.shared.isAdEnabled else {
+            return
+        }
+        let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        view.addSubview(bannerView)
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        bannerView.delegate = self
+        self.bannerView = bannerView
+        positionBannerView()
+    }
+    
+    func positionBannerView(yOffset: CGFloat = 0.0) {
+        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + yOffset), width: bannerView.frame.width, height: bannerView.frame.height)
     }
 }
