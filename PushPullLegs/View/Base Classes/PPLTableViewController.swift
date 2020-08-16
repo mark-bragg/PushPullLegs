@@ -10,8 +10,61 @@ import GoogleMobileAds
 import UIKit
 import Combine
 
+class ArrowHelperViewController: UIViewController {
+    weak var arrowView: ArrowView!
+    var message: String = "Tap to create new exercises!"
+    let fontSize: CGFloat = 28
+    var centerX_arrowView: CGFloat = 0
+    var bottomY: CGFloat = 0
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addArrow()
+        addLabel()
+        positionView()
+        view.clipsToBounds = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        animateArrow()
+    }
+    
+    func animateArrow() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.arrowView.frame.origin.y = self.arrowView.frame.origin.y - 30
+        }) { (b) in
+            UIView.animate(withDuration: 0.5, animations: {
+                self.arrowView.frame.origin.y = self.arrowView.frame.origin.y + 30
+            }) { b in
+                self.animateArrow()
+            }
+        }
+    }
+    
+    fileprivate func addArrow() {
+        let v = ArrowView(frame: CGRect(x: centerX_arrowView - ArrowView.width / 2, y: 0, width: ArrowView.width, height: ArrowView.height))
+        view.addSubview(v)
+        arrowView = v
+    }
+    
+    fileprivate func addLabel() {
+        let lbl = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: view.frame.width - (ArrowView.width + 20), height: ArrowView.height)))
+        lbl.textAlignment = .center
+        lbl.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
+        lbl.text = message
+        lbl.numberOfLines = 0
+        view.addSubview(lbl)
+    }
+    
+    func positionView() {
+        view.frame = CGRect(x: 0, y: bottomY - view.frame.height, width: view.frame.width, height: view.frame.height)
+    }
+}
+
 class PPLTableViewController: UIViewController {
     
+    var addButtonHelperVc = ArrowHelperViewController()
     var viewModel: PPLTableViewModel!
     weak var tableView: PPLTableView!
     weak var bannerView: GADBannerView!
@@ -29,6 +82,9 @@ class PPLTableViewController: UIViewController {
         view.backgroundColor = PPLColor.grey
         addNoDataView()
         tableView.reloadData()
+        if viewModel.hasData() && addButtonHelperVc.view.superview == view {
+            removeAddButtonInstructions()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -39,6 +95,20 @@ class PPLTableViewController: UIViewController {
         if let tbc = tabBarController, !hidesBottomBarWhenPushed && bannerView != nil {
             positionBannerView(yOffset: tbc.tabBar.frame.height)
         }
+        if addButton != nil && !viewModel.hasData() {
+            insertAddButtonInstructions()
+        }
+    }
+    
+    func insertAddButtonInstructions() {
+        addButtonHelperVc.bottomY = addButton.frame.origin.y
+        addButtonHelperVc.centerX_arrowView = addButton.center.x
+        view.addSubview(addButtonHelperVc.view)
+        addButtonHelperVc.view.frame = CGRect(x: 0, y: addButton.frame.origin.y - ArrowView.height, width: view.frame.width, height: ArrowView.height)
+    }
+    
+    func removeAddButtonInstructions() {
+        addButtonHelperVc.removeFromParent()
     }
     
     override func viewDidLayoutSubviews() {

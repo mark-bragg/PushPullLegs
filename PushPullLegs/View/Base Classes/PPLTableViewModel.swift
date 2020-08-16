@@ -16,3 +16,15 @@ import Foundation
     @objc optional func titleForSection(_ section: Int) -> String?
     @objc optional func title() -> String?
 }
+
+extension PPLTableViewModel {
+    func hasData() -> Bool {
+        let sections = (sectionCount ?? { 1 })()
+        for section in 0..<sections {
+            if rowCount(section: section) > 0 {
+                 return true
+            }
+        }
+        return false
+    }
+}
