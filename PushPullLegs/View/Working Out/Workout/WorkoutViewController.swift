@@ -155,6 +155,7 @@ extension WorkoutViewController: ReloadProtocol {
     func reload() {
         workoutEditViewModel().exerciseTemplatesAdded()
         tableView.reloadData()
+        hideNoDataView()
     }
 }
 
