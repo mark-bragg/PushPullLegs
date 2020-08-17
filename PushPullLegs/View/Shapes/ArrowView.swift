@@ -16,9 +16,6 @@ class ArrowView: UIView {
     static let rectWidth: CGFloat = 16.0
     static private let triangleHeight: CGFloat = 42.0
     static private let triangleWidth: CGFloat = 47.0
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    
     
     override func draw(_ rect: CGRect) {
         addRectangle()
@@ -28,6 +25,10 @@ class ArrowView: UIView {
     
     fileprivate func styleArrowComponent(_ component: CAShapeLayer) {
         component.fillColor = PPLColor.offWhite!.cgColor
+        component.shadowPath = component.path
+        component.shadowOffset = CGSize(width: -5, height: 5)
+        component.shadowRadius = 5
+        component.shadowOpacity = 0.4
     }
     
     fileprivate func addRectangle() {

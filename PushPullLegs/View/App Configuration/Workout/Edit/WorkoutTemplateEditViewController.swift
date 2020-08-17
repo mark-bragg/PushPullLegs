@@ -11,7 +11,7 @@ import UIKit
 let exerciseCellReuseIdentifier = "ExerciseCell"
 let AppConfigurationCellReuseIdentifier = "AppConfigurationCellReuseIdentifier"
 
-class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol {
+class WorkoutTemplateEditViewController: PPLTableViewController {
 
     var currentSegueId: String!
     
@@ -64,9 +64,10 @@ class WorkoutTemplateEditViewController: PPLTableViewController, ReloadProtocol 
         return tableHeaderView(titles: [title])
     }
     
-    func reload() {
+    override func reload() {
         workoutTemplateEditViewModel().reload()
         tableView.reloadData()
+        super.reload()
     }
     
 }

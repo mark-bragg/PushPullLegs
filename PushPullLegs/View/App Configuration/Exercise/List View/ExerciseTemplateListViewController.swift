@@ -12,7 +12,7 @@ fileprivate let PushTag = 1
 fileprivate let PullTag = 2
 fileprivate let LegsTag = 3
 
-class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol, UIAdaptivePresentationControllerDelegate {
+class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePresentationControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -44,11 +44,20 @@ class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let title = exerciseTemplateListViewModel().titleForSection(section) else {
+        guard let title = sectionHeaderTitle(section) else {
             return nil
         }
         let headerView = tableHeaderView(titles: [title])
         return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return sectionHeaderTitle(section) != nil ? super.tableView(tableView, heightForHeaderInSection: section) : 0
+    }
+    
+    func sectionHeaderTitle(_ section: Int) -> String? {
+        guard let viewModel = viewModel, viewModel.rowCount(section: section) > 0 else { return nil }
+        return exerciseTemplateListViewModel().titleForSection(section)
     }
     
     override func addAction(_ sender: Any) {
@@ -88,9 +97,10 @@ class ExerciseTemplateListViewController: PPLTableViewController, ReloadProtocol
         return .delete
     }
     
-    func reload() {
+    override func reload() {
         exerciseTemplateListViewModel().reload()
         tableView.reloadData()
+        super.reload()
     }
     
 }

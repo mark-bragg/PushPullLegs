@@ -181,6 +181,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     func showNoDataView() {
+        eraseLine()
         if subviews.contains(noDataView) {
             return
         }

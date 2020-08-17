@@ -151,11 +151,11 @@ extension WorkoutViewController: WorkoutEditViewModelDelegate {
     }
 }
 
-extension WorkoutViewController: ReloadProtocol {
-    func reload() {
+extension WorkoutViewController {
+    override func reload() {
         workoutEditViewModel().exerciseTemplatesAdded()
         tableView.reloadData()
-        hideNoDataView()
+        super.reload()
     }
 }
 

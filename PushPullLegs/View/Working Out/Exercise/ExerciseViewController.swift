@@ -14,7 +14,7 @@ protocol ExercisingViewController: UIViewController {
     var exerciseSetViewModel: ExerciseSetViewModel? { get set }
 }
 
-class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate, ReloadProtocol {
+class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate {
 
     weak var weightCollector: WeightCollectionViewController!
     weak var exerciseTimer: ExerciseTimerViewController!
@@ -43,6 +43,11 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         } else {
             presentExerciseCompletionConfirmation()
         }
+    }
+    
+    override func insertAddButtonInstructions() {
+        super.insertAddButtonInstructions()
+        addButtonHelperVc.message = "Tap to start the next set!"
     }
     
     func exerciseViewModel() -> ExerciseViewModel {
@@ -138,7 +143,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         exerciseSetViewModel = nil
     }
     
-    func reload() {
+    override func reload() {
         tableView.reloadData()
     }
     
