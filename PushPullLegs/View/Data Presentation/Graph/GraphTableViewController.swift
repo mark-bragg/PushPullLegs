@@ -56,6 +56,7 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
         if AppState.shared.workoutInProgress {
             self.navigateToNextWorkout()
         }
+        tableView.reloadData()
         pushVc.view.setNeedsLayout()
         pullVc.view.setNeedsLayout()
         legsVc.view.setNeedsLayout()

@@ -52,12 +52,16 @@ class ExerciseDataCellViewController: UIViewController {
     func setWorkoutProgressionImage() {
         var imageName: String
         var tint: UIColor
-        if progress == .increase {
+        switch progress {
+        case .increase:
             imageName = "arrow.up"
             tint = .green
-        } else {
+        case .decrease:
             imageName = "arrow.down"
             tint = .red
+        default:
+            imageName = "minus"
+            tint = PPLColor.offWhite!
         }
         progressIndicatorImageView.image = UIImage.init(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
         progressIndicatorImageView.tintColor = tint

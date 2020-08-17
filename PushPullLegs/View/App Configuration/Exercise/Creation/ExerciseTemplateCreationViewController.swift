@@ -35,6 +35,11 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        textField.becomeFirstResponder()
+    }
+    
     fileprivate func bind() {
         bindButtons()
         bindViewModel()
