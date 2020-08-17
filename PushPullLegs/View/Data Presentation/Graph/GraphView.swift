@@ -26,6 +26,8 @@ class GraphView: UIControl, ObservableObject {
     private var firstLoad = true
     private weak var lineLayer: CAShapeLayer!
     private var noDataView = NoDataView()
+    private let singlePointCircleDiameter: CGFloat = 5
+    var smallDisplay = false
     
     func setInteractivity() {
         addTarget(self, action: #selector(touchUp(_:)), for: .touchDragExit)
@@ -133,7 +135,7 @@ class GraphView: UIControl, ObservableObject {
         let axesPath = UIBezierPath()
         layer.addSublayer(axesLayer)
         axesPath.move(to: CGPoint(x: frame.width * 0.025, y: frame.height * 0.025))
-        axesPath.addLine(to: CGPoint(x: frame.width * 0.025, y: frame.height * 0.975))
+        axesPath.addLine(to: origin())
         axesPath.addLine(to: CGPoint(x: frame.width * 0.975, y: frame.height * 0.975))
         axesLayer.path = axesPath.cgPath
         axesLayer.strokeColor = PPLColor.textBlue!.cgColor
@@ -157,27 +159,55 @@ class GraphView: UIControl, ObservableObject {
         lineLayer.lineCap = .round
         lineLayer.strokeColor = PPLColor.textBlue!.cgColor
         lineLayer.lineWidth = lineWidth
-        lineLayer.fillColor = UIColor.clear.cgColor
+        lineLayer.fillColor = isSinglePoint() ? PPLColor.textBlue!.cgColor : UIColor.clear.cgColor
     }
     
     func getPath() -> CGPath {
         guard let yValues = yValues else { return CGPath(ellipseIn: .zero, transform: nil) }
+        if isSinglePoint() {
+            return singlePointPath()
+        }
+        return multiplePointPath(yValues)
+    }
+    
+    private func isSinglePoint() -> Bool {
+        guard let y = yValues else { return false }
+        return y.count == 1
+    }
+    
+    private func singlePointPath() -> CGPath {
+        linePoints = [startingPoint()]
+        return UIBezierPath.init(ovalIn: CGRect(x: linePoints[0].x - singlePointCircleDiameter / 2, y: linePoints[0].y - singlePointCircleDiameter / 2, width: singlePointCircleDiameter, height: singlePointCircleDiameter)).cgPath
+    }
+    
+    private func multiplePointPath(_ yValues: [CGFloat]) -> CGPath {
         let xSpacing = (frame.width * 0.95) / CGFloat(yValues.count)
         let biggestY = yValues.max()!
         let normalizedYs = yValues.map { (y) -> CGFloat in
             CGFloat(y) / CGFloat(biggestY)
         }
         let path = UIBezierPath()
-        var point = CGPoint(x: frame.width * 0.025, y: frame.height * 0.95)
+        func x (index: Int) -> CGFloat{
+            return self.frame.width * 0.025 + xSpacing * CGFloat(index)
+        }
+        let y = CGFloat(frame.height * 0.95) - CGFloat(normalizedYs[0]) * CGFloat(frame.height * 0.9)
+        var point = CGPoint(x: startingPoint().x, y: y)
         path.move(to: point)
         linePoints.append(point)
         for index in 1..<yValues.count {
-            let x = frame.width * 0.025 + xSpacing * CGFloat(index)
-            point = CGPoint(x: x, y: CGFloat((frame.height * 0.95) - normalizedYs[index] * (frame.height * 0.9)))
+            point = CGPoint(x: x(index: index), y: CGFloat((frame.height * 0.95) - normalizedYs[index] * (frame.height * 0.9)))
             path.addLine(to: point)
             linePoints.append(point)
         }
         return path.cgPath
+    }
+    
+    private func origin() -> CGPoint {
+        CGPoint(x: frame.width * 0.025, y: frame.height * 0.975)
+    }
+    
+    private func startingPoint() -> CGPoint {
+        CGPoint(x: origin().x + frame.width * 0.025, y: origin().y - frame.width * 0.025)
     }
     
     func showNoDataView() {
