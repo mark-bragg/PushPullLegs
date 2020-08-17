@@ -64,7 +64,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         presentModally(wc)
         weightCollector = wc
         if let v = restTimerView {
-            v.removeFromSuperview()
+            v.isHidden = true
         }
         removeAddButtonInstructions()
     }
@@ -112,9 +112,15 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         if exerciseViewModel().rowCount() == 0 {
             insertAddButtonInstructions()
         }
+        if let v = restTimerView, v.isHidden {
+            v.isHidden = false
+        }
     }
     
     func setupRestTimerView() {
+        if let v = restTimerView {
+            v.removeFromSuperview()
+        }
         var yOffset: CGFloat = 15
         if (AppState.shared.isAdEnabled) {
             yOffset += bannerView.frame.size.height
