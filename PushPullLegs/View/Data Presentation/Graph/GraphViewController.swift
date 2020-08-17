@@ -40,19 +40,18 @@ class GraphViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if firstLoad {
-            firstLoad = false
-            if let frame = frame {
-                view.frame = frame
-            }
-            addViews()
-            if isInteractive {
-                view.backgroundColor = PPLColor.darkGrey
-                bind()
-            }
-            if navigationController != nil {
-                addBackNavigationGesture()
-            }
+        guard firstLoad else { return }
+        firstLoad = false
+        if let frame = frame {
+            view.frame = frame
+        }
+        addViews()
+        if isInteractive {
+            view.backgroundColor = PPLColor.darkGrey
+            bind()
+        }
+        if navigationController != nil {
+            addBackNavigationGesture()
         }
     }
     

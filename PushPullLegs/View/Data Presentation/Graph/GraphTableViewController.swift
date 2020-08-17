@@ -18,6 +18,7 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
     private var exerciseType: ExerciseType?
     private var interstitial: GADInterstitial?
     private var didNavigateToWorkout: Bool = false
+    private var helpTag = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,29 +106,56 @@ extension GraphTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        cell.tag = indexPath.row
         if indexPath.row == 3 {
             addStartNextWorkoutLabel(rootView: cell.rootView)
+            cell.addDisclosureIndicator()
         } else {
             cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
             let view = viewForRow(indexPath.row)
             cell.rootView.addSubview(view)
-            addControlToCell(cell, indexPath.row)
+            if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
+                addControlToCell(cell, indexPath.row)
+                cell.addDisclosureIndicator()
+            } else {
+                cell.addHelpIndicator(target: self, action: #selector(help(_:)))
+                cell.selectionStyle = .none
+            }
         }
-        cell.addDisclosureIndicator()
         return cell
     }
     
-    func viewForRow(_ row: Int) -> UIView {
-        var view: UIView
+    @objc func help(_ control: UIControl) {
+        let vc = UIViewController()
+        let lbl = UILabel()
+        lbl.numberOfLines = 3
+        lbl.text = "This graph has no data.\nStart working out,\nand build your graph!"
+        lbl.textAlignment = .center
+        lbl.textColor = PPLColor.darkGreyText
+        vc.view.backgroundColor = PPLColor.offWhite
+        lbl.sizeToFit()
+        vc.view.addSubview(lbl)
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
+        vc.preferredContentSize = CGSize(width: lbl.frame.width + 10, height: lbl.frame.height + 10)
+        lbl.frame = CGRect(x: lbl.frame.origin.x + 5, y: lbl.frame.origin.y + 5, width: lbl.frame.width, height: lbl.frame.height)
+        helpTag = control.tag
+        present(vc, animated: true, completion: nil)
+    }
+    
+    func vcForRow(_ row: Int) -> GraphViewController {
         switch row {
         case 0:
-            view = pushVc.view
+            return pushVc
         case 1:
-            view = pullVc.view
+            return pullVc
         default:
-            view = legsVc.view
+            return legsVc
         }
-        return view
+    }
+    
+    func viewForRow(_ row: Int) -> UIView {
+        vcForRow(row).view
     }
     
     private func addStartNextWorkoutLabel(rootView: UIView) {
@@ -169,11 +197,25 @@ extension GraphTableViewController: UITableViewDataSource {
     
 }
 
+extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        popoverPresentationController.permittedArrowDirections = .right
+        guard let cell = tableView.cellForRow(at: IndexPath(row: helpTag, section: 0)) as? PPLTableViewCell else {
+            return
+        }
+        popoverPresentationController.sourceView = cell.indicator
+    }
+
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+}
+
 extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 3 {
             startWorkout()
-        } else {
+        } else if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
             showGraph(indexPath.row)
         }
     }

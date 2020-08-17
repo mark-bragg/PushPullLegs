@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 let PPLTableViewCellIdentifier = "PPLTableViewCellIdentifier"
 
@@ -14,6 +15,7 @@ class PPLTableViewCell: UITableViewCell {
 
     @IBOutlet weak var rootView: ShadowBackground!
     var pplSelectionFlag = false
+    weak var indicator: UIView?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -64,14 +66,53 @@ class PPLTableViewCell: UITableViewCell {
     }
     
     func addDisclosureIndicator() {
+        removeIndicator()
         let indicator = UIImage.init(systemName: "chevron.right")!
         let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.lightGrey!, renderingMode: .alwaysOriginal))
         rootView.addSubview(indicatorView)
         indicatorView.translatesAutoresizingMaskIntoConstraints = false
         indicatorView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -20).isActive = true
         indicatorView.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
+        self.indicator = indicatorView
     }
     
+    func addHelpIndicator(target: Any?, action: Selector) {
+        removeIndicator()
+        let indicatorView = QuestionMarkView()
+        indicatorView.tag = tag
+        indicatorView.add(target: target, action: action)
+        addSubview(indicatorView)
+        indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        indicatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -25).isActive = true
+        indicatorView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        self.indicator = indicatorView
+    }
+    
+    func removeIndicator() {
+        guard let indicator = indicator else { return }
+        indicator.removeFromSuperview()
+        self.indicator = nil
+    }
+    
+}
+
+class QuestionMarkView: UIImageView {
+    init() {
+        super.init(image: UIImage(systemName: "questionmark.circle")?.withTintColor(PPLColor.textBlue!, renderingMode: .alwaysOriginal))
+        isUserInteractionEnabled = true
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    func add(target: Any?, action: Selector) {
+        let indicatorControl = UIControl(frame: bounds)
+        indicatorControl.isUserInteractionEnabled = true
+        indicatorControl.tag = tag
+        addSubview(indicatorControl)
+        indicatorControl.addTarget(target, action: action, for: .touchUpInside)
+    }
 }
 
 extension CGSize {
