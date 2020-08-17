@@ -47,7 +47,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     
     override func insertAddButtonInstructions() {
         super.insertAddButtonInstructions()
-        addButtonHelperVc.message = "Tap to start the next set!"
+        addButtonHelperVc!.message = "Tap to start the next set!"
     }
     
     func exerciseViewModel() -> ExerciseViewModel {
@@ -66,6 +66,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         if let v = restTimerView {
             v.removeFromSuperview()
         }
+        removeAddButtonInstructions()
     }
     
     func presentExerciseCompletionConfirmation() {
@@ -108,6 +109,9 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel) {
         dismiss(animated: true, completion: nil)
         resetState()
+        if exerciseViewModel().rowCount() == 0 {
+            insertAddButtonInstructions()
+        }
     }
     
     func setupRestTimerView() {
@@ -144,7 +148,8 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     }
     
     override func reload() {
-        tableView.reloadData()
+        super.reload()
+        hideNoDataView()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

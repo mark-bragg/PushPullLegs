@@ -25,6 +25,7 @@ class ArrowHelperViewController: UIViewController {
         }
     }
     var bottomY: CGFloat = 0
+    var animating = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,7 @@ class ArrowHelperViewController: UIViewController {
     }
     
     func animateArrow() {
+        guard !animating else { return }
         UIView.animate(withDuration: 0.5, animations: {
             self.arrowView.frame.origin.y = self.arrowView.frame.origin.y - 30
         }) { (b) in
@@ -48,6 +50,7 @@ class ArrowHelperViewController: UIViewController {
     }
     
     fileprivate func addArrow() {
+        guard arrowView == nil else { return }
         let v = ArrowView(frame: CGRect(x: centerX_arrowView - ArrowView.width / 2, y: 0, width: ArrowView.width, height: ArrowView.height))
         view.addSubview(v)
         arrowView = v
@@ -58,6 +61,7 @@ class ArrowHelperViewController: UIViewController {
     }
     
     fileprivate func addLabel() {
+        guard !view.subviews.contains(where: { $0.isKind(of: UILabel.self) }) else { return }
         let lbl = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: view.frame.width - (ArrowView.width + 20), height: ArrowView.height)))
         lbl.textAlignment = .center
         lbl.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
@@ -78,7 +82,7 @@ class ArrowHelperViewController: UIViewController {
 
 class PPLTableViewController: UIViewController {
     
-    var addButtonHelperVc = ArrowHelperViewController()
+    var addButtonHelperVc: ArrowHelperViewController?
     var viewModel: PPLTableViewModel!
     weak var tableView: PPLTableView!
     weak var bannerView: GADBannerView!
@@ -96,7 +100,7 @@ class PPLTableViewController: UIViewController {
         view.backgroundColor = PPLColor.grey
         addNoDataView()
         tableView.reloadData()
-        if let viewModel = viewModel, viewModel.hasData() && addButtonHelperVc.view.superview == view {
+        if let viewModel = viewModel, viewModel.hasData() && addButtonHelperVc != nil {
             removeAddButtonInstructions()
         }
     }
@@ -116,16 +120,23 @@ class PPLTableViewController: UIViewController {
     
     func insertAddButtonInstructions() {
         guard let addButton = addButton else { return }
+        if addButtonHelperVc != nil {
+            removeAddButtonInstructions()
+        }
+        let addButtonHelperVc = ArrowHelperViewController()
         addButtonHelperVc.bottomY = addButton.frame.origin.y
         addButtonHelperVc.centerX_arrowView = addButton.center.x
         if addButtonHelperVc.view.superview == nil {
             view.addSubview(addButtonHelperVc.view)
         }
         addButtonHelperVc.view.frame = CGRect(x: 0, y: addButton.frame.origin.y - ArrowView.height, width: view.frame.width, height: ArrowView.height)
+        self.addButtonHelperVc = addButtonHelperVc
     }
     
     func removeAddButtonInstructions() {
+        guard let addButtonHelperVc = addButtonHelperVc else { return }
         addButtonHelperVc.view.removeFromSuperview()
+        self.addButtonHelperVc = nil
     }
     
     override func viewDidLayoutSubviews() {
@@ -315,6 +326,7 @@ extension PPLTableViewController: ReloadProtocol {
         if viewModel.hasData(), let btn = addButton, btn.superview == view {
             removeAddButtonInstructions()
             hideNoDataView()
+            tableView.reloadData()
         } else {
             insertAddButtonInstructions()
             showNoDataView()
