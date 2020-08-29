@@ -57,10 +57,11 @@ class WorkoutReadViewModel: NSObject, PPLTableViewModel {
         guard
             let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
             let date = workout.dateCreated,
-            let previousWorkout = workoutManager.previousWorkout(before: date),
+            let previousWorkout = workoutManager.previousWorkout(before: date, type: exerciseType),
             let previousExercise = previousWorkout.exercises?.first(where: { ($0 as! Exercise).name == exercisesDone[row].name}) as? Exercise
-            else {
-                return .increase }
+        else {
+            return .increase
+        }
         
         if previousExercise.volume() == exercisesDone[row].volume() {
             return .noChange

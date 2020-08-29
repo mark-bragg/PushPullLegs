@@ -98,6 +98,7 @@ class WorkoutViewController: PPLTableViewController {
             vc.workText = "Total work: \(workoutEditViewModel().detailText(indexPath: indexPath)!)"
             vc.preferredContentSize = cell.rootView.bounds.size
             cell.rootView.addSubview(vc.view)
+            vc.progress = workoutEditViewModel().exerciseVolumeComparison(row: indexPath.row)
             cell.setSelected(true, animated: false)
         } else {
             let label = PPLNameLabel()
@@ -109,10 +110,6 @@ class WorkoutViewController: PPLTableViewController {
         }
         cell.addDisclosureIndicator()
         return cell
-    }
-    
-    func dequeuCell(section: Int) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: section == 0 ? ExerciseToDoCellReuseIdentifier : ExerciseDataCellReuseIdentifier)!
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

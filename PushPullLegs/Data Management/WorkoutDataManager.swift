@@ -50,12 +50,16 @@ class WorkoutDataManager: DataManager {
         return nil
     }
     
-    func previousWorkout(before date: Date? = nil) -> Workout? {
+    func previousWorkout(before date: Date? = nil, type: ExerciseType? = nil) -> Workout? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
         request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
         request.fetchLimit = 2
         if let date = date {
-            request.predicate = NSPredicate(format: "dateCreated < %@", argumentArray: [date])
+            request.predicate =
+            NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "dateCreated < %@", argumentArray: [date]),
+                type != nil ? NSPredicate(format: "name = %@", argumentArray: [type!.rawValue]) : NSPredicate(value: true)
+            ])
             request.fetchLimit = 1
         }
         do {

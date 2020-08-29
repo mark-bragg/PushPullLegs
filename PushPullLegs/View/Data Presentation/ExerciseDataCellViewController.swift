@@ -25,9 +25,8 @@ class ExerciseDataCellViewController: UIViewController {
     }
     
     var progress: ExerciseVolumeComparison? {
-        willSet {
-            if progressIndicatorImageView == nil { return }
-            
+        didSet {
+            setWorkoutProgressionImage()
         }
     }
     
@@ -50,6 +49,7 @@ class ExerciseDataCellViewController: UIViewController {
     }
     
     func setWorkoutProgressionImage() {
+        guard let imageView = progressIndicatorImageView else { return }
         var imageName: String
         var tint: UIColor
         switch progress {
@@ -63,8 +63,8 @@ class ExerciseDataCellViewController: UIViewController {
             imageName = "minus"
             tint = PPLColor.offWhite!
         }
-        progressIndicatorImageView.image = UIImage.init(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
-        progressIndicatorImageView.tintColor = tint
+        imageView.image = UIImage.init(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = tint
     }
 
 }
