@@ -8,7 +8,6 @@
 
 import GoogleMobileAds
 import UIKit
-import Combine
 
 class ArrowHelperViewController: UIViewController {
     weak var arrowView: ArrowView!
@@ -38,15 +37,20 @@ class ArrowHelperViewController: UIViewController {
     
     func animateArrow() {
         guard !animating else { return }
-        UIView.animate(withDuration: 0.5, animations: {
-            self.arrowView.frame.origin.y = self.arrowView.frame.origin.y - 30
-        }) { (b) in
+        weak var weakSelf = self
+        DispatchQueue.main.async {
+            guard let weakSelf = weakSelf else {return}
             UIView.animate(withDuration: 0.5, animations: {
-                self.arrowView.frame.origin.y = self.arrowView.frame.origin.y + 30
-            }) { b in
-                self.animateArrow()
+                weakSelf.arrowView.frame.origin.y = weakSelf.arrowView.frame.origin.y - 30
+            }) { (b) in
+                UIView.animate(withDuration: 0.5, animations: {
+                    weakSelf.arrowView.frame.origin.y = weakSelf.arrowView.frame.origin.y + 30
+                }) { (b) in
+                    weakSelf.animateArrow()
+                }
             }
         }
+        
     }
     
     fileprivate func addArrow() {
@@ -82,13 +86,13 @@ class ArrowHelperViewController: UIViewController {
 
 class PPLTableViewController: UIViewController {
     
-    var addButtonHelperVc: ArrowHelperViewController?
     var viewModel: PPLTableViewModel!
     weak var tableView: PPLTableView!
     weak var bannerView: GADBannerView!
     weak var noDataView: NoDataView!
     weak var addButton: PPLAddButton!
     private let addButtonSize = CGSize(width: 75, height: 75)
+    weak var addButtonHelperVc: ArrowHelperViewController?
     
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
@@ -100,9 +104,6 @@ class PPLTableViewController: UIViewController {
         view.backgroundColor = PPLColor.grey
         addNoDataView()
         tableView.reloadData()
-        if let viewModel = viewModel, viewModel.hasData() && addButtonHelperVc != nil {
-            removeAddButtonInstructions()
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -126,16 +127,20 @@ class PPLTableViewController: UIViewController {
         let addButtonHelperVc = ArrowHelperViewController()
         addButtonHelperVc.bottomY = addButton.frame.origin.y
         addButtonHelperVc.centerX_arrowView = addButton.center.x
+        addChild(addButtonHelperVc)
         if addButtonHelperVc.view.superview == nil {
             view.addSubview(addButtonHelperVc.view)
         }
+        addButtonHelperVc.didMove(toParent: self)
         addButtonHelperVc.view.frame = CGRect(x: 0, y: addButton.frame.origin.y - ArrowView.height, width: view.frame.width, height: ArrowView.height)
         self.addButtonHelperVc = addButtonHelperVc
     }
     
     func removeAddButtonInstructions() {
         guard let addButtonHelperVc = addButtonHelperVc else { return }
+        addButtonHelperVc.willMove(toParent: nil)
         addButtonHelperVc.view.removeFromSuperview()
+        addButtonHelperVc.removeFromParent()
         self.addButtonHelperVc = nil
     }
     
@@ -151,7 +156,6 @@ class PPLTableViewController: UIViewController {
         showNoDataView()
     }
     
-    // MARK: @objc
     @objc func addAction(_ sender: Any) {
         // no-op
     }
