@@ -10,7 +10,7 @@ import GoogleMobileAds
 import UIKit
 
 class ArrowHelperViewController: UIViewController {
-    weak var arrowView: ArrowView!
+    weak var arrowView: DownwardsArrowView!
     var message: String = "Tap to create new exercises!" {
         didSet {
             redrawText()
@@ -28,25 +28,26 @@ class ArrowHelperViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.translatesAutoresizingMaskIntoConstraints = false
         addArrow()
         addLabel()
         positionView()
         animateArrow()
         view.clipsToBounds = false
+        view.heightAnchor.constraint(equalToConstant: VerticalArrowViewDimensions().height).isActive = true
     }
     
     func animateArrow() {
         guard !animating else { return }
-        weak var weakSelf = self
-        DispatchQueue.main.async {
-            guard let weakSelf = weakSelf else {return}
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
             UIView.animate(withDuration: 0.5, animations: {
-                weakSelf.arrowView.frame.origin.y = weakSelf.arrowView.frame.origin.y - 30
+                self.arrowView.frame.origin.y = self.arrowView.frame.origin.y - 30
             }) { (b) in
                 UIView.animate(withDuration: 0.5, animations: {
-                    weakSelf.arrowView.frame.origin.y = weakSelf.arrowView.frame.origin.y + 30
+                    self.arrowView.frame.origin.y = self.arrowView.frame.origin.y + 30
                 }) { (b) in
-                    weakSelf.animateArrow()
+                    self.animateArrow()
                 }
             }
         }
@@ -55,18 +56,21 @@ class ArrowHelperViewController: UIViewController {
     
     fileprivate func addArrow() {
         guard arrowView == nil else { return }
-        let v = ArrowView(frame: CGRect(x: centerX_arrowView - ArrowView.width / 2, y: 0, width: ArrowView.width, height: ArrowView.height))
+        let dims = VerticalArrowViewDimensions()
+        let v = DownwardsArrowView(frame: CGRect(x: centerX_arrowView - dims.width / 2, y: 0, width: dims.width, height: dims.height))
         view.addSubview(v)
         arrowView = v
     }
     
     func repositionArrow() {
-        arrowView.frame = CGRect(x: centerX_arrowView - ArrowView.width / 2, y: 0, width: ArrowView.width, height: ArrowView.height)
+        let dims = VerticalArrowViewDimensions()
+        arrowView.frame = CGRect(x: centerX_arrowView - dims.width / 2, y: 0, width: dims.width, height: dims.height)
     }
     
     fileprivate func addLabel() {
         guard !view.subviews.contains(where: { $0.isKind(of: UILabel.self) }) else { return }
-        let lbl = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: view.frame.width - (ArrowView.width + 20), height: ArrowView.height)))
+        let dims = VerticalArrowViewDimensions()
+        let lbl = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: view.frame.width - (dims.width + 20), height: dims.height)))
         lbl.textAlignment = .center
         lbl.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         lbl.text = message
@@ -128,20 +132,28 @@ class PPLTableViewController: UIViewController {
         addButtonHelperVc.bottomY = addButton.frame.origin.y
         addButtonHelperVc.centerX_arrowView = addButton.center.x
         addChild(addButtonHelperVc)
+        self.addButtonHelperVc = addButtonHelperVc
         if addButtonHelperVc.view.superview == nil {
             view.addSubview(addButtonHelperVc.view)
+            activateAddHelperConstraints(true)
         }
         addButtonHelperVc.didMove(toParent: self)
-        addButtonHelperVc.view.frame = CGRect(x: 0, y: addButton.frame.origin.y - ArrowView.height, width: view.frame.width, height: ArrowView.height)
-        self.addButtonHelperVc = addButtonHelperVc
     }
     
     func removeAddButtonInstructions() {
         guard let addButtonHelperVc = addButtonHelperVc else { return }
         addButtonHelperVc.willMove(toParent: nil)
+        activateAddHelperConstraints(false)
         addButtonHelperVc.view.removeFromSuperview()
         addButtonHelperVc.removeFromParent()
         self.addButtonHelperVc = nil
+    }
+    
+    func activateAddHelperConstraints(_ activation: Bool) {
+        guard let addButtonHelperVc = addButtonHelperVc else { return }
+        addButtonHelperVc.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = activation
+        addButtonHelperVc.view.bottomAnchor.constraint(equalTo: addButton.topAnchor).isActive = activation
+        addButtonHelperVc.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = activation
     }
     
     override func viewDidLayoutSubviews() {
