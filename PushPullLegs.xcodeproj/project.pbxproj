@@ -65,6 +65,7 @@
 		49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB1D7A24849C980003CFA1 /* AppState.swift */; };
 		49AB68CB24E8BD8E0057D5F7 /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB68CA24E8BD8E0057D5F7 /* ArrowView.swift */; };
 		49AB68CD24FB0E5C0057D5F7 /* ArrowHelperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */; };
+		49AB68D124FC63FF0057D5F7 /* CountdownPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB68D024FC63FF0057D5F7 /* CountdownPickerViewController.swift */; };
 		49C8D24124A99E0000B361C7 /* PPLDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C8D24024A99E0000B361C7 /* PPLDefaults.swift */; };
 		49CEF20A2447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */; };
 		49E2501F249F1B60001F7B70 /* PPLTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */; };
@@ -176,6 +177,7 @@
 		49AB1D7A24849C980003CFA1 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		49AB68CA24E8BD8E0057D5F7 /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowHelperViewController.swift; sourceTree = "<group>"; };
+		49AB68D024FC63FF0057D5F7 /* CountdownPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownPickerViewController.swift; sourceTree = "<group>"; };
 		49C8D24024A99E0000B361C7 /* PPLDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDefaults.swift; sourceTree = "<group>"; };
 		49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModelTests.swift; sourceTree = "<group>"; };
 		49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewController.swift; sourceTree = "<group>"; };
@@ -253,9 +255,9 @@
 		49028D22243D8587005EC078 /* App Configuration */ = {
 			isa = PBXGroup;
 			children = (
+				49AB68CF24FC63C70057D5F7 /* Root */,
 				49E30B49243AF3AF002FABD6 /* Exercise */,
 				49E30B48243AF3AA002FABD6 /* Workout */,
-				49028D23243D85AC005EC078 /* AppConfigurationViewController.swift */,
 			);
 			path = "App Configuration";
 			sourceTree = "<group>";
@@ -457,6 +459,15 @@
 				49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */,
 			);
 			path = "User Guidance";
+			sourceTree = "<group>";
+		};
+		49AB68CF24FC63C70057D5F7 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				49028D23243D85AC005EC078 /* AppConfigurationViewController.swift */,
+				49AB68D024FC63FF0057D5F7 /* CountdownPickerViewController.swift */,
+			);
+			path = Root;
 			sourceTree = "<group>";
 		};
 		49CEF2082447B66A003E55D4 /* Creation */ = {
@@ -923,6 +934,7 @@
 				49EF4BB423F8390A0071687D /* Date+Helpers.swift in Sources */,
 				49028D24243D85AC005EC078 /* AppConfigurationViewController.swift in Sources */,
 				49E3832B23FA09BF00F7A502 /* TemplateManagement.swift in Sources */,
+				49AB68D124FC63FF0057D5F7 /* CountdownPickerViewController.swift in Sources */,
 				49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */,
 				4937729324001807005F566A /* DBUtilities.swift in Sources */,
 				49E675FE244CDAB6001F5974 /* ExerciseSelectionViewModel.swift in Sources */,

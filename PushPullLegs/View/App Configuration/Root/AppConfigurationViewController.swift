@@ -120,30 +120,25 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     func configureCustomCountdownCell(cell: PPLTableViewCell) {
         if let _ = cell.rootView.viewWithTag(2929) { return }
         cell.rootView.isUserInteractionEnabled = true
-        let countdownLabel = UILabel()
-        countdownLabel.tag = 2929
-        countdownLabel.textAlignment = .center
-        countdownLabel.font = UIFont.systemFont(ofSize: 36)
-        countdownLabel.translatesAutoresizingMaskIntoConstraints = false
-        countdownLabel.text = "\(PPLDefaults.instance.countdown())"
-        countdownLabel.sizeToFit()
+        let countdownLabel = labelForCountdown()
         cell.rootView.addSubview(countdownLabel)
-        countdownLabel.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -20).isActive = true
+        countdownLabel.tag = 2929
+        countdownLabel.translatesAutoresizingMaskIntoConstraints = false
+        countdownLabel.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -18).isActive = true
         countdownLabel.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
         countdownLabel.widthAnchor.constraint(equalToConstant: switchWidth).isActive = true
         countdownLabel.heightAnchor.constraint(equalToConstant: countdownLabel.frame.height).isActive = true
-        countdownLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCountdownPicker(_:))))
-        countdownLabel.isUserInteractionEnabled = true
+        cell.rootView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCountdownPicker)))
         self.countdownLabel = countdownLabel
     }
     
-    @objc func showCountdownPicker(_ tappy: UITapGestureRecognizer) {
+    @objc func showCountdownPicker() {
         let picker = CountdownPickerViewController()
         picker.modalPresentationStyle = .popover
         picker.view.backgroundColor = .black
-        picker.preferredContentSize = CGSize(width: 200, height: 200)
-        picker.popoverPresentationController?.sourceView = tappy.view
-        picker.popoverPresentationController?.sourceRect = CGRect(x: 0, y: tappy.view!.frame.height/2, width: 0, height: 0)
+        picker.preferredContentSize = CGSize(width: countdownLabel.frame.width, height: 250)
+        picker.popoverPresentationController?.sourceView = countdownLabel
+        picker.popoverPresentationController?.sourceRect = CGRect(x: countdownLabel.frame.width/2, y: 6, width: 0, height: countdownLabel.frame.height)
         picker.popoverPresentationController?.delegate = self
         present(picker, animated: true, completion: {
             picker.$countdownSelection.sink { [weak self] (value) in
@@ -156,7 +151,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
-        popoverPresentationController.permittedArrowDirections = .right
+        popoverPresentationController.permittedArrowDirections = []
         popoverPresentationController.sourceView = countdownLabel
     }
     
@@ -206,49 +201,5 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
             return "ERROR"
         }
         
-    }
-}
-
-class CountdownPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
-    
-    weak var picker: UIPickerView!
-    @Published private(set) var countdownSelection: Int?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let picker = UIPickerView()
-        picker.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(picker)
-        picker.delegate = self
-        picker.backgroundColor = PPLColor.darkGrey
-        picker.tintColor = .black
-        picker.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        picker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        picker.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        picker.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        self.picker = picker
-        picker.selectRow(PPLDefaults.instance.countdown(), inComponent: 0, animated: false)
-    }
-    
-    // MARK: DATA SOURCE
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        31
-    }
-    
-    // MARK: DELEGATE
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(row)"
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        25
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        countdownSelection = row
     }
 }
