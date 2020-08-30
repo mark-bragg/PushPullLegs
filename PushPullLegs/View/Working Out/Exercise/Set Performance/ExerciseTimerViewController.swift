@@ -19,7 +19,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         finishButton.setTitle("Finish Set", for: .normal)
-        finishButton.isEnabled = false
+        finishButton.isEnabled = PPLDefaults.instance.countdown() == 0
         timerLabel.layer.borderColor = PPLColor.lightGrey!.cgColor
         timerLabel.layer.backgroundColor = PPLColor.darkGrey!.cgColor
         timerLabel.layer.borderWidth = 1.5
