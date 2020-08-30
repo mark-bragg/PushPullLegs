@@ -45,14 +45,15 @@ class ExerciseSetViewModel: NSObject {
     private var weight: Double!
     private var state: ExerciseSetState
     private var stopWatch: PPLStopWatch!
+    private let countdown = PPLDefaults.instance.countdown()
+    @Published private(set) var setBegan = false
     
     override init() {
         state = .notStarted
         super.init()
-        weak var weakSelf = self
-        stopWatch = PPLStopWatch(withHandler: { (seconds) in
-            guard let strongSelf = weakSelf else { return }
-            strongSelf.timerDelegate?.timerUpdate(String.format(seconds: seconds))
+        stopWatch = PPLStopWatch(withHandler: { [weak self] (seconds) in
+            guard let self = self else { return }
+            self.timerDelegate?.timerUpdate(String.format(seconds: self.currentTime(seconds)))
         })
     }
     
@@ -76,8 +77,18 @@ class ExerciseSetViewModel: NSObject {
             return
         }
         stopWatch.stop()
-        totalTime = Int(stopWatch.currentTime())
+        totalTime = currentTime()
         delegate?.exerciseSetViewModelStoppedTimer(self)
+    }
+    
+    private func currentTime(_ seconds: Int? = nil) -> Int {
+        let s = seconds ?? stopWatch.currentTime()
+        var multiplier = -1
+        if countdown >= s {
+            multiplier *= -1
+            setBegan = countdown == s
+        }
+        return (countdown - s) * multiplier
     }
     
     func finishSetWithReps(_ reps: Int) {
@@ -115,5 +126,13 @@ class ExerciseSetViewModel: NSObject {
             throw ExerciseStateError()
         }
         state = newValue
+    }
+    
+    func initialTimerText() -> String {
+        let countdown = PPLDefaults.instance.countdown()
+        if countdown >= 10 {
+            return "0:\(countdown)"
+        }
+        return "0:0\(countdown)"
     }
 }

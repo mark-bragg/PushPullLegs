@@ -16,6 +16,7 @@ class PPLDefaults: NSObject {
     private let kWorkoutInProgress = "kWorkoutInProgress"
     private let kExerciseInProgress = "kExerciseInProgress"
     private let kIsInstalled = "kIsInstalled"
+    private let kCountdownInt = "kCountdownInt"
     override private init() {
         super.init()
         setupUserDetails()
@@ -42,6 +43,14 @@ class PPLDefaults: NSObject {
     @objc func toggleKilograms() {
         let newValue = !userDetails.bool(forKey: kUserDetailsKilogramsPounds)
         userDetails.set(newValue, forKey: kUserDetailsKilogramsPounds)
+    }
+    
+    func countdown() -> Int {
+        return userDetails.integer(forKey: kCountdownInt)
+    }
+    
+    func setCountdown(_ value: Int) {
+        userDetails.set(value, forKey: kCountdownInt)
     }
     
     func isWorkoutInProgress() -> Bool {
@@ -73,6 +82,7 @@ class PPLDefaults: NSObject {
         } else {
             UserDefaults.standard.addSuite(named: user_details_suite_name)
             addWorkoutTypePromptBool()
+            userDetails.set(5, forKey: kCountdownInt)
             setupUserDetails()
         }
     }

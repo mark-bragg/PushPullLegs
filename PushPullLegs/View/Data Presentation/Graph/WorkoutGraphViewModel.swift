@@ -14,10 +14,12 @@ class WorkoutGraphViewModel: NSObject, ReloadProtocol {
     private var yValues = [CGFloat]()
     private var xValues = [String]()
     private var type: ExerciseType
+    private var dataManager: WorkoutDataManager!
     
     init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
         self.type = type
         super.init()
+        self.dataManager = dataManager
         reload()
     }
     
@@ -42,7 +44,7 @@ class WorkoutGraphViewModel: NSObject, ReloadProtocol {
     func reload() {
         yValues.removeAll()
         xValues.removeAll()
-        let workouts = WorkoutDataManager().workouts(ascending: true, types: [type])
+        let workouts = dataManager.workouts(ascending: true, types: [type])
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/YY"
         for workout in workouts {

@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Combine
 @testable import PushPullLegs
 
 class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, ExerciseSetTimerDelegate, ExerciseSetCollector {
@@ -18,9 +19,19 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     var vmFinishedSetExpectation: XCTestExpectation?
     var vmCanceledSetExpectation: XCTestExpectation?
     var collectSetExpectation: XCTestExpectation?
+    var setBeganObservers = [AnyCancellable]()
+    var shouldHaveBegunAlready = false
+    var testingCountdown = false
+    var countdown = 0
     
     override func setUp() {
+        PPLDefaults.instance.setCountdown(countdown)
         sut = ExerciseSetViewModel()
+        sut.$setBegan.sink { [weak self] (began) in
+            guard let self = self else { return }
+            XCTAssert(began == self.shouldHaveBegunAlready)
+        }
+        .store(in: &setBeganObservers)
         XCTAssert(!sut.completedExerciseSet)
     }
 
@@ -34,6 +45,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         }
         sut.timerDelegate = self
         sut.delegate = self
+        shouldHaveBegunAlready = true
         sut.startSetWithWeight(10)
         XCTAssert(!sut.completedExerciseSet)
         wait(for: expectations, timeout: 9)
@@ -42,6 +54,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     func testStopTimer_delegateCalled() {
         sut.timerDelegate = self
         sut.delegate = self
+        shouldHaveBegunAlready = true
         sut.startSetWithWeight(10)
         XCTAssert(!sut.completedExerciseSet)
         vmStoppedTimerExpectation = XCTestExpectation(description: "timer stopped expectation")
@@ -56,6 +69,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         sut.delegate = self
         collectSetExpectation = XCTestExpectation(description: "ExerciseSetCollector collectSet(duration:weight:reps:)")
         vmFinishedSetExpectation = XCTestExpectation(description: "ExerciseSetViewModelDelegate func exerciseSetViewModelStoppedTimer(_:)")
+        shouldHaveBegunAlready = true
         sut.startSetWithWeight(10)
         XCTAssert(!sut.completedExerciseSet)
         sleep(5)
@@ -69,6 +83,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     func testCancelSet_afterStartingSet_delegateCalled() {
         sut.delegate = self
         vmCanceledSetExpectation = XCTestExpectation(description: "ExerciseSetViewModelDelegate exerciseSetViewModelCanceledSet(_:)")
+        shouldHaveBegunAlready = true
         sut.startSetWithWeight(10)
         XCTAssert(!sut.completedExerciseSet)
         sut.cancel()
@@ -79,6 +94,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     func testCancelSet_afterStoppingTimer_delegateCalled() {
         sut.delegate = self
         vmCanceledSetExpectation = XCTestExpectation(description: "ExerciseSetViewModelDelegate exerciseSetViewModelCanceledSet(_:)")
+        shouldHaveBegunAlready = true
         sut.startSetWithWeight(10)
         XCTAssert(!sut.completedExerciseSet)
         sut.stopTimer()
@@ -105,6 +121,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         sut.setCollector = self
         sut.timerDelegate = self
         sut.delegate = self
+        shouldHaveBegunAlready = true
         sut.startSetWithWeight(10)
         XCTAssert(!sut.completedExerciseSet)
         sleep(5)
@@ -115,12 +132,57 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         wait(for: [collectSetExpectation!, vmFinishedSetExpectation!], timeout: 20)
     }
     
+    func testInitialTimerText() {
+        PPLDefaults.instance.setCountdown(5)
+        XCTAssert(sut.initialTimerText() == "0:05")
+        PPLDefaults.instance.setCountdown(10)
+        XCTAssert(sut.initialTimerText() == "0:10")
+        PPLDefaults.instance.setCountdown(15)
+        XCTAssert(sut.initialTimerText() == "0:15")
+    }
+    
+    
+    
+    func testTimerUpdateWithCountdownAndCountUp() {
+        countdown = 5
+        setUp()
+        testingCountdown = true
+        PPLDefaults.instance.setCountdown(countdown)
+        for i in 0...4 {
+            let ex = XCTestExpectation(description: "ExerciseSetTimerDelegate countdown expectation timerUpdate(_:) \(i)")
+            timerDelegateExpectations.append(ex)
+        }
+        for i in 0...5 {
+            let ex = XCTestExpectation(description: "ExerciseSetTimerDelegate countup expectation timerUpdate(_:) \(i)")
+            timerDelegateExpectations.append(ex)
+        }
+        sut.timerDelegate = self
+        shouldHaveBegunAlready = true
+        sut.startSetWithWeight(10)
+        wait(for: timerDelegateExpectations, timeout: 15)
+    }
+    
     func timerUpdate(_ text: String) {
         guard timerDelegateExpectations.count > 0 else {
             return
         }
-        XCTAssert(text == "0:0\(9-timerDelegateExpectations.count)", "\nexpected: 0:0\(9-timerDelegateExpectations.count)\nactual:\(text)")
-        timerDelegateExpectations.removeLast().fulfill()
+        if testingCountdown {
+            assertCountdownText(text)
+        } else {
+            XCTAssert(text == "0:0\(9-timerDelegateExpectations.count)", "\nexpected: 0:0\(9-timerDelegateExpectations.count)\nactual:\(text)")
+            timerDelegateExpectations.removeLast().fulfill()
+        }
+    }
+    
+    func assertCountdownText(_ text: String) {
+        let exp = timerDelegateExpectations.removeLast()
+        if countdown == -1 {
+            XCTAssert(text == "0:0\(PPLDefaults.instance.countdown() - timerDelegateExpectations.count)", "\nexpected: 0:0\(PPLDefaults.instance.countdown() - timerDelegateExpectations.count)\nactual: \(text)")
+        } else {
+            XCTAssert(text == "0:0\(countdown)", "\nexpected: 0:0\(countdown)\nactual: \(text)")
+            countdown -= 1
+        }
+        exp.fulfill()
     }
     
     func collectSet(duration: Int, weight: Double, reps: Int) {
