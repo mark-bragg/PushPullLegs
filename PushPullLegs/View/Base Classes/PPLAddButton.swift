@@ -35,7 +35,7 @@ class PPLAddButton: UIControl {
     
     private func style() {
         clipsToBounds = false
-        layer.backgroundColor = PPLColor.lightGrey?.cgColor
+        layer.backgroundColor = PPLColor.textBlue?.cgColor
         layer.cornerRadius = layer.frame.height / 2
     }
     
@@ -43,7 +43,7 @@ class PPLAddButton: UIControl {
         if viewWithTag(333) != nil { return }
         let plusSign = UILabel()
         plusSign.text = "+"
-        plusSign.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        plusSign.font = UIFont.systemFont(ofSize: 48, weight: .bold)
         plusSign.textColor = .white
         plusSign.textAlignment = .center
         plusSign.sizeToFit()
@@ -75,10 +75,10 @@ class PPLAddButton: UIControl {
             return
         }
         layer.borderColor = UIColor.white.cgColor
-        layer.borderWidth = 1
+        layer.borderWidth = 4
         layer.shadowPath = UIBezierPath.init(roundedRect: CGRect(origin: .zero, size: layer.frame.size), cornerRadius: layer.frame.size.height / 2).cgPath
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.3
+        layer.shadowOpacity = 0.55
         layer.shadowOffset = .shadowOffsetAddButton
         layer.shadowRadius = 2
         layer.shouldRasterize = true

@@ -117,7 +117,7 @@ class QuestionMarkView: UIImageView {
 
 extension CGSize {
     static var shadowOffset = CGSize(width: -5, height: 5)
-    static var shadowOffsetAddButton = CGSize(width: -10, height: 10)
+    static var shadowOffsetAddButton = CGSize(width: -8, height: 8)
     static var shadowOffsetTableHeader = CGSize(width: -7, height: 7)
 }
 

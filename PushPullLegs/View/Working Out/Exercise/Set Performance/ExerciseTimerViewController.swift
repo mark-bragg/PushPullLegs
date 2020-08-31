@@ -20,14 +20,69 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         super.viewWillAppear(animated)
         finishButton.setTitle("Finish Set", for: .normal)
         finishButton.isEnabled = PPLDefaults.instance.countdown() == 0
+        styleTimerLabel()
+        timerLabel.text = exerciseSetViewModel?.initialTimerText()
+        bind()
+    }
+    
+    fileprivate func styleTimerLabel() {
         timerLabel.layer.borderColor = PPLColor.lightGrey!.cgColor
         timerLabel.layer.backgroundColor = PPLColor.darkGrey!.cgColor
         timerLabel.layer.borderWidth = 1.5
         timerLabel.layer.cornerRadius = timerLabel.frame.height / 12
-        timerLabel.text = exerciseSetViewModel?.initialTimerText()
+    }
+    
+    func showStartText() {
+        let lbl = startLabel()
+        let diameter = view.frame.width * 0.75
+        view.addSubview(lbl)
+        constrainStartLabel(lbl, diameter)
+        styleStartLabel(lbl, diameter)
+        animateStartLabel(lbl)
+    }
+    
+    fileprivate func startLabel() -> UILabel {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.text = "Start!"
+        lbl.font = UIFont.systemFont(ofSize: 72, weight: .bold)
+        lbl.textColor = .white
+        lbl.textAlignment = .center
+        return lbl
+    }
+    
+    fileprivate func styleStartLabel(_ lbl: UILabel, _ diameter: CGFloat) {
+        lbl.layer.backgroundColor = PPLColor.textBlue!.cgColor
+        lbl.layer.cornerRadius = diameter / 2
+        lbl.layer.shadowPath = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: diameter, height: diameter)).cgPath
+        lbl.layer.shadowColor = PPLColor.textBlue!.cgColor
+        lbl.layer.shadowOpacity = 1.0
+        lbl.layer.shadowRadius = 10
+    }
+    
+    fileprivate func constrainStartLabel(_ lbl: UILabel, _ diameter: CGFloat) {
+        lbl.widthAnchor.constraint(equalToConstant: diameter).isActive = true
+        lbl.heightAnchor.constraint(equalToConstant: diameter).isActive = true
+        lbl.centerYAnchor.constraint(equalTo: finishButton.centerYAnchor).isActive = true
+        lbl.centerXAnchor.constraint(equalTo: finishButton.centerXAnchor).isActive = true
+    }
+    
+    fileprivate func animateStartLabel(_ lbl: UILabel) {
+        UIView.animate(withDuration: 1.0, delay: 0.5, options: .transitionFlipFromTop, animations: {
+            lbl.alpha = 0
+        }) { (b) in
+            for c in lbl.constraints {
+                c.isActive = false
+            }
+            lbl.removeFromSuperview()
+        }
+    }
+    
+    fileprivate func bind() {
         exerciseSetViewModel?.$setBegan.sink(receiveValue: { [weak self] (exerciseBegan) in
             guard exerciseBegan, let self = self else { return }
             DispatchQueue.main.async {
+                self.showStartText()
                 self.finishButton.isEnabled = exerciseBegan
             }
         }).store(in: &cancellables)
