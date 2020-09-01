@@ -25,6 +25,7 @@ class WorkoutDataViewController: PPLTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         if let vm = workoutReadViewModel() {
+            cell.rootView.removeAllSubviews()
             let vc = ExerciseDataCellViewController()
             vc.preferredContentSize = cell.rootView.bounds.size
             vc.exerciseName = vm.title(indexPath: indexPath)

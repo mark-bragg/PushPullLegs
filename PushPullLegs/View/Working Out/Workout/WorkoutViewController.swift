@@ -159,6 +159,9 @@ extension WorkoutViewController {
 extension UIView {
     func removeAllSubviews() {
         for v in subviews {
+            for c in v.constraints {
+                c.isActive = false
+            }
             v.removeFromSuperview()
         }
     }
