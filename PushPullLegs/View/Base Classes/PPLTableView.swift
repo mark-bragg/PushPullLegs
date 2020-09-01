@@ -12,7 +12,10 @@ import UIKit
 class PPLTableView: UITableView {
     
     override func dequeueReusableCell(withIdentifier identifier: String) -> UITableViewCell? {
-        guard let cell = super.dequeueReusableCell(withIdentifier: identifier) as? PPLTableViewCell else { return nil }
+        if super.dequeueReusableCell(withIdentifier: identifier) == nil {
+            register(UINib(nibName: "PPLTableViewCell", bundle: nil), forCellReuseIdentifier: PPLTableViewCellIdentifier)
+        }
+        let cell = super.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier)!
         cell.backgroundColor = .clear
         cell.focusStyle = .custom
         cell.contentView.clipsToBounds = false

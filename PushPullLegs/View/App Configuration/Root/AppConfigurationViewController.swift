@@ -22,10 +22,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         viewModel = AppConfigurationViewModel()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         segue.destination.hidesBottomBarWhenPushed = true
     }

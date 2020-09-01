@@ -24,10 +24,6 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     weak var restTimerView: RestTimerView!
     private let timerHeight: CGFloat = 150.0
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if !readOnly && addButton == nil {

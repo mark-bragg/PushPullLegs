@@ -15,23 +15,7 @@
                     <view key="view" contentMode="scaleToFill" id="166-Gn-UWB">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="t23-AC-erN" customClass="PPLTableView" customModule="PushPullLegs" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="MHo-vX-w8S" id="G6V-Uy-wJ0"/>
-                                    <outlet property="delegate" destination="MHo-vX-w8S" id="GF7-qx-cdu"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="65h-KN-OIs" firstAttribute="trailing" secondItem="t23-AC-erN" secondAttribute="trailing" id="GOA-wc-mcK"/>
-                            <constraint firstItem="t23-AC-erN" firstAttribute="top" secondItem="65h-KN-OIs" secondAttribute="top" id="HoR-to-EYb"/>
-                            <constraint firstItem="t23-AC-erN" firstAttribute="leading" secondItem="65h-KN-OIs" secondAttribute="leading" id="bmy-P5-KX1"/>
-                            <constraint firstItem="65h-KN-OIs" firstAttribute="bottom" secondItem="t23-AC-erN" secondAttribute="bottom" id="dyE-98-HAF"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="65h-KN-OIs"/>
                     </view>
                     <navigationItem key="navigationItem" title="Select Workout" id="ep3-tq-ksx">

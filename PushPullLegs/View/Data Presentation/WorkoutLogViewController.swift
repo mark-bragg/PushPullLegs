@@ -14,19 +14,12 @@ class WorkoutLogViewController: PPLTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tbl = PPLTableView()
-        view.addSubview(tbl)
-        tbl.translatesAutoresizingMaskIntoConstraints = false
-        tbl.rowHeight = 75
-        tableView = tbl
-        tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel = WorkoutLogViewModel()
         tableView.backgroundColor = .clear
-        constrainToView(tableView)
         tableView.reloadData()
     }
     
