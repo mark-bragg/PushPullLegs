@@ -32,6 +32,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        removeSwitch(cell)
         if indexPath.row < 2 {
             cell.selectionStyle = .default
             cell.addDisclosureIndicator()
@@ -47,43 +48,19 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         }
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
-            textLabel = PPLNameLabel()
-            textLabel?.numberOfLines = 2
-            textLabel?.translatesAutoresizingMaskIntoConstraints = false
-            cell.rootView.addSubview(textLabel!)
-            textLabel?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
-            textLabel?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
-            textLabel?.trailingAnchor.constraint(equalTo: nameLabelTrailingAnchor(cell.rootView), constant: 5).isActive = true
+            textLabel = textLabelForCell(cell)
         }
         textLabel?.text = viewModel.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 4.0, rect: cell.frame)
         return cell
     }
     
-    fileprivate func nameLabelTrailingAnchor(_ view: UIView) -> NSLayoutXAxisAnchor {
-        if let iv = view.subviews.first(where: { $0.isKind(of: UISwitch.self) }) {
-            return iv.leadingAnchor
+    fileprivate func removeSwitch(_ cell: PPLTableViewCell) {
+        guard let switcheroo = cell.rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) else { return }
+        for c in switcheroo.constraints {
+            c.isActive = false
         }
-        return view.trailingAnchor
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let segueId = segueIdentifierForRow(indexPath.row) {
-            performSegue(withIdentifier: segueId, sender: self)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func segueIdentifierForRow(_ row: Int) -> String? {
-        switch row {
-        case 0: return SegueIdentifier.editWorkoutList
-        case 1: return SegueIdentifier.editExerciseList
-        default: break
-        }
-        return nil
+        switcheroo.removeFromSuperview()
     }
     
     func configureKilogramsPoundsSwitch(cell: PPLTableViewCell) {
@@ -144,6 +121,47 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
             }
             .store(in: &self.cancellables)
         })
+    }
+    
+    fileprivate func textLabelForCell(_ cell: PPLTableViewCell) -> PPLNameLabel {
+        let lbl = PPLNameLabel()
+        lbl.numberOfLines = 2
+        cell.rootView.addSubview(lbl)
+        constrain(lbl, cell)
+        return lbl
+    }
+    
+    fileprivate func constrain(_ lbl: PPLNameLabel, _ cell: PPLTableViewCell) {
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
+        lbl.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
+        lbl.trailingAnchor.constraint(equalTo: nameLabelTrailingAnchor(cell.rootView), constant: 5).isActive = true
+    }
+    
+    fileprivate func nameLabelTrailingAnchor(_ view: UIView) -> NSLayoutXAxisAnchor {
+        if let iv = view.subviews.first(where: { $0.isKind(of: UISwitch.self) }) {
+            return iv.leadingAnchor
+        }
+        return view.trailingAnchor
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let segueId = segueIdentifierForRow(indexPath.row) {
+            performSegue(withIdentifier: segueId, sender: self)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func segueIdentifierForRow(_ row: Int) -> String? {
+        switch row {
+        case 0: return SegueIdentifier.editWorkoutList
+        case 1: return SegueIdentifier.editExerciseList
+        default: break
+        }
+        return nil
     }
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
