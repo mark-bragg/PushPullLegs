@@ -167,7 +167,7 @@ class GraphViewController: UIViewController {
     func updateLabels(_ index: Int?) {
         if let index = index, let date = viewModel.dates()?[index], let volume = viewModel.volumes()?[index] {
             dateLabel.text = date
-            volumeLabel.text = "volume: \(volume)"
+            volumeLabel.text = "volume: \(volume)".trimDecimalDigitsToTwo()
         } else {
             dateLabel.text = nil
             volumeLabel.text = nil
