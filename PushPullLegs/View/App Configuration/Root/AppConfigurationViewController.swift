@@ -193,6 +193,10 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
         return 5
     }
     
+    func title() -> String? {
+        return "Workout Settings"
+    }
+    
     func title(indexPath: IndexPath) -> String? {
         switch indexPath.row {
         case 0:

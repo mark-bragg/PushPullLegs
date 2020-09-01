@@ -14,11 +14,11 @@ class WorkoutLogViewController: PPLTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = WorkoutLogViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel = WorkoutLogViewModel()
         tableView.backgroundColor = .clear
         tableView.reloadData()
     }
@@ -77,6 +77,10 @@ class WorkoutLogViewModel: NSObject, PPLTableViewModel {
     
     func rowCount(section: Int) -> Int {
         return workouts.count
+    }
+    
+    func title() -> String? {
+        return "Workouts"
     }
     
     func title(indexPath: IndexPath) -> String? {

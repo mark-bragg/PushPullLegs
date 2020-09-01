@@ -41,6 +41,10 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
         return exercisesForSection(section).count
     }
     
+    func title() -> String? {
+        return "Exercises"
+    }
+    
     func sectionCount() -> Int {
         return 3
     }

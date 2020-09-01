@@ -14,9 +14,13 @@ fileprivate let LegsTag = 3
 
 class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePresentationControllerDelegate {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        viewModel = ExerciseTemplateListViewModel(withTemplateManagement: TemplateManagement())
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel = ExerciseTemplateListViewModel(withTemplateManagement: TemplateManagement())
         setupAddButton()
         tableView.allowsSelection = false
     }

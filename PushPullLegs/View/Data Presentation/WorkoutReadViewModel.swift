@@ -21,20 +21,21 @@ class WorkoutReadViewModel: NSObject, PPLTableViewModel {
     init(withCoreDataManagement coreDataManagement: CoreDataManagement = CoreDataManager.shared, workout: Workout? = nil) {
         coreDataManager = coreDataManagement
         workoutManager = WorkoutDataManager(backgroundContext: coreDataManagement.mainContext)
-        workoutId = workout?.objectID
-        if let exercises = workout?.exercises?.array as? [Exercise] {
-            exercisesDone = exercises
+        if let wkt = workout, let name = wkt.name {
+            workoutId = wkt.objectID
+            exerciseType = ExerciseType(rawValue: name)
+            if let exercises = wkt.exercises?.array as? [Exercise] {
+                exercisesDone = exercises
+            }
         }
         super.init()
     }
     
-    func rowCount(section: Int) -> Int {
-        return exercisesDone.count
-    }
+    func rowCount(section: Int) -> Int { return exercisesDone.count }
     
-    func sectionCount() -> Int {
-        return 1
-    }
+    func title() -> String? { exerciseType.rawValue }
+    
+    func sectionCount() -> Int { 1 }
     
     
     func title(indexPath: IndexPath) -> String? {
@@ -44,9 +45,7 @@ class WorkoutReadViewModel: NSObject, PPLTableViewModel {
         return "ERROR: CAN'T GET NAME FOR INDEX PATH: \(indexPath)"
     }
     
-    func detailText(indexPath: IndexPath) -> String? {
-        return "\(exercisesDone[indexPath.row].volume())"
-    }
+    func detailText(indexPath: IndexPath) -> String? { "\(exercisesDone[indexPath.row].volume())" }
     
     func getSelected() -> Any? {
         guard let indexPath = selectedIndex, indexPath.row < exercisesDone.count else { return nil }

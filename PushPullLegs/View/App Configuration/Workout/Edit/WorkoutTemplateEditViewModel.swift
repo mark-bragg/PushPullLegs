@@ -14,6 +14,11 @@ protocol WorkoutCreationDelegate {
 }
 
 class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
+    
+    static let added = "Added to Workout"
+    static let removed = "Removed from Workout"
+    static let noExercises = "No Exercises"
+    
     private var selectedExercises = [ExerciseTemplate]()
     private var unselectedExercises = [ExerciseTemplate]()
     private var selectedIndices = [Int]()
@@ -34,6 +39,10 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
         return section == 0 ? selectedExercises.count : unselectedExercises.count
     }
     
+    func title() -> String? {
+        return "\(exerciseType.rawValue) Exercises"
+    }
+    
     func sectionCount() -> Int {
         var sectionCount = 0
         if selectedExercises.count > 0 { sectionCount += 1 }
@@ -51,12 +60,12 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
     func titleForSection(_ section: Int) -> String? {
         if section == 0 {
             if selectedExercises.count == 0 {
-                return unselectedExercises.count > 0 ? "Not Added to Workout" : "No Exercises"
+                return unselectedExercises.count > 0 ? WorkoutTemplateEditViewModel.removed : WorkoutTemplateEditViewModel.noExercises
             } else {
-                return "Added to Workout"
+                return WorkoutTemplateEditViewModel.added
             }
         }
-        return "Not Added to Workout"
+        return WorkoutTemplateEditViewModel.removed
     }
     
     func selected(indexPath: IndexPath) {

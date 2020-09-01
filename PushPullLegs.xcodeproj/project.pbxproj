@@ -40,7 +40,6 @@
 		4957DFB4246B549F00574C89 /* WorkoutReadViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */; };
 		4957DFB6246B54F000574C89 /* WorkoutReadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */; };
 		4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */; };
-		4957DFBC246CF94200574C89 /* WorkoutDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */; };
 		4957DFBE246D049C00574C89 /* ExerciseDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */; };
 		4957DFCC2470407A00574C89 /* StoryboardIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFCB2470407A00574C89 /* StoryboardIdentifiers.swift */; };
 		49680BDA24DD264800DFF1E0 /* WorkoutGraphViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49680BD924DD264800DFF1E0 /* WorkoutGraphViewModelTests.swift */; };
@@ -151,7 +150,6 @@
 		4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutReadViewModelTests.swift; sourceTree = "<group>"; };
 		4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutReadViewModel.swift; sourceTree = "<group>"; };
 		4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDataViewController.swift; sourceTree = "<group>"; };
-		4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkoutDataViewController.xib; sourceTree = "<group>"; };
 		4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseDataCell.xib; sourceTree = "<group>"; };
 		4957DFCB2470407A00574C89 /* StoryboardIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardIdentifiers.swift; sourceTree = "<group>"; };
 		49680BD924DD264800DFF1E0 /* WorkoutGraphViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutGraphViewModelTests.swift; sourceTree = "<group>"; };
@@ -306,14 +304,11 @@
 		49453376244FC8BB00FA1665 /* Data Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				49359B9E24DD0519005FF7A8 /* Graph */,
 				49453377244FC8FA00FA1665 /* WorkoutLogViewController.swift */,
 				4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */,
 				4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */,
-				4957DFBB246CF94200574C89 /* WorkoutDataViewController.xib */,
-				4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */,
-				4989BA5F24BB94B0001C17B3 /* ExerciseDataCellViewController.xib */,
-				4989BA6124BB9A10001C17B3 /* ExerciseDataCellViewController.swift */,
+				49AB68D224FDFF0B0057D5F7 /* Exercise Data Cell */,
+				49359B9E24DD0519005FF7A8 /* Graph */,
 			);
 			path = "Data Presentation";
 			sourceTree = "<group>";
@@ -465,6 +460,16 @@
 				49AB68D024FC63FF0057D5F7 /* CountdownPickerViewController.swift */,
 			);
 			path = Root;
+			sourceTree = "<group>";
+		};
+		49AB68D224FDFF0B0057D5F7 /* Exercise Data Cell */ = {
+			isa = PBXGroup;
+			children = (
+				4957DFBD246D049C00574C89 /* ExerciseDataCell.xib */,
+				4989BA5F24BB94B0001C17B3 /* ExerciseDataCellViewController.xib */,
+				4989BA6124BB9A10001C17B3 /* ExerciseDataCellViewController.swift */,
+			);
+			path = "Exercise Data Cell";
 			sourceTree = "<group>";
 		};
 		49CEF2082447B66A003E55D4 /* Creation */ = {
@@ -763,7 +768,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4957DFBC246CF94200574C89 /* WorkoutDataViewController.xib in Resources */,
 				4957DFBE246D049C00574C89 /* ExerciseDataCell.xib in Resources */,
 				4911325D246B13C100D689DD /* TypeSelectorViewController.xib in Resources */,
 				4989BA6024BB94B0001C17B3 /* ExerciseDataCellViewController.xib in Resources */,
