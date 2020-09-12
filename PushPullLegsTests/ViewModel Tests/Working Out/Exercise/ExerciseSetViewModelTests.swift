@@ -13,6 +13,7 @@ import Combine
 class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, ExerciseSetTimerDelegate, ExerciseSetCollector {
     
     var sut: ExerciseSetViewModel!
+    var firstSetup = true
     var timerDelegateExpectations = [XCTestExpectation]()
     var vmStartedExpectation: XCTestExpectation?
     var vmStoppedTimerExpectation: XCTestExpectation?
@@ -27,11 +28,14 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     override func setUp() {
         PPLDefaults.instance.setCountdown(countdown)
         sut = ExerciseSetViewModel()
-        sut.$setBegan.sink { [weak self] (began) in
-            guard let self = self else { return }
-            XCTAssert(began == self.shouldHaveBegunAlready)
+        if firstSetup {
+            firstSetup = false
+            sut.$setBegan.sink { [weak self] (began) in
+                guard let self = self else { return }
+                XCTAssert(began == self.shouldHaveBegunAlready)
+            }
+            .store(in: &setBeganObservers)
         }
-        .store(in: &setBeganObservers)
         XCTAssert(!sut.completedExerciseSet)
     }
 

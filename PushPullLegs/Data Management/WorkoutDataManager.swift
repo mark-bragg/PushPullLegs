@@ -10,7 +10,7 @@ import CoreData
 
 class WorkoutDataManager: DataManager {
     
-    override init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
+    override init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.mainContext) {
         super.init(backgroundContext: backgroundContext)
         entityName = EntityName.workout
     }
@@ -23,7 +23,11 @@ class WorkoutDataManager: DataManager {
         
         backgroundContext.performAndWait {
             workoutInContext.addToExercises(exerciseInContext)
-            try? backgroundContext.save()
+            do {
+                try backgroundContext.save()
+            } catch {
+                print(error)
+            }
         }
     }
     
