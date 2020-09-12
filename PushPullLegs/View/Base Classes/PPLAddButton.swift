@@ -10,6 +10,8 @@ import UIKit
 
 class PPLAddButton: UIControl {
     
+    private let PLUS_SIGN_NAME = "PLUS_SIGN_NAME"
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addTargets()
@@ -40,16 +42,39 @@ class PPLAddButton: UIControl {
     }
     
     private func addPlusSign() {
-        if viewWithTag(333) != nil { return }
-        let plusSign = UILabel()
-        plusSign.text = "+"
-        plusSign.font = UIFont.systemFont(ofSize: 48, weight: .bold)
-        plusSign.textColor = .white
-        plusSign.textAlignment = .center
-        plusSign.sizeToFit()
-        addSubview(plusSign)
-        plusSign.center = CGPoint(x: frame.width/2, y: frame.height/2)
-        plusSign.tag = 333
+        if let layers = layer.sublayers, layers.contains(where: { $0.name == PLUS_SIGN_NAME } ) {
+            return
+        }
+        addPlusLayer()
+    }
+    
+    private func addPlusLayer() {
+        let plusLayer = CALayer()
+        plusLayer.frame = layer.bounds
+        layer.addSublayer(plusLayer)
+        drawPlusSign(plusLayer)
+    }
+    
+    private func drawPlusSign(_ plusLayer: CALayer) {
+        let horizontal = CAShapeLayer()
+        let vertical = CAShapeLayer()
+        horizontal.frame = plusLayer.bounds
+        vertical.frame = plusLayer.bounds
+        horizontal.path = horizontalRectangle()
+        horizontal.fillColor = UIColor.white.cgColor
+        vertical.path = verticalRectangle()
+        vertical.fillColor = UIColor.white.cgColor
+        plusLayer.addSublayer(horizontal)
+        plusLayer.addSublayer(vertical)
+        plusLayer.name = PLUS_SIGN_NAME
+    }
+    
+    private func horizontalRectangle() -> CGPath {
+        return UIBezierPath(roundedRect: CGRect(x: frame.width/3, y: frame.height/2 - 3.75, width: frame.width/3, height: 7.5), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 5, height: 5)).cgPath
+    }
+    
+    private func verticalRectangle() -> CGPath {
+        return UIBezierPath(roundedRect: CGRect(x: frame.width/2 - 3.75, y: frame.height/3, width: 7.5, height: frame.height/3), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 5, height: 5)).cgPath
     }
     
     @objc func addAction(_ sender: Any) {
