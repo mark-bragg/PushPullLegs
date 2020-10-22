@@ -33,13 +33,14 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         removeSwitch(cell)
+        removeSegmentedControl(cell)
         if indexPath.row < 2 {
             cell.selectionStyle = .default
             cell.addDisclosureIndicator()
         } else {
             cell.selectionStyle = .none
             if indexPath.row == 2 {
-                configureKilogramsPoundsSwitch(cell: cell)
+                configureImperialMetricSegmenedControl(cell: cell)
             } else if indexPath.row == 3 {
                 configureStartNextWorkoutPromptSwitch(cell: cell)
             } else {
@@ -47,7 +48,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
             }
         }
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
-        if textLabel == nil {
+        if textLabel == nil && indexPath.row != 2 {
             textLabel = textLabelForCell(cell)
         }
         textLabel?.text = viewModel.title(indexPath: indexPath)
@@ -63,17 +64,33 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         switcheroo.removeFromSuperview()
     }
     
-    func configureKilogramsPoundsSwitch(cell: PPLTableViewCell) {
+    fileprivate func removeSegmentedControl(_ cell: PPLTableViewCell) {
+        guard let segmenteroo = cell.rootView.subviews.first(where: { $0.isKind(of: UISegmentedControl.self) }) else { return }
+        for c in segmenteroo.constraints {
+            c.isActive = false
+        }
+        segmenteroo.removeFromSuperview()
+    }
+    
+    func configureImperialMetricSegmenedControl(cell: PPLTableViewCell) {
         if let _ = cell.rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
         cell.rootView.isUserInteractionEnabled = true
-        let switchV = switchView(cell)
-        switchV.setOn(PPLDefaults.instance.isKilograms(), animated: false)
-        switchV.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
-        switchWidth = switchV.frame.width
+        let segment = UISegmentedControl()
+        segment.insertSegment(withTitle: "Imperial", at: 0, animated: false)
+        segment.insertSegment(withTitle: "Metric", at: 1, animated: false)
+        segment.selectedSegmentIndex = PPLDefaults.instance.isKilograms() ? 1 : 0
+        segment.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
+        cell.rootView.addSubview(segment)
+        segment.translatesAutoresizingMaskIntoConstraints = false
+        segment.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
+        segment.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
+        segment.widthAnchor.constraint(equalTo: cell.rootView.widthAnchor).isActive = true
+        segment.heightAnchor.constraint(equalTo: cell.rootView.heightAnchor).isActive = true
     }
 
-    @objc func toggleKilogramsPoundsValue(_ switchView: UISwitch) {
-        PPLDefaults.instance.toggleKilograms()
+    @objc func toggleKilogramsPoundsValue(_ control: UISegmentedControl) {
+        let measurementType = control.selectedSegmentIndex == 0 ? MeasurementType.imperial : MeasurementType.metric
+        PPLDefaults.instance.setImperialMetric(measurementType)
         self.tableView.reloadData()
     }
     

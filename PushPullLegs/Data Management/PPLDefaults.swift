@@ -8,6 +8,11 @@
 
 import Foundation
 
+@objc enum MeasurementType: Int {
+    case imperial
+    case metric
+}
+
 class PPLDefaults: NSObject {
     private let user_details_suite_name = "User Details"
     private let prompt_user_for_workout_type = "Prompt User For Workout Type"
@@ -40,9 +45,13 @@ class PPLDefaults: NSObject {
         return false
     }
     
-    @objc func toggleKilograms() {
-        let newValue = !userDetails.bool(forKey: kUserDetailsKilogramsPounds)
-        userDetails.set(newValue, forKey: kUserDetailsKilogramsPounds)
+    @objc func setImperialMetric(_ type: MeasurementType) {
+        let oldValue = userDetails.bool(forKey: kUserDetailsKilogramsPounds)
+        if oldValue && type == .imperial {
+            userDetails.set(false, forKey: kUserDetailsKilogramsPounds)
+        } else  if !oldValue && type == .metric {
+            userDetails.set(true, forKey: kUserDetailsKilogramsPounds)
+        }
     }
     
     func countdown() -> Int {
