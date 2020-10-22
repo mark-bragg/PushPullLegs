@@ -23,7 +23,9 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     var setBeganObservers = [AnyCancellable]()
     var shouldHaveBegunAlready = false
     var testingCountdown = false
+    var testingClearCountdown = false
     var countdown = 0
+    var expectationsCount = 0
     
     override func setUp() {
         PPLDefaults.instance.setCountdown(countdown)
@@ -47,6 +49,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
             timerDelegateExpectations.append(ex)
             expectations.append(ex)
         }
+        expectationsCount = 9
         sut.timerDelegate = self
         sut.delegate = self
         shouldHaveBegunAlready = true
@@ -122,6 +125,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         for ex in [vmStartedExpectation, vmStoppedTimerExpectation, collectSetExpectation, vmFinishedSetExpectation] {
             expectations.append(ex)
         }
+        expectationsCount = 9
         sut.setCollector = self
         sut.timerDelegate = self
         sut.delegate = self
@@ -160,6 +164,26 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
             let ex = XCTestExpectation(description: "ExerciseSetTimerDelegate countup expectation timerUpdate(_:) \(i)")
             timerDelegateExpectations.append(ex)
         }
+        expectationsCount = 11
+        sut.timerDelegate = self
+        shouldHaveBegunAlready = true
+        sut.startSetWithWeight(10)
+        wait(for: timerDelegateExpectations, timeout: 15)
+    }
+    
+    func testCancelCountdown() {
+        countdown = 5
+        setUp()
+        testingCountdown = true
+        testingClearCountdown = true
+        PPLDefaults.instance.setCountdown(countdown)
+        let ex = XCTestExpectation(description: "ExerciseSetTimerDelegate countdown expectation timerUpdate(_:) \(0)")
+        timerDelegateExpectations.append(ex)
+        for i in 0...5 {
+            let ex = XCTestExpectation(description: "ExerciseSetTimerDelegate countup expectation timerUpdate(_:) \(i)")
+            timerDelegateExpectations.append(ex)
+        }
+        expectationsCount = 6
         sut.timerDelegate = self
         shouldHaveBegunAlready = true
         sut.startSetWithWeight(10)
@@ -171,9 +195,13 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
             return
         }
         if testingCountdown {
+            if testingClearCountdown {
+                testingCountdown = false
+                sut.cancelCountdown()
+            }
             assertCountdownText(text)
         } else {
-            XCTAssert(text == "0:0\(9-timerDelegateExpectations.count)", "\nexpected: 0:0\(9-timerDelegateExpectations.count)\nactual:\(text)")
+            XCTAssert(text == "0:0\(expectationsCount-timerDelegateExpectations.count)", "\nexpected: 0:0\(expectationsCount-timerDelegateExpectations.count)\nactual:\(text)")
             timerDelegateExpectations.removeLast().fulfill()
         }
     }

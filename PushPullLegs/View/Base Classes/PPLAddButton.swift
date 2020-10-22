@@ -97,7 +97,7 @@ class PPLAddButton: UIControl {
         }
     }
     
-    private func addShadow() {
+    private func a1ddShadow() {
         if layer.shadowOffset == .shadowOffsetAddButton {
             return
         }

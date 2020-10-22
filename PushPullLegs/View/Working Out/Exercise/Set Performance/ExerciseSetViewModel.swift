@@ -45,7 +45,8 @@ class ExerciseSetViewModel: NSObject {
     private var weight: Double!
     private var state: ExerciseSetState
     private var stopWatch: PPLStopWatch!
-    private let countdown = PPLDefaults.instance.countdown()
+    private var countdown = PPLDefaults.instance.countdown()
+    private var countdownCanceled = false
     @Published private(set) var setBegan = false
     
     override init() {
@@ -84,6 +85,10 @@ class ExerciseSetViewModel: NSObject {
     private func currentTime(_ seconds: Int? = nil) -> Int {
         let s = seconds ?? stopWatch.currentTime()
         var multiplier = -1
+        if countdownCanceled {
+            countdownCanceled = false
+            countdown = s
+        }
         if countdown >= s {
             multiplier *= -1
             setBegan = countdown == s
@@ -135,4 +140,9 @@ class ExerciseSetViewModel: NSObject {
         }
         return "0:0\(countdown)"
     }
+    
+    func cancelCountdown() {
+        countdownCanceled = true
+    }
+    
 }

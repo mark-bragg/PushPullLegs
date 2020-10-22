@@ -21,6 +21,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         finishButton.setTitle("Finish Set", for: .normal)
         finishButton.isEnabled = PPLDefaults.instance.countdown() == 0
         styleTimerLabel()
+        addTimerLabelTap()
         timerLabel.text = exerciseSetViewModel?.initialTimerText()
         bind()
     }
@@ -30,6 +31,16 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         timerLabel.layer.backgroundColor = PPLColor.darkGrey!.cgColor
         timerLabel.layer.borderWidth = 1.5
         timerLabel.layer.cornerRadius = timerLabel.frame.height / 12
+    }
+    
+    fileprivate func addTimerLabelTap() {
+        timerLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(timerTapped)))
+        timerLabel.isUserInteractionEnabled = true
+    }
+    
+    @objc fileprivate func timerTapped() {
+        timerLabel.isUserInteractionEnabled = false
+        exerciseSetViewModel?.cancelCountdown()
     }
     
     func showStartText() {
