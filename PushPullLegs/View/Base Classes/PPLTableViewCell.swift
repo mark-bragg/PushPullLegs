@@ -17,48 +17,25 @@ class PPLTableViewCell: UITableViewCell {
     var pplSelectionFlag = false
     weak var indicator: UIView?
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addControl()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        addControl()
-    }
-    
-    func addControl() {
-        if let _ = subviews.first(where: { $0.isKind(of: UIControl.self) }) { return }
-        let control = UIControl(frame: frame)
-        control.isUserInteractionEnabled = true
-        control.addTarget(self, action: #selector(deselect(_:)), for: .touchUpInside)
-        insertSubview(control, at: 0)
-    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         rootView.isUserInteractionEnabled = false
-    }
-    
-    @objc func deselect(_ contro: UIControl) {
-        setHighlighted(false, animated: true)
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         guard selectionStyle != .none else { return }
         if highlighted {
             self.rootView.removeShadow()
-        } else {
-            self.rootView.addShadow()
-            self.rootView.layer.borderColor = UIColor.white.cgColor
-            self.rootView.layer.borderWidth = 4
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                self.rootView.addShadow(.shadowOffsetCell)
+            }
         }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         UIView.animate(withDuration: 0.05, animations: {
             if !selected {
-                self.rootView.addShadow()
+                self.rootView.addShadow(.shadowOffsetCell)
                 self.rootView.layer.borderColor = UIColor.white.cgColor
                 self.rootView.layer.borderWidth = 4
             }
@@ -117,6 +94,7 @@ class QuestionMarkView: UIImageView {
 
 extension CGSize {
     static var shadowOffset = CGSize(width: -5, height: 5)
+    static var shadowOffsetCell = CGSize(width: -7, height: 15)
     static var shadowOffsetAddButton = CGSize(width: -8, height: 8)
     static var shadowOffsetTableHeader = CGSize(width: -7, height: 7)
 }
@@ -124,7 +102,7 @@ extension CGSize {
 extension UIView {
     func addShadow(_ offset: CGSize = .shadowOffset) {
         removeShadow()
-        layer.shadowOffset = .shadowOffset
+        layer.shadowOffset = offset
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 2.0
         layer.shadowOpacity = 0.75
@@ -145,7 +123,7 @@ class ShadowBackground: UIView {
         layer.shadowPath = UIBezierPath.init(roundedRect: bounds, cornerRadius: bounds.size.height / 8).cgPath
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.75
-        layer.shadowOffset = .shadowOffset
+        layer.shadowOffset = .shadowOffsetCell
         layer.shadowRadius = 2
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale

@@ -125,4 +125,8 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
         selectedExercises.sort(by: sorter)
         unselectedExercises.sort(by: sorter)
     }
+    
+    func isSelected(_ indexPath: IndexPath) -> Bool {
+        indexPath.section == 0 && selectedExercises.count > 0
+    }
 }
