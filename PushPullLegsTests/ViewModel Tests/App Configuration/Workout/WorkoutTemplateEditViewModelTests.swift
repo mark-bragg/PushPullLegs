@@ -327,5 +327,20 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
         XCTAssert(WorkoutTemplateEditViewModel.noExercises == sut.titleForSection(0))
     }
+    
+    func testIsSelected() {
+        addWorkoutTemplate()
+        sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
+        for i in 0...3 {
+            addExerciseTemplate(name: "ex\(i)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
+            addExerciseTemplate(name: "ex\(i+100)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
+        }
+        sut.reload()
+        assertRowCounts()
+        for i in 0...3 {
+            XCTAssert(sut.isSelected(IndexPath(row: i, section: 0)))
+            XCTAssert(!sut.isSelected(IndexPath(row: i, section: 1)))
+        }
+    }
 
 }

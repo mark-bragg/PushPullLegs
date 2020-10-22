@@ -44,6 +44,7 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         label(forCell: cell).text = workoutTemplateEditViewModel().title(indexPath: indexPath)
+        cell.setHighlighted(workoutTemplateEditViewModel().isSelected(indexPath), animated: true)
         return cell
     }
     
@@ -66,7 +67,6 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     
     override func reload() {
         workoutTemplateEditViewModel().reload()
-        tableView.reloadData()
         super.reload()
     }
     
