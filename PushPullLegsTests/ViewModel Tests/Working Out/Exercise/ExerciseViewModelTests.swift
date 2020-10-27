@@ -165,16 +165,16 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         XCTAssert(sut.title() == name)
     }
     
-    func testHeaderLabelText() {
-        if !PPLDefaults.instance.isKilograms() {
-            PPLDefaults.instance.toggleKilograms()
-        }
-        XCTAssert(sut.headerLabelText(0) == "Kg")
-        PPLDefaults.instance.toggleKilograms()
-        XCTAssert(sut.headerLabelText(0) == "lbs")
-        XCTAssert(sut.headerLabelText(1) == "Reps")
-        XCTAssert(sut.headerLabelText(2) == "Time")
-    }
+//    func testHeaderLabelText() {
+//        if !PPLDefaults.instance.isKilograms() {
+//            PPLDefaults.instance.toggleKilograms()
+//        }
+//        XCTAssert(sut.headerLabelText(0) == "Kg")
+//        PPLDefaults.instance.toggleKilograms()
+//        XCTAssert(sut.headerLabelText(0) == "lbs")
+//        XCTAssert(sut.headerLabelText(1) == "Reps")
+//        XCTAssert(sut.headerLabelText(2) == "Time")
+//    }
     
     func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise) {
         exerciseCompletionExpectation?.fulfill()

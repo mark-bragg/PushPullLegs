@@ -58,13 +58,25 @@ class ExerciseSetViewModel: NSObject {
         })
     }
     
+    func restartSet() {
+        stopWatch.start()
+    }
+    
     func startSetWithWeight(_ weight: Double) {
+        setStateForStartSet()
+        fireOffStart(weight)
+    }
+    
+    fileprivate func setStateForStartSet() {
         do {
             try setState(.inProgress)
         } catch {
             print("invalid state error")
             return
         }
+    }
+    
+    fileprivate func fireOffStart(_ weight: Double) {
         stopWatch.start()
         self.weight = weight
         delegate?.exerciseSetViewModelStartedSet(self)
@@ -111,6 +123,21 @@ class ExerciseSetViewModel: NSObject {
     func cancel() {
         state = .canceled
         self.delegate?.exerciseSetViewModelCanceledSet(self)
+    }
+    
+    func revertState() throws {
+        switch state {
+        case .inProgress:
+            state = .notStarted
+        case .ending:
+            state = .inProgress
+        case .finished:
+            state = .ending
+        case .notStarted:
+            state = .canceled
+        default:
+            state = .canceled
+        }
     }
     
     private func setState(_ newValue: ExerciseSetState) throws {

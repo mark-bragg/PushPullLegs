@@ -190,6 +190,23 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         wait(for: timerDelegateExpectations, timeout: 15)
     }
     
+    func testRevertState_stateReverted() {
+        sut.startSetWithWeight(90)
+        do {
+            try sut.revertState()
+        } catch {
+            XCTFail()
+        }
+        sut.startSetWithWeight(90)
+        sut.finishSetWithReps(10)
+        do {
+            try sut.revertState()
+        } catch {
+            XCTFail()
+        }
+        sut.finishSetWithReps(10)
+    }
+    
     func timerUpdate(_ text: String) {
         guard timerDelegateExpectations.count > 0 else {
             return

@@ -18,6 +18,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationItem.title = "Timer"
         finishButton.setTitle("Finish Set", for: .normal)
         finishButton.isEnabled = PPLDefaults.instance.countdown() == 0
         styleTimerLabel()
@@ -100,7 +101,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        exerciseSetViewModel?.timerDelegate = nil
+        
     }
     
     @IBAction func finishWorkout(_ sender: Any) {

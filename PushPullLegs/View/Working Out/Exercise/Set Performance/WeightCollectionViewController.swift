@@ -14,10 +14,18 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        label.text = "Enter Weight"
+        navigationItem.title = "Weight"
+        label.text = PPLDefaults.instance.isKilograms() ? "Kilograms" : "Pounds"
         button.setTitle("Begin Set", for: .normal)
         textField.keyboardType = .decimalPad
         characterLimit = 7
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let text = textField.text, text != ""  {
+            button.enable()
+        }
     }
     
     override func buttonReleased(_ sender: Any) {

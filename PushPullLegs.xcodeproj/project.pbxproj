@@ -20,6 +20,7 @@
 		490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */; };
 		490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */; };
 		4911325D246B13C100D689DD /* TypeSelectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4911325C246B13C100D689DD /* TypeSelectorViewController.xib */; };
+		491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CF62547D65E003A7526 /* RestTimerView.swift */; };
 		491DD62B248C565C0001F9F8 /* PPLStopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */; };
 		4929DB112454DB0C009DCC7F /* RepsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */; };
 		49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */; };
@@ -130,6 +131,7 @@
 		490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseTimerViewController.xib; sourceTree = "<group>"; };
 		490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		4911325C246B13C100D689DD /* TypeSelectorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TypeSelectorViewController.xib; sourceTree = "<group>"; };
+		491C8CF62547D65E003A7526 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
 		491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLStopWatch.swift; sourceTree = "<group>"; };
 		4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsCollectionViewController.swift; sourceTree = "<group>"; };
 		49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushPullLegs.xcdatamodel; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				49E675F9244CDA54001F5974 /* ExerciseTemplateSelectionViewController.swift */,
 				49E675FD244CDAB6001F5974 /* ExerciseSelectionViewModel.swift */,
 				4973C11D244BB592009460F2 /* ExerciseViewController.swift */,
+				491C8CF62547D65E003A7526 /* RestTimerView.swift */,
 			);
 			path = Exercise;
 			sourceTree = "<group>";
@@ -953,6 +956,7 @@
 				49EF4BB023F838F60071687D /* ExerciseDataManager.swift in Sources */,
 				49C8D24124A99E0000B361C7 /* PPLDefaults.swift in Sources */,
 				49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */,
+				491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */,
 				49EF4BB223F838FE0071687D /* WorkoutDataManager.swift in Sources */,
 				490D88E32452832F005FFEA3 /* QuantityCollectionViewController.swift in Sources */,
 				49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */,
