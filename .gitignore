@@ -3,3 +3,4 @@ PushPullLegs.xcodeproj/xcuserdata/markbragg.xcuserdatad/xcdebugger/
 Podfile.lock
 Pods/
 PushPullLegs.xcworkspace/
+*.DS_Store
