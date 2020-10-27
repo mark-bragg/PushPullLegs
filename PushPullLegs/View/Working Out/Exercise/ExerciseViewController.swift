@@ -14,7 +14,7 @@ protocol ExercisingViewController: UIViewController {
     var exerciseSetViewModel: ExerciseSetViewModel? { get set }
 }
 
-class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate {
+class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate, SetNavigationControllerDelegate {
 
     weak var weightCollector: WeightCollectionViewController!
     weak var exerciseTimer: ExerciseTimerViewController!
@@ -23,6 +23,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     var readOnly = false
     weak var restTimerView: RestTimerView!
     private let timerHeight: CGFloat = 150.0
+    weak var setNavController: SetNavigationController!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -56,8 +57,11 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         exerciseSetViewModel?.delegate = self
         exerciseSetViewModel?.setCollector = exerciseViewModel()
         let wc = WeightCollectionViewController()
+        let setNavController = SetNavigationController(rootViewController: wc)
         wc.exerciseSetViewModel = exerciseSetViewModel
-        presentModally(wc)
+        presentModally(setNavController)
+        self.setNavController = setNavController
+        setNavController.setDelegate = self
         weightCollector = wc
         if let v = restTimerView {
             v.isHidden = true
@@ -75,23 +79,28 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         present(alert, animated: true, completion: nil)
     }
     
-    func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel) {
-        dismiss(animated: true) {
-            let et = ExerciseTimerViewController()
-            et.exerciseSetViewModel = self.exerciseSetViewModel
-            et.exerciseSetViewModel?.timerDelegate = et
-            self.presentModally(et)
-            self.exerciseTimer = et
+    func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController) {
+        if viewController.isEqual(exerciseTimer) {
+            try? exerciseSetViewModel?.revertState()
+        } else if viewController.isEqual(repsCollector) {
+            try? exerciseSetViewModel?.revertState()
+            exerciseSetViewModel?.restartSet()
         }
     }
     
+    func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel) {
+        let et = ExerciseTimerViewController()
+        et.exerciseSetViewModel = self.exerciseSetViewModel
+        et.exerciseSetViewModel?.timerDelegate = et
+        self.setNavController.pushViewController(et, animated: true)
+        self.exerciseTimer = et
+    }
+    
     func exerciseSetViewModelStoppedTimer(_ viewModel: ExerciseSetViewModel) {
-        dismiss(animated: true) {
-            let rc = RepsCollectionViewController()
-            rc.exerciseSetViewModel = self.exerciseSetViewModel
-            self.presentModally(rc)
-            self.repsCollector = rc
-        }
+        let rc = RepsCollectionViewController()
+        rc.exerciseSetViewModel = self.exerciseSetViewModel
+        self.setNavController.pushViewController(rc, animated: true)
+        self.repsCollector = rc
     }
     
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
@@ -135,7 +144,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     }
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        if let _ = presentationController.presentedViewController as? ExercisingViewController {
+        if let _ = presentationController.presentedViewController as? SetNavigationController {
             if exerciseSetViewModel!.completedExerciseSet {
 
             } else {
@@ -174,6 +183,18 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     
 }
 
+protocol SetNavigationControllerDelegate {
+    func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController)
+}
+
+class SetNavigationController: UINavigationController {
+    var setDelegate: SetNavigationControllerDelegate?
+    override func popViewController(animated: Bool) -> UIViewController? {
+        setDelegate?.navigationController(self, willPop: topViewController!)
+        return super.popViewController(animated: animated)
+    }
+}
+
 extension PPLTableViewCell {
     
     fileprivate static let WEIGHT_LABEL_TAG = 123
@@ -202,55 +223,6 @@ extension PPLTableViewCell {
             rootView.addSubview(lbl)
         }
         return (weightLabel, repsLabel, timeLabel)
-    }
-}
-
-class RestTimerView: UIView {
-    private var text: String? {
-        willSet {
-            timerLabel.text = newValue
-        }
-    }
-    private var timerLabel = UILabel()
-    private var stopWatch: PPLStopWatch!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    func restartTimer() {
-        weak var weakSelf = self
-        stopWatch = PPLStopWatch(withHandler: { (seconds) in
-            DispatchQueue.main.async {
-                guard let strongSelf = weakSelf else { return }
-                strongSelf.text = String.format(seconds: seconds)
-            }
-        })
-        stopWatch.start()
-    }
-    
-    override func layoutSubviews() {
-        if !subviews.contains(timerLabel) {
-            setupTimerLabel()
-        }
-        layer.backgroundColor = UIColor.systemRed.cgColor
-        layer.borderColor = UIColor.white.cgColor
-        layer.borderWidth = 1.5
-        layer.cornerRadius = frame.height/2
-        addShadow(.shadowOffsetAddButton)
-    }
-    
-    func setupTimerLabel() {
-        timerLabel.frame = CGRect(x: 20, y: 10, width: frame.width - 40, height: frame.height - 20)
-        timerLabel.font = UIFont.systemFont(ofSize: 40, weight: .semibold)
-        timerLabel.textColor = .white
-        addSubview(timerLabel)
-        timerLabel.textAlignment = .center
-        timerLabel.backgroundColor = .clear
     }
 }
 

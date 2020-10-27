@@ -21,7 +21,11 @@ class PPLStopWatch {
     }
     
     func start() {
-        queue = DispatchQueue(label: "timer queue")
+        if queue == nil {
+            queue = DispatchQueue(label: "timer queue")
+        } else {
+            queue?.activate()
+        }
         startingTime = CFAbsoluteTimeGetCurrent()
         beginUpdating()
     }
