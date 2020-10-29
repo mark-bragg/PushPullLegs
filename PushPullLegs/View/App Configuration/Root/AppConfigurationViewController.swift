@@ -146,7 +146,11 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1 {
+        if indexPath.row == 0 {
+            let vc = AboutViewController()
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
+        } else if indexPath.row == 1 {
             navigationController?.pushViewController(WorkoutTemplateListViewController(), animated: true)
         } else if indexPath.row == 2 {
             let vc = ExerciseTemplateListViewController()
