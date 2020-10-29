@@ -13,7 +13,6 @@ let defaultCellIdentifier = "DefaultTableViewCell"
 
 class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentationControllerDelegate {
     
-    private var switchWidth: CGFloat = 0
     private weak var countdownLabel: UILabel!
     
     override func viewDidLoad() {
@@ -33,21 +32,19 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         removeSwitch(cell)
         removeSegmentedControl(cell)
-        if indexPath.row < 2 {
+        if indexPath.row < 3 {
             cell.selectionStyle = .default
             cell.addDisclosureIndicator()
         } else {
             cell.selectionStyle = .none
-            if indexPath.row == 2 {
+            if indexPath.row == 3 {
                 configureImperialMetricSegmenedControl(cell: cell)
-            } else if indexPath.row == 3 {
-                configureStartNextWorkoutPromptSwitch(cell: cell)
             } else {
                 configureCustomCountdownCell(cell: cell)
             }
         }
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
-        if textLabel == nil && indexPath.row != 2 {
+        if textLabel == nil && indexPath.row != 3 {
             textLabel = textLabelForCell(cell)
         }
         textLabel?.text = viewModel.title(indexPath: indexPath)
@@ -93,20 +90,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         self.tableView.reloadData()
     }
     
-    func configureStartNextWorkoutPromptSwitch(cell: PPLTableViewCell) {
-        if let _ = cell.rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
-        cell.rootView.isUserInteractionEnabled = true
-        let switchV = switchView(cell)
-        switchWidth = switchV.frame.width
-        switchV.setOn(PPLDefaults.instance.workoutTypePromptSwitchValue(), animated: false)
-        switchV.addTarget(self, action: #selector(toggleWorkoutTypePromptValue(_:)), for: .valueChanged)
-    }
-
-    @objc func toggleWorkoutTypePromptValue(_ switchView: UISwitch) {
-        PPLDefaults.instance.toggleWorkoutTypePromptValue()
-        tableView.reloadData()
-    }
-    
     func configureCustomCountdownCell(cell: PPLTableViewCell) {
         if let _ = cell.rootView.viewWithTag(2929) { return }
         cell.rootView.isUserInteractionEnabled = true
@@ -116,7 +99,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         countdownLabel.translatesAutoresizingMaskIntoConstraints = false
         countdownLabel.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -18).isActive = true
         countdownLabel.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
-        countdownLabel.widthAnchor.constraint(equalToConstant: switchWidth).isActive = true
+        countdownLabel.widthAnchor.constraint(equalToConstant: 75).isActive = true
         countdownLabel.heightAnchor.constraint(equalToConstant: countdownLabel.frame.height).isActive = true
         cell.rootView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCountdownPicker)))
         self.countdownLabel = countdownLabel
@@ -163,9 +146,9 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
+        if indexPath.row == 1 {
             navigationController?.pushViewController(WorkoutTemplateListViewController(), animated: true)
-        } else if indexPath.row == 1 {
+        } else if indexPath.row == 2 {
             let vc = ExerciseTemplateListViewController()
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
@@ -212,19 +195,13 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
     func title(indexPath: IndexPath) -> String? {
         switch indexPath.row {
         case 0:
-            return "Edit Workout List"
+            return "About"
         case 1:
-            return "Edit Exercise List"
+            return "Edit Workout List"
         case 2:
-            if PPLDefaults.instance.isKilograms() {
-                return "Kilograms"
-            }
-            return "Pounds"
+            return "Edit Exercise List"
         case 3:
-            if PPLDefaults.instance.workoutTypePromptSwitchValue() {
-                return "Custom Workout Choice"
-            }
-            return "Start Next Workout in Program"
+            return ""
         case 4:
             return "Countdown for each set"
         default:
