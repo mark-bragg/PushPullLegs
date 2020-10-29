@@ -8,6 +8,7 @@
 
 import GoogleMobileAds
 import UIKit
+import Combine
 
 class PPLTableViewController: UIViewController {
     
@@ -23,6 +24,7 @@ class PPLTableViewController: UIViewController {
     var headerView: UIView? {
         return view.viewWithTag(headerTag)
     }
+    var cancellables: Set<AnyCancellable> = []
     
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {

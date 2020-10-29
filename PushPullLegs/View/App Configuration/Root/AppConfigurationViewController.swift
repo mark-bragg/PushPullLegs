@@ -14,7 +14,6 @@ let defaultCellIdentifier = "DefaultTableViewCell"
 class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentationControllerDelegate {
     
     private var switchWidth: CGFloat = 0
-    private var cancellables = [AnyCancellable]()
     private weak var countdownLabel: UILabel!
     
     override func viewDidLoad() {

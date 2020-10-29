@@ -15,6 +15,7 @@ class WorkoutViewController: PPLTableViewController {
     private var exerciseSelectionViewModel: ExerciseSelectionViewModel!
     private let section1 = 0
     private let section2 = 1
+    @Published private(set) var popped = false
     
     func workoutEditViewModel() -> WorkoutEditViewModel {
         return viewModel as! WorkoutEditViewModel
@@ -37,7 +38,7 @@ class WorkoutViewController: PPLTableViewController {
         }
         setupAddButton()
         reload()
-//        navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
+        navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
     }
     
     override func addAction(_ sender: Any) {
@@ -68,13 +69,13 @@ class WorkoutViewController: PPLTableViewController {
     func presentFinishWorkoutPrompt() {
         guard viewModel.rowCount(section: 1) > 0 else {
             workoutEditViewModel().deleteWorkout()
-            navigationController?.popViewController(animated: true)
+            popFromNavStack()
             return
         }
         let alert = UIAlertController.init(title: "Workout Complete?", message: "Once you save a workout, you cannot edit it later.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
             self.workoutEditViewModel().finishWorkout()
-            self.navigationController?.popViewController(animated: true)
+            self.popFromNavStack()
         }))
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
             self.cancel(self)
@@ -85,6 +86,11 @@ class WorkoutViewController: PPLTableViewController {
     
     @objc func cancel(_ sender: Any) {
         self.workoutEditViewModel().deleteWorkout()
+        popFromNavStack()
+    }
+    
+    fileprivate func popFromNavStack() {
+        popped = true
         self.navigationController?.popViewController(animated: true)
     }
     

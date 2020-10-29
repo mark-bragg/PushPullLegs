@@ -66,6 +66,9 @@ class StartWorkoutViewController: PPLTableViewController {
         didNavigateToWorkout = true
         let vc = WorkoutViewController()
         vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
+        vc.$popped.sink { (popped) in
+            PPLDefaults.instance.setWorkoutInProgress(false)
+        }.store(in: &cancellables)
         AppState.shared.workoutInProgress = true
         vc.hidesBottomBarWhenPushed = true
         navigationController!.pushViewController(vc, animated: true)
