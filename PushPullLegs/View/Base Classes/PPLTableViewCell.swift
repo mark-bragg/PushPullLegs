@@ -16,6 +16,7 @@ class PPLTableViewCell: UITableViewCell {
     @IBOutlet weak var rootView: ShadowBackground!
     var pplSelectionFlag = false
     weak var indicator: UIView?
+    var autoDeselect = true
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,9 +27,13 @@ class PPLTableViewCell: UITableViewCell {
         guard selectionStyle != .none else { return }
         if highlighted {
             self.rootView.removeShadow()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                self.rootView.addShadow(.shadowOffsetCell)
+            if autoDeselect {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    self.rootView.addShadow(.shadowOffsetCell)
+                }
             }
+        } else {
+            self.rootView.addShadow(.shadowOffsetCell)
         }
     }
 

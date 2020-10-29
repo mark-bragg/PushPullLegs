@@ -19,13 +19,14 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         super.viewWillAppear(animated)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
         navigationItem.title = "Select Exercises"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(pop))
     }
     
     private func exerciseSelectionViewModel() -> ExerciseSelectionViewModel {
         viewModel as! ExerciseSelectionViewModel
     }
     
-    override func pop() {
+    @objc override func pop() {
         super.pop()
         exerciseSelectionViewModel().commitChanges()
         delegate?.exerciseTemplatesAdded()
@@ -41,6 +42,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        cell.autoDeselect = false
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
