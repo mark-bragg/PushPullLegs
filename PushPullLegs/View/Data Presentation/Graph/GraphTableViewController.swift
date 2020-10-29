@@ -107,7 +107,6 @@ extension GraphTableViewController: UITableViewDataSource {
         cell.rootView.addSubview(view)
         cell.contentView.clipsToBounds = false
         if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
-            addControlToCell(cell, indexPath.row)
             cell.addDisclosureIndicator()
         } else {
             cell.addHelpIndicator(target: self, action: #selector(help(_:)))
@@ -149,13 +148,6 @@ extension GraphTableViewController: UITableViewDataSource {
         vcForRow(row).view
     }
     
-    func addControlToCell(_ cell: PPLTableViewCell, _ row: Int) {
-        guard let control = cell.subviews.first(where: { $0.isKind(of: UIControl.self) }) as? UIControl else { return }
-        control.tag = row
-        constrain(control, toInsideOf: cell)
-        control.addTarget(self, action: #selector(showGraph(_:)), for: .touchUpInside)
-    }
-    
     @objc private func showGraph(_ row: Int) {
         guard let nav = navigationController else { return }
         let vc = GraphViewController(type: typeForRow(row))
@@ -193,7 +185,9 @@ extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
 
 extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showGraph(indexPath.row)
+        if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
+            showGraph(indexPath.row)
+        }
     }
 }
 

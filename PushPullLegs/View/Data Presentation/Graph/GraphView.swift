@@ -215,7 +215,7 @@ class GraphView: UIControl, ObservableObject {
         if subviews.contains(noDataView) {
             return
         }
-        noDataView.frame = CGRect(origin: .zero, size: frame.size)
+        noDataView.frame = bounds
         noDataView.lightBackground = false
         addSubview(noDataView)
     }

@@ -16,6 +16,7 @@ class WorkoutViewController: PPLTableViewController {
     private let section1 = 0
     private let section2 = 1
     @Published private(set) var popped = false
+    private var firstLoad = true
     
     func workoutEditViewModel() -> WorkoutEditViewModel {
         return viewModel as! WorkoutEditViewModel
@@ -39,6 +40,11 @@ class WorkoutViewController: PPLTableViewController {
         setupAddButton()
         reload()
         navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        firstLoad = false
     }
     
     override func addAction(_ sender: Any) {
@@ -158,7 +164,9 @@ extension WorkoutViewController {
     override func reload() {
         workoutEditViewModel().exerciseTemplatesAdded()
         tableView.reloadData()
-        super.reload()
+        if !firstLoad {
+            super.reload()
+        }
     }
 }
 

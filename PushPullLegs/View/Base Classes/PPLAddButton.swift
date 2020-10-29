@@ -84,7 +84,7 @@ class PPLAddButton: UIControl {
     @objc private func addTouchDown(_ sender: Any) {
         UIView.animate(withDuration: 0.25) { [weak self] in
             guard let self = self else { return }
-            self.layer.shadowOffset = .shadowOffset
+            self.layer.shadowOffset = .zero
         }
     }
     
