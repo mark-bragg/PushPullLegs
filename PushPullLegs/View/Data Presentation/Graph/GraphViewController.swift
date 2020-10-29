@@ -14,7 +14,6 @@ class GraphViewController: UIViewController {
     var viewModel: WorkoutGraphViewModel!
     weak var containerView: UIView!
     weak var graphView: GraphView!
-    weak var titleLabel: UILabel!
     weak var dateLabel: UILabel!
     weak var volumeLabel: UILabel!
     var isInteractive = true
@@ -41,6 +40,10 @@ class GraphViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard firstLoad else { return }
+        let lbl = UILabel()
+        lbl.text = viewModel.title()
+        lbl.font = titleLabelFont()
+        navigationItem.titleView = lbl
         firstLoad = false
         if let frame = frame {
             view.frame = frame
@@ -78,10 +81,9 @@ class GraphViewController: UIViewController {
     func addConstraints() {
         if needConstraints, let view = isInteractive ? containerView : self.view, let superview = view.superview {
             needConstraints = false
-            let insets: UIEdgeInsets
+            view.translatesAutoresizingMaskIntoConstraints = false
+            let insets = superview.safeAreaInsets
             if !isInteractive {
-                insets = superview.safeAreaInsets
-                view.translatesAutoresizingMaskIntoConstraints = false
                 view.topAnchor.constraint(equalTo: superview.topAnchor, constant: insets.top).isActive = true
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
                 view.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
@@ -92,8 +94,14 @@ class GraphViewController: UIViewController {
                 containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             } else {
-                insets = SceneDelegate.shared.window!.safeAreaInsets
-                view.frame = CGRect(x: 0, y: insets.top, width: self.view.frame.width, height: self.view.frame.height - (insets.top + insets.bottom))
+                let guide = view.safeAreaLayoutGuide
+                self.view.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+                self.view.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+                self.view.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
+                view.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
+                view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
+                view.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+                view.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
             }
             
         }
@@ -101,25 +109,31 @@ class GraphViewController: UIViewController {
     
     private func addLabels() {
         var labels = [UILabel]()
-        titleLabel = label()
-        titleLabel.text = viewModel.title()
-        titleLabel.sizeToFit()
-        labels.append(titleLabel)
-        if isInteractive {
+        if !isInteractive {
+            labels.append(titleLabel())
+        } else {
             dateLabel = label()
-            dateLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: titleLabel.frame.height)
+            dateLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 75)
             labels.append(dateLabel)
             volumeLabel = label()
-            volumeLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: titleLabel.frame.height)
+            volumeLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 75)
             labels.append(volumeLabel)
         }
         let labelStack = UIStackView(arrangedSubviews: labels)
         labelStack.axis = .vertical
         labelStack.distribution = .fillEqually
-        labelStack.frame = CGRect(x: 0, y: 8, width: view.frame.width, height: titleLabel.frame.height * CGFloat(labels.count))
+        labelStack.frame = CGRect(x: 0, y: 8, width: view.frame.width, height: 75 * CGFloat(labels.count))
         containerView.addSubview(labelStack)
         self.labelStack = labelStack
     }
+    
+    private func titleLabel() -> UILabel {
+        let lbl = label()
+        lbl.text = viewModel.title()
+        lbl.sizeToFit()
+        return lbl
+    }
+    
     func label() -> UILabel {
         let label = UILabel()
         label.textAlignment = .center

@@ -37,6 +37,7 @@ class WorkoutViewController: PPLTableViewController {
         }
         setupAddButton()
         reload()
+//        navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
     }
     
     override func addAction(_ sender: Any) {
@@ -47,17 +48,16 @@ class WorkoutViewController: PPLTableViewController {
             vc.delegate = workoutEditViewModel()
             navigationController?.pushViewController(vc, animated: true)
         } else {
-            if let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateViewController(withIdentifier: ViewControllerIdentifier.createExerciseViewController) as? ExerciseTemplateCreationViewController {
-                vc.showExerciseType = false
-                vc.viewModel = ExerciseTemplateCreationViewModel(withType: workoutEditViewModel().exerciseType, management: TemplateManagement())
-                vc.viewModel?.reloader = self
-                vc.modalPresentationStyle = .pageSheet
-                present(vc, animated: true, completion: nil)
-            }
+            let vc = ExerciseTemplateCreationViewController()
+            vc.showExerciseType = false
+            vc.viewModel = ExerciseTemplateCreationViewModel(withType: workoutEditViewModel().exerciseType, management: TemplateManagement())
+            vc.viewModel?.reloader = self
+            vc.modalPresentationStyle = .pageSheet
+            present(vc, animated: true, completion: nil)
         }
     }
     
-    override func pop() {
+    @objc override func pop() {
         if viewModel.rowCount(section: 1) > 0 {
             presentFinishWorkoutPrompt()
         } else {

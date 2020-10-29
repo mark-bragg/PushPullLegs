@@ -27,7 +27,6 @@ class PPLTableViewController: UIViewController {
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        addHeaderView()
         setupTableView()
         hideBottomBar()
         addBannerView()
@@ -35,43 +34,60 @@ class PPLTableViewController: UIViewController {
         view.backgroundColor = PPLColor.grey
         addNoDataView()
         tableView.reloadData()
-        addTitle()
+        setTitle()
     }
     
-    private func addHeaderView() {
-        let headerView = UIView()
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.tag = headerTag
-        view.addSubview(headerView)
-        constrainHeaderView(headerView)
+    fileprivate func setupTableView() {
+        setTableView()
+        addTableFooter()
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
-    private func constrainHeaderView(_ headerView: UIView) {
-        let guide = view.safeAreaLayoutGuide
-        headerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        headerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
-        headerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        set(headerView, height: 50)
-    }
-    
-    private func set(_ v: UIView, height constraint: CGFloat) {
-        v.heightAnchor.constraint(equalToConstant: constraint).isActive = true
-    }
-    
-    private func addTitle() {
-        guard let headerView = headerView else { return }
-        guard let viewModel = viewModel, let title = viewModel.title?() else {
-            set(headerView, height: 0)
-            return
+    fileprivate func setTableView() {
+        tableView = view.viewWithTag(tableViewTag) as? PPLTableView
+        if tableView == nil {
+            let tbl = PPLTableView()
+            tbl.tag = tableViewTag
+            view.addSubview(tbl)
+            tbl.translatesAutoresizingMaskIntoConstraints = false
+            tbl.rowHeight = 75
+            tbl.reloadData()
+            tableView = tbl
+            constrainTableView()
         }
+    }
+    
+    private func constrainTableView() {
+        let guide = view.safeAreaLayoutGuide
+        guard let tableView = tableView else { return }
+        tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
+    }
+    
+    fileprivate func addTableFooter() {
+        let footer = UIView(frame: .zero)
+        footer.backgroundColor = tableView.backgroundColor
+        tableView.tableFooterView = footer
+    }
+    
+    private func setTitle() {
+        let lbl = titleLabel()
+        navigationItem.titleView = lbl
+        navigationItem.title = lbl.text
+    }
+    
+    private func titleLabel() -> UILabel {
         let lbl = UILabel()
+        guard let viewModel = viewModel, let title = viewModel.title?() else {
+            return lbl
+        }
         lbl.text = title
-        lbl.font = UIFont.systemFont(ofSize: 36, weight: .heavy)
+        lbl.font = titleLabelFont()
         lbl.sizeToFit()
-        headerView.addSubview(lbl)
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        lbl.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+        return lbl
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -172,43 +188,6 @@ class PPLTableViewController: UIViewController {
         addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
         addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: y).isActive = true
         addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
-    }
-    
-    fileprivate func setupTableView() {
-        setTableView()
-        addTableFooter()
-        tableView.delegate = self
-        tableView.dataSource = self
-    }
-    
-    fileprivate func setTableView() {
-        tableView = view.viewWithTag(tableViewTag) as? PPLTableView
-        if tableView == nil {
-            let tbl = PPLTableView()
-            tbl.tag = tableViewTag
-            view.addSubview(tbl)
-            tbl.translatesAutoresizingMaskIntoConstraints = false
-            tbl.rowHeight = 75
-            tbl.reloadData()
-            view.addSubview(tbl)
-            tableView = tbl
-            constrainTableView()
-        }
-    }
-    
-    private func constrainTableView() {
-        let guide = view.safeAreaLayoutGuide
-        guard let tableView = tableView, let headerView = view.viewWithTag(headerTag) else { return }
-        tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
-    }
-    
-    fileprivate func addTableFooter() {
-        let footer = UIView(frame: .zero)
-        footer.backgroundColor = tableView.backgroundColor
-        tableView.tableFooterView = footer
     }
     
     fileprivate func addBackNavigationGesture() {
@@ -320,5 +299,11 @@ extension PPLTableViewController: ReloadProtocol {
             insertAddButtonInstructions()
             showNoDataView()
         }
+    }
+}
+
+extension UIViewController {
+    func titleLabelFont() -> UIFont {
+        UIFont.systemFont(ofSize: 36, weight: .heavy)
     }
 }

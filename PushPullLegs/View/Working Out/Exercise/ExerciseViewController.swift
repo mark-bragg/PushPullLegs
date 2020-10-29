@@ -24,6 +24,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     weak var restTimerView: RestTimerView!
     private let timerHeight: CGFloat = 150.0
     weak var setNavController: SetNavigationController!
+    private var isLeftBarItemSetToDone = false
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -31,6 +32,19 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
             setupAddButton()
         }
         tableView.allowsSelection = false
+//        updateLeftBarButtonItem()
+//    }
+//
+//    private func updateLeftBarButtonItem() {
+//        navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: backNavigationBarButtonItem(), target: self, action: #selector(pop)), animated: false)
+//    }
+//
+//    private func backNavigationBarButtonItem() -> UIBarButtonItem.SystemItem {
+//        if viewModel.rowCount(section: 1) == 0 {
+//            return .cancel
+//        }
+//        isLeftBarItemSetToDone = true
+//        return .done
     }
     
     override func pop() {
@@ -108,6 +122,9 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         setupRestTimerView()
         if exerciseViewModel().rowCount() > 0 {
             AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel().title() : nil
+//            if !isLeftBarItemSetToDone {
+//                updateLeftBarButtonItem()
+//            }
         }
     }
     

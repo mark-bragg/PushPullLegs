@@ -80,7 +80,7 @@ class WorkoutLogViewModel: NSObject, PPLTableViewModel {
     }
     
     func title() -> String? {
-        return "Workouts"
+        return "Workout Log"
     }
     
     func title(indexPath: IndexPath) -> String? {

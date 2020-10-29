@@ -29,16 +29,6 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
         return viewModel as! ExerciseTemplateListViewModel
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifier.createTemplateExercise,
-            let vc = segue.destination as? ExerciseTemplateCreationViewController {
-            vc.showExerciseType = true
-            vc.viewModel = ExerciseTemplateCreationViewModel(management: exerciseTemplateListViewModel().templateManagement)
-            vc.presentationController?.delegate = self
-            vc.viewModel?.reloader = self
-        }
-    }
-    
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         reload()
     }
@@ -66,7 +56,13 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     
     override func addAction(_ sender: Any) {
         super.addAction(sender)
-        performSegue(withIdentifier: SegueIdentifier.createTemplateExercise, sender: self)
+        let vc = ExerciseTemplateCreationViewController()
+        vc.showExerciseType = true
+        vc.viewModel = ExerciseTemplateCreationViewModel(management: exerciseTemplateListViewModel().templateManagement)
+        vc.presentationController?.delegate = self
+        vc.viewModel?.reloader = self
+        vc.modalPresentationStyle = .pageSheet
+        present(vc, animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

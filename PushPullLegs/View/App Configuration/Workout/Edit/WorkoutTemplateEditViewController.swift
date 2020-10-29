@@ -22,7 +22,12 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     
     override func addAction(_ sender: Any) {
         super.addAction(sender)
-        performSegue(withIdentifier: SegueIdentifier.createTemplateExercise, sender: self)
+        let vc = ExerciseTemplateCreationViewController()
+        let vm = ExerciseTemplateCreationViewModel(withType: workoutTemplateEditViewModel().type(), management: workoutTemplateEditViewModel().templateManagement)
+        vm.reloader = self
+        vc.viewModel = vm
+        vc.modalPresentationStyle = .pageSheet
+        present(vc, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,9 +37,7 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
             return
         }
         currentSegueId = id
-        let vm = ExerciseTemplateCreationViewModel(withType: workoutTemplateEditViewModel().type(), management: workoutTemplateEditViewModel().templateManagement)
-        vm.reloader = self
-        vc.viewModel = vm
+        
     }
     
     private func workoutTemplateEditViewModel() -> WorkoutTemplateEditViewModel {

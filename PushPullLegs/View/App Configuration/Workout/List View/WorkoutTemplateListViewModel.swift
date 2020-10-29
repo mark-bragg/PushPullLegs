@@ -20,11 +20,15 @@ class WorkoutTemplateListViewModel: NSObject, PPLTableViewModel {
     }
     
     func title(indexPath: IndexPath) -> String? {
-        return workouts[indexPath.row].name
+        workouts[indexPath.row].name
+    }
+    
+    func title() -> String? {
+        "Workouts"
     }
     
     func rowCount(section: Int) -> Int {
-        return workouts.count
+        workouts.count
     }
     
     func select(_ indexPath: IndexPath) {
@@ -33,6 +37,6 @@ class WorkoutTemplateListViewModel: NSObject, PPLTableViewModel {
     }
     
     func selectedType() -> ExerciseType {
-        return exerciseType
+        exerciseType
     }
 }

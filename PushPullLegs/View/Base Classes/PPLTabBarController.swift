@@ -15,10 +15,12 @@ class PPLTabBarController: UITabBarController {
         viewControllers = [
             workoutNavigationController(),
             workoutLogNavigationController(),
+            trendsNavigationController(),
             appConfigurationNavigationController()
         ]
         for navigationController in viewControllers as! [UINavigationController] {
-            navigationController.setNavigationBarHidden(true, animated: false)
+            navigationController.navigationBar.isTranslucent = false
+            navigationController.navigationBar.barTintColor = PPLColor.darkGrey
         }
     }
     
@@ -27,24 +29,28 @@ class PPLTabBarController: UITabBarController {
     }
     
     fileprivate func workoutNavigationController() -> UINavigationController {
-        let vc = UINavigationController(rootViewController: GraphTableViewController())
+        let vc = UINavigationController(rootViewController: StartWorkoutViewController())
         vc.tabBarItem = UITabBarItem(title: EntityName.workout.rawValue, image: UIImage(named: "curlbar"), selectedImage: nil)
-        vc.tabBarItem.badgeColor = PPLColor.green
+        return vc
+    }
+    
+    fileprivate func trendsNavigationController() -> UINavigationController {
+        let vc = UINavigationController(rootViewController: GraphTableViewController())
+        vc.tabBarItem = UITabBarItem(title: "Trends", image: UIImage(named: "line_graph"), selectedImage: nil)
         return vc
     }
     
     fileprivate func workoutLogNavigationController() -> UINavigationController {
         let vc = UINavigationController(rootViewController: WorkoutLogViewController())
         vc.tabBarItem = UITabBarItem(title: "Database", image: UIImage(named: "database"), selectedImage: nil)
-        vc.tabBarItem.badgeColor = PPLColor.green
         return vc
     }
     
     fileprivate func appConfigurationNavigationController() -> UINavigationController {
-        let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let vc = UINavigationController(rootViewController: AppConfigurationViewController())
         vc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "gear"), selectedImage: nil)
-        vc.tabBarItem.badgeColor = PPLColor.green
         return vc
     }
 
 }
+

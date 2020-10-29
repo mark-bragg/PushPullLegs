@@ -84,8 +84,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         segment.translatesAutoresizingMaskIntoConstraints = false
         segment.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
         segment.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
-        segment.widthAnchor.constraint(equalTo: cell.rootView.widthAnchor).isActive = true
-        segment.heightAnchor.constraint(equalTo: cell.rootView.heightAnchor).isActive = true
+        segment.widthAnchor.constraint(equalTo: cell.rootView.widthAnchor, multiplier: 0.9).isActive = true
+        segment.heightAnchor.constraint(equalTo: cell.rootView.heightAnchor, multiplier: 0.75).isActive = true
     }
 
     @objc func toggleKilogramsPoundsValue(_ control: UISegmentedControl) {
@@ -98,6 +98,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         if let _ = cell.rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
         cell.rootView.isUserInteractionEnabled = true
         let switchV = switchView(cell)
+        switchWidth = switchV.frame.width
         switchV.setOn(PPLDefaults.instance.workoutTypePromptSwitchValue(), animated: false)
         switchV.addTarget(self, action: #selector(toggleWorkoutTypePromptValue(_:)), for: .valueChanged)
     }
@@ -163,22 +164,17 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let segueId = segueIdentifierForRow(indexPath.row) {
-            performSegue(withIdentifier: segueId, sender: self)
+        if indexPath.row == 0 {
+            navigationController?.pushViewController(WorkoutTemplateListViewController(), animated: true)
+        } else if indexPath.row == 1 {
+            let vc = ExerciseTemplateListViewController()
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
-    }
-    
-    func segueIdentifierForRow(_ row: Int) -> String? {
-        switch row {
-        case 0: return SegueIdentifier.editWorkoutList
-        case 1: return SegueIdentifier.editExerciseList
-        default: break
-        }
-        return nil
     }
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
@@ -211,7 +207,7 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
     }
     
     func title() -> String? {
-        return "Workout Settings"
+        return "App Settings"
     }
     
     func title(indexPath: IndexPath) -> String? {

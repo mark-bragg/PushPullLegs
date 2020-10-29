@@ -15,8 +15,8 @@ class WorkoutTemplateListViewController: PPLTableViewController {
     var firstLoad = true
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         viewModel = WorkoutTemplateListViewModel(withTemplateManagement: TemplateManagement())
+        super.viewWillAppear(animated)
     }
     
     private func workoutTemplateListViewModel() -> WorkoutTemplateListViewModel {
@@ -36,17 +36,13 @@ class WorkoutTemplateListViewController: PPLTableViewController {
             return
         }
         workoutTemplateListViewModel().select(indexPath)
-        performSegue(withIdentifier: SegueIdentifier.editWorkout, sender: self)
+        let vc = WorkoutTemplateEditViewController()
+        vc.viewModel = WorkoutTemplateEditViewModel(withType: workoutTemplateListViewModel().selectedType(), templateManagement: TemplateManagement())
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return tableView.frame.height / 3.0
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifier.editWorkout, let vc = segue.destination as? WorkoutTemplateEditViewController {
-            vc.viewModel = WorkoutTemplateEditViewModel(withType: workoutTemplateListViewModel().selectedType(), templateManagement: TemplateManagement())
-        }
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

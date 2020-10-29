@@ -9,20 +9,26 @@
 import UIKit
 import GoogleMobileAds
 
-class GraphTableViewController: UIViewController, TypeSelectorDelegate {
+class GraphTableViewController: UIViewController {
     
     weak var tableView: UITableView!
     var pushVc: GraphViewController!
     var pullVc: GraphViewController!
     var legsVc: GraphViewController!
-    private var exerciseType: ExerciseType?
     private var interstitial: GADInterstitial?
-    private var didNavigateToWorkout: Bool = false
     private var helpTag = 0
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         view.backgroundColor = PPLColor.grey
+        prepareTableView()
+        prepareGraphViewControllers()
+        navigationItem.titleView = titleLabel()
+        constrainTableView()
+        tableView.rowHeight = (tableView.frame.height) / 3
+    }
+    
+    fileprivate func prepareTableView() {
         let tbv = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - (tabBarController?.tabBar.frame.height ?? 0)))
         tbv.register(UINib(nibName: "PPLTableViewCell", bundle: nil), forCellReuseIdentifier: PPLTableViewCellIdentifier)
         tbv.backgroundColor = PPLColor.grey
@@ -30,15 +36,37 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
         view.addSubview(tbv)
         tbv.dataSource = self
         tbv.delegate = self
-        tbv.rowHeight = tbv.frame.height / 4.25
+        tbv.separatorStyle = .none
         tableView = tbv
-        let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: tbv.rowHeight - 16)
+    }
+    
+    fileprivate func prepareGraphViewControllers() {
+        guard pushVc == nil || pullVc == nil || legsVc == nil else {
+            return
+        }
+        let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: tableView.rowHeight - 16)
         pushVc = GraphViewController(type: .push, frame: frame)
         pullVc = GraphViewController(type: .pull, frame: frame)
         legsVc = GraphViewController(type: .legs, frame: frame)
         pushVc.isInteractive = false
         pullVc.isInteractive = false
         legsVc.isInteractive = false
+    }
+    
+    private func constrainTableView() {
+        let guide = view.safeAreaLayoutGuide
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
+    }
+    
+    func titleLabel() -> UILabel {
+        let lbl = UILabel()
+        lbl.text = "Trends"
+        lbl.font = titleLabelFont()
+        return lbl
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,13 +76,9 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
                 interstitial = createAndLoadInterstitial()
             }
             if let interstitial = interstitial,
-                interstitial.isReady && didNavigateToWorkout {
+                interstitial.isReady {
                 interstitial.present(fromRootViewController: self)
             }
-            didNavigateToWorkout = false
-        }
-        if AppState.shared.workoutInProgress {
-            self.navigateToNextWorkout()
         }
         tableView.reloadData()
         pushVc.view.setNeedsLayout()
@@ -67,61 +91,27 @@ class GraphTableViewController: UIViewController, TypeSelectorDelegate {
       interstitial.load(GADRequest())
       return interstitial
     }
-    
-    func startWorkout() {
-        if PPLDefaults.instance.workoutTypePromptSwitchValue() {
-            presentTypeSelector()
-        } else {
-            navigateToNextWorkout()
-        }
-    }
-    
-    func presentTypeSelector() {
-        let typeVC = TypeSelectorViewController()
-        typeVC.delegate = self
-        typeVC.modalPresentationStyle = .pageSheet
-        present(typeVC, animated: true, completion: nil)
-    }
-    
-    func navigateToNextWorkout() {
-        didNavigateToWorkout = true
-        let vc = WorkoutViewController()
-        vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
-        AppState.shared.workoutInProgress = true
-        vc.hidesBottomBarWhenPushed = true
-        navigationController!.pushViewController(vc, animated: true)
-    }
-    
-    func select(type: ExerciseType) {
-        exerciseType = type
-        navigateToNextWorkout()
-        exerciseType = nil
-    }
 
 }
 
 extension GraphTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        4
+        3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         cell.tag = indexPath.row
-        if indexPath.row == 3 {
-            addStartNextWorkoutLabel(rootView: cell.rootView)
+        cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
+        let view = viewForRow(indexPath.row)
+        cell.rootView.addSubview(view)
+        cell.contentView.clipsToBounds = false
+        if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
+            addControlToCell(cell, indexPath.row)
             cell.addDisclosureIndicator()
         } else {
-            cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
-            let view = viewForRow(indexPath.row)
-            cell.rootView.addSubview(view)
-            if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
-                addControlToCell(cell, indexPath.row)
-                cell.addDisclosureIndicator()
-            } else {
-                cell.addHelpIndicator(target: self, action: #selector(help(_:)))
-                cell.selectionStyle = .none
-            }
+            cell.addHelpIndicator(target: self, action: #selector(help(_:)))
+            cell.selectionStyle = .none
         }
         return cell
     }
@@ -157,17 +147,6 @@ extension GraphTableViewController: UITableViewDataSource {
     
     func viewForRow(_ row: Int) -> UIView {
         vcForRow(row).view
-    }
-    
-    private func addStartNextWorkoutLabel(rootView: UIView) {
-        let lbl = UILabel()
-        lbl.text = "Start next workout"
-        lbl.font = UIFont.systemFont(ofSize: 26, weight: .black)
-        lbl.textAlignment = .center
-        lbl.textColor = PPLColor.textBlue
-        lbl.backgroundColor = .clear
-        rootView.addSubview(lbl)
-        constrain(lbl, toInsideOf: rootView, insets: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
     }
     
     func addControlToCell(_ cell: PPLTableViewCell, _ row: Int) {
@@ -214,11 +193,7 @@ extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
 
 extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 3 {
-            startWorkout()
-        } else if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
-            showGraph(indexPath.row)
-        }
+        showGraph(indexPath.row)
     }
 }
 
