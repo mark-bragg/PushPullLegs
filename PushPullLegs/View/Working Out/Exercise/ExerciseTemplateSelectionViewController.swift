@@ -14,10 +14,12 @@ protocol ExerciseTemplateSelectionDelegate: NSObject {
 
 class ExerciseTemplateSelectionViewController: PPLTableViewController {
     weak var delegate: ExerciseTemplateSelectionDelegate?
+    var selectedIndices = [Int]()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
+        tableView.allowsMultipleSelection = true
         navigationItem.title = "Select Exercises"
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(pop))
     }
