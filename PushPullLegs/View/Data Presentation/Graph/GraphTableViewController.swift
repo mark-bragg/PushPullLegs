@@ -15,7 +15,7 @@ class GraphTableViewController: UIViewController {
     var pushVc: GraphViewController!
     var pullVc: GraphViewController!
     var legsVc: GraphViewController!
-    private var interstitial: GADInterstitial?
+    weak var bannerView: GADBannerView!
     private var helpTag = 0
     
     override func viewWillAppear(_ animated: Bool) {
@@ -26,6 +26,7 @@ class GraphTableViewController: UIViewController {
         navigationItem.titleView = titleLabel()
         constrainTableView()
         tableView.rowHeight = (tableView.frame.height) / 3
+        addBannerView()
     }
     
     fileprivate func prepareTableView() {
@@ -71,25 +72,10 @@ class GraphTableViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if AppState.shared.isAdEnabled {
-            if interstitial == nil || interstitial!.hasBeenUsed {
-                interstitial = createAndLoadInterstitial()
-            }
-            if let interstitial = interstitial,
-                interstitial.isReady {
-                interstitial.present(fromRootViewController: self)
-            }
-        }
         tableView.reloadData()
         pushVc.view.setNeedsLayout()
         pullVc.view.setNeedsLayout()
         legsVc.view.setNeedsLayout()
-    }
-    
-    func createAndLoadInterstitial() -> GADInterstitial {
-      let interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
-      interstitial.load(GADRequest())
-      return interstitial
     }
 
 }
@@ -165,6 +151,25 @@ extension GraphTableViewController: UITableViewDataSource {
         default:
             return .legs
         }
+    }
+    
+    fileprivate func addBannerView() {
+        guard AppState.shared.isAdEnabled else {
+            return
+        }
+        let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        view.addSubview(bannerView)
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        self.bannerView = bannerView
+        if let tbc = tabBarController, !hidesBottomBarWhenPushed {
+            positionBannerView(yOffset: tbc.tabBar.frame.height)
+        }
+    }
+    
+    func positionBannerView(yOffset: CGFloat = 0.0) {
+        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + yOffset), width: bannerView.frame.width, height: bannerView.frame.height)
     }
     
 }

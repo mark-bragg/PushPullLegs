@@ -13,11 +13,12 @@ class StartWorkoutViewController: PPLTableViewController {
 
     private var exerciseType: ExerciseType?
     private var didNavigateToWorkout: Bool = false
-    private var interstitial: GADInterstitial?
+    private weak var interstitial: GADInterstitial?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = StartWorkoutViewModel()
+        hasBannerView = false
     }
     
     override func viewWillAppear(_ animated: Bool) {

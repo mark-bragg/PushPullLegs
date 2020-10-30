@@ -25,13 +25,16 @@ class PPLTableViewController: UIViewController {
         return view.viewWithTag(headerTag)
     }
     var cancellables: Set<AnyCancellable> = []
+    var hasBannerView = true
     
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupTableView()
         hideBottomBar()
-        addBannerView()
+        if hasBannerView {
+            addBannerView()
+        }
         addBackNavigationGesture()
         view.backgroundColor = PPLColor.grey
         addNoDataView()
