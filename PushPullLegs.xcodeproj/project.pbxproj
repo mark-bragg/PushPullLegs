@@ -294,6 +294,54 @@
 			path = "Set Performance";
 			sourceTree = "<group>";
 		};
+		491C8D00254BC157003A7526 /* button */ = {
+			isa = PBXGroup;
+			children = (
+				49359B8824C29886005FF7A8 /* PPLAddButton.swift */,
+				49359B8C24D60001005FF7A8 /* PPLButton.swift */,
+			);
+			path = button;
+			sourceTree = "<group>";
+		};
+		491C8D01254BC166003A7526 /* table */ = {
+			isa = PBXGroup;
+			children = (
+				49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */,
+				49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */,
+				49359B8624C28C64005FF7A8 /* PPLTableView.swift */,
+				491C8D02254BC183003A7526 /* cell */,
+			);
+			path = table;
+			sourceTree = "<group>";
+		};
+		491C8D02254BC183003A7526 /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */,
+				4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */,
+			);
+			path = cell;
+			sourceTree = "<group>";
+		};
+		491C8D03254BC1BD003A7526 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */,
+				49EF4BB323F8390A0071687D /* Date+Helpers.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
+		491C8D04254BC27E003A7526 /* Utility Closet */ = {
+			isa = PBXGroup;
+			children = (
+				491C8D03254BC1BD003A7526 /* extensions */,
+				49AB1D7A24849C980003CFA1 /* AppState.swift */,
+				491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */,
+			);
+			path = "Utility Closet";
+			sourceTree = "<group>";
+		};
 		49359B9E24DD0519005FF7A8 /* Graph */ = {
 			isa = PBXGroup;
 			children = (
@@ -428,15 +476,9 @@
 		4989BA5C24BB93FD001C17B3 /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
+				491C8D01254BC166003A7526 /* table */,
+				491C8D00254BC157003A7526 /* button */,
 				49453379244FCC1900FA1665 /* PPLTabBarController.swift */,
-				49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */,
-				49359B8624C28C64005FF7A8 /* PPLTableView.swift */,
-				4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */,
-				4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */,
-				49359B8824C29886005FF7A8 /* PPLAddButton.swift */,
-				49359B8C24D60001005FF7A8 /* PPLButton.swift */,
-				49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */,
-				496BE36824E63F5C00A4E08B /* NoDataView.swift */,
 			);
 			path = "Base Classes";
 			sourceTree = "<group>";
@@ -452,6 +494,7 @@
 		49AB68CE24FB0EAD0057D5F7 /* User Guidance */ = {
 			isa = PBXGroup;
 			children = (
+				496BE36824E63F5C00A4E08B /* NoDataView.swift */,
 				49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */,
 				491C8CFC254A67DC003A7526 /* AboutViewController.swift */,
 				491C8CFE254A6841003A7526 /* AboutViewModel.swift */,
@@ -543,13 +586,10 @@
 			children = (
 				49EF4BC523F839A30071687D /* View */,
 				49EF4BC623F839B50071687D /* Data Management */,
+				491C8D04254BC27E003A7526 /* Utility Closet */,
 				496A84472400EE790082D677 /* Resources */,
 				49EF4B7823F8381F0071687D /* AppDelegate.swift */,
 				49EF4B7A23F8381F0071687D /* SceneDelegate.swift */,
-				49EF4BB323F8390A0071687D /* Date+Helpers.swift */,
-				490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */,
-				49AB1D7A24849C980003CFA1 /* AppState.swift */,
-				491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */,
 			);
 			path = PushPullLegs;
 			sourceTree = "<group>";

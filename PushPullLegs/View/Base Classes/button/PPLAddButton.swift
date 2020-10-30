@@ -11,6 +11,7 @@ import UIKit
 class PPLAddButton: UIControl {
     
     private let PLUS_SIGN_NAME = "PLUS_SIGN_NAME"
+    private weak var gradient: CAGradientLayer!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,13 +33,33 @@ class PPLAddButton: UIControl {
         super.layoutSubviews()
         style()
         addPlusSign()
-        addShadow()
+//        addShadow()
     }
     
     private func style() {
         clipsToBounds = false
         layer.backgroundColor = PPLColor.textBlue?.cgColor
         layer.cornerRadius = layer.frame.height / 2
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.locations = [
+            NSNumber(value: 0.7),
+            NSNumber(value: 0.8),
+            NSNumber(value: 0.97),
+            NSNumber(value: 1)
+        ]
+        gradientLayer.type = .radial
+        gradientLayer.colors = [
+            UIColor.clear.cgColor,
+            UIColor(white: 1.0, alpha: 0.25).cgColor,
+            UIColor(white: 1.0, alpha: 0.45).cgColor,
+            UIColor.clear.cgColor
+        ]
+        gradientLayer.frame = layer.bounds
+        gradientLayer.cornerRadius = layer.cornerRadius
+        layer.addSublayer(gradientLayer)
+        gradient = gradientLayer
     }
     
     private func addPlusSign() {
@@ -61,9 +82,9 @@ class PPLAddButton: UIControl {
         horizontal.frame = plusLayer.bounds
         vertical.frame = plusLayer.bounds
         horizontal.path = horizontalRectangle()
-        horizontal.fillColor = UIColor.white.cgColor
+        horizontal.fillColor = UIColor(white: 0.85, alpha: 1.0).cgColor
         vertical.path = verticalRectangle()
-        vertical.fillColor = UIColor.white.cgColor
+        vertical.fillColor = UIColor(white: 0.85, alpha: 1.0).cgColor
         plusLayer.addSublayer(horizontal)
         plusLayer.addSublayer(vertical)
         plusLayer.name = PLUS_SIGN_NAME
@@ -84,7 +105,7 @@ class PPLAddButton: UIControl {
     @objc private func addTouchDown(_ sender: Any) {
         UIView.animate(withDuration: 0.25) { [weak self] in
             guard let self = self else { return }
-            self.layer.shadowOffset = .zero
+            self.gradient.isHidden = true
         }
     }
     
@@ -92,23 +113,9 @@ class PPLAddButton: UIControl {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             UIView.animate(withDuration: 0.25) { [weak self] in
                 guard let self = self else { return }
-                self.layer.shadowOffset = .shadowOffsetAddButton
+                self.gradient.isHidden = false
             }
         }
-    }
-    
-    private func a1ddShadow() {
-        if layer.shadowOffset == .shadowOffsetAddButton {
-            return
-        }
-        layer.borderColor = UIColor.white.cgColor
-        layer.borderWidth = 4
-        layer.shadowPath = UIBezierPath.init(roundedRect: CGRect(origin: .zero, size: layer.frame.size), cornerRadius: layer.frame.size.height / 2).cgPath
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.55
-        layer.shadowOffset = .shadowOffsetAddButton
-        layer.shadowRadius = 2
-        layer.shouldRasterize = true
     }
     
 }
