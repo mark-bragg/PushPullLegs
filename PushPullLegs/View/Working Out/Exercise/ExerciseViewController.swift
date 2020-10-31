@@ -145,8 +145,8 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         }
         var yOffset: CGFloat = 15
         if (AppState.shared.isAdEnabled) {
-            yOffset += bannerView.frame.size.height
-            positionBannerView(yOffset: 0)
+            yOffset += bannerView.frame.size.height + view.safeAreaInsets.bottom
+            positionBannerView(yOffset: yOffset)
         }
         let timerView = RestTimerView(frame: CGRect(x: 15, y: view.frame.height - timerHeight - yOffset, width: timerHeight, height: timerHeight))
         view.addSubview(timerView)
