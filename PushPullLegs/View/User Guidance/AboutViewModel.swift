@@ -73,6 +73,15 @@ class AboutViewModel: NSObject, PPLTableViewModel {
         return sectionExpansions[section]
     }
     
+    func collapseEverythingExcept(_ section: Int) {
+        expandSection(section)
+        for row in 0..<sectionCount() {
+            if row != section {
+                collapseSection(row)
+            }
+        }
+    }
+    
     func expandSection(_ section: Int) {
         sectionExpansions[section] = true
     }
