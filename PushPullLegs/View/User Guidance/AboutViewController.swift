@@ -60,13 +60,10 @@ class AboutViewController: PPLTableViewController {
     }
     
     private func heightForSection(_ section: Int, _ tv: UITextView) -> CGFloat {
-        var size: CGSize
         if aboutViewModel().isSectionExpanded(section) {
-            size = tv.sizeThatFits(CGSize(width: tableView.frame.size.width - 32, height: CGFloat.greatestFiniteMagnitude))
-        } else {
-            size = CGSize(width: 0, height: 75)
+            return tv.sizeThatFits(CGSize(width: tableView.frame.size.width - 32, height: CGFloat.greatestFiniteMagnitude)).height
         }
-        return size.height
+        return 75
     }
     
     func addReadMoreButton(_ cell: UITableViewCell, section: Int) {
@@ -90,12 +87,16 @@ class AboutViewController: PPLTableViewController {
     
     @objc func expandCollapseCell(_ button: CellExpansionButton) {
         let section = button.tag - buttonTagConstant
+        let rowToScrollTo = button.isCollapsed ? section : 0
         if button.isCollapsed {
-            aboutViewModel().expandSection(section)
+            aboutViewModel().collapseEverythingExcept(section)
         } else {
             aboutViewModel().collapseSection(section)
         }
         tableView.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: rowToScrollTo), at: .top, animated: true)
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

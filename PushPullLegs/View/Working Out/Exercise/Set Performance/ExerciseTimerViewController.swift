@@ -110,7 +110,8 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     
     func timerUpdate(_ text: String) {
         DispatchQueue.main.async { [weak self] in
-            self!.timerLabel.text = text
+            guard let self = self, let lbl = self.timerLabel else { return }
+            lbl.text = text
         }
     }
     

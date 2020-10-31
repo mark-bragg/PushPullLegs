@@ -8,8 +8,9 @@
 
 import UIKit
 import Combine
+import GoogleMobileAds
 
-class GraphViewController: UIViewController {
+class GraphViewController: UIViewController, GADInterstitialDelegate {
 
     var viewModel: WorkoutGraphViewModel!
     weak var containerView: UIView!
@@ -26,6 +27,7 @@ class GraphViewController: UIViewController {
     private var frame: CGRect?
     weak var labelStack: UIStackView!
     private var firstLoad = true
+    private var interstitial: GADInterstitial?
     
     init(type: ExerciseType, frame: CGRect? = nil) {
         super.init(nibName: nil, bundle: nil)
@@ -56,6 +58,23 @@ class GraphViewController: UIViewController {
         if navigationController != nil {
             addBackNavigationGesture()
         }
+        if AppState.shared.isAdEnabled && isInteractive {
+            if let interstitial = createAndLoadInterstitial() {
+                interstitial.delegate = self
+                self.interstitial = interstitial
+            }
+            
+        }
+    }
+    
+    func interstitialDidReceiveAd(_ ad: GADInterstitial) {
+        ad.present(fromRootViewController: self)
+    }
+    
+    func createAndLoadInterstitial() -> GADInterstitial? {
+      let interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+      interstitial.load(GADRequest())
+      return interstitial
     }
     
     var needConstraints = true

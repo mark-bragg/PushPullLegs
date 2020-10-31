@@ -18,14 +18,9 @@ class NoDataView: UIView {
     
     func styledNoDataLabel(frame: CGRect) -> UILabel {
         let label = UILabel(frame: frame)
-        let strokeTextAttributes = [
-            NSAttributedString.Key.strokeColor : PPLColor.lightGrey!,
-            NSAttributedString.Key.foregroundColor : PPLColor.darkGreyText!,
-            NSAttributedString.Key.strokeWidth : -3.0,
-            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 72)
-            ] as [NSAttributedString.Key : Any]
+        label.font = UIFont.systemFont(ofSize: 72)
         label.textAlignment = .center
-        label.attributedText = NSMutableAttributedString(string: "No Data", attributes: strokeTextAttributes)
+        label.text = "No Data"
         return label
     }
 }
