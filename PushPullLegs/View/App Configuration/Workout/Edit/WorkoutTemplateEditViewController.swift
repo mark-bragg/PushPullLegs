@@ -12,8 +12,6 @@ let exerciseCellReuseIdentifier = "ExerciseCell"
 let AppConfigurationCellReuseIdentifier = "AppConfigurationCellReuseIdentifier"
 
 class WorkoutTemplateEditViewController: PPLTableViewController {
-
-    var currentSegueId: String!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -28,16 +26,6 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
         vc.viewModel = vm
         vc.modalPresentationStyle = .pageSheet
         present(vc, animated: true, completion: nil)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let vc = segue.destination as? ExerciseTemplateCreationViewController,
-            let id = segue.identifier else {
-            print("ERROR")
-            return
-        }
-        currentSegueId = id
-        
     }
     
     private func workoutTemplateEditViewModel() -> WorkoutTemplateEditViewModel {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Exercise" representedClassName="Exercise" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="sets" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="ExerciseSet" inverseName="exercise" inverseEntity="ExerciseSet"/>
@@ -22,7 +22,7 @@
         <relationship name="exercises" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Exercise" inverseName="workout" inverseEntity="Exercise"/>
     </entity>
     <entity name="WorkoutTemplate" representedClassName="WorkoutTemplate" syncable="YES" codeGenerationType="class">
-        <attribute name="exerciseNames" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="exerciseNames" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
     <elements>
