@@ -20,7 +20,7 @@ class WorkoutLogViewController: PPLTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.backgroundColor = .clear
-        tableView.reloadData()
+        reload()
     }
     
     private func workoutLogViewModel() -> WorkoutLogViewModel {
@@ -61,6 +61,11 @@ class WorkoutLogViewController: PPLTableViewController {
         
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    override func reload() {
+        viewModel = WorkoutLogViewModel()
+        super.reload()
     }
 
 }

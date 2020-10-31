@@ -296,8 +296,10 @@ extension PPLTableViewController: GADBannerViewDelegate {
 
 extension PPLTableViewController: ReloadProtocol {
     @objc func reload() {
-        if viewModel.hasData(), let btn = addButton, btn.superview == view {
-            removeAddButtonInstructions()
+        if viewModel.hasData() {
+            if let btn = addButton, btn.superview == view {
+                removeAddButtonInstructions()
+            }
             hideNoDataView()
             tableView.reloadData()
         } else {
