@@ -7,43 +7,24 @@
 //
 
 import UIKit
-import GoogleMobileAds
 
 class StartWorkoutViewController: PPLTableViewController {
 
     private var exerciseType: ExerciseType?
     private var didNavigateToWorkout: Bool = false
-    private weak var interstitial: GADInterstitial?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = StartWorkoutViewModel()
-        hasBannerView = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.isScrollEnabled = false
         hidesBottomBarWhenPushed = false
-        if AppState.shared.isAdEnabled {
-            if interstitial == nil || interstitial!.hasBeenUsed {
-                interstitial = createAndLoadInterstitial()
-            }
-            if let interstitial = interstitial,
-                interstitial.isReady && didNavigateToWorkout {
-                interstitial.present(fromRootViewController: self)
-            }
-            didNavigateToWorkout = false
-        }
         if AppState.shared.workoutInProgress {
             self.navigateToNextWorkout()
         }
-    }
-    
-    func createAndLoadInterstitial() -> GADInterstitial {
-      let interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
-      interstitial.load(GADRequest())
-      return interstitial
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

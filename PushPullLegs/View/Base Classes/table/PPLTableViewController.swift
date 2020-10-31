@@ -191,7 +191,7 @@ class PPLTableViewController: UIViewController {
         addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
         addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
-        addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: y).isActive = true
+        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: y).isActive = true
         addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
     }
     
@@ -205,8 +205,8 @@ class PPLTableViewController: UIViewController {
     }
     
     func addNoDataView() {
-        guard noDataView == nil else {
-            return
+        while view.subviews.contains(where: { $0.isKind(of: NoDataView.self) }) {
+            view.subviews.first(where: { $0.isKind(of: NoDataView.self) })!.removeFromSuperview()
         }
         let ndv = NoDataView(frame: view.bounds)
         view.addSubview(ndv)
@@ -279,6 +279,9 @@ extension PPLTableViewController: GADBannerViewDelegate {
         guard AppState.shared.isAdEnabled else {
             return
         }
+        while view.subviews.contains(where: { $0.isKind(of: GADBannerView.self) }) {
+            view.subviews.first(where: { $0.isKind(of: GADBannerView.self) })!.removeFromSuperview()
+        }
         let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
         view.addSubview(bannerView)
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
@@ -290,7 +293,18 @@ extension PPLTableViewController: GADBannerViewDelegate {
     }
     
     func positionBannerView(yOffset: CGFloat = 0.0) {
-        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + yOffset), width: bannerView.frame.width, height: bannerView.frame.height)
+        
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        bannerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        bannerView.widthAnchor.constraint(equalToConstant: bannerView.frame.width).isActive = true
+        bannerView.heightAnchor.constraint(equalToConstant: bannerView.frame.height).isActive = true
+        bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//
+//        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + totalOffset(yOffset)), width: bannerView.frame.width, height: bannerView.frame.height)
+    }
+    
+    func totalOffset(_ offset: CGFloat) -> CGFloat {
+        return offset + (hidesBottomBarWhenPushed ? view.safeAreaInsets.bottom : 0)
     }
 }
 
