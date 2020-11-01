@@ -57,8 +57,8 @@ class WorkoutGraphViewModelTests: XCTestCase {
         dates.append(formatter.string(from: date))
         for _ in 0..<count {
             let _ = dbHelper.createWorkout(name: .push, date:date)
+            dates.insert(formatter.string(from: date), at: 0)
             date = date.addingTimeInterval(60 * 60 * 24)
-            dates.append(formatter.string(from: date))
         }
         sut = WorkoutGraphViewModel(type: .push, dataManager: WorkoutDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
         let sutDates = sut.dates()!
@@ -86,7 +86,7 @@ class WorkoutGraphViewModelTests: XCTestCase {
             wkt?.addToExercises(dbHelper.createExercise("ex \(i)", sets: [
                 (d, r, w)
             ]))
-            volumes.append((Double(d * r) * w / 60).truncateDigitsAfterDecimal(afterDecimalDigits: 2))
+            volumes.insert((Double(d * r) * w / 60).truncateDigitsAfterDecimal(afterDecimalDigits: 2), at: 0)
         }
         sut = WorkoutGraphViewModel(type: .push, dataManager: WorkoutDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
         let sutVolumes = sut.volumes()!

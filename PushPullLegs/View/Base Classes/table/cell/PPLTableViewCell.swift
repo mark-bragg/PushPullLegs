@@ -23,6 +23,10 @@ class PPLTableViewCell: UITableViewCell {
         rootView.isUserInteractionEnabled = false
     }
     
+    static func nib() -> UINib {
+        UINib(nibName: "PPLTableViewCell", bundle: nil)
+    }
+    
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         guard selectionStyle != .none else { return }
         if highlighted {

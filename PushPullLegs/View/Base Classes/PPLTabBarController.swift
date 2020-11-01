@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AppTrackingTransparency
+import AdSupport
 
 class PPLTabBarController: UITabBarController {
     
@@ -24,33 +26,45 @@ class PPLTabBarController: UITabBarController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if #available(iOS 14, *) {
+            ATTrackingManager.requestTrackingAuthorization { (status) in
+                print("status \(status.rawValue)")
+            }
+        }
     }
     
     fileprivate func workoutNavigationController() -> UINavigationController {
         let vc = UINavigationController(rootViewController: StartWorkoutViewController())
-        vc.tabBarItem = UITabBarItem(title: EntityName.workout.rawValue, image: UIImage(named: "curlbar"), selectedImage: nil)
+        vc.tabBarItem = .workoutTab
         return vc
     }
     
     fileprivate func trendsNavigationController() -> UINavigationController {
         let vc = UINavigationController(rootViewController: GraphTableViewController())
-        vc.tabBarItem = UITabBarItem(title: "Trends", image: UIImage(named: "line_graph"), selectedImage: nil)
+        vc.tabBarItem = .trendsTab
         return vc
     }
     
     fileprivate func workoutLogNavigationController() -> UINavigationController {
         let vc = UINavigationController(rootViewController: WorkoutLogViewController())
-        vc.tabBarItem = UITabBarItem(title: "Database", image: UIImage(named: "database"), selectedImage: nil)
+        vc.tabBarItem = .databaseTab
         return vc
     }
     
     fileprivate func appConfigurationNavigationController() -> UINavigationController {
         let vc = UINavigationController(rootViewController: AppConfigurationViewController())
-        vc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "gear"), selectedImage: nil)
+        vc.tabBarItem = .settingsTab
         return vc
     }
 
+}
+
+extension UITabBarItem {
+    static let workoutTab = UITabBarItem(title: EntityName.workout.rawValue, image: TabBarImage.forWorkoutTab(), selectedImage: nil)
+    static let trendsTab = UITabBarItem(title: "Trends", image: TabBarImage.forTrendsTab(), selectedImage: nil)
+    static let databaseTab = UITabBarItem(title: "Database", image: TabBarImage.forDatabaseTab(), selectedImage: nil)
+    static let settingsTab = UITabBarItem(title: "Settings", image: TabBarImage.forSettingsTab(), selectedImage: nil)
 }
 

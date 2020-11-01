@@ -13,7 +13,7 @@ class PPLTableView: UITableView {
     
     override func dequeueReusableCell(withIdentifier identifier: String) -> UITableViewCell? {
         if super.dequeueReusableCell(withIdentifier: identifier) == nil {
-            register(UINib(nibName: "PPLTableViewCell", bundle: nil), forCellReuseIdentifier: PPLTableViewCellIdentifier)
+            register(PPLTableViewCell.nib(), forCellReuseIdentifier: PPLTableViewCellIdentifier)
         }
         let cell = super.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier)!
         cell.backgroundColor = .clear

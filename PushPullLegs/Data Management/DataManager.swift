@@ -30,7 +30,7 @@ class DataManager {
     
     func exists(name: String) -> Bool {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
-        request.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
+        request.predicate = PPLPredicate.nameIsEqualTo(name)
         do {
             let result = try backgroundContext.fetch(request)
             return result.count > 0
@@ -44,7 +44,7 @@ class DataManager {
         backgroundContext.performAndWait {
             let object = NSEntityDescription.insertNewObject(forEntityName: entityNameString(), into: backgroundContext)
             if let name = name {
-                object.setValue(name, forKey: "name")
+                object.setValue(name, forKey: PPLObjectKey.name)
             }
             if pairs.count > 0 {
                 for (key, value) in pairs {

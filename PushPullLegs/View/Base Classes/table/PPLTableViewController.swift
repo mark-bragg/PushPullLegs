@@ -299,8 +299,6 @@ extension PPLTableViewController: GADBannerViewDelegate {
         bannerView.widthAnchor.constraint(equalToConstant: bannerView.frame.width).isActive = true
         bannerView.heightAnchor.constraint(equalToConstant: bannerView.frame.height).isActive = true
         bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//
-//        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + totalOffset(yOffset)), width: bannerView.frame.width, height: bannerView.frame.height)
     }
     
     func totalOffset(_ offset: CGFloat) -> CGFloat {

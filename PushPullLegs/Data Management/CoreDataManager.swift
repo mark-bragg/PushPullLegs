@@ -19,7 +19,7 @@ class CoreDataManager: CoreDataManagement {
     static let shared = CoreDataManager()
     private var storeType: String!
     lazy var persistentContainer: NSPersistentContainer! = { [unowned self] in
-        let persistentContainer = NSPersistentContainer(name: "PushPullLegs")
+        let persistentContainer = NSPersistentContainer(name: persistentContainerName)
         let description = persistentContainer.persistentStoreDescriptions.first
         description?.type = storeType
         return persistentContainer

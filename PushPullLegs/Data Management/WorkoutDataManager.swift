@@ -41,7 +41,7 @@ class WorkoutDataManager: DataManager {
     
     private func fetchLatestWorkout() -> Workout? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
-        request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        request.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
         request.fetchLimit = 1
         do {
             let latestWorkouts = try backgroundContext.fetch(request) as? [Workout]
@@ -56,13 +56,13 @@ class WorkoutDataManager: DataManager {
     
     func previousWorkout(before date: Date? = nil, type: ExerciseType? = nil) -> Workout? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
-        request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        request.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
         request.fetchLimit = 2
         if let date = date {
             request.predicate =
             NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "dateCreated < %@", argumentArray: [date]),
-                type != nil ? NSPredicate(format: "name = %@", argumentArray: [type!.rawValue]) : NSPredicate(value: true)
+                PPLPredicate.priorToDate(date),
+                type != nil ? PPLPredicate.nameIsEqualTo(type!.rawValue) : NSPredicate(value: true)
             ])
             request.fetchLimit = 1
         }
@@ -81,10 +81,10 @@ class WorkoutDataManager: DataManager {
     
     func workouts(ascending: Bool = false, types: [ExerciseType] = [.push, .pull, .legs]) -> [Workout] {
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
-        req.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: ascending)]
+        req.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
         var predicates = [NSPredicate]()
         for type in types.map({ return $0.rawValue }) {
-            predicates.append(NSPredicate(format: "name = %@", argumentArray: [type]))
+            predicates.append(PPLPredicate.nameIsEqualTo(type))
         }
         req.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
         if let wkts = try? backgroundContext.fetch(req) as? [Workout] {

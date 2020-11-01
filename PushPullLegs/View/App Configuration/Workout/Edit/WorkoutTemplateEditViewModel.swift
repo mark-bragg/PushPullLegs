@@ -110,9 +110,6 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
     private func selectExercises() {
         guard let names = templateManagement.workoutTemplate(type: exerciseType).exerciseNames else { return }
         for name in names {
-            // TODO: add test for exercise type
-            // a user may have saved the same name in different workouts, and if a workout is performed,
-            // an exercise with that name will exist with both types
             if let temp = templateManagement.exerciseTemplate(name: name), !selectedExercises.contains(temp) {
                 selectedExercises.append(temp)
                 unselectedExercises.removeAll { $0.name == name }

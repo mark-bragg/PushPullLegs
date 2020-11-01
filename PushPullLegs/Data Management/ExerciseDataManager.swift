@@ -38,15 +38,15 @@ class ExerciseDataManager: DataManager {
     }
     
     func set(reps: Int, forSet set: ExerciseSet) {
-        self.set(value: reps, forSet: set, withKey: "reps")
+        self.set(value: reps, forSet: set, withKey: PPLObjectKey.reps)
     }
     
     func set(weight: Int, forSet set: ExerciseSet) {
-        self.set(value: weight, forSet: set, withKey: "weight")
+        self.set(value: weight, forSet: set, withKey: PPLObjectKey.weight)
     }
     
     func set(duration: Int, forSet set: ExerciseSet) {
-        self.set(value: duration, forSet: set, withKey: "duration")
+        self.set(value: duration, forSet: set, withKey: PPLObjectKey.duration)
     }
     
     func set(value: Int, forSet set: ExerciseSet, withKey key: String) {

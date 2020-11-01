@@ -31,7 +31,7 @@ class GraphTableViewController: UIViewController {
     
     fileprivate func prepareTableView() {
         let tbv = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - (tabBarController?.tabBar.frame.height ?? 0)))
-        tbv.register(UINib(nibName: "PPLTableViewCell", bundle: nil), forCellReuseIdentifier: PPLTableViewCellIdentifier)
+        tbv.register(PPLTableViewCell.nib(), forCellReuseIdentifier: PPLTableViewCellIdentifier)
         tbv.backgroundColor = PPLColor.grey
         tbv.isScrollEnabled = false
         view.addSubview(tbv)

@@ -23,13 +23,13 @@ class TemplateManagement {
             throw TemplateError.duplicateExercise
         }
         let ew = exerciseWriter()
-        ew.create(name: name, keyValuePairs: ["type": type.rawValue])
+        ew.create(name: name, keyValuePairs: [PPLObjectKey.type: type.rawValue])
     }
     
     func deleteExerciseTemplate(name: String) {
         coreDataManager.mainContext.performAndWait {
             let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.exerciseTemplate.rawValue)
-            req.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
+            req.predicate = PPLPredicate.nameIsEqualTo(name)
             if
                 let exerciseTemplate = try? coreDataManager.backgroundContext.fetch(req).first as? ExerciseTemplate
             {
@@ -61,7 +61,7 @@ class TemplateManagement {
         let names =  exercises.map({ (temp) -> String in
             return temp.name!
         })
-        workoutWriter().update(workoutTemplate(type: type), keyValuePairs: ["exerciseNames": names])
+        workoutWriter().update(workoutTemplate(type: type), keyValuePairs: [PPLObjectKey.exerciseNames: names])
     }
     
     func workoutTemplate(type: ExerciseType) -> WorkoutTemplate {
@@ -97,11 +97,11 @@ class TemplateManagement {
     func exerciseTemplatesForWorkout(_ type: ExerciseType) -> [ExerciseTemplate] {
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.workoutTemplate.rawValue)
         req.fetchLimit = 1
-        req.predicate = NSPredicate(format: "name == %@", argumentArray: [type.rawValue])
+        req.predicate = PPLPredicate.nameIsEqualTo(type.rawValue)
         if let workoutTemplate = try? coreDataManager.mainContext.fetch(req).first as? WorkoutTemplate {
             if let names = workoutTemplate.exerciseNames {
                 let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.exerciseTemplate.rawValue)
-                req.predicate = NSPredicate(format: "type == %@", argumentArray: [type.rawValue])
+                req.predicate = PPLPredicate.typeIsEqualTo(type)
                 if let exerciseTemplates = try? coreDataManager.mainContext.fetch(req) as? [ExerciseTemplate] {
                     return exerciseTemplates.filter { (temp) -> Bool in
                         return names.contains { (name) -> Bool in
@@ -159,7 +159,7 @@ fileprivate extension DataManager {
     
     func getTemplate(name: String) -> NSManagedObject? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityNameString())
-        request.predicate = NSPredicate(format: "name == %@", argumentArray: [name])
+        request.predicate = PPLPredicate.nameIsEqualTo(name)
         guard let template = try? self.backgroundContext.fetch(request).first as? NSManagedObject else {
             // TODO: handle error
             return nil
@@ -171,7 +171,7 @@ fileprivate extension DataManager {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityNameString())
         var predicates = [NSPredicate]()
         for name in names {
-            predicates.append(NSPredicate(format: "name == %@", argumentArray: [name]))
+            predicates.append(PPLPredicate.nameIsEqualTo(name))
         }
         request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
         guard let template = try? self.backgroundContext.fetch(request) as? [ExerciseTemplate] else {
@@ -183,7 +183,7 @@ fileprivate extension DataManager {
     
     func exerciseTemplates(withType type: ExerciseType) -> [ExerciseTemplate]? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityNameString())
-        request.predicate = NSPredicate(format: "type == %@", argumentArray: [type.rawValue])
+        request.predicate = PPLPredicate.typeIsEqualTo(type)
         guard let templates = try? self.backgroundContext.fetch(request) as? [ExerciseTemplate] else {
             // TODO: handle error
             return nil

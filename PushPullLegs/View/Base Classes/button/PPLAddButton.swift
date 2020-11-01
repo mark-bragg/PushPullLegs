@@ -10,7 +10,7 @@ import UIKit
 
 class PPLAddButton: UIControl {
     
-    private let PLUS_SIGN_NAME = "PLUS_SIGN_NAME"
+    private let plusSignLayerName = "PLUS_SIGN"
     private weak var gradient: CAGradientLayer!
     
     override init(frame: CGRect) {
@@ -33,7 +33,6 @@ class PPLAddButton: UIControl {
         super.layoutSubviews()
         style()
         addPlusSign()
-//        addShadow()
     }
     
     private func style() {
@@ -63,7 +62,7 @@ class PPLAddButton: UIControl {
     }
     
     private func addPlusSign() {
-        if let layers = layer.sublayers, layers.contains(where: { $0.name == PLUS_SIGN_NAME } ) {
+        if let layers = layer.sublayers, layers.contains(where: { $0.name == plusSignLayerName } ) {
             return
         }
         addPlusLayer()
@@ -87,7 +86,7 @@ class PPLAddButton: UIControl {
         vertical.fillColor = UIColor(white: 0.85, alpha: 1.0).cgColor
         plusLayer.addSublayer(horizontal)
         plusLayer.addSublayer(vertical)
-        plusLayer.name = PLUS_SIGN_NAME
+        plusLayer.name = plusSignLayerName
     }
     
     private func horizontalRectangle() -> CGPath {
