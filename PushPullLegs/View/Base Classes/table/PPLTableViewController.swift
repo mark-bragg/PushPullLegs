@@ -193,6 +193,7 @@ class PPLTableViewController: UIViewController {
         addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
         addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: y).isActive = true
         addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
+        view.bringSubviewToFront(addButton)
     }
     
     fileprivate func addBackNavigationGesture() {
