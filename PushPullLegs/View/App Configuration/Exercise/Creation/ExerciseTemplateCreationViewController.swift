@@ -97,7 +97,10 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
          UITextField.textDidEndEditingNotification
         ].forEach({ notif in
             NotificationCenter.default.publisher(for: notif, object: textField)
-            .map( { ($0.object as! UITextField).text } )
+            .map( { (($0.object as! UITextField).text ?? "") } )
+            .map({ (text) -> String in
+                return ExerciseNameSanitizer().sanitize(text)
+            })
             .assign(to: \ExerciseTemplateCreationViewModel.exerciseName, on: viewModel)
             .store(in: &cancellables)
         })
