@@ -27,6 +27,13 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         bind()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if timerLabel.text == "0:00" {
+            self.showStartText()
+        }
+    }
+    
     fileprivate func styleTimerLabel() {
         timerLabel.layer.borderColor = PPLColor.lightGrey!.cgColor
         timerLabel.layer.backgroundColor = PPLColor.darkGrey!.cgColor
@@ -92,9 +99,8 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     
     fileprivate func bind() {
         exerciseSetViewModel?.$setBegan.sink(receiveValue: { [weak self] (exerciseBegan) in
-            guard exerciseBegan, let self = self else { return }
+            guard let exerciseBegan = exerciseBegan, exerciseBegan, let self = self else { return }
             DispatchQueue.main.async {
-                self.showStartText()
                 self.finishButton.isEnabled = exerciseBegan
             }
         }).store(in: &cancellables)
@@ -112,6 +118,9 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let lbl = self.timerLabel else { return }
             lbl.text = text
+            if text == "0:00" {
+                self.showStartText()
+            }
         }
     }
     

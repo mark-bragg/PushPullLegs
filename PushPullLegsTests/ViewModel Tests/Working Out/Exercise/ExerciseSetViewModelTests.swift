@@ -26,6 +26,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     var testingClearCountdown = false
     var countdown = 0
     var expectationsCount = 0
+    var setBeganCount = 10
     
     override func setUp() {
         PPLDefaults.instance.setCountdown(countdown)
@@ -33,7 +34,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         if firstSetup {
             firstSetup = false
             sut.$setBegan.sink { [weak self] (began) in
-                guard let self = self else { return }
+                guard let began = began, let self = self else { return }
                 XCTAssert(began == self.shouldHaveBegunAlready)
             }
             .store(in: &setBeganObservers)
@@ -205,6 +206,21 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
             XCTFail()
         }
         sut.finishSetWithReps(10)
+    }
+    
+    func testAAAAAAAA_setBegan() {
+        sut = nil
+        setBeganObservers.removeAll()
+        for _ in 0...9 {
+            setUp()
+            sut.$setBegan.sink { (didBegin) in
+                if let begun = didBegin {
+                    XCTAssert(begun)
+                }
+            }.store(in: &setBeganObservers)
+            sut.startSetWithWeight(1)
+            sut.cancel()
+        }
     }
     
     func timerUpdate(_ text: String) {
