@@ -47,7 +47,7 @@ class ExerciseSetViewModel: NSObject {
     private var stopWatch: PPLStopWatch!
     private var countdown = PPLDefaults.instance.countdown()
     private var countdownCanceled = false
-    @Published private(set) var setBegan = false
+    @Published private(set) var setBegan: Bool!
     
     override init() {
         state = .notStarted
