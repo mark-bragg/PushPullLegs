@@ -44,7 +44,6 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        cell.autoDeselect = false
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
@@ -67,7 +66,6 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
                 cell.setHighlighted(false, animated: true)
             } else {
                 exerciseSelectionViewModel().selected(row: indexPath.row)
-                cell.setHighlighted(true, animated: true)
             }
         }
     }

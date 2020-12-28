@@ -26,15 +26,16 @@ class PPLTableViewController: UIViewController {
     }
     var cancellables: Set<AnyCancellable> = []
     var hasBannerView = true
+    private var adSize: CGSize?
     
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupTableView()
-        hideBottomBar()
         if hasBannerView {
             addBannerView()
         }
+        setupTableView()
+        hideBottomBar()
         addBackNavigationGesture()
         view.backgroundColor = PPLColor.grey
         addNoDataView()
@@ -51,16 +52,15 @@ class PPLTableViewController: UIViewController {
     
     fileprivate func setTableView() {
         tableView = view.viewWithTag(tableViewTag) as? PPLTableView
-        if tableView == nil {
-            let tbl = PPLTableView()
-            tbl.tag = tableViewTag
-            view.addSubview(tbl)
-            tbl.translatesAutoresizingMaskIntoConstraints = false
-            tbl.rowHeight = 75
-            tbl.reloadData()
-            tableView = tbl
-            constrainTableView()
-        }
+        guard tableView == nil else { return }
+        let tbl = PPLTableView()
+        tbl.tag = tableViewTag
+        view.addSubview(tbl)
+        tbl.translatesAutoresizingMaskIntoConstraints = false
+        tbl.rowHeight = 75
+        tbl.reloadData()
+        tableView = tbl
+        constrainTableView()
     }
     
     private func constrainTableView() {
@@ -69,7 +69,7 @@ class PPLTableViewController: UIViewController {
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -(adSize?.height ?? 0)).isActive = true
     }
     
     fileprivate func addTableFooter() {
@@ -143,7 +143,7 @@ class PPLTableViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard let count = viewModel.sectionCount?() else {return}
+        guard let count = viewModel.sectionCount?() else { return }
         for i in 0..<count {
             if viewModel.rowCount(section: i) > 0 {
                 hideNoDataView()
@@ -277,13 +277,13 @@ extension PPLTableViewController: UITableViewDataSource {
 
 extension PPLTableViewController: GADBannerViewDelegate {
     fileprivate func addBannerView() {
-        guard AppState.shared.isAdEnabled else {
-            return
-        }
+        guard AppState.shared.isAdEnabled else { return }
         while view.subviews.contains(where: { $0.isKind(of: GADBannerView.self) }) {
             view.subviews.first(where: { $0.isKind(of: GADBannerView.self) })!.removeFromSuperview()
         }
-        let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
+        let bannerView = GADBannerView(adSize: adSize)
+        self.adSize = adSize.size
         view.addSubview(bannerView)
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         bannerView.rootViewController = self
@@ -294,7 +294,6 @@ extension PPLTableViewController: GADBannerViewDelegate {
     }
     
     func positionBannerView(yOffset: CGFloat = 0.0) {
-        
         bannerView.translatesAutoresizingMaskIntoConstraints = false
         bannerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         bannerView.widthAnchor.constraint(equalToConstant: bannerView.frame.width).isActive = true
