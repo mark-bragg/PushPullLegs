@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 let WorkoutLogCellReuseIdentifier = "WorkoutLogCellReuseIdentifier"
 
@@ -76,7 +77,7 @@ class WorkoutLogViewModel: NSObject, PPLTableViewModel {
     
     init(withDataManager dataManager: WorkoutDataManager = WorkoutDataManager()) {
         super.init()
-        formatter.dateFormat = "MM/dd/YY"
+        formatter.dateFormat = "MM/dd/yy"
         workouts = WorkoutDataManager().workouts()
     }
     
@@ -111,16 +112,5 @@ class PPLNameLabel: UILabel {
         super.init(coder: coder)
         textColor = PPLColor.textBlue
         font = UIFont.systemFont(ofSize: 23, weight: .medium)
-    }
-}
-
-
-extension UIViewController {
-    func constrainToView(_ subview: UIView) {
-        let guide = view.safeAreaLayoutGuide
-        subview.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
-        subview.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        subview.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        subview.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
     }
 }

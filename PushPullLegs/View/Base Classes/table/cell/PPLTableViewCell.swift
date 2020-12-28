@@ -16,7 +16,6 @@ class PPLTableViewCell: UITableViewCell {
     @IBOutlet weak var rootView: ShadowBackground!
     var pplSelectionFlag = false
     weak var indicator: UIView?
-    var autoDeselect = true
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -31,13 +30,6 @@ class PPLTableViewCell: UITableViewCell {
         guard selectionStyle != .none else { return }
         if highlighted {
             self.rootView.removeShadow()
-            if autoDeselect {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                    self.rootView.addShadow(.shadowOffsetCell)
-                }
-            }
-        } else {
-            self.rootView.addShadow(.shadowOffsetCell)
         }
     }
 
@@ -111,6 +103,8 @@ extension CGSize {
 extension UIView {
     func addShadow(_ offset: CGSize = .shadowOffset) {
         removeShadow()
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
         layer.shadowOffset = offset
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 2.0
@@ -119,6 +113,8 @@ extension UIView {
     }
     
     func removeShadow() {
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
         layer.shadowOffset = .zero
         layer.shadowColor = UIColor.clear.cgColor
         layer.shadowRadius = 0

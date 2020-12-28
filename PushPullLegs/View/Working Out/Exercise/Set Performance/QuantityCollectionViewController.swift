@@ -47,6 +47,10 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
             performTextFieldCorrection(text)
         }
         performingTextCorrection = false
+        guard let textFinal = textField.text, !textFinal.isEmpty else {
+            button.disable()
+            return
+        }
         button.enable()
     }
     

@@ -17,20 +17,45 @@ class GraphTableViewController: UIViewController {
     var legsVc: GraphViewController!
     weak var bannerView: GADBannerView!
     private var helpTag = 0
+    private var interstitial: GADInterstitial?
+    private var selectedRow: Int!
+    private weak var spinner: UIActivityIndicatorView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         view.backgroundColor = PPLColor.grey
+        addBannerView()
         prepareTableView()
         prepareGraphViewControllers()
         navigationItem.titleView = titleLabel()
         constrainTableView()
         tableView.rowHeight = (tableView.frame.height) / 3
-        addBannerView()
+        if let bannerView = bannerView {
+            view.bringSubviewToFront(bannerView)
+        }
+    }
+    
+    fileprivate func addBannerView() {
+        guard AppState.shared.isAdEnabled else { return }
+        let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
+        let bannerView = GADBannerView(adSize: adSize)
+        view.addSubview(bannerView)
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        self.bannerView = bannerView
+        if let tbc = tabBarController, !hidesBottomBarWhenPushed {
+            positionBannerView(yOffset: tbc.tabBar.frame.height)
+        }
+    }
+    
+    func positionBannerView(yOffset: CGFloat = 0.0) {
+        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + yOffset), width: bannerView.frame.width, height: bannerView.frame.height)
     }
     
     fileprivate func prepareTableView() {
-        let tbv = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - (tabBarController?.tabBar.frame.height ?? 0)))
+        let height = view.frame.height - ((tabBarController?.tabBar.frame.height ?? 0) + (bannerView?.frame.height ?? 0))
+        let tbv = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height))
         tbv.register(PPLTableViewCell.nib(), forCellReuseIdentifier: PPLTableViewCellIdentifier)
         tbv.backgroundColor = PPLColor.grey
         tbv.isScrollEnabled = false
@@ -153,25 +178,6 @@ extension GraphTableViewController: UITableViewDataSource {
         }
     }
     
-    fileprivate func addBannerView() {
-        guard AppState.shared.isAdEnabled else {
-            return
-        }
-        let bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        view.addSubview(bannerView)
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
-        self.bannerView = bannerView
-        if let tbc = tabBarController, !hidesBottomBarWhenPushed {
-            positionBannerView(yOffset: tbc.tabBar.frame.height)
-        }
-    }
-    
-    func positionBannerView(yOffset: CGFloat = 0.0) {
-        bannerView.frame = CGRect(x: (view.frame.width - bannerView.frame.width) / 2.0, y: view.frame.height - (bannerView.frame.height + yOffset), width: bannerView.frame.width, height: bannerView.frame.height)
-    }
-    
 }
 
 extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
@@ -190,9 +196,45 @@ extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
 
 extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
-            showGraph(indexPath.row)
+        selectedRow = indexPath.row
+        guard vcForRow(selectedRow).viewModel.pointCount() > 0 else { return }
+        if AppState.shared.isAdEnabled, let interstitial = createAndLoadInterstitial() {
+            presentAdLoadingView()
+            interstitial.delegate = self
+            self.interstitial = interstitial
+        } else {
+            showGraph(selectedRow)
         }
+    }
+}
+
+extension GraphTableViewController: GADInterstitialDelegate {
+    func interstitialDidReceiveAd(_ ad: GADInterstitial) {
+        ad.present(fromRootViewController: self)
+    }
+
+    func createAndLoadInterstitial() -> GADInterstitial? {
+      let interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+      interstitial.load(GADRequest())
+      return interstitial
+    }
+    
+    func interstitialWillDismissScreen(_ ad: GADInterstitial) {
+        showGraph(selectedRow)
+    }
+    
+    func presentAdLoadingView() {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: selectedRow, section: 0)) else { return }
+        let spinner = UIActivityIndicatorView(frame: cell.contentView.frame)
+        spinner.style = .large
+        spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.25)
+        cell.contentView.addSubview(spinner)
+        spinner.startAnimating()
+        self.spinner = spinner
+    }
+    
+    func interstitialWillPresentScreen(_ ad: GADInterstitial) {
+        spinner.removeFromSuperview()
     }
 }
 
