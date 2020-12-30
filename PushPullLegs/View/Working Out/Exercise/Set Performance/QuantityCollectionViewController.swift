@@ -29,8 +29,9 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         textField.delegate = self
         button.disable()
-        view.backgroundColor = PPLColor.grey
+        view.backgroundColor = .backgroundBlue
         textField.becomeFirstResponder()
+        label.textColor = .cellBackgroundBlue
     }
     
     override func viewWillDisappear(_ animated: Bool) {

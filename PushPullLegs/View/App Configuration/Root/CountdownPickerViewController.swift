@@ -19,7 +19,7 @@ class CountdownPickerViewController: UIViewController, UIPickerViewDataSource, U
         picker.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(picker)
         picker.delegate = self
-        picker.backgroundColor = PPLColor.darkGrey
+        picker.backgroundColor = .cellBackgroundBlue
         picker.tintColor = .black
         picker.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         picker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -61,6 +61,7 @@ extension UIViewController {
         let countdownLabel = UILabel()
         countdownLabel.textAlignment = .center
         countdownLabel.font = UIFont.systemFont(ofSize: 36)
+        countdownLabel.textColor = .darkGrey
         if let seconds = seconds {
             countdownLabel.text = "\(seconds)"
             countdownLabel.sizeToFit()

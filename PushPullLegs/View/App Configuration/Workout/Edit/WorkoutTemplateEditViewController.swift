@@ -53,7 +53,7 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let title = workoutTemplateEditViewModel().titleForSection(section) else { return nil }
-        return tableHeaderView(titles: [title])
+        return tableHeaderViewContainer(titles: [title])
     }
     
     override func reload() {

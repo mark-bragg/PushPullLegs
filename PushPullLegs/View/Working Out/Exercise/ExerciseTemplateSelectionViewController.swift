@@ -34,14 +34,6 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         delegate?.exerciseTemplatesAdded()
     }
     
-    @IBAction func createExerciseTemplate(_ sender: Any) {
-        if let vc = UIStoryboard(name: StoryboardFileName.appConfiguration, bundle: nil).instantiateViewController(withIdentifier: ViewControllerIdentifier.createExerciseViewController) as? ExerciseTemplateCreationViewController {
-            vc.viewModel = ExerciseTemplateCreationViewModel(withType: exerciseSelectionViewModel().exerciseType, management: TemplateManagement())
-            vc.modalPresentationStyle = .formSheet
-            present(vc, animated: true, completion: nil)
-        }
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
@@ -71,7 +63,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        super.tableHeaderView(titles: ["Select Exercises To Add"])
+        super.tableHeaderViewContainer(titles: ["Select Exercises To Add"])
     }
 
 }

@@ -24,7 +24,6 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = PPLColor.grey
         if showExerciseType {
             setupExerciseTypeButtons()
             saveButton.setTitle("Select Type", for: .normal)

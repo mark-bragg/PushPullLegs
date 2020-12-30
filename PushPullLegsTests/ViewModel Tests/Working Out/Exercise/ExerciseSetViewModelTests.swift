@@ -208,6 +208,16 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         sut.finishSetWithReps(10)
     }
     
+    func testRevertStateDuringRepCollection_timerStateIsValid() {
+        sut.startSetWithWeight(50)
+        sut.stopTimer()
+        do {
+            try sut.revertState()
+        } catch {
+            XCTFail()
+        }
+    }
+    
     func testAAAAAAAA_setBegan() {
         sut = nil
         setBeganObservers.removeAll()

@@ -36,7 +36,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     
     fileprivate func styleTimerLabel() {
         timerLabel.layer.borderColor = PPLColor.lightGrey!.cgColor
-        timerLabel.layer.backgroundColor = PPLColor.darkGrey!.cgColor
+        timerLabel.layer.backgroundColor = PPLColor.cellBackgroundBlue!.cgColor
         timerLabel.layer.borderWidth = 1.5
         timerLabel.layer.cornerRadius = timerLabel.frame.height / 12
     }
@@ -65,16 +65,17 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.text = "Start!"
         lbl.font = UIFont.systemFont(ofSize: 72, weight: .bold)
-        lbl.textColor = .white
+        lbl.textColor = .textGreen
         lbl.textAlignment = .center
         return lbl
     }
     
     fileprivate func styleStartLabel(_ lbl: UILabel, _ diameter: CGFloat) {
-        lbl.layer.backgroundColor = PPLColor.textBlue!.cgColor
+        let color = UIColor(red: 151/255, green: 251/255, blue: 152/255, alpha: 1.0).cgColor
+        lbl.layer.backgroundColor = color
         lbl.layer.cornerRadius = diameter / 2
         lbl.layer.shadowPath = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: diameter, height: diameter)).cgPath
-        lbl.layer.shadowColor = PPLColor.textBlue!.cgColor
+        lbl.layer.shadowColor = color
         lbl.layer.shadowOpacity = 1.0
         lbl.layer.shadowRadius = 10
     }

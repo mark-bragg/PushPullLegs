@@ -42,7 +42,7 @@ class PPLStopWatch {
     private func beginUpdating() {
         running = true
         queue!.async { [weak self] in
-            guard let self = self else { return }
+            guard let self = self, self.running else { return }
             while let handler = self.handler {
                 handler(self.currentTime())
                 sleep(self.timeBetweenReadings)

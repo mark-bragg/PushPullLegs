@@ -9,6 +9,14 @@
 import UIKit
 import GoogleMobileAds
 
+class HeaderViewContainer: UIView {
+    var headerView: UIView! {
+        willSet {
+            addSubview(newValue)
+        }
+    }
+}
+
 let WorkoutLogCellReuseIdentifier = "WorkoutLogCellReuseIdentifier"
 
 class WorkoutLogViewController: PPLTableViewController {
@@ -31,12 +39,13 @@ class WorkoutLogViewController: PPLTableViewController {
     // MARK: - Table view data source
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableHeaderView(titles: workoutLogViewModel().tableHeaderTitles())
+        let container = tableHeaderViewContainer(titles: workoutLogViewModel().tableHeaderTitles())
+        guard let header = container.headerView else { return nil }
         let leftLabel = header.subviews.first(where: { $0.frame.origin.x == 0 })!
         let rightLabel = header.subviews.first(where: { $0.frame.origin.x != 0 })!
         leftLabel.frame = CGRect(x: 20, y: leftLabel.frame.origin.y, width: leftLabel.frame.width - 20, height: leftLabel.frame.height)
         rightLabel.frame = CGRect(x: leftLabel.frame.width + 20, y: rightLabel.frame.origin.y, width: rightLabel.frame.width - 20, height: leftLabel.frame.height)
-        return header
+        return container
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -105,12 +114,15 @@ class WorkoutLogViewModel: NSObject, PPLTableViewModel {
 class PPLNameLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        textColor = PPLColor.textBlue
-        font = UIFont.systemFont(ofSize: 23, weight: .medium)
+        commonInit()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        textColor = PPLColor.textBlue
+        commonInit()
+    }
+    
+    private func commonInit() {
+        textColor = .textGreen
         font = UIFont.systemFont(ofSize: 23, weight: .medium)
     }
 }

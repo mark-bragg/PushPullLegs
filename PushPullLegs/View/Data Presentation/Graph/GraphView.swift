@@ -10,7 +10,11 @@ import Foundation
 import UIKit
 
 class GraphView: UIControl, ObservableObject {
-    var yValues: [CGFloat]?
+    var yValues: [CGFloat]? {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
     private var circle = CAShapeLayer()
     private var circleLine = CAShapeLayer()
     private let circleRadius: CGFloat = 10.0
@@ -25,7 +29,7 @@ class GraphView: UIControl, ObservableObject {
     @Published private(set) var index: Int?
     private var firstLoad = true
     private weak var lineLayer: CAShapeLayer!
-    private var noDataView = NoDataView()
+    private var noDataView: NoDataGraphView!
     private let singlePointCircleDiameter: CGFloat = 5
     var smallDisplay = false
     
@@ -62,12 +66,15 @@ class GraphView: UIControl, ObservableObject {
         editCircle(#selector(drawCircle))
     }
     
-    override func draw(_ rect: CGRect) {
-        guard hasData() else {
+    override func layoutSubviews() {
+        if hasData() {
+            removeNoDataView()
+        } else {
             showNoDataView()
-            return
         }
-        removeNoDataView()
+    }
+    
+    override func draw(_ rect: CGRect) {
         if firstLoad {
             firstLoad = false
             drawAxes()
@@ -138,9 +145,13 @@ class GraphView: UIControl, ObservableObject {
         axesPath.addLine(to: origin())
         axesPath.addLine(to: CGPoint(x: frame.width * 0.975, y: frame.height * 0.975))
         axesLayer.path = axesPath.cgPath
-        axesLayer.strokeColor = PPLColor.textBlue!.cgColor
+        axesLayer.strokeColor = lineStrokeColor()
         axesLayer.lineWidth = lineWidth
         axesLayer.fillColor = UIColor.clear.cgColor
+    }
+    
+    private func lineStrokeColor() -> CGColor {
+        PPLColor.textGreen!.cgColor
     }
     
     func eraseLine() {
@@ -157,9 +168,9 @@ class GraphView: UIControl, ObservableObject {
         lineLayer.path = getPath()
         lineLayer.lineJoin = .round
         lineLayer.lineCap = .round
-        lineLayer.strokeColor = PPLColor.textBlue!.cgColor
+        lineLayer.strokeColor = lineStrokeColor()
         lineLayer.lineWidth = lineWidth
-        lineLayer.fillColor = isSinglePoint() ? PPLColor.textBlue!.cgColor : UIColor.clear.cgColor
+        lineLayer.fillColor = isSinglePoint() ? PPLColor.backgroundBlue!.cgColor : UIColor.clear.cgColor
     }
     
     func getPath() -> CGPath {
@@ -212,17 +223,22 @@ class GraphView: UIControl, ObservableObject {
     
     func showNoDataView() {
         eraseLine()
+        drawAxes()
+        if noDataView == nil {
+            noDataView = NoDataGraphView()
+            noDataView.whiteBackground = smallDisplay
+        }
         if subviews.contains(noDataView) {
             return
         }
         noDataView.frame = bounds
-        noDataView.lightBackground = false
         addSubview(noDataView)
     }
     
     func removeNoDataView() {
-        if subviews.contains(noDataView) {
+        if let ndv = noDataView, subviews.contains(ndv) {
             noDataView.removeFromSuperview()
+            setNeedsDisplay()
         }
     }
 }

@@ -12,6 +12,7 @@ class PPLAddButton: UIControl {
     
     private let plusSignLayerName = "PLUS_SIGN"
     private weak var gradient: CAGradientLayer!
+    private weak var darkGradient: CAGradientLayer!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,8 +38,13 @@ class PPLAddButton: UIControl {
     
     private func style() {
         clipsToBounds = false
-        layer.backgroundColor = PPLColor.textBlue?.cgColor
+        layer.backgroundColor = UIColor(red: 130/255, green: 130/255, blue: 130/255, alpha: 1).cgColor //PPLColor.backgroundBlue?.cgColor
         layer.cornerRadius = layer.frame.height / 2
+        addGradientLayer()
+        addDarkGradientLayer()
+    }
+    
+    private func addGradientLayer() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
@@ -55,10 +61,34 @@ class PPLAddButton: UIControl {
             UIColor(white: 1.0, alpha: 0.45).cgColor,
             UIColor.clear.cgColor
         ]
+        gradientLayer.frame = CGRect(x: -1, y: -1, width: layer.bounds.width + 2, height: layer.bounds.height + 2)
+        gradientLayer.cornerRadius = layer.cornerRadius
+        layer.addSublayer(gradientLayer)
+        self.gradient = gradientLayer
+    }
+    
+    private func addDarkGradientLayer() {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.locations = [
+            NSNumber(value: 0.7),
+            NSNumber(value: 0.8),
+            NSNumber(value: 0.97),
+            NSNumber(value: 1)
+        ]
+        gradientLayer.type = .radial
+        gradientLayer.colors = [
+            UIColor.clear.cgColor,
+            UIColor(white: 0.0, alpha: 0.25).cgColor,
+            UIColor(white: 0.0, alpha: 0.45).cgColor,
+            UIColor.clear.cgColor
+        ]
         gradientLayer.frame = layer.bounds
         gradientLayer.cornerRadius = layer.cornerRadius
         layer.addSublayer(gradientLayer)
-        gradient = gradientLayer
+        self.darkGradient = gradientLayer
+        gradientLayer.isHidden = true
     }
     
     private func addPlusSign() {
@@ -105,6 +135,7 @@ class PPLAddButton: UIControl {
         UIView.animate(withDuration: 0.25) { [weak self] in
             guard let self = self else { return }
             self.gradient.isHidden = true
+            self.darkGradient.isHidden = false
         }
     }
     
@@ -113,6 +144,7 @@ class PPLAddButton: UIControl {
             UIView.animate(withDuration: 0.25) { [weak self] in
                 guard let self = self else { return }
                 self.gradient.isHidden = false
+                self.darkGradient.isHidden = true
             }
         }
     }

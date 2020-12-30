@@ -143,11 +143,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         if let v = restTimerView {
             v.removeFromSuperview()
         }
-        var yOffset: CGFloat = 15
-        if (AppState.shared.isAdEnabled) {
-            yOffset += bannerView.frame.size.height + view.safeAreaInsets.bottom
-            positionBannerView(yOffset: yOffset)
-        }
+        let yOffset: CGFloat = 15
         let timerView = RestTimerView(frame: CGRect(x: 15, y: view.frame.height - timerHeight - yOffset, width: timerHeight, height: timerHeight))
         view.addSubview(timerView)
         restTimerView = timerView
@@ -185,7 +181,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         for i in 0...2 {
             titles.append(exerciseViewModel().headerLabelText(i))
         }
-        let view = tableHeaderView(titles: titles)
+        let view = tableHeaderViewContainer(titles: titles)
         return view
     }
     
@@ -206,6 +202,15 @@ protocol SetNavigationControllerDelegate {
 
 class SetNavigationController: UINavigationController {
     var setDelegate: SetNavigationControllerDelegate?
+    
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
+        navigationBar.backgroundColor = PPLColor.navbarBackgroundBlue
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     override func popViewController(animated: Bool) -> UIViewController? {
         setDelegate?.navigationController(self, willPop: topViewController!)
         return super.popViewController(animated: animated)
@@ -240,15 +245,5 @@ extension PPLTableViewCell {
             rootView.addSubview(lbl)
         }
         return (weightLabel, repsLabel, timeLabel)
-    }
-}
-
-extension UILabel {
-    static func headerLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
-        return label
     }
 }

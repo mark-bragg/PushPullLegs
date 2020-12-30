@@ -14,7 +14,6 @@ class PPLTableViewController: UIViewController {
     
     var viewModel: PPLTableViewModel!
     weak var tableView: PPLTableView!
-    weak var bannerView: GADBannerView!
     weak var noDataView: NoDataView!
     weak var addButton: PPLAddButton!
     private let addButtonSize = CGSize(width: 75, height: 75)
@@ -26,7 +25,8 @@ class PPLTableViewController: UIViewController {
     }
     var cancellables: Set<AnyCancellable> = []
     var hasBannerView = true
-    private var adSize: CGSize?
+    private var adHeight: CGFloat?
+    private weak var bannerViewContainer: UIView!
     
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
@@ -37,7 +37,7 @@ class PPLTableViewController: UIViewController {
         setupTableView()
         hideBottomBar()
         addBackNavigationGesture()
-        view.backgroundColor = PPLColor.grey
+        view.backgroundColor = PPLColor.backgroundBlue
         addNoDataView()
         tableView.reloadData()
         setTitle()
@@ -68,8 +68,8 @@ class PPLTableViewController: UIViewController {
         guard let tableView = tableView else { return }
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -(adSize?.height ?? 0)).isActive = true
+        tableView.topAnchor.constraint(equalTo: guide.topAnchor, constant: (adHeight ?? 0)).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
     }
     
     fileprivate func addTableFooter() {
@@ -97,11 +97,8 @@ class PPLTableViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let bannerView = bannerView, view.subviews.contains(bannerView) {
+        if let bannerView = bannerViewContainer, view.subviews.contains(bannerView) {
             view.bringSubviewToFront(bannerView)
-        }
-        if let tbc = tabBarController, !hidesBottomBarWhenPushed && bannerView != nil {
-            positionBannerView(yOffset: tbc.tabBar.frame.height)
         }
         if addButton != nil && !viewModel.hasData() {
             insertAddButtonInstructions()
@@ -184,15 +181,12 @@ class PPLTableViewController: UIViewController {
     }
     
     private func positionAddButton() {
-        var y: CGFloat = -15
-        if AppState.shared.isAdEnabled {
-            y -= bannerView.frame.size.height
-        }
+        let y: CGFloat = -15
         addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
         addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
         addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: y).isActive = true
-        addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
+        addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: y).isActive = true
         view.bringSubviewToFront(addButton)
     }
     
@@ -223,26 +217,31 @@ class PPLTableViewController: UIViewController {
         noDataView.isHidden = true
     }
     
-    func tableHeaderView(titles: [String]) -> UIView {
-        let headerHeight: CGFloat = 60.0
-        let headerView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: headerHeight)))
+    func tableHeaderViewContainer(titles: [String], section: Int = 0) -> HeaderViewContainer {
+        let headerHeight: CGFloat = tableView(tableView, heightForHeaderInSection: section)
+        if headerHeight == 0 {
+            return HeaderViewContainer(frame: .zero)
+        }
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight - CGSize.shadowOffsetTableHeader.height))
         var i = 0
         let widthDenominator = CGFloat(titles.count)
         let labelWidth = headerView.frame.width / widthDenominator
         let gradientTop = CAGradientLayer()
         gradientTop.frame = headerView.layer.bounds
-        gradientTop.colors = [PPLColor.textBlue!.cgColor, PPLColor.grey!.cgColor, PPLColor.grey!.cgColor, PPLColor.textBlue!.cgColor, UIColor.clear.cgColor]
-        gradientTop.locations = [0.0, 0.15, 0.85, 0.99, 1.0]
+        gradientTop.colors = [PPLColor.backgroundBlue!.cgColor, UIColor.clear.cgColor]
+        gradientTop.locations = [0.0, 1.0]
         headerView.layer.addSublayer(gradientTop)
+        headerView.backgroundColor = .headerBackgroundBlue
         for title in titles {
             let label = UILabel.headerLabel(title)
-            label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight)
-            label.textColor = UIColor.white
+            label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight - CGSize.shadowOffsetTableHeader.height)
             headerView.addSubview(label)
             i += 1
         }
         headerView.addShadow(.shadowOffsetTableHeader)
-        return headerView
+        let headerViewContainer = HeaderViewContainer(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: headerHeight))
+        headerViewContainer.headerView = headerView
+        return headerViewContainer
     }
 }
 
@@ -251,7 +250,7 @@ extension PPLTableViewController: UITableViewDelegate {
         tableView.cellForRow(at: indexPath)!.setHighlighted(true, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return 90
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -275,30 +274,47 @@ extension PPLTableViewController: UITableViewDataSource {
     }
 }
 
+fileprivate let bannerViewContainerTag = 98765
+fileprivate let buffer: CGFloat = 10
 extension PPLTableViewController: GADBannerViewDelegate {
     fileprivate func addBannerView() {
         guard AppState.shared.isAdEnabled else { return }
-        while view.subviews.contains(where: { $0.isKind(of: GADBannerView.self) }) {
-            view.subviews.first(where: { $0.isKind(of: GADBannerView.self) })!.removeFromSuperview()
-        }
         let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
+        self.adHeight = adSize.size.height + (buffer * 2)
+        let container = containerView()
+        if let v =  container.subviews.first(where: { $0.isKind(of: GADBannerView.self) }) {
+            v.removeFromSuperview()
+        }
         let bannerView = GADBannerView(adSize: adSize)
-        self.adSize = adSize.size
-        view.addSubview(bannerView)
+        add(bannerView, toContainer: container)
+        bannerView.center = CGPoint(x: container.frame.width / 2, y: container.frame.height / 2)
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
         bannerView.delegate = self
-        self.bannerView = bannerView
-        positionBannerView()
     }
     
-    func positionBannerView(yOffset: CGFloat = 0.0) {
+    fileprivate func add(_ bannerView: GADBannerView , toContainer container: UIView) {
+        container.addSubview(bannerView)
         bannerView.translatesAutoresizingMaskIntoConstraints = false
-        bannerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        bannerView.widthAnchor.constraint(equalToConstant: bannerView.frame.width).isActive = true
-        bannerView.heightAnchor.constraint(equalToConstant: bannerView.frame.height).isActive = true
-        bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        bannerView.topAnchor.constraint(equalTo: container.topAnchor, constant: buffer).isActive = true
+        bannerView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+    }
+    
+    fileprivate func containerView() -> UIView {
+        if let container = view.viewWithTag(bannerViewContainerTag) {
+            return container
+        }
+        let container = UIView()
+        container.tag = bannerViewContainerTag
+        view.addSubview(container)
+        container.backgroundColor = .darkGray
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        container.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        container.heightAnchor.constraint(equalToConstant: adHeight!).isActive = true
+        container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        return container
     }
     
     func totalOffset(_ offset: CGFloat) -> CGFloat {
@@ -323,6 +339,17 @@ extension PPLTableViewController: ReloadProtocol {
 
 extension UIViewController {
     func titleLabelFont() -> UIFont {
-        UIFont.systemFont(ofSize: 36, weight: .heavy)
+        UIFont.systemFont(ofSize: 32, weight: .heavy)
+    }
+}
+
+extension UILabel {
+    static func headerLabel(_ text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.textColor = .white
+        return label
     }
 }

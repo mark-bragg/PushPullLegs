@@ -59,6 +59,7 @@ class ExerciseSetViewModel: NSObject {
     }
     
     func restartSet() {
+        countdown = PPLDefaults.instance.countdown()
         stopWatch.start()
     }
     
@@ -131,6 +132,8 @@ class ExerciseSetViewModel: NSObject {
             state = .notStarted
         case .ending:
             state = .inProgress
+            setBegan = false
+            restartSet()
         case .finished:
             state = .ending
         case .notStarted:

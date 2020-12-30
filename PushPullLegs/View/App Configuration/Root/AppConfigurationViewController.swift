@@ -76,6 +76,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         segment.insertSegment(withTitle: "Metric", at: 1, animated: false)
         segment.selectedSegmentIndex = PPLDefaults.instance.isKilograms() ? 1 : 0
         segment.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
+        segment.selectedSegmentTintColor = PPLColor.headerBackgroundBlue
+        segment.backgroundColor = .grey
         cell.rootView.addSubview(segment)
         segment.translatesAutoresizingMaskIntoConstraints = false
         segment.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
@@ -108,7 +110,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     @objc func showCountdownPicker() {
         let picker = CountdownPickerViewController()
         picker.modalPresentationStyle = .popover
-        picker.view.backgroundColor = .black
         picker.preferredContentSize = CGSize(width: countdownLabel.frame.width, height: 250)
         picker.popoverPresentationController?.sourceView = countdownLabel
         picker.popoverPresentationController?.sourceRect = CGRect(x: countdownLabel.frame.width/2, y: 6, width: 0, height: countdownLabel.frame.height)

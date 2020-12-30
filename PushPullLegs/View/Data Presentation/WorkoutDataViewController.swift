@@ -33,7 +33,7 @@ class WorkoutDataViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        tableHeaderView(titles: ["Exercises"])
+        tableHeaderViewContainer(titles: ["Exercises"])
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

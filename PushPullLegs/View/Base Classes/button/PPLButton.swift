@@ -76,10 +76,11 @@ class PPLButton : UIButton {
         contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         layer.cornerRadius = radius != 0 ? radius : frame.height/2
         layer.borderWidth = 2.0
-        setTitleColor(PPLColor.disabledSaveWhiteColor, for: .disabled)
-        setTitleColor(PPLColor.textBlue, for: .normal)
+        layer.borderColor = UIColor.white.cgColor
+        setTitleColor(.disabledSaveWhiteColor, for: .disabled)
+        setTitleColor(.textGreen, for: .normal)
         titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)
-        backgroundColor = PPLColor.darkGrey
+        backgroundColor = .cellBackgroundBlue
     }
     
     static func touchDownNotificationName() -> NSNotification.Name {

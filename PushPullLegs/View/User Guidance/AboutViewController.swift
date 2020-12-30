@@ -29,11 +29,15 @@ class AboutViewController: PPLTableViewController {
         return aboutViewModel().titleForSection(section)
     }
     
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 75
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.contentView.backgroundColor = PPLColor.grey
+        cell.contentView.backgroundColor = .backgroundBlue
         let tv = UITextView()
-        tv.backgroundColor = PPLColor.offWhite
+        tv.backgroundColor = .clear
         tv.textColor = .black
         tv.text = aboutViewModel().title(indexPath: indexPath)
         tv.isScrollEnabled = false
@@ -73,6 +77,7 @@ class AboutViewController: PPLTableViewController {
         } else {
             btn = CellExpansionButton(type: .roundedRect)
         }
+        btn.setTitleColor(.white, for: .normal)
         btn.tag = section + buttonTagConstant
         btn.isCollapsed = !aboutViewModel().isSectionExpanded(section)
         btn.sizeToFit()

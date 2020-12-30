@@ -51,7 +51,6 @@ class GraphViewController: UIViewController {
         }
         addViews()
         if isInteractive {
-            view.backgroundColor = PPLColor.darkGrey
             bind()
         }
         if navigationController != nil {
@@ -63,7 +62,6 @@ class GraphViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         viewModel.reload()
         graphView.yValues = viewModel.volumes()
-        graphView.setNeedsDisplay()
     }
     
     func addViews() {
@@ -141,26 +139,29 @@ class GraphViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         view.addSubview(label)
         label.numberOfLines = 1
-        label.textColor = .white
+        label.textColor = isInteractive ? .white : .textGreen
         return label
     }
     
     func addGraphView() {
         let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: containerView.frame.width - padding * 2, height: heightForGraph()))
+        graph.smallDisplay = !isInteractive
         containerView.addSubview(graph)
-        containerView.backgroundColor = isInteractive ? PPLColor.darkGrey : .clear
         containerView.addSubview(graph)
         if isInteractive {
             graph.setInteractivity()
+            graph.backgroundColor = .cellBackgroundBlue
+            containerView.backgroundColor = .backgroundBlue
         } else {
+            containerView.backgroundColor = .clear
             graph.translatesAutoresizingMaskIntoConstraints = false
             graph.topAnchor.constraint(equalTo: labelStack.bottomAnchor).isActive = true
             graph.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -16).isActive = true
             graph.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20).isActive = true
             graph.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8).isActive = true
+            graph.backgroundColor = .clear
         }
         graphView = graph
-        graph.backgroundColor = .clear
         graph.yValues = viewModel.volumes()
     }
     

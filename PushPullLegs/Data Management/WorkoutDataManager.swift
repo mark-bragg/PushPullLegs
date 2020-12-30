@@ -88,6 +88,9 @@ class WorkoutDataManager: DataManager {
         }
         req.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
         if let wkts = try? backgroundContext.fetch(req) as? [Workout] {
+            if ascending {
+                return wkts.reversed()
+            }
             return wkts
         }
         return []

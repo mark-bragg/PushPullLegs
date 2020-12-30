@@ -41,7 +41,7 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
         guard let title = sectionHeaderTitle(section) else {
             return nil
         }
-        let headerView = tableHeaderView(titles: [title])
+        let headerView = tableHeaderViewContainer(titles: [title])
         return headerView
     }
     
