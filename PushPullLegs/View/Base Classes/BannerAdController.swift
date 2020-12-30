@@ -45,7 +45,7 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
         let container = UIView()
         container.tag = bannerViewContainerTag()
         view.addSubview(container)
-        container.backgroundColor = .darkGray
+        container.backgroundColor = .black
         container.translatesAutoresizingMaskIntoConstraints = false
         container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         container.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
@@ -55,9 +55,9 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
     }
     
     func bannerHeight() -> CGFloat {
+        guard AppState.shared.isAdEnabled else { return 0 }
         let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
-        let containerHeight = adSize.size.height + (heightBuffer() * 2)
-        return containerHeight
+        return adSize.size.height + (heightBuffer() * 2)
     }
     
     fileprivate func heightBuffer() -> CGFloat { 10.0 }
