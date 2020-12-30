@@ -75,7 +75,11 @@ class GraphTableViewController: UIViewController {
     }
     
     fileprivate func prepareTableView() {
-        guard tableView == nil else { return }
+        guard tableView == nil else {
+            tableView.isUserInteractionEnabled = true
+            tableView.reloadData()
+            return
+        }
         var height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0)
         if bannerView != nil {
             height -= (bannerView?.frame.height ?? 0) + buffer * 2
@@ -93,6 +97,9 @@ class GraphTableViewController: UIViewController {
     
     fileprivate func prepareGraphViewControllers() {
         guard pushVc == nil || pullVc == nil || legsVc == nil else {
+            pushVc.view.setNeedsLayout()
+            pullVc.view.setNeedsLayout()
+            legsVc.view.setNeedsLayout()
             return
         }
         let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: tableView.rowHeight - 16)
@@ -120,14 +127,6 @@ class GraphTableViewController: UIViewController {
         lbl.font = titleLabelFont()
         return lbl
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        tableView.reloadData()
-        pushVc.view.setNeedsLayout()
-        pullVc.view.setNeedsLayout()
-        legsVc.view.setNeedsLayout()
-    }
 
 }
 
@@ -143,6 +142,7 @@ extension GraphTableViewController: UITableViewDataSource {
         let view = viewForRow(indexPath.row)
         cell.rootView.addSubview(view)
         cell.contentView.clipsToBounds = false
+        vcForRow(indexPath.row).viewModel.reload()
         if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
             cell.addDisclosureIndicator()
         } else {
@@ -226,6 +226,7 @@ extension GraphTableViewController: UITableViewDelegate {
         guard vcForRow(selectedRow).viewModel.pointCount() > 0 else { return }
         if AppState.shared.isAdEnabled, let interstitial = createAndLoadInterstitial() {
             presentAdLoadingView()
+            tableView.isUserInteractionEnabled = false
             interstitial.delegate = self
             self.interstitial = interstitial
         } else {
