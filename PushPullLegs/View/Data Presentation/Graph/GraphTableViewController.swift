@@ -15,7 +15,6 @@ class GraphTableViewController: UIViewController {
     var pushVc: GraphViewController!
     var pullVc: GraphViewController!
     var legsVc: GraphViewController!
-    weak var bannerView: GADBannerView?
     private var helpTag = 0
     private var interstitial: GADInterstitial?
     private var selectedRow: Int!
@@ -30,48 +29,6 @@ class GraphTableViewController: UIViewController {
         navigationItem.titleView = titleLabel()
         constrainTableView()
         tableView.rowHeight = (tableView.frame.height) / 3
-        if let bannerView = bannerView {
-            view.bringSubviewToFront(bannerView)
-        }
-    }
-    
-    fileprivate func addBannerView() {
-        guard AppState.shared.isAdEnabled else { return }
-        if let v = view.subviews.first(where: { $0.isKind(of: GADBannerView.self) }) { v.removeFromSuperview() }
-        let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
-        let bannerView = GADBannerView(adSize: adSize)
-        view.addSubview(bannerView)
-        addBannerBackground(adSize.size.height)
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
-        self.bannerView = bannerView
-        positionBannerView()
-    }
-    
-    let bannerBackgroundTag = 85673
-    fileprivate func addBannerBackground(_ adHeight: CGFloat) {
-        if let _ = view.viewWithTag(bannerBackgroundTag) {
-            return
-        }
-        let background = UIView()
-        background.translatesAutoresizingMaskIntoConstraints = false
-        background.backgroundColor = .gray
-        view.addSubview(background)
-        background.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        background.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        background.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        background.heightAnchor.constraint(equalToConstant: adHeight + (buffer * 2)).isActive = true
-    }
-    
-    fileprivate let buffer: CGFloat = 10
-    func positionBannerView() {
-        guard let bannerView = bannerView  else { return }
-        bannerView.translatesAutoresizingMaskIntoConstraints = false
-        bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        bannerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: buffer).isActive = true
-        bannerView.widthAnchor.constraint(equalToConstant: bannerView.frame.width).isActive = true
-        bannerView.heightAnchor.constraint(equalToConstant: bannerView.frame.height).isActive = true
     }
     
     fileprivate func prepareTableView() {
@@ -80,10 +37,7 @@ class GraphTableViewController: UIViewController {
             tableView.reloadData()
             return
         }
-        var height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0)
-        if bannerView != nil {
-            height -= (bannerView?.frame.height ?? 0) + buffer * 2
-        }
+        let height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0) - bannerHeight()
         let tbv = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height))
         tbv.register(PPLTableViewCell.nib(), forCellReuseIdentifier: PPLTableViewCellIdentifier)
         tbv.backgroundColor = PPLColor.clear
@@ -113,11 +67,10 @@ class GraphTableViewController: UIViewController {
     
     private func constrainTableView() {
         let guide = view.safeAreaLayoutGuide
-        var topAnchor: NSLayoutYAxisAnchor { AppState.shared.isAdEnabled && bannerView != nil ? bannerView!.bottomAnchor : guide.topAnchor }
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: guide.topAnchor, constant: bannerHeight()).isActive = true
         tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
     }
     
@@ -274,12 +227,5 @@ extension UIViewController {
         subview.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
         subview.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insets.left).isActive = true
         subview.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insets.right).isActive = true
-    }
-}
-
-extension UIViewController {
-    func removeBanner() {
-        guard let banner = view.subviews.first(where: { $0.isKind(of: GADBannerView.self) }) as? GADBannerView else { return }
-        banner.removeFromSuperview()
     }
 }
