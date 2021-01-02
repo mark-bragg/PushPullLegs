@@ -32,17 +32,16 @@ class PPLTableViewCell: UITableViewCell {
         guard selectionStyle != .none else { return }
         if highlighted {
             self.rootView.removeShadow()
+        } else {
+            self.rootView.addShadow(.shadowOffsetCell)
         }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
-        UIView.animate(withDuration: 0.05, animations: {
-            if !selected {
-                self.rootView.addShadow(.shadowOffsetCell)
-                self.rootView.layer.borderColor = UIColor.white.cgColor
-                self.rootView.layer.borderWidth = PPLTableViewCell.borderWidth
-            }
-        })
+        guard !selected else { return }
+        self.rootView.addShadow(.shadowOffsetCell)
+        self.rootView.layer.borderColor = UIColor.white.cgColor
+        self.rootView.layer.borderWidth = PPLTableViewCell.borderWidth
     }
     
     func addDisclosureIndicator() {

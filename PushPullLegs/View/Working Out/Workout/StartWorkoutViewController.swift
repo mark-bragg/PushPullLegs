@@ -20,7 +20,6 @@ class StartWorkoutViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.isScrollEnabled = false
         hidesBottomBarWhenPushed = false
         if AppState.shared.workoutInProgress {
             self.navigateToNextWorkout()
