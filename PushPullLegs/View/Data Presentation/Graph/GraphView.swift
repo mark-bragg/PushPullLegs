@@ -187,7 +187,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     private func singlePointPath() -> CGPath {
-        linePoints = [startingPoint()]
+        linePoints = [lowestPoint()]
         return UIBezierPath.init(ovalIn: CGRect(x: linePoints[0].x - singlePointCircleDiameter / 2, y: linePoints[0].y - singlePointCircleDiameter / 2, width: singlePointCircleDiameter, height: singlePointCircleDiameter)).cgPath
     }
     
@@ -199,26 +199,32 @@ class GraphView: UIControl, ObservableObject {
         }
         let path = UIBezierPath()
         func x (index: Int) -> CGFloat{
-            return self.frame.width * 0.025 + xSpacing * CGFloat(index)
+            return self.frame.width * 0.05 + xSpacing * CGFloat(index)
         }
-        let y = CGFloat(frame.height * 0.95) - CGFloat(normalizedYs[0]) * CGFloat(frame.height * 0.9)
-        var point = CGPoint(x: startingPoint().x, y: y)
+        let yShift = convertToGraphY(normalizedYs.min()!) - lowestPoint().y
+        var y = convertToGraphY(normalizedYs[0]) - yShift
+        var point = CGPoint(x: lowestPoint().x, y: y)
         path.move(to: point)
         linePoints.append(point)
         for index in 1..<yValues.count {
-            point = CGPoint(x: x(index: index), y: CGFloat((frame.height * 0.95) - normalizedYs[index] * (frame.height * 0.9)))
+            y = convertToGraphY(normalizedYs[index]) - yShift
+            point = CGPoint(x: x(index: index), y: y)
             path.addLine(to: point)
             linePoints.append(point)
         }
         return path.cgPath
     }
     
+    func convertToGraphY(_ oldY: CGFloat) -> CGFloat {
+        return CGFloat(frame.height * 0.95) - CGFloat(oldY) * CGFloat(frame.height * 0.9)
+    }
+    
     private func origin() -> CGPoint {
         CGPoint(x: frame.width * 0.025, y: frame.height * 0.975)
     }
     
-    private func startingPoint() -> CGPoint {
-        CGPoint(x: origin().x + frame.width * 0.025, y: origin().y - frame.width * 0.025)
+    private func lowestPoint() -> CGPoint {
+        CGPoint(x: origin().x + frame.width * 0.05, y: origin().y - frame.height * 0.05)
     }
     
     func showNoDataView() {
