@@ -148,6 +148,10 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
         workoutManager.delete(workout)
         AppState.shared.workoutInProgress = false
     }
+    
+    func noDataText() -> String {
+        return "Empty Workout"
+    }
 }
 
 extension Exercise: Comparable {

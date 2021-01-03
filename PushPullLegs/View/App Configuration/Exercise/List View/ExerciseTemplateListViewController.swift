@@ -41,17 +41,19 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
         guard let title = sectionHeaderTitle(section) else {
             return nil
         }
-        let headerView = tableHeaderViewContainer(titles: [title])
+        let headerView = tableHeaderViewContainer(titles: [title], section: section)
         return headerView
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return sectionHeaderTitle(section) != nil ? super.tableView(tableView, heightForHeaderInSection: section) : 0
+        let height = sectionHeaderTitle(section) != nil ? super.tableView(tableView, heightForHeaderInSection: section) : 0
+        return height
     }
     
     func sectionHeaderTitle(_ section: Int) -> String? {
         guard let viewModel = viewModel, viewModel.rowCount(section: section) > 0 else { return nil }
-        return exerciseTemplateListViewModel().titleForSection(section)
+        let title = exerciseTemplateListViewModel().titleForSection(section)
+        return title
     }
     
     override func addAction(_ sender: Any) {

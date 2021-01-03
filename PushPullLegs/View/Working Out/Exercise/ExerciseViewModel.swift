@@ -105,6 +105,10 @@ class ExerciseViewModel: NSObject, PPLTableViewModel, ExerciseSetCollector {
         return "Time"
     }
     
+    func noDataText() -> String {
+        ""
+    }
+    
     private func collectFinishedCellData() {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
         for set in sets {

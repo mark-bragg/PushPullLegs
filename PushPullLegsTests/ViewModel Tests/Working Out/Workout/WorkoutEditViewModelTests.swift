@@ -593,6 +593,12 @@ class WorkoutEditViewModelTests: XCTestCase {
         XCTAssert(AppState.shared.workoutInProgress == false)
     }
     
+    func testNoDataText() {
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
+        let text = sut.noDataText()
+        XCTAssert(text == "Empty Workout")
+    }
+    
 }
 
 func assertEqual(_ v1: Int, _ v2: Int) {

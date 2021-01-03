@@ -89,4 +89,8 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
         pullExercises = templateManagement.exerciseTemplates(withType: .pull)?.sorted(by: exerciseTemplateSorter) ?? []
         legsExercises = templateManagement.exerciseTemplates(withType: .legs)?.sorted(by: exerciseTemplateSorter) ?? []
     }
+    
+    func noDataText() -> String {
+        "No Exercises"
+    }
 }

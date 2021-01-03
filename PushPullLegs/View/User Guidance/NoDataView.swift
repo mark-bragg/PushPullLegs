@@ -11,20 +11,44 @@ import UIKit
 class NoDataView: UIView {
     var lightBackground: Bool = true
     let labelTag = 1234
+    var text = "No Data" {
+        willSet {
+            updateLabel(newValue)
+        }
+    }
+    
+    func updateLabel(_ text: String) {
+        guard let label = label() else {return}
+        label.text = text
+        let height = label.textRect(forBounds: bounds, limitedToNumberOfLines: 10).height
+        label.heightAnchor.constraint(lessThanOrEqualToConstant: height).isActive = true
+    }
     
     override func layoutSubviews() {
         if label() == nil {
             addSubview(styledNoDataLabel(frame: bounds))
+            positionLabel()
         }
         backgroundColor = lightBackground ? PPLColor.backgroundBlue : PPLColor.darkGrey
     }
     
     func styledNoDataLabel(frame: CGRect) -> UILabel {
-        let label = UILabel(frame: frame)
+        let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 72)
         label.textAlignment = .center
-        label.text = "No Data"
+        label.text = text
+        label.sizeToFit()
+        label.tag = labelTag
+        label.numberOfLines = 0
         return label
+    }
+    
+    func positionLabel() {
+        guard let label = label() else {return}
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        label.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
     }
     
     func label() -> UILabel? {
@@ -40,11 +64,6 @@ class NoDataGraphView: NoDataView {
         if whiteBackground {
             backgroundColor = .cellBackgroundBlue
         }
-//        let leftBar = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: frame.height))
-//        let bottomBar = UIView(frame: CGRect(x: 0, y: frame.height - 5, width: frame.width, height: 5))
-//        leftBar.backgroundColor = .backgroundBlue
-//        bottomBar.backgroundColor = .backgroundBlue
-//        addSubviews([leftBar, bottomBar])
     }
 }
 
