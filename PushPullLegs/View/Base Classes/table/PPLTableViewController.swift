@@ -160,6 +160,7 @@ class PPLTableViewController: UIViewController {
     func setupAddButton() {
         attachAddButton()
         positionAddButton()
+        showNoDataView()
     }
     
     private func attachAddButton() {
@@ -198,6 +199,9 @@ class PPLTableViewController: UIViewController {
         let ndv = NoDataView(frame: view.bounds)
         view.addSubview(ndv)
         ndv.isHidden = true
+        if let ndt = viewModel.noDataText?() {
+            ndv.text = ndt
+        }
         noDataView = ndv
     }
     

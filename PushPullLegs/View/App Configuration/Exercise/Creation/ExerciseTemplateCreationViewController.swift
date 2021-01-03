@@ -55,7 +55,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         guard let viewModel = viewModel else { return }
         bindSaveButtonToViewModel(viewModel)
         bindSanitizerToTextField(viewModel)
-        bindTypButtonDeselectionToViewModel(viewModel)
+        bindTypeButtonDeselectionToViewModel(viewModel)
         bindExerciseNameToTextField(viewModel)
     }
     
@@ -79,7 +79,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         .store(in: &cancellables)
     }
     
-    fileprivate func bindTypButtonDeselectionToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
+    fileprivate func bindTypeButtonDeselectionToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
         viewModel.$exerciseType.sink { [weak self] type in
             guard let self = self else { return }
             if self.saveButton.title(for: .normal) != "Save" {
@@ -138,10 +138,18 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         guard let text = textField.text else {
             return
         }
-        viewModel?.saveExercise(withName: text, successCompletion: { [weak self] in
+        let alert = UIAlertController(title: "Add to Workout?", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [weak self] (action) in
             guard let self = self else { return }
-            self.dismiss(animated: true, completion: nil)
-        })
+            self.viewModel?.saveExercise(withName: text, successCompletion: {
+                self.dismiss(animated: true, completion: nil)
+            })
+        }))
+        alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: { [weak self] (action) in
+            guard let self = self else { return }
+            self.saveButton.deselection()
+        }))
+        present(alert, animated: true, completion: nil)
     }
     
     fileprivate func setupExerciseTypeButtons() {

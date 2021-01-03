@@ -68,6 +68,10 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
         return WorkoutTemplateEditViewModel.removed
     }
     
+    func noDataText() -> String {
+        "Empty Workout"
+    }
+    
     func selected(indexPath: IndexPath) {
         if indexPath.section == 0 {
             if selectedExercises.count > 0 {

@@ -15,6 +15,7 @@ import Foundation
     @objc optional func sectionCount() -> Int
     @objc optional func titleForSection(_ section: Int) -> String?
     @objc optional func title() -> String?
+    @objc optional func noDataText() -> String
 }
 
 extension PPLTableViewModel {
