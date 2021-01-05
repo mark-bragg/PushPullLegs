@@ -28,7 +28,7 @@ class PPLTableViewController: UIViewController {
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        addBannerView()
+        addBannerView(bannerAdUnitID())
         setupTableView()
         hideBottomBar()
         addBackNavigationGesture()
@@ -203,6 +203,7 @@ class PPLTableViewController: UIViewController {
             ndv.text = ndt
         }
         noDataView = ndv
+        view.bringSubviewToFront(bannerContainerView(0))
     }
     
     func showNoDataView() {
@@ -239,6 +240,11 @@ class PPLTableViewController: UIViewController {
         headerViewContainer.headerView = headerView
         return headerViewContainer
     }
+    
+    func bannerAdUnitID() -> String {
+        AdUnitID.exampleBannerAdUnitID
+    }
+    
 }
 
 extension PPLTableViewController: UITableViewDelegate {

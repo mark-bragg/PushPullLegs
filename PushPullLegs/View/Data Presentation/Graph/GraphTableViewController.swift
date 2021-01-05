@@ -23,7 +23,7 @@ class GraphTableViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         view.backgroundColor = PPLColor.backgroundBlue
-        addBannerView()
+        addBannerView(bannerAdUnitID())
         prepareTableView()
         prepareGraphViewControllers()
         navigationItem.titleView = titleLabel()
@@ -78,6 +78,10 @@ class GraphTableViewController: UIViewController {
         lbl.text = "Trends"
         lbl.font = titleLabelFont()
         return lbl
+    }
+    
+    func bannerAdUnitID() -> String {
+        AdUnitID.exampleBannerAdUnitID
     }
 
 }
@@ -193,9 +197,9 @@ extension GraphTableViewController: GADInterstitialDelegate {
     }
 
     func createAndLoadInterstitial() -> GADInterstitial? {
-      let interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
-      interstitial.load(GADRequest())
-      return interstitial
+        let interstitial = GADInterstitial(adUnitID: AdUnitID.exampleInterstitialAdUnitID)
+        interstitial.load(GADRequest())
+        return interstitial
     }
     
     func interstitialWillDismissScreen(_ ad: GADInterstitial) {
@@ -211,10 +215,6 @@ extension GraphTableViewController: GADInterstitialDelegate {
         cell.rootView.addSubview(spinner)
         spinner.startAnimating()
         self.spinner = spinner
-    }
-    
-    func interstitialWillPresentScreen(_ ad: GADInterstitial) {
-        spinner.removeFromSuperview()
     }
 }
 

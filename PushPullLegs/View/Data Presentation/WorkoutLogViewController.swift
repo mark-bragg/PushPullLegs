@@ -118,6 +118,10 @@ class WorkoutLogViewController: PPLTableViewController {
         viewModel = WorkoutLogViewModel()
         super.reload()
     }
+    
+//    override func adUnitID() -> String {
+//        
+//    }
 
 }
 

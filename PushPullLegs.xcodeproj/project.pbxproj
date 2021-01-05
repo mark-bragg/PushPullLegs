@@ -54,6 +54,7 @@
 		4973C11E244BB593009460F2 /* ExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C11D244BB592009460F2 /* ExerciseViewController.swift */; };
 		4973C122244BCBB4009460F2 /* WorkoutEditViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C121244BCBB4009460F2 /* WorkoutEditViewModelTests.swift */; };
 		4973C124244BCC26009460F2 /* WorkoutEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C123244BCC26009460F2 /* WorkoutEditViewModel.swift */; };
+		4980D99A25A267090054EA5F /* AdUnitIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4980D99925A267090054EA5F /* AdUnitIDs.swift */; };
 		4989BA5524B94344001C17B3 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4989BA5424B94344001C17B3 /* AppColors.swift */; };
 		4989BA5A24BB905F001C17B3 /* PPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */; };
 		4989BA5B24BB905F001C17B3 /* PPLTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */; };
@@ -170,6 +171,7 @@
 		4973C11D244BB592009460F2 /* ExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewController.swift; sourceTree = "<group>"; };
 		4973C121244BCBB4009460F2 /* WorkoutEditViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEditViewModelTests.swift; sourceTree = "<group>"; };
 		4973C123244BCC26009460F2 /* WorkoutEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEditViewModel.swift; sourceTree = "<group>"; };
+		4980D99925A267090054EA5F /* AdUnitIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdUnitIDs.swift; sourceTree = "<group>"; };
 		4989BA5424B94344001C17B3 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewCell.swift; sourceTree = "<group>"; };
 		4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PPLTableViewCell.xib; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 				491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */,
 				4989BA5424B94344001C17B3 /* AppColors.swift */,
 				49F6083E254DFF1700407D0A /* AppImages.swift */,
+				4980D99925A267090054EA5F /* AdUnitIDs.swift */,
 			);
 			path = "Utility Closet";
 			sourceTree = "<group>";
@@ -1038,6 +1041,7 @@
 				4973C11C244BB068009460F2 /* WorkoutViewController.swift in Sources */,
 				49359B8D24D60001005FF7A8 /* PPLButton.swift in Sources */,
 				490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */,
+				4980D99A25A267090054EA5F /* AdUnitIDs.swift in Sources */,
 				4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */,
 				49F8EF292447754900B6BD45 /* ExerciseTemplateListViewController.swift in Sources */,
 				49EF4BAF23F838F60071687D /* DataManager.swift in Sources */,
