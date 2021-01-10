@@ -124,7 +124,7 @@ class WorkoutViewController: PPLTableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         workoutEditViewModel().selectedIndex = indexPath
         navigateToExercise()
     }

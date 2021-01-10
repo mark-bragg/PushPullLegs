@@ -146,7 +146,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         return view.trailingAnchor
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             let vc = AboutViewController()
             vc.hidesBottomBarWhenPushed = true

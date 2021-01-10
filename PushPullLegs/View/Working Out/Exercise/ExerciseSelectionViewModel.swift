@@ -14,6 +14,7 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     private var selectedIndices = [Int]()
     let exerciseType: ExerciseType
     private var templateManagement: TemplateManagement
+    var multiSelect: Bool = true
     
     init(withType type: ExerciseType, templateManagement: TemplateManagement) {
         self.templateManagement = templateManagement

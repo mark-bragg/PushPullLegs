@@ -36,6 +36,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        cell.multiSelect = viewModel.multiSelect ?? false
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
@@ -50,14 +51,15 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        super.tableView(tableView, didSelectRowAt: indexPath)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
+            // TODO: refactor to new method in ExerciseSelectionViewModel: func toggle()
             if exerciseSelectionViewModel().isSelected(row: indexPath.row) {
                 exerciseSelectionViewModel().deselected(row: indexPath.row)
-                cell.setHighlighted(false, animated: true)
+                cell.setSelected(false, animated: true)
             } else {
                 exerciseSelectionViewModel().selected(row: indexPath.row)
+                cell.setSelected(true, animated: true)
             }
         }
     }

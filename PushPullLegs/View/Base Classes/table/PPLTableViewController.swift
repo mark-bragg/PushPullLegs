@@ -248,9 +248,6 @@ class PPLTableViewController: UIViewController {
 }
 
 extension PPLTableViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.cellForRow(at: indexPath)!.setHighlighted(true, animated: true)
-    }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 90
     }
