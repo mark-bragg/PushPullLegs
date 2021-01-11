@@ -107,14 +107,14 @@ class PPLAddButton: UIControl {
     
     private func drawPlusSign(_ plusLayer: CALayer) {
         // TODO: change these shape layers to plain layers with proper corner radius
-        let horizontal = CAShapeLayer()
-        let vertical = CAShapeLayer()
-        horizontal.frame = plusLayer.bounds
-        vertical.frame = plusLayer.bounds
-        horizontal.path = horizontalRectangle()
-        horizontal.fillColor = UIColor(white: 0.85, alpha: 1.0).cgColor
-        vertical.path = verticalRectangle()
-        vertical.fillColor = UIColor(white: 0.85, alpha: 1.0).cgColor
+        let horizontal = CALayer()
+        let vertical = CALayer()
+        horizontal.frame = CGRect(x: plusLayer.bounds.width/3, y: plusLayer.bounds.height/2 - 3.75, width: plusLayer.bounds.width/3, height: 7.5)
+        horizontal.backgroundColor = UIColor(white: 0.85, alpha: 1.0).cgColor
+        horizontal.cornerRadius = 5
+        vertical.frame = CGRect(x: plusLayer.bounds.width/2 - 3.75, y: plusLayer.bounds.height/3, width: 7.5, height: plusLayer.bounds.height/3)
+        vertical.backgroundColor = UIColor(white: 0.85, alpha: 1.0).cgColor
+        vertical.cornerRadius = 5
         plusLayer.addSublayer(horizontal)
         plusLayer.addSublayer(vertical)
         plusLayer.name = plusSignLayerName

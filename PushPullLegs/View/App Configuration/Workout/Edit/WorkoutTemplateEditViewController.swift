@@ -34,9 +34,10 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        cell.frame = CGRect(x: cell.frame.origin.x, y: cell.frame.origin.y, width: tableView.frame.width, height: cell.frame.height)
         cell.multiSelect = true
-        label(forCell: cell).text = workoutTemplateEditViewModel().title(indexPath: indexPath)
         cell.setSelected(workoutTemplateEditViewModel().isSelected(indexPath), animated: true)
+        label(forCell: cell).text = workoutTemplateEditViewModel().title(indexPath: indexPath)
         return cell
     }
     

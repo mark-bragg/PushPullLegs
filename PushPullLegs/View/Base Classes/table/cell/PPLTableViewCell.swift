@@ -32,25 +32,27 @@ class PPLTableViewCell: UITableViewCell {
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         guard !multiSelect && selectionStyle != .none else { return }
         if highlighted {
-            self.rootView.removeShadow()
+            rootView.removeShadow()
         } else {
-            UIView.animate(withDuration: 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.rootView.addShadow(.shadowOffsetCell)
-            }
+            addShadowAnimated()
         }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         guard multiSelect && animated else { return }
-        rootView.isSelected = true
-//        if selected {
-//            rootView.removeShadow()
-//        } else {
-//            self.rootView.addShadow(.shadowOffsetCell)
-//            self.rootView.layer.borderColor = UIColor.white.cgColor
-//            self.rootView.layer.borderWidth = PPLTableViewCell.borderWidth
-//        }
+        rootView.isSelected = selected
+        if selected {
+            rootView.removeShadow()
+        } else if animated {
+            rootView.addShadow(.shadowOffsetCell)
+        }
+    }
+    
+    private func addShadowAnimated() {
+        UIView.animate(withDuration: 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.rootView.addShadow(.shadowOffsetCell)
+        }
     }
     
     func addDisclosureIndicator() {
