@@ -74,7 +74,6 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
             textLabel = PPLNameLabel()
             textLabel?.textAlignment = .center
             cell.rootView.addSubview(textLabel!)
-            cell.selectionStyle = .none
             textLabel?.translatesAutoresizingMaskIntoConstraints = false
             textLabel?.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: 10).isActive = true
             textLabel?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: -10).isActive = true
@@ -89,6 +88,16 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
             exerciseTemplateListViewModel().deleteExercise(indexPath: indexPath)
             reload()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? PPLTableViewCell else { return }
+        cell.setHighlighted(true, animated: false)
+    }
+    
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        guard let ip = indexPath, let cell = tableView.cellForRow(at: ip) as? PPLTableViewCell else { return }
+        cell.setHighlighted(false, animated: true)
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

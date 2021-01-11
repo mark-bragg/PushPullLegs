@@ -36,7 +36,7 @@ class WorkoutDataViewController: PPLTableViewController {
         tableHeaderViewContainer(titles: ["Exercises"])
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let vm = workoutReadViewModel() else { return }
         vm.selectedIndex = indexPath
         let exerciseVm = ExerciseViewModel(exercise: vm.getSelected() as! Exercise)

@@ -106,7 +106,7 @@ class WorkoutLogViewController: PPLTableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = WorkoutDataViewController()
         vc.viewModel = WorkoutReadViewModel(withCoreDataManagement: CoreDataManager.shared, workout: workoutLogViewModel().workouts[indexPath.row])
         
@@ -118,6 +118,10 @@ class WorkoutLogViewController: PPLTableViewController {
         viewModel = WorkoutLogViewModel()
         super.reload()
     }
+    
+//    override func adUnitID() -> String {
+//        
+//    }
 
 }
 

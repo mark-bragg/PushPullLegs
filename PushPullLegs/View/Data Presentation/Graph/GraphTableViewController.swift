@@ -7,23 +7,22 @@
 //
 
 import UIKit
-import GoogleMobileAds
 
 class GraphTableViewController: UIViewController {
     
-    weak var tableView: UITableView!
+    weak var tableView: PPLTableView!
     var pushVc: GraphViewController!
     var pullVc: GraphViewController!
     var legsVc: GraphViewController!
     private var helpTag = 0
-    private var interstitial: GADInterstitial?
+    private var interstitial: NSObject?
     private var selectedRow: Int!
     private weak var spinner: UIActivityIndicatorView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         view.backgroundColor = PPLColor.backgroundBlue
-        addBannerView()
+        addBannerView(bannerAdUnitID())
         prepareTableView()
         prepareGraphViewControllers()
         navigationItem.titleView = titleLabel()
@@ -38,8 +37,7 @@ class GraphTableViewController: UIViewController {
             return
         }
         let height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0) - bannerHeight()
-        let tbv = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height))
-        tbv.register(PPLTableViewCell.nib(), forCellReuseIdentifier: PPLTableViewCellIdentifier)
+        let tbv = PPLTableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height))
         tbv.backgroundColor = PPLColor.clear
         view.addSubview(tbv)
         tbv.dataSource = self
@@ -78,6 +76,10 @@ class GraphTableViewController: UIViewController {
         lbl.text = "Trends"
         lbl.font = titleLabelFont()
         return lbl
+    }
+    
+    func bannerAdUnitID() -> String {
+        AdUnitID.exampleBannerAdUnitID
     }
 
 }
@@ -156,6 +158,21 @@ extension GraphTableViewController: UITableViewDataSource {
         }
     }
     
+    override func interstitialWillDismiss() {
+        showGraph(selectedRow)
+    }
+    
+    override func presentAdLoadingView() {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell else { return }
+        let spinner = UIActivityIndicatorView(frame: cell.rootView.frame)
+        spinner.layer.cornerRadius = cell.rootView.layer.cornerRadius
+        spinner.style = .large
+        spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
+        cell.contentView.addSubview(spinner)
+        spinner.startAnimating()
+        self.spinner = spinner
+    }
+    
 }
 
 extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
@@ -176,7 +193,7 @@ extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
         guard vcForRow(selectedRow).viewModel.pointCount() > 0 else { return }
-        if AppState.shared.isAdEnabled, let interstitial = createAndLoadInterstitial() {
+        if let interstitial = createAndLoadInterstitial() {
             presentAdLoadingView()
             tableView.isUserInteractionEnabled = false
             interstitial.delegate = self
@@ -184,37 +201,6 @@ extension GraphTableViewController: UITableViewDelegate {
         } else {
             showGraph(selectedRow)
         }
-    }
-}
-
-extension GraphTableViewController: GADInterstitialDelegate {
-    func interstitialDidReceiveAd(_ ad: GADInterstitial) {
-        ad.present(fromRootViewController: self)
-    }
-
-    func createAndLoadInterstitial() -> GADInterstitial? {
-      let interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
-      interstitial.load(GADRequest())
-      return interstitial
-    }
-    
-    func interstitialWillDismissScreen(_ ad: GADInterstitial) {
-        showGraph(selectedRow)
-    }
-    
-    func presentAdLoadingView() {
-        guard let cell = tableView.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell else { return }
-        let spinner = UIActivityIndicatorView(frame: cell.rootView.bounds)
-        spinner.layer.cornerRadius = cell.rootView.layer.cornerRadius
-        spinner.style = .large
-        spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
-        cell.rootView.addSubview(spinner)
-        spinner.startAnimating()
-        self.spinner = spinner
-    }
-    
-    func interstitialWillPresentScreen(_ ad: GADInterstitial) {
-        spinner.removeFromSuperview()
     }
 }
 

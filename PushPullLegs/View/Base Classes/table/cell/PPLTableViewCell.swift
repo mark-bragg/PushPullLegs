@@ -17,6 +17,7 @@ class PPLTableViewCell: UITableViewCell {
     @IBOutlet weak var rootView: ShadowBackground!
     var pplSelectionFlag = false
     weak var indicator: UIView?
+    var multiSelect: Bool = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,19 +30,29 @@ class PPLTableViewCell: UITableViewCell {
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        guard selectionStyle != .none else { return }
+        guard !multiSelect && selectionStyle != .none else { return }
         if highlighted {
-            self.rootView.removeShadow()
+            rootView.removeShadow()
         } else {
-            self.rootView.addShadow(.shadowOffsetCell)
+            addShadowAnimated()
         }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
-        guard !selected else { return }
-        self.rootView.addShadow(.shadowOffsetCell)
-        self.rootView.layer.borderColor = UIColor.white.cgColor
-        self.rootView.layer.borderWidth = PPLTableViewCell.borderWidth
+        guard multiSelect && animated else { return }
+        rootView.isSelected = selected
+        if selected {
+            rootView.removeShadow()
+        } else if animated {
+            rootView.addShadow(.shadowOffsetCell)
+        }
+    }
+    
+    private func addShadowAnimated() {
+        UIView.animate(withDuration: 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.rootView.addShadow(.shadowOffsetCell)
+        }
     }
     
     func addDisclosureIndicator() {
@@ -94,38 +105,14 @@ class QuestionMarkView: UIImageView {
     }
 }
 
-extension CGSize {
-    static let shadowOffset = CGSize(width: -5, height: 5)
-    static let shadowOffsetCell = CGSize(width: -7, height: 15)
-    static let shadowOffsetAddButton = CGSize(width: -8, height: 8)
-    static let shadowOffsetTableHeader = CGSize(width: -9, height: 17)
-}
-
-extension UIView {
-    func addShadow(_ offset: CGSize = .shadowOffset, _ animated: Bool = true) {
-        removeShadow()
-        layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.main.scale
-        layer.shadowOffset = offset
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowRadius = 2.0
-        layer.shadowOpacity = 0.75
-    }
-    
-    func removeShadow() {
-        self.layer.shouldRasterize = true
-        self.layer.rasterizationScale = UIScreen.main.scale
-        self.layer.shadowOffset = .zero
-        self.layer.shadowRadius = 0
-    }
-}
-
 class ShadowBackground: UIView {
     var isSelected = false
     override func layoutSubviews() {
-        addShadow(.shadowOffsetCell)
+        if !isSelected {
+            addShadow(.shadowOffsetCell)
+        }
         layer.borderWidth = PPLTableViewCell.borderWidth
         layer.borderColor = UIColor.white.cgColor
-        layer.cornerRadius = layer.bounds.height/8
+        layer.cornerRadius = layer.bounds.height * 0.03
     }
 }

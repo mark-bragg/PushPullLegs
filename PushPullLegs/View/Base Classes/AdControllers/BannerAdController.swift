@@ -10,22 +10,22 @@ import UIKit
 import GoogleMobileAds
 
 protocol BannerAdController {
-    func addBannerView()
+    func addBannerView(_ adUnitID: String)
     func bannerHeight() -> CGFloat
 }
 
 extension UIViewController: BannerAdController, GADBannerViewDelegate {
-    func addBannerView() {
+    func addBannerView(_ adUnitID: String) {
         guard AppState.shared.isAdEnabled else { return }
         let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
-        let container = containerView(bannerHeight())
+        let container = bannerContainerView(bannerHeight())
         if let v =  container.subviews.first(where: { $0.isKind(of: GADBannerView.self) }) {
             v.removeFromSuperview()
         }
         let bannerView = GADBannerView(adSize: adSize)
         add(bannerView, toContainer: container)
         bannerView.center = CGPoint(x: container.frame.width / 2, y: container.frame.height / 2)
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.adUnitID = adUnitID
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
         bannerView.delegate = self
@@ -38,7 +38,7 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
         bannerView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
     }
     
-    fileprivate func containerView(_ height: CGFloat) -> UIView {
+    func bannerContainerView(_ height: CGFloat) -> UIView {
         if let container = view.viewWithTag(bannerViewContainerTag()) {
             return container
         }

@@ -9,6 +9,8 @@
 import Foundation
 
 @objc protocol PPLTableViewModel: NSObjectProtocol {
+    @objc optional var multiSelect: Bool { get set }
+    
     func rowCount(section: Int) -> Int
     func title(indexPath: IndexPath) -> String?
     

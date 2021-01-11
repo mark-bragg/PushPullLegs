@@ -37,7 +37,7 @@ class StartWorkoutViewController: PPLTableViewController {
         return tableView.frame.height / 3
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         exerciseType = (tableView.cellForRow(at: indexPath) as! PPLTableViewCell).exerciseType()
         navigateToNextWorkout()
         exerciseType = nil

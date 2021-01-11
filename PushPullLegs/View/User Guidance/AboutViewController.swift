@@ -114,7 +114,7 @@ class CellExpansionButton: UIButton {
     var indexPath: IndexPath?
     var isCollapsed = true {
         willSet {
-            setTitle(newValue ? "Read More" : "Read Less", for: .normal)
+            setTitle(newValue ? "Continue Reading" : "Finished", for: .normal)
         }
     }
 }
