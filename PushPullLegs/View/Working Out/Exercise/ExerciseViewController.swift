@@ -197,6 +197,13 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         return cell
     }
     
+    override func bannerAdUnitID() -> String {
+        if readOnly {
+            return BannerAdUnitID.exerciseReadOnlyVC
+        }
+        return BannerAdUnitID.exerciseVC
+    }
+    
 }
 
 protocol SetNavigationControllerDelegate {

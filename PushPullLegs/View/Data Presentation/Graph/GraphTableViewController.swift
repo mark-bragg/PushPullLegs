@@ -79,7 +79,7 @@ class GraphTableViewController: UIViewController {
     }
     
     func bannerAdUnitID() -> String {
-        AdUnitID.exampleBannerAdUnitID
+        BannerAdUnitID.graphTableVC
     }
 
 }
@@ -193,7 +193,7 @@ extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
         guard vcForRow(selectedRow).viewModel.pointCount() > 0 else { return }
-        if let interstitial = createAndLoadInterstitial() {
+        if let interstitial = createAndLoadInterstitial(adUnitID: InterstitialAdUnitID.graphTableVC) {
             presentAdLoadingView()
             tableView.isUserInteractionEnabled = false
             interstitial.delegate = self

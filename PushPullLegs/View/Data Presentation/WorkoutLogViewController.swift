@@ -119,9 +119,9 @@ class WorkoutLogViewController: PPLTableViewController {
         super.reload()
     }
     
-//    override func adUnitID() -> String {
-//        
-//    }
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.workoutLogVC
+    }
 
 }
 

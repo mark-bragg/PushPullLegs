@@ -49,5 +49,9 @@ class WorkoutDataViewController: PPLTableViewController {
     func workoutReadViewModel() -> WorkoutReadViewModel? {
         return viewModel as? WorkoutReadViewModel
     }
+    
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.workoutDataVC
+    }
 
 }

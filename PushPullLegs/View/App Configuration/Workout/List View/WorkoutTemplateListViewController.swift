@@ -48,6 +48,10 @@ class WorkoutTemplateListViewController: PPLTableViewController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
+    
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.workoutTemplateListVC
+    }
 }
 
 extension CGRect {

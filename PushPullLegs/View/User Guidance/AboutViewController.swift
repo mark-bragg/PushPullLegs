@@ -23,7 +23,7 @@ class AboutViewController: PPLTableViewController {
         super.viewWillAppear(animated)
         guard firstLoad else { return }
         firstLoad = false
-        if let interstitial = createAndLoadInterstitial() {
+        if let interstitial = createAndLoadInterstitial(adUnitID: InterstitialAdUnitID.appConfigurationAboutVC) {
             interstitial.delegate = self
             self.interstitial = interstitial
         }
