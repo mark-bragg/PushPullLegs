@@ -105,31 +105,6 @@ class QuestionMarkView: UIImageView {
     }
 }
 
-extension CGSize {
-    static let shadowOffset = CGSize(width: 0, height: 5)
-    static let shadowOffsetCell = CGSize(width: 0, height: 17)
-    static let shadowOffsetAddButton = CGSize(width: 0, height: 8)
-    static let shadowOffsetTableHeader = CGSize(width: 0, height: 17)
-}
-
-extension UIView {
-    func addShadow(_ offset: CGSize = .shadowOffset, _ animated: Bool = true) {
-        removeShadow()
-        layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.main.scale
-        layer.shadowPath = CGPath(rect: CGRect(x: 2.5, y: 0, width: bounds.width - 5, height: bounds.height), transform: nil)
-        layer.shadowOffset = offset
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 1.0
-    }
-    
-    func removeShadow() {
-        self.layer.shadowPath = nil
-        self.layer.shadowOffset = .zero
-        layer.shadowOpacity = .zero
-    }
-}
-
 class ShadowBackground: UIView {
     var isSelected = false
     override func layoutSubviews() {

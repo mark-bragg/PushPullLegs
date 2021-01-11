@@ -40,6 +40,7 @@
 		4945337A244FCC1900FA1665 /* PPLTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453379244FCC1900FA1665 /* PPLTabBarController.swift */; };
 		4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4945337B2450895500FA1665 /* ExerciseViewModel.swift */; };
 		49453382245090F600FA1665 /* ExerciseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453381245090F600FA1665 /* ExerciseViewModelTests.swift */; };
+		494865A125ACB021004A5FCC /* Shadows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494865A025ACB021004A5FCC /* Shadows.swift */; };
 		49568BA424422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */; };
 		4957DFB4246B549F00574C89 /* WorkoutReadViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */; };
 		4957DFB6246B54F000574C89 /* WorkoutReadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */; };
@@ -158,6 +159,7 @@
 		49453379244FCC1900FA1665 /* PPLTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTabBarController.swift; sourceTree = "<group>"; };
 		4945337B2450895500FA1665 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		49453381245090F600FA1665 /* ExerciseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModelTests.swift; sourceTree = "<group>"; };
+		494865A025ACB021004A5FCC /* Shadows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shadows.swift; sourceTree = "<group>"; };
 		49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewModelTests.swift; sourceTree = "<group>"; };
 		4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutReadViewModelTests.swift; sourceTree = "<group>"; };
 		4957DFB5246B54F000574C89 /* WorkoutReadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutReadViewModel.swift; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 			children = (
 				490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */,
 				49EF4BB323F8390A0071687D /* Date+Helpers.swift */,
+				494865A025ACB021004A5FCC /* Shadows.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1014,6 +1017,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4973C124244BCC26009460F2 /* WorkoutEditViewModel.swift in Sources */,
+				494865A125ACB021004A5FCC /* Shadows.swift in Sources */,
 				49359B9324D91E4E005FF7A8 /* GraphViewController.swift in Sources */,
 				491C8CFF254A6841003A7526 /* AboutViewModel.swift in Sources */,
 				4929DB112454DB0C009DCC7F /* RepsCollectionViewController.swift in Sources */,

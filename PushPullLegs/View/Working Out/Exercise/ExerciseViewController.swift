@@ -30,6 +30,9 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
         super.viewWillAppear(animated)
         if !readOnly && addButton == nil {
             setupAddButton()
+            if viewModel.hasData() {
+                hideNoDataView()
+            }
         }
         tableView.allowsSelection = false
         updateLeftBarButtonItem()

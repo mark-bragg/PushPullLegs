@@ -46,7 +46,7 @@ class PPLButton : UIButton {
     func enable() {
         isEnabled = true
         layer.borderColor = UIColor.white.cgColor
-        addShadow()
+        addSimpleShadow()
     }
     
     func disable() {
@@ -69,7 +69,7 @@ class PPLButton : UIButton {
     @objc func deselection() {
         isSelected = false
         layer.borderColor = UIColor.white.cgColor
-        addShadow()
+        addSimpleShadow()
     }
     
     func style() {

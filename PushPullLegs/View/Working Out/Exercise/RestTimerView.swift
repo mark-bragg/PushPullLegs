@@ -44,7 +44,7 @@ class RestTimerView: UIView {
         layer.borderColor = UIColor.white.cgColor
         layer.borderWidth = 1.5
         layer.cornerRadius = frame.height/2
-        addShadow(.shadowOffsetAddButton)
+        addSimpleShadow(.shadowOffsetAddButton)
     }
     
     func setupTimerLabel() {
