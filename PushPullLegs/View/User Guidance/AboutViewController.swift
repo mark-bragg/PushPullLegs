@@ -11,10 +11,22 @@ import UIKit
 class AboutViewController: PPLTableViewController {
 
     private let buttonTagConstant = 123
+    private var interstitial: NSObject?
+    private var firstLoad = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = AboutViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard firstLoad else { return }
+        firstLoad = false
+        if let interstitial = createAndLoadInterstitial() {
+            interstitial.delegate = self
+            self.interstitial = interstitial
+        }
     }
     
     func aboutViewModel() -> AboutViewModel {
