@@ -20,6 +20,7 @@ class PPLDefaults: NSObject {
     private let kExerciseInProgress = "kExerciseInProgress"
     private let kIsInstalled = "kIsInstalled"
     private let kCountdownInt = "kCountdownInt"
+    private let kIsAdsEnabled = "kIsAdsEnabled"
     override private init() {
         super.init()
         setupUserDetails()
@@ -87,5 +88,10 @@ class PPLDefaults: NSObject {
             userDetails.set(5, forKey: kCountdownInt)
             setupUserDetails()
         }
+        userDetails.set(true, forKey: kIsAdsEnabled)
+    }
+    
+    func isAdsEnabled() -> Bool {
+        userDetails.bool(forKey: kIsAdsEnabled)
     }
 }

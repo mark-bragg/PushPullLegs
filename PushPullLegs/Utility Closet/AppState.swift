@@ -31,7 +31,7 @@ class AppState {
     }
     var isAdEnabled: Bool {
         get {
-            return ProcessInfo.processInfo.arguments.contains(ADVERTISE)
+            PPLDefaults.instance.isAdsEnabled()
         }
     }
     private let ADVERTISE = "ADVERTISE"
