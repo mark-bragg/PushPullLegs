@@ -159,6 +159,10 @@ extension GraphTableViewController: UITableViewDataSource {
     }
     
     override func interstitialWillDismiss() {
+        if let spinner = spinner {
+            spinner.removeFromSuperview()
+        }
+        interstitial = nil
         showGraph(selectedRow)
     }
     

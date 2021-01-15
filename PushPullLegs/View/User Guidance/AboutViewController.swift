@@ -11,7 +11,6 @@ import UIKit
 class AboutViewController: PPLTableViewController {
 
     private let buttonTagConstant = 123
-    private var interstitial: NSObject?
     private var firstLoad = true
     
     override func viewDidLoad() {
@@ -23,10 +22,14 @@ class AboutViewController: PPLTableViewController {
         super.viewWillAppear(animated)
         guard firstLoad else { return }
         firstLoad = false
-        if let interstitial = createAndLoadInterstitial() {
-            interstitial.delegate = self
-            self.interstitial = interstitial
-        }
+    }
+    
+    override func addBannerView(_ adUnitID: String) {
+        // no op
+    }
+    
+    override func bannerHeight() -> CGFloat {
+        0
     }
     
     func aboutViewModel() -> AboutViewModel {

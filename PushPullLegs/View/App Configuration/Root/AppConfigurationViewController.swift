@@ -8,16 +8,23 @@
 
 import UIKit
 import Combine
+import GoogleMobileAds
 
 let defaultCellIdentifier = "DefaultTableViewCell"
 
 class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentationControllerDelegate {
     
     private weak var countdownLabel: UILabel!
+    private var interstitial: NSObject?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = AppConfigurationViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.isUserInteractionEnabled = true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -148,9 +155,14 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let vc = AboutViewController()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(vc, animated: true)
+            if let interstitial = createAndLoadInterstitial() {
+                interstitial.delegate = self
+                self.interstitial = interstitial
+                presentAdLoadingView()
+                view.isUserInteractionEnabled = false
+            } else {
+                navigateToAbout()
+            }
         } else if indexPath.row == 1 {
             navigationController?.pushViewController(WorkoutTemplateListViewController(), animated: true)
         } else if indexPath.row == 2 {
@@ -158,6 +170,30 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    override func presentAdLoadingView() {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? PPLTableViewCell else { return }
+        let spinner = UIActivityIndicatorView(frame: cell.rootView.frame)
+        spinner.layer.cornerRadius = cell.rootView.layer.cornerRadius
+        spinner.style = .large
+        spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
+        cell.contentView.addSubview(spinner)
+        spinner.startAnimating()
+        spinner.tag = spinnerTag
+    }
+    
+    override func interstitialWillDismissScreen(_ ad: GADInterstitial) {
+        super.interstitialWillDismissScreen(ad)
+        navigateToAbout()
+    }
+    
+    private func navigateToAbout() {
+        let vc = AboutViewController()
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+        view.isUserInteractionEnabled = true
+        interstitial = nil
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

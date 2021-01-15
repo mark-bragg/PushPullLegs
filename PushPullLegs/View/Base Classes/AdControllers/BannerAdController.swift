@@ -9,13 +9,15 @@
 import UIKit
 import GoogleMobileAds
 
-protocol BannerAdController {
-    func addBannerView(_ adUnitID: String)
-    func bannerHeight() -> CGFloat
+let spinnerTag = 7469
+
+@objc protocol BannerAdController {
+    @objc func addBannerView(_ adUnitID: String)
+    @objc func bannerHeight() -> CGFloat
 }
 
 extension UIViewController: BannerAdController, GADBannerViewDelegate {
-    func addBannerView(_ adUnitID: String) {
+    @objc func addBannerView(_ adUnitID: String) {
         guard AppState.shared.isAdEnabled else { return }
         let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
         let container = bannerContainerView(bannerHeight())
@@ -54,7 +56,7 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
         return container
     }
     
-    func bannerHeight() -> CGFloat {
+    @objc func bannerHeight() -> CGFloat {
         guard AppState.shared.isAdEnabled else { return 0 }
         let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
         return adSize.size.height + (heightBuffer() * 2)
