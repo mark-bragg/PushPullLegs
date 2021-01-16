@@ -155,7 +155,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            if let interstitial = createAndLoadInterstitial() {
+            if let interstitial = createAndLoadInterstitial(adUnitID: InterstitialAdUnitID.appConfigurationAboutVC) {
                 interstitial.delegate = self
                 self.interstitial = interstitial
                 presentAdLoadingView()
@@ -185,6 +185,10 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     
     override func interstitialWillDismissScreen(_ ad: GADInterstitial) {
         super.interstitialWillDismissScreen(ad)
+        navigateToAbout()
+    }
+    
+    func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
         navigateToAbout()
     }
     

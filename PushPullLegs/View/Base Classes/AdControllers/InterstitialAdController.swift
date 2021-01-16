@@ -16,7 +16,7 @@ import GoogleMobileAds
 }
 
 extension UIViewController: InterstitialAdController {
-    func createAndLoadInterstitial(adUnitID: String = AdUnitID.exampleInterstitialAdUnitID) -> GADInterstitial? {
+    func createAndLoadInterstitial(adUnitID: String) -> GADInterstitial? {
         guard AppState.shared.isAdEnabled else { return nil }
         let interstitial = GADInterstitial(adUnitID: adUnitID)
         interstitial.load(GADRequest())
