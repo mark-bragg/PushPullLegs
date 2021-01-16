@@ -240,11 +240,6 @@ class PPLTableViewController: UIViewController {
         headerViewContainer.headerView = headerView
         return headerViewContainer
     }
-    
-    func bannerAdUnitID() -> String {
-        ""
-    }
-    
 }
 
 extension PPLTableViewController: UITableViewDelegate {

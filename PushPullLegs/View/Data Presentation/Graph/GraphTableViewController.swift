@@ -79,7 +79,7 @@ class GraphTableViewController: UIViewController {
         return lbl
     }
     
-    func bannerAdUnitID() -> String {
+    @objc override func bannerAdUnitID() -> String {
         BannerAdUnitID.graphTableVC
     }
 
