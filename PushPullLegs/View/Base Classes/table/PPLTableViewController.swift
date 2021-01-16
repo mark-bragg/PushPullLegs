@@ -242,7 +242,7 @@ class PPLTableViewController: UIViewController {
     }
     
     func bannerAdUnitID() -> String {
-        AdUnitID.exampleBannerAdUnitID
+        ""
     }
     
 }

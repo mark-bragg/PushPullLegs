@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 class GraphTableViewController: UIViewController {
     
@@ -159,6 +160,14 @@ extension GraphTableViewController: UITableViewDataSource {
     }
     
     override func interstitialWillDismiss() {
+        navigateToGraphDetail()
+    }
+    
+    func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
+        navigateToGraphDetail()
+    }
+    
+    private func navigateToGraphDetail() {
         if let spinner = spinner {
             spinner.removeFromSuperview()
         }

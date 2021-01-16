@@ -742,7 +742,6 @@
 			buildConfigurationList = 49EF4BA223F838380071687D /* Build configuration list for PBXNativeTarget "PushPullLegs" */;
 			buildPhases = (
 				8FD02F5137C9D5FAAA587221 /* [CP] Check Pods Manifest.lock */,
-				A617BF5774F975A44D60B967 /* [CP] Prepare Artifacts */,
 				49EF4B7123F8381F0071687D /* Sources */,
 				49EF4B7223F8381F0071687D /* Frameworks */,
 				49EF4B7323F8381F0071687D /* Resources */,
@@ -781,7 +780,6 @@
 			buildConfigurationList = 49EF4BA823F838380071687D /* Build configuration list for PBXNativeTarget "PushPullLegsUITests" */;
 			buildPhases = (
 				8EBC292FB69213CDA492BC6A /* [CP] Check Pods Manifest.lock */,
-				3C1DCF34E0FDB0E3ED2626A7 /* [CP] Prepare Artifacts */,
 				49EF4B9523F838380071687D /* Sources */,
 				49EF4B9623F838380071687D /* Frameworks */,
 				49EF4B9723F838380071687D /* Resources */,
@@ -875,23 +873,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3C1DCF34E0FDB0E3ED2626A7 /* [CP] Prepare Artifacts */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-artifacts-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Prepare Artifacts";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-artifacts-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-artifacts.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3EF434DA5C07AAAB7BC3128F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -951,23 +932,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A617BF5774F975A44D60B967 /* [CP] Prepare Artifacts */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-artifacts-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Prepare Artifacts";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-artifacts-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-artifacts.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C545DED859D1688C7CA43180 /* [CP] Check Pods Manifest.lock */ = {
