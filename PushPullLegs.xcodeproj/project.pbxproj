@@ -69,6 +69,9 @@
 		49AB68CB24E8BD8E0057D5F7 /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB68CA24E8BD8E0057D5F7 /* ArrowView.swift */; };
 		49AB68CD24FB0E5C0057D5F7 /* ArrowHelperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */; };
 		49AB68D124FC63FF0057D5F7 /* CountdownPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB68D024FC63FF0057D5F7 /* CountdownPickerViewController.swift */; };
+		49ABAC9D25F44E3500517F6F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ABAC9C25F44E3500517F6F /* SoundManager.swift */; };
+		49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACA225F45BEF00517F6F /* countdown.m4a */; };
+		49ABACBC25F463C700517F6F /* start.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACAF25F45CE700517F6F /* start.m4a */; };
 		49AF0CF9259AB59F003F8C60 /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 49AF0CF8259AB59F003F8C60 /* launch.png */; };
 		49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF0D20259D23D2003F8C60 /* BannerAdController.swift */; };
 		49C8D24124A99E0000B361C7 /* PPLDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C8D24024A99E0000B361C7 /* PPLDefaults.swift */; };
@@ -188,6 +191,9 @@
 		49AB68CA24E8BD8E0057D5F7 /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowHelperViewController.swift; sourceTree = "<group>"; };
 		49AB68D024FC63FF0057D5F7 /* CountdownPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownPickerViewController.swift; sourceTree = "<group>"; };
+		49ABAC9C25F44E3500517F6F /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		49ABACA225F45BEF00517F6F /* countdown.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = countdown.m4a; sourceTree = "<group>"; };
+		49ABACAF25F45CE700517F6F /* start.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.m4a; sourceTree = "<group>"; };
 		49AF0CF8259AB59F003F8C60 /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		49AF0D20259D23D2003F8C60 /* BannerAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdController.swift; sourceTree = "<group>"; };
 		49C8D24024A99E0000B361C7 /* PPLDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDefaults.swift; sourceTree = "<group>"; };
@@ -457,6 +463,7 @@
 		496A84472400EE790082D677 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				49ABACB825F463A200517F6F /* Sounds */,
 				49EF4B8923F838370071687D /* Info.plist */,
 				49EF4B8423F838370071687D /* Assets.xcassets */,
 				49AF0CF8259AB59F003F8C60 /* launch.png */,
@@ -550,6 +557,23 @@
 			path = "Exercise Data Cell";
 			sourceTree = "<group>";
 		};
+		49ABAC9225F44DA300517F6F /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				49ABAC9C25F44E3500517F6F /* SoundManager.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		49ABACB825F463A200517F6F /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				49ABACAF25F45CE700517F6F /* start.m4a */,
+				49ABACA225F45BEF00517F6F /* countdown.m4a */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		49CEF2082447B66A003E55D4 /* Creation */ = {
 			isa = PBXGroup;
 			children = (
@@ -612,6 +636,7 @@
 		49EF4B7723F8381F0071687D /* PushPullLegs */ = {
 			isa = PBXGroup;
 			children = (
+				49ABAC9225F44DA300517F6F /* Audio */,
 				49EF4BC523F839A30071687D /* View */,
 				49EF4BC623F839B50071687D /* Data Management */,
 				491C8D04254BC27E003A7526 /* Utility Closet */,
@@ -848,7 +873,9 @@
 				4989BA6024BB94B0001C17B3 /* ExerciseDataCellViewController.xib in Resources */,
 				496BE36724DE7C7000A4E08B /* Workout.storyboard in Resources */,
 				49AF0CF9259AB59F003F8C60 /* launch.png in Resources */,
+				49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */,
 				490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */,
+				49ABACBC25F463C700517F6F /* start.m4a in Resources */,
 				49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */,
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
 				4989BA5B24BB905F001C17B3 /* PPLTableViewCell.xib in Resources */,
@@ -1006,6 +1033,7 @@
 				490D88EA2452B5FD005FFEA3 /* ExerciseTimerViewController.swift in Sources */,
 				49028D26243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift in Sources */,
 				49F8EF30244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift in Sources */,
+				49ABAC9D25F44E3500517F6F /* SoundManager.swift in Sources */,
 				4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */,
 				4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */,
 				49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */,

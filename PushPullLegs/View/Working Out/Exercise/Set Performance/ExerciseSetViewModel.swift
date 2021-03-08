@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 protocol ExerciseSetTimerDelegate: NSObject {
     func timerUpdate(_ text: String)
@@ -48,6 +49,7 @@ class ExerciseSetViewModel: NSObject {
     private var countdown = PPLDefaults.instance.countdown()
     private var countdownCanceled = false
     @Published private(set) var setBegan: Bool!
+    private var cancellables = [AnyCancellable]()
     
     override init() {
         state = .notStarted
@@ -56,6 +58,10 @@ class ExerciseSetViewModel: NSObject {
             guard let self = self else { return }
             self.timerDelegate?.timerUpdate(String.format(seconds: self.currentTime(seconds)))
         })
+        $setBegan.sink { (began) in
+            guard let began = began, began else { return }
+            SoundManager.shared.playStartSound()
+        }.store(in: &cancellables)
     }
     
     func restartSet() {
@@ -102,10 +108,22 @@ class ExerciseSetViewModel: NSObject {
             countdownCanceled = false
             countdown = s
         }
-        if countdown >= s {
+        if countingDown(s) {
             multiplier *= -1
+            let time = calculateCurrentTime(s, multiplier)
             setBegan = countdown == s
+            if time <= 3 && !setBegan {
+                SoundManager.shared.playCountdownSound()
+            }
         }
+        return calculateCurrentTime(s, multiplier)
+    }
+    
+    private func countingDown(_ s: Int) -> Bool {
+        return countdown >= s
+    }
+    
+    fileprivate func calculateCurrentTime(_ s: Int, _ multiplier: Int) -> Int {
         return (countdown - s) * multiplier
     }
     
