@@ -20,11 +20,17 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = AppConfigurationViewModel()
+        StoreManager.shared.prepareToDisableAds()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         view.isUserInteractionEnabled = true
+    }
+    
+    override func viewWillLayoutSubviews() {
+        viewModel = AppConfigurationViewModel()
+        super.viewWillLayoutSubviews()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -39,17 +45,20 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         removeSwitch(cell)
         removeSegmentedControl(cell)
+        cell.selectionStyle = .default
         if indexPath.row < 3 {
-            cell.selectionStyle = .default
             cell.addDisclosureIndicator()
-        } else {
+        } else if indexPath.row < 5 {
             cell.selectionStyle = .none
             if indexPath.row == 3 {
                 configureImperialMetricSegmenedControl(cell: cell)
             } else {
                 configureCustomCountdownCell(cell: cell)
             }
+        } else {
+            
         }
+        
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil && indexPath.row != 3 {
             textLabel = textLabelForCell(cell)
@@ -154,26 +163,39 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            if let interstitial = createAndLoadInterstitial(adUnitID: InterstitialAdUnitID.appConfigurationAboutVC) {
-                interstitial.delegate = self
-                self.interstitial = interstitial
-                presentAdLoadingView()
-                view.isUserInteractionEnabled = false
-            } else {
-                navigateToAbout()
-            }
-        } else if indexPath.row == 1 {
-            navigationController?.pushViewController(WorkoutTemplateListViewController(), animated: true)
-        } else if indexPath.row == 2 {
+        guard let rowId = appConfigurationViewModel().idForRow(indexPath.row) else { return }
+        
+        if rowId == .about {
+            navigateToAbout()
+        } else if rowId == .editWorkouts {
+            let vc = WorkoutTemplateListViewController()
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
+        } else if rowId == .editExercises {
             let vc = ExerciseTemplateListViewController()
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
+        } else if rowId == .disableAds {
+            showSpinner()
+            StoreManager.shared.restoreDisabledAds({ [weak self] in
+                guard let self = self else { return }
+                let alert = UIAlertController(title: "In-app Purchase Required", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
+                    self.removeSpinner()
+                }))
+                alert.addAction(UIAlertAction(title: "Continue", style: .default, handler: { action in
+                    StoreManager.shared.startDisableAdsTransaction()
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }, failure: { [weak self] in
+                guard let self = self else { return }
+                self.removeSpinner()
+            })
         }
     }
     
-    override func presentAdLoadingView() {
-        guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? PPLTableViewCell else { return }
+    func showSpinner() {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: 5, section: 0)) as? PPLTableViewCell else { return }
         let spinner = UIActivityIndicatorView(frame: cell.rootView.frame)
         spinner.layer.cornerRadius = cell.rootView.layer.cornerRadius
         spinner.style = .large
@@ -181,6 +203,12 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         cell.contentView.addSubview(spinner)
         spinner.startAnimating()
         spinner.tag = spinnerTag
+    }
+    
+    private func removeSpinner() {
+        guard let spinner = view.viewWithTag(spinnerTag) else { return }
+        spinner.removeFromSuperview()
+        view.isUserInteractionEnabled = true
     }
     
     override func interstitialWillDismissScreen(_ ad: GADInterstitial) {
@@ -226,32 +254,16 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         return switchView
     }
     
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.appConfigurationVC
+    }
+    
+    func appConfigurationViewModel() -> AppConfigurationViewModel {
+        return viewModel as! AppConfigurationViewModel
+    }
+    
 }
 
-class AppConfigurationViewModel: NSObject, PPLTableViewModel {
-    func rowCount(section: Int) -> Int {
-        return 5
-    }
-    
-    func title() -> String? {
-        return "App Settings"
-    }
-    
-    func title(indexPath: IndexPath) -> String? {
-        switch indexPath.row {
-        case 0:
-            return "About"
-        case 1:
-            return "Edit Workout List"
-        case 2:
-            return "Edit Exercise List"
-        case 3:
-            return ""
-        case 4:
-            return "Countdown for each set"
-        default:
-            return "ERROR"
-        }
-        
-    }
+class AppConfigurationRowView: UIView {
+    var mainTitle: String?
 }

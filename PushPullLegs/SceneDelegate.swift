@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate, AdsRemovedResponder {
 
     var window: UIWindow?
     static var shared: SceneDelegate!
@@ -22,6 +22,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         window?.rootViewController = PPLTabBarController()
         window?.overrideUserInterfaceStyle = .dark
+    }
+    
+    func adsRemoved() {
+        for subvc in window!.rootViewController!.children {
+            guard let nvc = subvc as? UINavigationController else { break }
+            if let responder = nvc.children.first as? AdsRemovedResponder {
+                responder.adsRemoved()
+            }
+            subvc.view.setNeedsDisplay()
+            subvc.view.setNeedsLayout()
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

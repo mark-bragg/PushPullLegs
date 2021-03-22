@@ -22,6 +22,19 @@ class GraphTableViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupViews()
+    }
+    
+    func adsRemoved() {
+        if let tbv = tableView {
+            tbv.removeFromSuperview()
+            tableView = nil
+        }
+        removeBanner()
+        setupViews()
+    }
+    
+    func setupViews() {
         view.backgroundColor = PPLColor.backgroundBlue
         addBannerView(bannerAdUnitID())
         prepareTableView()

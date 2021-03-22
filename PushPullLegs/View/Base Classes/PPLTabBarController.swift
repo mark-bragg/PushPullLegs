@@ -29,7 +29,7 @@ class PPLTabBarController: UITabBarController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if #available(iOS 14, *) {
+        if #available(iOS 14, *), PPLDefaults.instance.isAdsEnabled() {
             ATTrackingManager.requestTrackingAuthorization { (status) in
                 print("status \(status.rawValue)")
             }

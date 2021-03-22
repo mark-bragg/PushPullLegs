@@ -9,9 +9,12 @@
 import UIKit
 import CoreData
 import GoogleMobileAds
+import StoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    private let defaults = PPLDefaults.instance
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -19,7 +22,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CoreDataManager.shared.setup(completion: nil)
         CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
         GADMobileAds.sharedInstance().start(completionHandler: nil)
+        SKPaymentQueue.default().add(StoreObserver.shared)
         return true
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Remove the observer.
+        SKPaymentQueue.default().remove(StoreObserver.shared)
     }
 
     // MARK: UISceneSession Lifecycle
@@ -37,4 +46,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-

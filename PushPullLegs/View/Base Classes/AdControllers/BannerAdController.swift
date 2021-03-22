@@ -10,12 +10,14 @@ import UIKit
 import GoogleMobileAds
 
 let spinnerTag = 7469
+let bannerTag = 98765
 
 @objc protocol BannerAdController {
     @objc func addBannerView(_ adUnitID: String)
     @objc func bannerHeight() -> CGFloat
     @objc func refreshBanner()
     @objc func bannerAdUnitID() -> String
+    @objc func removeBanner()
 }
 
 extension UIViewController: BannerAdController, GADBannerViewDelegate {
@@ -66,7 +68,7 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
     
     fileprivate func heightBuffer() -> CGFloat { 10.0 }
     
-    fileprivate func bannerViewContainerTag() -> Int { 98765 }
+    fileprivate func bannerViewContainerTag() -> Int { bannerTag }
     
     public func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
         perform(#selector(refreshBanner), with: self, afterDelay: 2)
@@ -78,5 +80,10 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
     
     func bannerAdUnitID() -> String {
         AdUnitID.exampleBannerAdUnitID
+    }
+    
+    @objc func removeBanner() {
+        guard let container = view.viewWithTag(bannerViewContainerTag()) else { return }
+        container.removeFromSuperview()
     }
 }

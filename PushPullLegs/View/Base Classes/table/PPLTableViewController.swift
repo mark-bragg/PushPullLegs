@@ -10,7 +10,7 @@ import GoogleMobileAds
 import UIKit
 import Combine
 
-class PPLTableViewController: UIViewController {
+class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     var viewModel: PPLTableViewModel!
     weak var tableView: PPLTableView!
@@ -24,10 +24,32 @@ class PPLTableViewController: UIViewController {
         return view.viewWithTag(headerTag)
     }
     var cancellables: Set<AnyCancellable> = []
+    private var topConstraint: NSLayoutConstraint!
     
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupViews()
+    }
+    
+    func adsRemoved() {
+        if let tbv = tableView {
+            tbv.removeFromSuperview()
+            tableView = nil
+        }
+        if let ndv = noDataView {
+            ndv.removeFromSuperview()
+            noDataView = nil
+        }
+        if let btn = addButton {
+            btn.removeFromSuperview()
+            addButton = nil
+        }
+        removeBanner()
+        setupViews()
+    }
+    
+    private func setupViews() {
         addBannerView(bannerAdUnitID())
         setupTableView()
         hideBottomBar()
@@ -40,6 +62,7 @@ class PPLTableViewController: UIViewController {
     
     fileprivate func setupTableView() {
         setTableView()
+        constrainTableView()
         addTableFooter()
         tableView.delegate = self
         tableView.dataSource = self
@@ -55,7 +78,6 @@ class PPLTableViewController: UIViewController {
         tbl.rowHeight = 75
         tbl.reloadData()
         tableView = tbl
-        constrainTableView()
     }
     
     private func constrainTableView() {
@@ -63,7 +85,8 @@ class PPLTableViewController: UIViewController {
         guard let tableView = tableView else { return }
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: guide.topAnchor, constant: bannerHeight()).isActive = true
+        topConstraint = tableView.topAnchor.constraint(equalTo: guide.topAnchor, constant: bannerHeight())
+        topConstraint.isActive = true
         tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
     }
     
@@ -72,6 +95,31 @@ class PPLTableViewController: UIViewController {
         footer.backgroundColor = tableView.backgroundColor
         tableView.tableFooterView = footer
     }
+    
+//    override func viewWillLayoutSubviews() {
+//        if shouldRemoveAdViews() {
+//            removeAdViews()
+//        } else if bannerShouldBeShowing() {
+//            topConstraint.constant = bannerHeight()
+//            addBannerView(bannerAdUnitID())
+//        }
+//    }
+//    
+//    func shouldRemoveAdViews() -> Bool {
+//        return !PPLDefaults.instance.isAdsEnabled() && topConstraint.constant != 0
+//    }
+//    
+//    func removeAdViews() {
+//        topConstraint.constant = 0
+//    }
+//    
+//    func bannerShouldBeShowing() -> Bool {
+//        var adsButNoTopConstraint = PPLDefaults.instance.isAdsEnabled() && topConstraint.constant == 0
+//        if let container = view.viewWithTag(bannerTag) {
+////            adsButNoTopConstraint = container.subviews.contains(where: { $0.isKind })
+//        }
+//        return adsButNoTopConstraint
+//    }
     
     private func setTitle() {
         let lbl = titleLabel()
@@ -298,4 +346,8 @@ extension UILabel {
         label.textColor = .white
         return label
     }
+}
+
+protocol AdsRemovedResponder {
+    func adsRemoved()
 }

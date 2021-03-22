@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 @objc enum MeasurementType: Int {
     case imperial
@@ -24,9 +25,13 @@ class PPLDefaults: NSObject {
     override private init() {
         super.init()
         setupUserDetails()
+        if !isInstalled() {
+            userDetails.set(true, forKey: self.kIsAdsEnabled)
+        }
     }
     static let instance = PPLDefaults()
     private var userDetails: UserDefaults!
+    private var cancellables = [AnyCancellable]()
     
     private func isInstalled() -> Bool {
         let isInstalled = userDetails.bool(forKey: kIsInstalled)
@@ -88,10 +93,14 @@ class PPLDefaults: NSObject {
             userDetails.set(5, forKey: kCountdownInt)
             setupUserDetails()
         }
-        userDetails.set(true, forKey: kIsAdsEnabled)
     }
     
     func isAdsEnabled() -> Bool {
         userDetails.bool(forKey: kIsAdsEnabled)
+    }
+    
+    func disableAds() {
+        userDetails.setValue(false, forKey: kIsAdsEnabled)
+        SceneDelegate.shared.adsRemoved()
     }
 }
