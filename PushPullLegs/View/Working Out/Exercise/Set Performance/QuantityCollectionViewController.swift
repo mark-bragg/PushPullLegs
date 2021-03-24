@@ -8,7 +8,7 @@
 
 import UIKit
 
-class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
+class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, PPLButtonDelegate {
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var textField: UITextField!
@@ -27,6 +27,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        button.delegate = self
         textField.delegate = self
         button.disable()
         view.backgroundColor = .backgroundBlue
@@ -61,7 +62,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
         textField.replace(uiRange, withText: correctedText)
     }
     
-    @IBAction func buttonReleased(_ sender: Any) {
+    func buttonReleased(_ sender: Any) {
         // no-op
     }
 }

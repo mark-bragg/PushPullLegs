@@ -9,15 +9,16 @@
 import UIKit
 import Combine
 
-class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, ExercisingViewController {
-
+class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, ExercisingViewController, PPLButtonDelegate {
     var exerciseSetViewModel: ExerciseSetViewModel?
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var finishButton: PPLButton!
     var cancellables = [AnyCancellable]()
+    private var isShowingStartText = false
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        finishButton.delegate = self
         navigationItem.title = "Timer"
         finishButton.setTitle("Finish Set", for: .normal)
         finishButton.isEnabled = PPLDefaults.instance.countdown() == 0
@@ -29,8 +30,8 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if timerLabel.text == "0:00" {
-            self.showStartText()
+        if shouldShowStartText() {
+            showStartText()
         }
     }
     
@@ -52,6 +53,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     }
     
     func showStartText() {
+        isShowingStartText = true
         let lbl = startLabel()
         let diameter = view.frame.width * 0.75
         view.addSubview(lbl)
@@ -95,6 +97,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
                 c.isActive = false
             }
             lbl.removeFromSuperview()
+            self.isShowingStartText = false
         }
     }
     
@@ -107,11 +110,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         }).store(in: &cancellables)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        
-    }
-    
-    @IBAction func finishWorkout(_ sender: Any) {
+    func buttonReleased(_ sender: Any) {
         exerciseSetViewModel?.stopTimer()
     }
     
@@ -119,10 +118,14 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let lbl = self.timerLabel else { return }
             lbl.text = text
-            if text == "0:00" {
+            if self.shouldShowStartText() {
                 self.showStartText()
             }
         }
+    }
+    
+    func shouldShowStartText() -> Bool {
+        timerLabel.text == "0:00" && !isShowingStartText
     }
     
 }

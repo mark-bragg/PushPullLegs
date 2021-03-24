@@ -9,9 +9,16 @@
 import Foundation
 import UIKit
 
+protocol PPLButtonDelegate {
+    func buttonReleased(_ sender: Any)
+}
+
+fileprivate let timerDelay = 250
+
 class PPLButton : UIButton {
     
     var radius: CGFloat = 0
+    var delegate: PPLButtonDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,7 +32,6 @@ class PPLButton : UIButton {
     
     func commonInit() {
         addTarget(self, action: #selector(touchDown), for: .touchDown)
-        addTarget(self, action: #selector(deselection), for: .touchUpInside)
     }
     
     override func layoutSubviews() {
@@ -57,13 +63,25 @@ class PPLButton : UIButton {
     
     @objc func touchDown() {
         selection()
-        NotificationCenter.default.post(name: PPLButton.touchDownNotificationName(), object: self)
+        guard delegate != nil else {
+            return NotificationCenter.default.post(name: PPLButton.touchDownNotificationName(), object: self)
+        }
+        startTimer()
     }
     
     @objc func selection() {
         isSelected = true
         layer.borderColor = PPLColor.disabledSaveWhiteColor.cgColor
         removeShadow()
+    }
+    
+    private func startTimer() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: DispatchTimeInterval.milliseconds(timerDelay))) {
+            if self.isSelected {
+                self.delegate?.buttonReleased(self)
+                self.deselection()
+            }
+        }
     }
     
     @objc func deselection() {
