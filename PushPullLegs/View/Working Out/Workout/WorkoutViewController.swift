@@ -79,20 +79,25 @@ class WorkoutViewController: PPLTableViewController {
             return
         }
         let alert = UIAlertController.init(title: "Workout Complete?", message: "Once you save a workout, you cannot edit it later.", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: "Save", style: .default) { (action) in
             self.workoutEditViewModel().finishWorkout()
             self.popFromNavStack()
-        }))
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+        })
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { (action) in
             self.cancel(self)
-        }))
+        })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
     @objc func cancel(_ sender: Any) {
-        self.workoutEditViewModel().deleteWorkout()
-        popFromNavStack()
+        let alert = UIAlertController.init(title: "Are you sure?", message: "Once you delete a workout, it is gone forever.", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { action in
+            self.workoutEditViewModel().deleteWorkout()
+            self.popFromNavStack()
+        })
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        present(alert, animated: false, completion: nil)
     }
     
     fileprivate func popFromNavStack() {
