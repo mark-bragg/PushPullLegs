@@ -18,7 +18,7 @@ protocol WorkoutEditViewModelDelegate: NSObject {
     func workoutEditViewModelCompletedFirstExercise(_ model: WorkoutEditViewModel)
 }
 
-class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate, ExerciseViewModelDelegate {
+class WorkoutEditViewModel: WorkoutDataViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate, ExerciseViewModelDelegate {
     
     private var exercisesToDo = [ExerciseTemplate]()
     private var startingTime: Date!
@@ -109,6 +109,7 @@ class WorkoutEditViewModel: WorkoutReadViewModel, ReloadProtocol, ExerciseTempla
             let done = workout.exercises,
             let doneArray = done.array as? [Exercise] {
             exercisesDone = doneArray.sorted(by: sorter)
+            exercisesToDo = exercisesToDo.filter { $0.name != nil }
             if doneArray.count > 0 {
                 var newTodos = [ExerciseTemplate]()
                 for template in exercisesToDo {

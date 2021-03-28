@@ -9,18 +9,29 @@
 import Foundation
 import CoreData
 
-class WorkoutReadViewModel: NSObject, PPLTableViewModel {
+class WorkoutDataViewModel: DatabaseViewModel {
     
     var exerciseType: ExerciseType!
-    var workoutManager: WorkoutDataManager
+    var workoutManager: WorkoutDataManager {
+        get {
+            dataManager as! WorkoutDataManager
+        }
+    }
     var coreDataManager: CoreDataManagement!
-    var exercisesDone = [Exercise]()
+    var exercisesDone: [Exercise] {
+        set {
+            dbObjects = newValue
+        }
+        get {
+            dbObjects as! [Exercise]
+        }
+    }
     var selectedIndex: IndexPath?
     var workoutId: NSManagedObjectID!
     
     init(withCoreDataManagement coreDataManagement: CoreDataManagement = CoreDataManager.shared, workout: Workout? = nil) {
         coreDataManager = coreDataManagement
-        workoutManager = WorkoutDataManager(backgroundContext: coreDataManagement.mainContext)
+        super.init()
         if let wkt = workout, let name = wkt.name {
             workoutId = wkt.objectID
             exerciseType = ExerciseType(rawValue: name)
@@ -28,17 +39,17 @@ class WorkoutReadViewModel: NSObject, PPLTableViewModel {
                 exercisesDone = exercises
             }
         }
-        super.init()
+        dataManager = WorkoutDataManager(backgroundContext: coreDataManagement.mainContext)
     }
     
-    func rowCount(section: Int) -> Int { return exercisesDone.count }
+    override func rowCount(section: Int) -> Int { return exercisesDone.count }
     
     func title() -> String? { exerciseType.rawValue }
     
     func sectionCount() -> Int { 1 }
     
     
-    func title(indexPath: IndexPath) -> String? {
+    override func title(indexPath: IndexPath) -> String? {
         if indexPath.row < exercisesDone.count, let name = exercisesDone[indexPath.row].name {
             return name
         }
@@ -66,6 +77,28 @@ class WorkoutReadViewModel: NSObject, PPLTableViewModel {
             return .noChange
         }
         return previousExercise < exercisesDone[row] ? .increase : .decrease
+    }
+    
+    override func deletionAlertMessage() -> String? {
+        "Delete exercise?"
+    }
+    
+    override func deleteDatabaseObject() {
+        super.deleteDatabaseObject()
+        guard let wkt = dataManager.fetch(workoutId) as? Workout,
+              let exercises = wkt.exercises?.array as? [Exercise] else { return }
+        exercisesDone = exercises
+    }
+    
+    override func refresh() {
+        guard let wkt = dataManager.fetch(workoutId) as? Workout,
+              let exercises = wkt.exercises?.array as? [Exercise] else { return }
+        exercisesDone = exercises
+    }
+    
+    override func objectDeleted(_ object: NSManagedObject) {
+        guard let exercise = object as? Exercise else { return }
+        exercisesDone = exercisesDone.filter({ $0 != exercise })
     }
 }
 

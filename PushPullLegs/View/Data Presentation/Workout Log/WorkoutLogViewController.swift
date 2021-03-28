@@ -19,14 +19,10 @@ class HeaderViewContainer: UIView {
 
 let WorkoutLogCellReuseIdentifier = "WorkoutLogCellReuseIdentifier"
 
-class WorkoutLogViewController: PPLTableViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        viewModel = WorkoutLogViewModel()
-    }
+class WorkoutLogViewController: DatabaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
+        viewModel = WorkoutLogViewModel()
         super.viewWillAppear(animated)
         tableView.backgroundColor = .clear
         reload()
@@ -91,24 +87,17 @@ class WorkoutLogViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        cell.rootView.removeAllSubviews()
-        let contentFrame = cell.rootView.frame
-        let nameLabel = PPLNameLabel(frame: CGRect(x: 20, y: 0, width: tableView.frame.width / 2 - 20, height: contentFrame.height))
-        let dateLabel = PPLNameLabel(frame: CGRect(x: nameLabel.frame.width + 20, y: 0, width: tableView.frame.width / 2 - 20, height: contentFrame.height))
-        nameLabel.text = viewModel.title(indexPath: indexPath)
-        dateLabel.text = workoutLogViewModel().dateLabel(indexPath: indexPath)
-        for lbl in [nameLabel, dateLabel] {
-            lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
-            lbl.textAlignment = .center
-            cell.rootView.addSubview(lbl)
+        cell.nameLabel.text = viewModel.title(indexPath: indexPath)
+        cell.dateLabel.text = workoutLogViewModel().dateLabel(indexPath: indexPath)
+        if !tableView.isEditing {
+            cell.addDisclosureIndicator()
         }
-        cell.addDisclosureIndicator()
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = WorkoutDataViewController()
-        vc.viewModel = WorkoutReadViewModel(withCoreDataManagement: CoreDataManager.shared, workout: workoutLogViewModel().workouts[indexPath.row])
+        vc.viewModel = WorkoutDataViewModel(withCoreDataManagement: CoreDataManager.shared, workout: workoutLogViewModel().dbObjects[indexPath.row] as? Workout)
         
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
@@ -119,44 +108,8 @@ class WorkoutLogViewController: PPLTableViewController {
         super.reload()
     }
     
-//    override func adUnitID() -> String {
-//        
-//    }
-
-}
-
-class WorkoutLogViewModel: NSObject, PPLTableViewModel {
-    var workouts = [Workout]()
-    let formatter = DateFormatter()
-    static var ascending = false
-    
-    init(withDataManager dataManager: WorkoutDataManager = WorkoutDataManager()) {
-        super.init()
-        formatter.dateFormat = "MM/dd/yy"
-        workouts = WorkoutDataManager().workouts()
-        if WorkoutLogViewModel.ascending {
-            workouts.reverse()
-        }
-    }
-    
-    func rowCount(section: Int) -> Int {
-        return workouts.count
-    }
-    
-    func title() -> String? {
-        return "Workout Log"
-    }
-    
-    func title(indexPath: IndexPath) -> String? {
-        return workouts[indexPath.row].name!
-    }
-    
-    func dateLabel(indexPath: IndexPath) -> String? {
-        return formatter.string(from: workouts[indexPath.row].dateCreated!)
-    }
-    
-    func tableHeaderTitles() -> [String] {
-        return ["Name", "Date"]
+    override func insertAddButtonInstructions() {
+        // no op
     }
 }
 
@@ -173,5 +126,47 @@ class PPLNameLabel: UILabel {
     private func commonInit() {
         textColor = .textGreen
         font = UIFont.systemFont(ofSize: 23, weight: .medium)
+    }
+}
+
+fileprivate extension PPLTableViewCell {
+    private var nameTag: Int {529}
+    private var dateTag: Int {232}
+    
+    var nameLabel: PPLNameLabel {
+        get {
+            if let lbl = viewWithTag(nameTag) as? PPLNameLabel {
+                return lbl
+            }
+            let nameLabel = PPLNameLabel()
+            nameLabel.tag = nameTag
+            addLabel(nameLabel)
+            nameLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor).isActive = true
+            nameLabel.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.5).isActive = true
+            return nameLabel
+        }
+    }
+    
+    var dateLabel: PPLNameLabel {
+        get {
+            if let lbl = viewWithTag(dateTag) as? PPLNameLabel {
+                return lbl
+            }
+            let dateLabel = PPLNameLabel()
+            dateLabel.tag = dateTag
+            addLabel(dateLabel)
+            dateLabel.trailingAnchor.constraint(equalTo: rootView.trailingAnchor).isActive = true
+            dateLabel.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.5).isActive = true
+            return dateLabel
+        }
+    }
+    
+    func addLabel(_ label: UILabel) {
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        label.textAlignment = .center
+        rootView.addSubview(label)
+        label.topAnchor.constraint(equalTo: rootView.topAnchor).isActive = true
+        label.bottomAnchor.constraint(equalTo: rootView.bottomAnchor).isActive = true
     }
 }

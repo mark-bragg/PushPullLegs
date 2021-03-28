@@ -61,7 +61,10 @@ class DataManager {
     }
     
     func fetch(_ object: NSManagedObject) -> Any? {
-        let objectId = object.objectID
+        fetch(object.objectID)
+    }
+    
+    func fetch(_ objectId: NSManagedObjectID) -> Any? {
         return try? backgroundContext.existingObject(with: objectId)
     }
     

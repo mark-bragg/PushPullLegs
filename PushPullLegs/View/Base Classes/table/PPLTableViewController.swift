@@ -288,6 +288,12 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         headerViewContainer.headerView = headerView
         return headerViewContainer
     }
+    
+    func removeAddButton() {
+        hideNoDataView()
+        self.addButton.removeTarget(self, action: #selector(addAction(_:)), for: .touchUpInside)
+        self.addButton.removeFromSuperview()
+    }
 }
 
 extension PPLTableViewController: UITableViewDelegate {

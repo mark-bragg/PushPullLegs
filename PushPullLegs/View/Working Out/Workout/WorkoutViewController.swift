@@ -68,7 +68,7 @@ class WorkoutViewController: PPLTableViewController {
         if viewModel.rowCount(section: 1) > 0 {
             presentFinishWorkoutPrompt()
         } else {
-            cancel(self)
+            deleteWorkoutAndPop()
         }
     }
     
@@ -84,20 +84,24 @@ class WorkoutViewController: PPLTableViewController {
             self.popFromNavStack()
         })
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { (action) in
-            self.cancel(self)
+            self.presentDeleteConfirmation()
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
-    @objc func cancel(_ sender: Any) {
+    @objc func presentDeleteConfirmation() {
         let alert = UIAlertController.init(title: "Are you sure?", message: "Once you delete a workout, it is gone forever.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { action in
-            self.workoutEditViewModel().deleteWorkout()
-            self.popFromNavStack()
+            self.deleteWorkoutAndPop()
         })
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         present(alert, animated: false, completion: nil)
+    }
+    
+    func deleteWorkoutAndPop() {
+        self.workoutEditViewModel().deleteWorkout()
+        self.popFromNavStack()
     }
     
     fileprivate func popFromNavStack() {

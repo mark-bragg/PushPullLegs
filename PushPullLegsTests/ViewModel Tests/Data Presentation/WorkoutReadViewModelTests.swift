@@ -11,7 +11,7 @@ import XCTest
 
 class WorkoutReadViewModelTests: XCTestCase {
 
-    var sut: WorkoutReadViewModel!
+    var sut: WorkoutDataViewModel!
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
     var exerciseNames = [String]()
     var date: Date!
@@ -23,14 +23,14 @@ class WorkoutReadViewModelTests: XCTestCase {
             exerciseNames.append("exercise \(i)")
             dbHelper.addExercise(exerciseNames.last!, to: workout)
         }
-        sut = WorkoutReadViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
+        sut = WorkoutDataViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
         XCTAssert(sut.sectionCount() == 1)
     }
 
     func testInit_noExercises_noRows() {
         let date = Date()
         let workout = dbHelper.createWorkout(name: .push, date: date)
-        sut = WorkoutReadViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
+        sut = WorkoutDataViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
         XCTAssert(sut.rowCount(section: 0) == 0)
     }
     
@@ -152,7 +152,7 @@ class WorkoutReadViewModelTests: XCTestCase {
         }
         previousWorkouts.sort(by: { $0.dateCreated!.compare($1.dateCreated!) == ComparisonResult.orderedAscending })
         for i in 0..<3 {
-            sut = WorkoutReadViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: previousWorkouts[i])
+            sut = WorkoutDataViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: previousWorkouts[i])
             for j in 0...4 {
                 let comparison = sut.exerciseVolumeComparison(row: j)
                 XCTAssert(comparison == .increase, "\nexpected: \(ExerciseVolumeComparison.increase)\nactual: \(comparison)")
@@ -185,7 +185,7 @@ class WorkoutReadViewModelTests: XCTestCase {
         }
         var workoutIndex = 0
         for workout in previousWorkouts {
-            sut = WorkoutReadViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
+            sut = WorkoutDataViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
             for j in 0...4 {
                 let comparison = sut.exerciseVolumeComparison(row: j)
                 if workoutIndex == 0 {
@@ -222,7 +222,7 @@ class WorkoutReadViewModelTests: XCTestCase {
         }
         var workoutIndex = 0
         for workout in previousWorkouts {
-            sut = WorkoutReadViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
+            sut = WorkoutDataViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
             for j in 0...4 {
                 let comparison = sut.exerciseVolumeComparison(row: j)
                 if workoutIndex == 0 {
@@ -267,7 +267,7 @@ class WorkoutReadViewModelTests: XCTestCase {
         }
         workoutIndex = 0
         for workout in previousWorkouts {
-            sut = WorkoutReadViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
+            sut = WorkoutDataViewModel(withCoreDataManagement: dbHelper.coreDataStack, workout: workout)
             for j in 0...4 {
                 let comparison = sut.exerciseVolumeComparison(row: j)
                 if workoutIndex == 0 {

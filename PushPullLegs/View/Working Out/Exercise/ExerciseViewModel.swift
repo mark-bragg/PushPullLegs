@@ -30,25 +30,28 @@ protocol ExerciseViewModelDelegate: NSObject {
     func exerciseViewModel(_ viewModel: ExerciseViewModel, started exercise: Exercise)
 }
 
-class ExerciseViewModel: NSObject, PPLTableViewModel, ExerciseSetCollector {
+class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     weak var reloader: ReloadProtocol?
     weak var delegate: ExerciseViewModelDelegate?
-    private let exerciseManager: ExerciseDataManager
+    private var exerciseManager: ExerciseDataManager {
+        set { dataManager = newValue }
+        get { dataManager as! ExerciseDataManager }
+    }
     private var exercise: Exercise!
     private var finishedCellData = [FinishedSetDataModel]()
     private var exerciseName: String!
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
-        exerciseManager = dataManager
         exerciseName = exerciseTemplate.name!
         super.init()
+        exerciseManager = dataManager
     }
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exercise: Exercise) {
-        exerciseManager = dataManager
         self.exercise = exercise
         super.init()
+        exerciseManager = dataManager
         collectFinishedCellData()
     }
     
@@ -65,11 +68,11 @@ class ExerciseViewModel: NSObject, PPLTableViewModel, ExerciseSetCollector {
         }
     }
     
-    func rowCount(section: Int = 0) -> Int {
+    override func rowCount(section: Int = 0) -> Int {
         return finishedCellData.count
     }
     
-    func title(indexPath: IndexPath) -> String? {
+    override func title(indexPath: IndexPath) -> String? {
         return nil
     }
     
@@ -113,6 +116,20 @@ class ExerciseViewModel: NSObject, PPLTableViewModel, ExerciseSetCollector {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
         for set in sets {
             finishedCellData.append(FinishedSetDataModel(withExerciseSet: set))
+        }
+        dbObjects = sets
+    }
+    
+    override func deleteDatabaseObject() {
+        super.deleteDatabaseObject()
+        refresh()
+    }
+    
+    override func refresh() {
+        finishedCellData = [FinishedSetDataModel]()
+        collectFinishedCellData()
+        if finishedCellData.count == 0 {
+            reloader?.reload()
         }
     }
     

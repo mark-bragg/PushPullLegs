@@ -14,7 +14,7 @@ protocol ExercisingViewController: UIViewController {
     var exerciseSetViewModel: ExerciseSetViewModel? { get set }
 }
 
-class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate, SetNavigationControllerDelegate {
+class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate, SetNavigationControllerDelegate {
 
     weak var weightCollector: WeightCollectionViewController!
     weak var exerciseTimer: ExerciseTimerViewController!
@@ -60,6 +60,7 @@ class ExerciseViewController: PPLTableViewController, ExerciseSetViewModelDelega
     }
     
     override func insertAddButtonInstructions() {
+        guard !readOnly else { return }
         super.insertAddButtonInstructions()
         addButtonHelperVc!.message = "Tap to start the next set!"
     }
@@ -220,33 +221,40 @@ class SetNavigationController: UINavigationController {
     }
 }
 
-extension PPLTableViewCell {
+fileprivate extension PPLTableViewCell {
     
-    fileprivate static let WEIGHT_LABEL_TAG = 123
-    fileprivate static let DURATION_LABEL_TAG = 234
-    fileprivate static let REPS_LABEL_TAG = 345
+    var weightLabelTag: Int {123}
+    var durationLabelTag: Int {234}
+    var repsLabelTag: Int {345}
     
-    fileprivate func labels(width: CGFloat) -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
+    func labels(width: CGFloat) -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
         guard
-            let weight = contentView.viewWithTag(PPLTableViewCell.WEIGHT_LABEL_TAG) as? PPLNameLabel,
-            let reps = contentView.viewWithTag(PPLTableViewCell.REPS_LABEL_TAG) as? PPLNameLabel,
-            let time = contentView.viewWithTag(PPLTableViewCell.DURATION_LABEL_TAG) as? PPLNameLabel
-        else { return insertLabels(width) }
+            let weight = contentView.viewWithTag(weightLabelTag) as? PPLNameLabel,
+            let reps = contentView.viewWithTag(repsLabelTag) as? PPLNameLabel,
+            let time = contentView.viewWithTag(durationLabelTag) as? PPLNameLabel
+        else { return insertLabels() }
         return (weight, reps, time)
     }
     
-    fileprivate func insertLabels(_ width: CGFloat) -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
-        let weightLabel =  PPLNameLabel(frame: CGRect(x: 0, y: 0, width: width, height: rootView.frame.height))
-        weightLabel.tag = PPLTableViewCell.WEIGHT_LABEL_TAG
-        let repsLabel = PPLNameLabel(frame: CGRect(x: width, y: 0, width: width, height: rootView.frame.height))
-        repsLabel.tag = PPLTableViewCell.REPS_LABEL_TAG
-        let timeLabel = PPLNameLabel(frame: CGRect(x: width * 2, y: 0, width: width, height: rootView.frame.height))
-        timeLabel.tag = PPLTableViewCell.DURATION_LABEL_TAG
+    func insertLabels() -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
+        let weightLabel =  PPLNameLabel()
+        weightLabel.tag = weightLabelTag
+        let repsLabel = PPLNameLabel()
+        repsLabel.tag = repsLabelTag
+        let timeLabel = PPLNameLabel()
+        timeLabel.tag = durationLabelTag
         for lbl in [weightLabel, repsLabel, timeLabel] {
             lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
             lbl.textAlignment = .center
             rootView.addSubview(lbl)
+            lbl.translatesAutoresizingMaskIntoConstraints = false
+            lbl.topAnchor.constraint(equalTo: rootView.topAnchor).isActive = true
+            lbl.bottomAnchor.constraint(equalTo: rootView.bottomAnchor).isActive = true
+            lbl.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 1/3).isActive = true
         }
+        weightLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor).isActive = true
+        repsLabel.leadingAnchor.constraint(equalTo: weightLabel.trailingAnchor).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: repsLabel.trailingAnchor).isActive = true
         return (weightLabel, repsLabel, timeLabel)
     }
 }
