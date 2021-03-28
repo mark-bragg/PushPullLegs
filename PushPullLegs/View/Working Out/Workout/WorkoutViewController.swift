@@ -78,7 +78,7 @@ class WorkoutViewController: PPLTableViewController {
             popFromNavStack()
             return
         }
-        let alert = UIAlertController.init(title: "Workout Complete?", message: "Once you save a workout, you cannot edit it later.", preferredStyle: .actionSheet)
+        let alert = UIAlertController.init(title: "Complete Workout", message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Save", style: .default) { (action) in
             self.workoutEditViewModel().finishWorkout()
             self.popFromNavStack()
@@ -95,7 +95,9 @@ class WorkoutViewController: PPLTableViewController {
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { action in
             self.deleteWorkoutAndPop()
         })
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
+            self.presentFinishWorkoutPrompt()
+        })
         present(alert, animated: false, completion: nil)
     }
     

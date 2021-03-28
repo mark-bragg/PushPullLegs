@@ -55,7 +55,8 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
             super.pop()
             AppState.shared.exerciseInProgress = nil
         } else {
-            presentExerciseCompletionConfirmation()
+            self.navigationController?.popViewController(animated: true)
+            AppState.shared.exerciseInProgress = nil
         }
     }
     
@@ -85,16 +86,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
             v.isHidden = true
         }
         removeAddButtonInstructions()
-    }
-    
-    func presentExerciseCompletionConfirmation() {
-        let alert = UIAlertController(title: "Exercise Completed?", message: "A completed exercise cannot be edited", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { (action) in
-            self.navigationController?.popViewController(animated: true)
-            AppState.shared.exerciseInProgress = nil
-        }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Default action"), style: .cancel))
-        present(alert, animated: true, completion: nil)
     }
     
     func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController) {
