@@ -25,7 +25,11 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
         super.viewWillAppear(animated)
         if let text = textField.text, text != ""  {
             button.enable()
+        } else if let defaultWeight = exerciseSetViewModel?.defaultWeight {
+            textField.text = "\(defaultWeight)".trimTrailingZeroes()
+            button.enable()
         }
+        
     }
     
     override func buttonReleased(_ sender: Any) {

@@ -41,6 +41,11 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     private var exercise: Exercise!
     private var finishedCellData = [FinishedSetDataModel]()
     private var exerciseName: String!
+    var defaultWeight: Double? {
+        guard let name = title()
+        else { return nil }
+        return PPLDefaults.instance.weightForExerciseWith(name: name)
+    }
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
         exerciseName = exerciseTemplate.name!
@@ -62,9 +67,10 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
             delegate?.exerciseViewModel(self, started: exercise)
         }
         exerciseManager.insertSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
-            guard let self = self else { return }
+            guard let self = self, let name = self.title() else { return }
             self.finishedCellData.append(FinishedSetDataModel(withExerciseSet: exerciseSet))
             self.reloader?.reload()
+            PPLDefaults.instance.setWeight(self.weightForRow(self.rowCount() - 1), forExerciseWithName: name)
         }
     }
     

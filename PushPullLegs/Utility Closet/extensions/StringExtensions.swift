@@ -47,6 +47,15 @@ extension String {
         return toCorrect
     }
     
+    func trimTrailingZeroes() -> String {
+        guard self.contains(".") else { return self }
+        var toCorrect = self
+        while toCorrect.hasSuffix("0") || toCorrect.hasSuffix(".") {
+            toCorrect.removeLast()
+        }
+        return toCorrect
+    }
+    
     func reduceToCharacterLimit(_ limit: Int) -> String {
         guard limit > 0 else { return self }
         guard self.count > limit else { return self }

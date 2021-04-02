@@ -104,3 +104,18 @@ class PPLDefaults: NSObject {
         SceneDelegate.shared.adsRemoved()
     }
 }
+
+protocol WeightDefaults {
+    func weightForExerciseWith(name: String) -> Double?
+    func setWeight(_ weight: Double, forExerciseWithName name: String)
+}
+
+extension PPLDefaults: WeightDefaults {
+    func weightForExerciseWith(name: String) -> Double? {
+        userDetails.value(forKey: name) as? Double
+    }
+    
+    func setWeight(_ weight: Double, forExerciseWithName name: String) {
+        userDetails.set(weight, forKey: name)
+    }
+}

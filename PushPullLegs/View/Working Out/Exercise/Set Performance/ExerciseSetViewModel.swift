@@ -50,6 +50,7 @@ class ExerciseSetViewModel: NSObject {
     private var countdownCanceled = false
     @Published private(set) var setBegan: Bool!
     private var cancellables = [AnyCancellable]()
+    var defaultWeight: Double?
     
     override init() {
         state = .notStarted

@@ -25,6 +25,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     private let timerHeight: CGFloat = 150.0
     weak var setNavController: SetNavigationController!
     private var isLeftBarItemSetToDone = false
+    private var exerciseViewModel: ExerciseViewModel { viewModel as! ExerciseViewModel }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -51,7 +52,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     override func pop() {
-        if readOnly || exerciseViewModel().rowCount(section: 0) == 0 {
+        if readOnly || exerciseViewModel.rowCount(section: 0) == 0 {
             super.pop()
             AppState.shared.exerciseInProgress = nil
         } else {
@@ -66,15 +67,12 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         addButtonHelperVc!.message = "Tap to start the next set!"
     }
     
-    func exerciseViewModel() -> ExerciseViewModel {
-        return viewModel as! ExerciseViewModel
-    }
-    
     override func addAction(_ sender: Any) {
         super.addAction(sender)
         exerciseSetViewModel = ExerciseSetViewModel()
         exerciseSetViewModel?.delegate = self
-        exerciseSetViewModel?.setCollector = exerciseViewModel()
+        exerciseSetViewModel?.setCollector = exerciseViewModel
+        exerciseSetViewModel?.defaultWeight = exerciseViewModel.defaultWeight
         let wc = WeightCollectionViewController()
         let setNavController = SetNavigationController(rootViewController: wc)
         wc.exerciseSetViewModel = exerciseSetViewModel
@@ -115,8 +113,8 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
         dismiss(animated: true, completion: { self.reload() })
         setupRestTimerView()
-        if exerciseViewModel().rowCount() > 0 {
-            AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel().title() : nil
+        if exerciseViewModel.rowCount() > 0 {
+            AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel.title() : nil
             if !isLeftBarItemSetToDone {
                 updateLeftBarButtonItem()
             }
@@ -126,7 +124,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel) {
         dismiss(animated: true, completion: nil)
         resetState()
-        if exerciseViewModel().rowCount() == 0 {
+        if exerciseViewModel.rowCount() == 0 {
             insertAddButtonInstructions()
         }
         if let v = restTimerView, v.isHidden {
@@ -174,7 +172,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var titles = [String]()
         for i in 0...2 {
-            titles.append(exerciseViewModel().headerLabelText(i))
+            titles.append(exerciseViewModel.headerLabelText(i))
         }
         let view = tableHeaderViewContainer(titles: titles)
         return view
@@ -183,9 +181,9 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         let labels = cell.labels(width: tableView.frame.width / 3)
-        labels.w.text = "\(exerciseViewModel().weightForRow(indexPath.row))"
-        labels.r.text = "\(exerciseViewModel().repsForRow(indexPath.row))"
-        labels.t.text = exerciseViewModel().durationForRow(indexPath.row)
+        labels.w.text = "\(exerciseViewModel.weightForRow(indexPath.row))"
+        labels.r.text = "\(exerciseViewModel.repsForRow(indexPath.row))"
+        labels.t.text = exerciseViewModel.durationForRow(indexPath.row)
         return cell
     }
     
