@@ -108,6 +108,7 @@ class PPLDefaults: NSObject {
 protocol WeightDefaults {
     func weightForExerciseWith(name: String) -> Double?
     func setWeight(_ weight: Double, forExerciseWithName name: String)
+    func deleteDefaultWeightForExerciseWith(name: String?)
 }
 
 extension PPLDefaults: WeightDefaults {
@@ -117,5 +118,10 @@ extension PPLDefaults: WeightDefaults {
     
     func setWeight(_ weight: Double, forExerciseWithName name: String) {
         userDetails.set(weight, forKey: name)
+    }
+    
+    func deleteDefaultWeightForExerciseWith(name: String?) {
+        guard let name = name else { return }
+        userDetails.removeObject(forKey: name)
     }
 }

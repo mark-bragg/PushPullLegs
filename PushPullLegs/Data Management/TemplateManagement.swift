@@ -30,12 +30,11 @@ class TemplateManagement {
         coreDataManager.mainContext.performAndWait {
             let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.exerciseTemplate.rawValue)
             req.predicate = PPLPredicate.nameIsEqualTo(name)
-            if
-                let exerciseTemplate = try? coreDataManager.backgroundContext.fetch(req).first as? ExerciseTemplate
-            {
+            if let exerciseTemplate = try? coreDataManager.backgroundContext.fetch(req).first as? ExerciseTemplate {
                 removeFromWorkout(exercise: exerciseTemplate)
                 coreDataManager.backgroundContext.delete(exerciseTemplate)
                 try? coreDataManager.backgroundContext.save()
+                PPLDefaults.instance.deleteDefaultWeightForExerciseWith(name: name)
             }
         }
         
