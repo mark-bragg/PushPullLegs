@@ -20,7 +20,7 @@ class PPLTabBarController: UITabBarController {
             trendsNavigationController(),
             appConfigurationNavigationController()
         ]
-        for navigationController in viewControllers as! [UINavigationController] {
+        for navigationController in viewControllers as! [PPLNavigationController] {
             navigationController.navigationBar.isTranslucent = false
             navigationController.navigationBar.barTintColor = .navbarBackgroundBlue
             navigationController.navigationBar.tintColor = .white
@@ -36,26 +36,26 @@ class PPLTabBarController: UITabBarController {
         }
     }
     
-    fileprivate func workoutNavigationController() -> UINavigationController {
-        let vc = UINavigationController(rootViewController: StartWorkoutViewController())
+    fileprivate func workoutNavigationController() -> PPLNavigationController {
+        let vc = PPLNavigationController(rootViewController: StartWorkoutViewController())
         vc.tabBarItem = .workoutTab
         return vc
     }
     
-    fileprivate func trendsNavigationController() -> UINavigationController {
-        let vc = UINavigationController(rootViewController: GraphTableViewController())
+    fileprivate func trendsNavigationController() -> PPLNavigationController {
+        let vc = PPLNavigationController(rootViewController: GraphTableViewController())
         vc.tabBarItem = .trendsTab
         return vc
     }
     
-    fileprivate func workoutLogNavigationController() -> UINavigationController {
-        let vc = UINavigationController(rootViewController: WorkoutLogViewController())
+    fileprivate func workoutLogNavigationController() -> PPLNavigationController {
+        let vc = PPLNavigationController(rootViewController: WorkoutLogViewController())
         vc.tabBarItem = .databaseTab
         return vc
     }
     
-    fileprivate func appConfigurationNavigationController() -> UINavigationController {
-        let vc = UINavigationController(rootViewController: AppConfigurationViewController())
+    fileprivate func appConfigurationNavigationController() -> PPLNavigationController {
+        let vc = PPLNavigationController(rootViewController: AppConfigurationViewController())
         vc.tabBarItem = .settingsTab
         return vc
     }
@@ -69,3 +69,12 @@ extension UITabBarItem {
     static let settingsTab = UITabBarItem(title: "Settings", image: TabBarImage.forSettingsTab(), selectedImage: nil)
 }
 
+class PPLNavigationController: UINavigationController {
+    override func popViewController(animated: Bool) -> UIViewController? {
+        let vc = super.popViewController(animated: animated)
+        if let _ = vc as? ExerciseViewController {
+            AppState.shared.exerciseInProgress = nil
+        }
+        return vc
+    }
+}

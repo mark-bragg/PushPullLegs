@@ -21,21 +21,22 @@ let WorkoutLogCellReuseIdentifier = "WorkoutLogCellReuseIdentifier"
 
 class WorkoutLogViewController: DatabaseTableViewController {
     
+    private var workoutLogViewModel: WorkoutLogViewModel {
+        get { viewModel as! WorkoutLogViewModel }
+        set { viewModel = newValue }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         viewModel = WorkoutLogViewModel()
         super.viewWillAppear(animated)
         tableView.backgroundColor = .clear
         reload()
     }
-    
-    private func workoutLogViewModel() -> WorkoutLogViewModel {
-        return viewModel as! WorkoutLogViewModel
-    }
 
     // MARK: - Table view data source
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let container = tableHeaderViewContainer(titles: workoutLogViewModel().tableHeaderTitles())
+        let container = tableHeaderViewContainer(titles: workoutLogViewModel.tableHeaderTitles())
         guard let header = container.headerView else { return nil }
         let leftLabel = header.subviews.first(where: { $0.frame.origin.x == 0 })!
         let rightLabel = header.subviews.first(where: { $0.frame.origin.x != 0 })!
@@ -88,7 +89,7 @@ class WorkoutLogViewController: DatabaseTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         cell.nameLabel.text = viewModel.title(indexPath: indexPath)
-        cell.dateLabel.text = workoutLogViewModel().dateLabel(indexPath: indexPath)
+        cell.dateLabel.text = workoutLogViewModel.dateLabel(indexPath: indexPath)
         if !tableView.isEditing {
             cell.addDisclosureIndicator()
         }
@@ -97,14 +98,14 @@ class WorkoutLogViewController: DatabaseTableViewController {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = WorkoutDataViewController()
-        vc.viewModel = WorkoutDataViewModel(withCoreDataManagement: CoreDataManager.shared, workout: workoutLogViewModel().dbObjects[indexPath.row] as? Workout)
+        vc.viewModel = WorkoutDataViewModel(withCoreDataManagement: CoreDataManager.shared, workout: workoutLogViewModel.dbObjects[indexPath.row] as? Workout)
         
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
     
     override func reload() {
-        viewModel = WorkoutLogViewModel()
+        viewModel = workoutLogViewModel
         super.reload()
     }
     

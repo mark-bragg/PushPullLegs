@@ -72,7 +72,12 @@ class ExerciseSetViewModel: NSObject {
     
     func startSetWithWeight(_ weight: Double) {
         setStateForStartSet()
-        fireOffStart(weight)
+        self.weight = weight
+        if PPLDefaults.instance.isWorkoutInProgress() {
+            countdown = PPLDefaults.instance.countdown()
+            stopWatch.start()
+        }
+        delegate?.exerciseSetViewModelStartedSet(self)
     }
     
     fileprivate func setStateForStartSet() {
@@ -84,12 +89,6 @@ class ExerciseSetViewModel: NSObject {
         }
     }
     
-    fileprivate func fireOffStart(_ weight: Double) {
-        stopWatch.start()
-        self.weight = weight
-        delegate?.exerciseSetViewModelStartedSet(self)
-    }
-    
     func stopTimer() {
         do {
             try setState(.ending)
@@ -99,6 +98,17 @@ class ExerciseSetViewModel: NSObject {
         }
         stopWatch.stop()
         totalTime = currentTime()
+        delegate?.exerciseSetViewModelStoppedTimer(self)
+    }
+    
+    func collectDuration(_ duration: String) {
+        do {
+            try setState(.ending)
+        } catch {
+            print("invalid state error")
+            return
+        }
+        totalTime = String.unformat(minutesAndSeconds: duration)
         delegate?.exerciseSetViewModelStoppedTimer(self)
     }
     
@@ -149,6 +159,7 @@ class ExerciseSetViewModel: NSObject {
         switch state {
         case .inProgress:
             state = .notStarted
+            setBegan = false
         case .ending:
             state = .inProgress
             setBegan = false
@@ -192,6 +203,11 @@ class ExerciseSetViewModel: NSObject {
     
     func cancelCountdown() {
         countdownCanceled = true
+        countdown = PPLDefaults.instance.countdown()
+    }
+    
+    func weightCollectionButtonText() -> String {
+        PPLDefaults.instance.isWorkoutInProgress() ? "Begin Set" : "Submit"
     }
     
 }

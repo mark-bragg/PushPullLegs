@@ -50,8 +50,9 @@ extension String {
     func trimTrailingZeroes() -> String {
         guard self.contains(".") else { return self }
         var toCorrect = self
-        while toCorrect.hasSuffix("0") || toCorrect.hasSuffix(".") {
-            toCorrect.removeLast()
+        var removedDecimalPoint = false
+        while (toCorrect.hasSuffix("0") || toCorrect.hasSuffix(".")) && !removedDecimalPoint {
+            removedDecimalPoint = toCorrect.removeLast() == "."
         }
         return toCorrect
     }
@@ -68,5 +69,15 @@ extension String {
         let minutes = seconds / 60
         let seconds = seconds % 60
         return String(format: "%01d:%02d", minutes, seconds)
+    }
+    
+    static func unformat(minutesAndSeconds mAndS: String) -> Int {
+        let minAndSec = mAndS.components(separatedBy: ":")
+        guard
+        let minutes = Int(minAndSec[0]),
+        let seconds = Int(minAndSec[1])
+        else { return 0 }
+        let totalSeconds = minutes * 60 + seconds
+        return totalSeconds
     }
 }

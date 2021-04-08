@@ -48,8 +48,7 @@ class WorkoutDataViewController: DatabaseTableViewController {
         vm.selectedIndex = indexPath
         let exerciseVm = ExerciseViewModel(exercise: vm.getSelected() as! Exercise)
         exerciseVm.deletionObserver = vm
-        let vc = ExerciseViewController()
-        vc.readOnly = true
+        let vc = DBExerciseViewController()
         vc.viewModel = exerciseVm
         navigationController?.pushViewController(vc, animated: true)
     }

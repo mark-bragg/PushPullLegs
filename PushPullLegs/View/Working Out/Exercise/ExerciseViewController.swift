@@ -36,11 +36,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
             }
         }
         tableView.allowsSelection = false
-        updateLeftBarButtonItem()
-    }
-
-    private func updateLeftBarButtonItem() {
-        navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: backNavigationBarButtonItem(), target: self, action: #selector(pop)), animated: false)
     }
 
     private func backNavigationBarButtonItem() -> UIBarButtonItem.SystemItem {
@@ -49,16 +44,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         }
         isLeftBarItemSetToDone = true
         return .done
-    }
-    
-    override func pop() {
-        if readOnly || exerciseViewModel.rowCount(section: 0) == 0 {
-            super.pop()
-            AppState.shared.exerciseInProgress = nil
-        } else {
-            self.navigationController?.popViewController(animated: true)
-            AppState.shared.exerciseInProgress = nil
-        }
     }
     
     override func insertAddButtonInstructions() {
@@ -115,9 +100,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         setupRestTimerView()
         if exerciseViewModel.rowCount() > 0 {
             AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel.title() : nil
-            if !isLeftBarItemSetToDone {
-                updateLeftBarButtonItem()
-            }
         }
     }
     

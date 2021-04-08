@@ -60,6 +60,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         constrainStartLabel(lbl, diameter)
         styleStartLabel(lbl, diameter)
         animateStartLabel(lbl)
+        timerLabel.isUserInteractionEnabled = false
     }
     
     fileprivate func startLabel() -> UILabel {

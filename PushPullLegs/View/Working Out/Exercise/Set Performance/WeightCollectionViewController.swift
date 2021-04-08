@@ -16,7 +16,7 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
         super.viewDidLoad()
         navigationItem.title = "Weight"
         label.text = PPLDefaults.instance.isKilograms() ? "Kilograms" : "Pounds"
-        button.setTitle("Begin Set", for: .normal)
+        button.setTitle(exerciseSetViewModel?.weightCollectionButtonText(), for: .normal)
         textField.keyboardType = .decimalPad
         characterLimit = 7
     }

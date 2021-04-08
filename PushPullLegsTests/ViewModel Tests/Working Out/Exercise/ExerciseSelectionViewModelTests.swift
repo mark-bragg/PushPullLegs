@@ -13,8 +13,11 @@ class ExerciseSelectionViewModelTests: XCTestCase {
 
     var sut: ExerciseSelectionViewModel!
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
+    var addedWorkoutTemplates = false
     
     override func setUp() {
+        guard !addedWorkoutTemplates else { return }
+        addedWorkoutTemplates = true
         dbHelper.addWorkoutTemplates()
     }
 
@@ -112,7 +115,7 @@ class ExerciseSelectionViewModelTests: XCTestCase {
         XCTAssert(sut.rowCount(section: 0) == 5)
         dbHelper.addExerciseTemplate("to add to workout", to: dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseType.push.rawValue })!, addToWorkout: true)
         sut.reload()
-        XCTAssert(sut.rowCount(section: 0) == 5, "\nexpected: 6\nactual: \(sut.rowCount(section: 0))")
+        XCTAssert(sut.rowCount(section: 0) == 5, "\nexpected: 5\nactual: \(sut.rowCount(section: 0))")
     }
 
     func testSelected_commitChanges_templateUpdated() {

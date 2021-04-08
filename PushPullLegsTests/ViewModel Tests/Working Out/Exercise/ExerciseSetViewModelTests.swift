@@ -27,14 +27,16 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     var countdown = 0
     var expectationsCount = 0
     var setBeganCount = 10
+    var testingShouldHaveBegunAlready = true
     
     override func setUp() {
+        testingShouldHaveBegunAlready = true
         PPLDefaults.instance.setCountdown(countdown)
         sut = ExerciseSetViewModel()
         if firstSetup {
             firstSetup = false
             sut.$setBegan.sink { [weak self] (began) in
-                guard let began = began, let self = self else { return }
+                guard let began = began,let self = self, self.testingShouldHaveBegunAlready else { return }
                 XCTAssert(began == self.shouldHaveBegunAlready)
             }
             .store(in: &setBeganObservers)
@@ -100,6 +102,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     }
     
     func testCancelSet_afterStoppingTimer_delegateCalled() {
+        PPLDefaults.instance.setWorkoutInProgress(true)
         sut.delegate = self
         vmCanceledSetExpectation = XCTestExpectation(description: "ExerciseSetViewModelDelegate exerciseSetViewModelCanceledSet(_:)")
         shouldHaveBegunAlready = true
@@ -187,6 +190,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         expectationsCount = 6
         sut.timerDelegate = self
         shouldHaveBegunAlready = true
+        PPLDefaults.instance.setWorkoutInProgress(true)
         sut.startSetWithWeight(10)
         wait(for: timerDelegateExpectations, timeout: 15)
     }
@@ -209,6 +213,8 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     }
     
     func testRevertStateDuringRepCollection_timerStateIsValid() {
+        self.testingShouldHaveBegunAlready = false
+        PPLDefaults.instance.setWorkoutInProgress(true)
         sut.startSetWithWeight(50)
         sut.stopTimer()
         do {

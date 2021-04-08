@@ -21,11 +21,14 @@ class DatabaseTableViewController: PPLTableViewController {
         navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
     }
     
-    @objc private func edit(_ sender: Any?) {
+    @objc func edit(_ sender: Any?) {
         let isEditing = !tableView.isEditing
         tableView.setEditing(isEditing, animated: false)
         navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
         tableView.reloadData()
+        if let btn = addButton {
+            btn.isHidden = isEditing
+        }
     }
     
     @objc func presentDeleteConfirmation(_ sender: Any) {
