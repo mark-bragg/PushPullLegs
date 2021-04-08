@@ -19,9 +19,13 @@ class DurationCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Duration"
-        timeLabel.becomeFirstResponder()
         button.setTitle("Submit", for: .normal)
         button.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        timeLabel.becomeFirstResponder()
     }
 
 }

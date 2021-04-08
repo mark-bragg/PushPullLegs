@@ -12,7 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DurationCollectionViewController" customModule="PushPullLegs" customModuleProvider="target">
             <connections>
                 <outlet property="button" destination="BF2-RX-Ijk" id="rMf-Nj-G6N"/>
-                <outlet property="label" destination="Lnz-5J-sPj" id="mQh-5F-GOL"/>
+                <outlet property="timeLabel" destination="Lnz-5J-sPj" id="RRk-Fc-8A7"/>
                 <outlet property="view" destination="iN0-l3-epB" id="mof-0r-1GS"/>
             </connections>
         </placeholder>
