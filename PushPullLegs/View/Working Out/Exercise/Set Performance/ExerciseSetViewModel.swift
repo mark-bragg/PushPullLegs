@@ -153,6 +153,7 @@ class ExerciseSetViewModel: NSObject {
     func cancel() {
         state = .canceled
         self.delegate?.exerciseSetViewModelCanceledSet(self)
+        stopWatch.stop()
     }
     
     func revertState() throws {
