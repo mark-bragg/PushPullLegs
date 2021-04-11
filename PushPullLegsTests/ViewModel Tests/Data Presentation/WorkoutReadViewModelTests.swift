@@ -143,7 +143,7 @@ class WorkoutReadViewModelTests: XCTestCase {
             var i = 1
             for exercise in dbHelper.fetchExercises() {
                 if oldExercises.contains(where: { $0.objectID == exercise.objectID }) {
-                    dbHelper.addSetTo(exercise, data: (1*j, 20, 30))
+                    dbHelper.addSetTo(exercise, data: (Double(1*j), 20, 30))
                 } else {
                     dbHelper.addSetTo(exercise, data: (10, 60, 60))
                 }
@@ -178,7 +178,7 @@ class WorkoutReadViewModelTests: XCTestCase {
         for workout in previousWorkouts {
             for exercise in exercises {
                 if let workoutExercises = workout.exercises?.array as? [Exercise], workoutExercises.contains(where: { $0.objectID == exercise.objectID }) {
-                    dbHelper.addSetTo(exercise, data: (volumeConstant, 20, 30))
+                    dbHelper.addSetTo(exercise, data: (Double(volumeConstant), 20, 30))
                 }
             }
             volumeConstant -= 5
@@ -216,7 +216,7 @@ class WorkoutReadViewModelTests: XCTestCase {
         for workout in previousWorkouts {
             for exercise in exercises {
                 if let workoutExercises = workout.exercises?.array as? [Exercise], workoutExercises.contains(where: { $0.objectID == exercise.objectID }) {
-                    dbHelper.addSetTo(exercise, data: (volumeConstant, Double(volumeConstant), volumeConstant))
+                    dbHelper.addSetTo(exercise, data: (Double(volumeConstant), Double(volumeConstant), volumeConstant))
                 }
             }
         }
@@ -260,7 +260,7 @@ class WorkoutReadViewModelTests: XCTestCase {
             for exercise in exercises {
                 if let workoutExercises = workout.exercises?.array as? [Exercise], workoutExercises.contains(where: { $0.objectID == exercise.objectID }) {
                     let volume = workoutIndex % 2 == 0 ? 0 : volumeConstant
-                    dbHelper.addSetTo(exercise, data: (volume, Double(volume), volume))
+                    dbHelper.addSetTo(exercise, data: (Double(volume), Double(volume), volume))
                 }
             }
             workoutIndex += 1

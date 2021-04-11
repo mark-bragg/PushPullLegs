@@ -29,6 +29,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, P
         super.viewWillAppear(animated)
         button.delegate = self
         textField.delegate = self
+        textField.autocorrectionType = .no
         button.disable()
         view.backgroundColor = .backgroundBlue
         textField.becomeFirstResponder()

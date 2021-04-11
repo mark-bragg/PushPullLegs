@@ -31,7 +31,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         XCTAssert(title == exerciseTemplateName)
     }
     
-    func assertFinishedSet(_ d: Int, _ w: Double, _ r: Int, _ exercise: Exercise, _ rowCount: Int) {
+    func assertFinishedSet(_ d: Int, _ w: Double, _ r: Double, _ exercise: Exercise, _ rowCount: Int) {
         sut.collectSet(duration: d, weight: w, reps: r)
         XCTAssert(sut.rowCount(section: 0) == rowCount)
         guard dbHelper.fetchSets(exercise)!.contains(where: { (set) -> Bool in
@@ -67,7 +67,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         sut.collectSet(duration: 10, weight: 10, reps: 10)
         let exercise = dbHelper.fetchExercises().first!
         for i in 1..<10 {
-            let (d, w, r) = (Int.random(in: 1...65), Double.random(in: 50...500), Int.random(in: 3...20))
+            let (d, w, r) = (Int.random(in: 1...65), Double.random(in: 50...500), Double.random(in: 3...20))
             assertFinishedSet(d, w, r, exercise, i+1)
         }
     }
@@ -120,7 +120,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     
     func testRepsForRow_tenFinishedSets() {
         for i in 0...9 {
-            let r = Int.random(in: 12...20)
+            let r = Double.random(in: 12...20)
             sut.collectSet(duration: 0, weight: 0, reps: r)
             XCTAssert(sut.rowCount(section: 0) == i + 1)
             XCTAssert(sut.repsForRow(i) == r)
@@ -131,7 +131,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         for i in 0...9 {
             let d = Int.random(in: 10...100)
             let w = Double.random(in: 20...500).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
-            let r = Int.random(in: 12...20)
+            let r = Double.random(in: 12...20)
             sut.collectSet(duration: d, weight: w, reps: r)
             XCTAssert(sut.rowCount(section: 0) == i + 1)
             XCTAssert(sut.durationForRow(i) == String.format(seconds: d))

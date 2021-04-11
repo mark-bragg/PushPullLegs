@@ -80,13 +80,13 @@ class WorkoutGraphViewModelTests: XCTestCase {
         for i in 0..<count {
             wkt = dbHelper.createWorkout(name: .push, date:dates.last!)
             let d = Int.random(in: 10...25)
-            let r = Int.random(in: 10...25)
+            let r = Double.random(in: 10...25)
             let w = Double.random(in: 10...25)
             dates.append(wkt!.dateCreated!.addingTimeInterval(60 * 60 * 24))
             wkt?.addToExercises(dbHelper.createExercise("ex \(i)", sets: [
                 (d, r, w)
             ]))
-            volumes.append((Double(d * r) * w / 60).truncateDigitsAfterDecimal(afterDecimalDigits: 2))
+            volumes.append((Double(d) * r * w / 60).truncateDigitsAfterDecimal(afterDecimalDigits: 2))
         }
         sut = WorkoutGraphViewModel(type: .push, dataManager: WorkoutDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext))
         let sutVolumes = sut.volumes()!

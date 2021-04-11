@@ -33,6 +33,7 @@ class PPLStopWatch {
     func stop() {
         running = false
         queue?.suspend()
+        handler = nil
     }
     
     func currentTime() -> Int {

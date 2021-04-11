@@ -14,7 +14,7 @@ protocol ExerciseSetTimerDelegate: NSObject {
 }
 
 protocol ExerciseSetCollector: NSObject {
-    func collectSet(duration: Int, weight: Double, reps: Int)
+    func collectSet(duration: Int, weight: Double, reps: Double)
 }
 
 fileprivate enum ExerciseSetState {
@@ -138,7 +138,7 @@ class ExerciseSetViewModel: NSObject {
         return (countdown - s) * multiplier
     }
     
-    func finishSetWithReps(_ reps: Int) {
+    func finishSetWithReps(_ reps: Double) {
         guard setCollector != nil else { return }
         do {
             try setState(.finished)

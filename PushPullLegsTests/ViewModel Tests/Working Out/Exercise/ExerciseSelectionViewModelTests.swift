@@ -13,11 +13,8 @@ class ExerciseSelectionViewModelTests: XCTestCase {
 
     var sut: ExerciseSelectionViewModel!
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
-    var addedWorkoutTemplates = false
     
     override func setUp() {
-        guard !addedWorkoutTemplates else { return }
-        addedWorkoutTemplates = true
         dbHelper.addWorkoutTemplates()
     }
 

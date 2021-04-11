@@ -40,4 +40,8 @@ class DBExerciseViewController: ExerciseViewController {
         dvc.exerciseSetViewModel = exerciseSetViewModel
         setNavController.pushViewController(dvc, animated: true)
     }
+    
+    override func setupRestTimerView() {
+        // no op
+    }
 }

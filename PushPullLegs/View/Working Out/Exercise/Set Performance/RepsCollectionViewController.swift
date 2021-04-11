@@ -17,12 +17,12 @@ class RepsCollectionViewController: QuantityCollectionViewController, Exercising
         navigationItem.title = "Rep Count"
         label.text = "Enter Number of Reps"
         button.setTitle("Save Set", for: .normal)
-        textField.keyboardType = .numberPad
-        characterLimit = 3
+        textField.keyboardType = .decimalPad
+        characterLimit = 5
     }
     
     override func buttonReleased(_ sender: Any) {
-        if let t = textField.text, let reps = Int(t) {
+        if let t = textField.text, let reps = Double(t) {
             super.buttonReleased(sender)
             exerciseSetViewModel?.finishSetWithReps(reps)
         }

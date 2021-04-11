@@ -12,12 +12,12 @@ import Combine
 fileprivate struct FinishedSetDataModel {
     var duration: Int
     var weight: Double
-    var reps: Int
+    var reps: Double
     var volume: Double
     
     init(withExerciseSet exerciseSet: ExerciseSet) {
         duration = Int(exerciseSet.duration)
-        reps = Int(exerciseSet.reps)
+        reps = exerciseSet.reps
         weight = exerciseSet.weight
         if PPLDefaults.instance.isKilograms() {
             weight = (weight * 0.453592).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
@@ -60,7 +60,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         collectFinishedCellData()
     }
     
-    func collectSet(duration: Int, weight: Double, reps: Int) {
+    func collectSet(duration: Int, weight: Double, reps: Double) {
         if finishedCellData.count == 0 {
             exerciseManager.create(name: exerciseName)
             exercise = exerciseManager.creation as? Exercise
@@ -90,7 +90,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         return String.format(seconds: finishedCellData[row].duration)
     }
     
-    func repsForRow(_ row: Int) -> Int {
+    func repsForRow(_ row: Int) -> Double {
         return finishedCellData[row].reps
     }
     

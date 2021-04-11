@@ -36,6 +36,8 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        textField.autocorrectionType = .no
+        textField.textAlignment = .center
         textField.becomeFirstResponder()
     }
     

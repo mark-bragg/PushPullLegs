@@ -49,12 +49,15 @@ class DBHelper {
     // MARK: WorkoutTemplate
     func addWorkoutTemplates() {
         for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs] {
-            insertWorkoutTemplate(type: type)
+            insertWorkoutTemplateMainContext(type: type)
         }
     }
     
     func insertWorkoutTemplate(type: ExerciseType = .push) {
-        let workout = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.backgroundContext) as! WorkoutTemplate
+        guard let workout = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.backgroundContext) as? WorkoutTemplate else {
+            assert(false, "failed to add workout template")
+            return
+        }
         workout.name = type.rawValue
         try? coreDataStack.backgroundContext.save()
     }
@@ -106,14 +109,14 @@ class DBHelper {
         return []
     }
     
-    func createExercise(_ name: String? = nil, sets: [(d: Int, r: Int, w: Double)]? = nil) -> Exercise {
+    func createExercise(_ name: String? = nil, sets: [(d: Int, r: Double, w: Double)]? = nil) -> Exercise {
         let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: coreDataStack.backgroundContext) as! Exercise
         exercise.name = name
         if let sets = sets {
             for set in sets {
                 let exerciseSet = NSEntityDescription.insertNewObject(forEntityName: "ExerciseSet", into: coreDataStack.backgroundContext) as! ExerciseSet
                 exerciseSet.duration = Int16(set.d)
-                exerciseSet.reps = Int16(set.r)
+                exerciseSet.reps = set.r
                 exerciseSet.weight = set.w
                 exercise.addToSets(exerciseSet)
             }
@@ -122,13 +125,13 @@ class DBHelper {
         return exercise
     }
     
-    func addSetTo(_ exercise: Exercise, data: (r: Int, w: Double, d: Int)? = nil) {
+    func addSetTo(_ exercise: Exercise, data: (r: Double, w: Double, d: Int)? = nil) {
         let set = NSEntityDescription.insertNewObject(forEntityName: "ExerciseSet", into: coreDataStack.backgroundContext) as! ExerciseSet
         if let exerciseInContext = try? coreDataStack.backgroundContext.existingObject(with: exercise.objectID) as? Exercise {
             exerciseInContext.addToSets(set)
             if let data = data {
                 set.duration = Int16(data.d)
-                set.reps = Int16(data.r)
+                set.reps = data.r
                 set.weight = data.w
             }
             try? coreDataStack.backgroundContext.save()
@@ -201,7 +204,7 @@ class DBHelper {
         return try? coreDataStack.mainContext.fetch(request) as? [ExerciseSet]
     }
     
-    func insertSet(_ exercise: Exercise, dwr data: (d: Int?, w: Double?, r: Int?) = (nil, nil, nil)) -> ExerciseSet {
+    func insertSet(_ exercise: Exercise, dwr data: (d: Int?, w: Double?, r: Double?) = (nil, nil, nil)) -> ExerciseSet {
         let set = NSEntityDescription.insertNewObject(forEntityName: "ExerciseSet", into: coreDataStack.backgroundContext) as! ExerciseSet
         if let d = data.d {
             set.duration = Int16(d)
@@ -210,7 +213,7 @@ class DBHelper {
             set.weight = w
         }
         if let r = data.r {
-            set.reps = Int16(r)
+            set.reps = r
         }
         exercise.addToSets(set)
         try? coreDataStack.backgroundContext.save()

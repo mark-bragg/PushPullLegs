@@ -266,7 +266,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         exp.fulfill()
     }
     
-    func collectSet(duration: Int, weight: Double, reps: Int) {
+    func collectSet(duration: Int, weight: Double, reps: Double) {
         collectSetExpectation?.fulfill()
         XCTAssert(duration == 5)
         XCTAssert(weight == 10)
