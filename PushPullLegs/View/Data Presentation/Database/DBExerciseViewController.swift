@@ -13,7 +13,6 @@ class DBExerciseViewController: ExerciseViewController {
     override func viewWillAppear(_ animated: Bool) {
         readOnly = true
         super.viewWillAppear(animated)
-        setupRightBarButtonItems()
     }
     
     @objc override func edit(_ sender: Any?) {
@@ -26,13 +25,6 @@ class DBExerciseViewController: ExerciseViewController {
             setupRightBarButtonItems()
         }
         tableView.reloadData()
-    }
-    
-    private func setupRightBarButtonItems() {
-        let addBtnItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction(_:)))
-        let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit(_:)))
-        navigationItem.rightBarButtonItem = nil
-        navigationItem.rightBarButtonItems = [addBtnItem, editBtnItem]
     }
     
     override func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel) {

@@ -18,13 +18,19 @@ class DatabaseTableViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
+        setupRightBarButtonItems()
     }
     
     @objc func edit(_ sender: Any?) {
+        
         let isEditing = !tableView.isEditing
         tableView.setEditing(isEditing, animated: false)
-        navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
+        if isEditing {
+            navigationItem.rightBarButtonItems = nil
+            navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
+        } else {
+            setupRightBarButtonItems()
+        }
         tableView.reloadData()
         if let btn = addButton {
             btn.isHidden = isEditing
@@ -55,5 +61,12 @@ class DatabaseTableViewController: PPLTableViewController {
         if tableView.isEditing && viewModel.rowCount(section: 0) == 0 {
             edit(self)
         }
+    }
+    
+    func setupRightBarButtonItems() {
+        let addBtnItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction(_:)))
+        let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit(_:)))
+        navigationItem.rightBarButtonItem = nil
+        navigationItem.rightBarButtonItems = [addBtnItem, editBtnItem]
     }
 }

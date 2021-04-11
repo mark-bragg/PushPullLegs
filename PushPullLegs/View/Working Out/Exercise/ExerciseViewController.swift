@@ -71,6 +71,10 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         removeAddButtonInstructions()
     }
     
+    override func setupRightBarButtonItems() {
+        navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
+    }
+    
     func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController) {
         if viewController.isEqual(exerciseTimer) {
             try? exerciseSetViewModel?.revertState()
