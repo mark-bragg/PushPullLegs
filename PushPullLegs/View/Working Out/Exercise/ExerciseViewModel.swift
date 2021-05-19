@@ -63,7 +63,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     func collectSet(duration: Int, weight: Double, reps: Double) {
         if finishedCellData.count == 0 {
             exerciseManager.create(name: exerciseName)
-            exercise = exerciseManager.creation as? Exercise
+            exercise = exercise ?? exerciseManager.creation as? Exercise
             delegate?.exerciseViewModel(self, started: exercise)
         }
         exerciseManager.insertSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in

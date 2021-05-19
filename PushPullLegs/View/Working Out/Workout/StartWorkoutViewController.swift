@@ -8,10 +8,15 @@
 
 import UIKit
 
+protocol WorkoutSelectionDelegate: NSObject {
+    func workoutSelectedWithType(_ type: ExerciseType)
+}
+
 class StartWorkoutViewController: PPLTableViewController {
 
     private var exerciseType: ExerciseType?
     private var didNavigateToWorkout: Bool = false
+    weak var delegate: WorkoutSelectionDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +28,10 @@ class StartWorkoutViewController: PPLTableViewController {
         hidesBottomBarWhenPushed = false
         if AppState.shared.workoutInProgress {
             self.navigateToNextWorkout()
+        }
+        if let _ = delegate {
+            removeBanner()
+            setTableViewY(0)
         }
     }
 
@@ -39,8 +48,12 @@ class StartWorkoutViewController: PPLTableViewController {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         exerciseType = (tableView.cellForRow(at: indexPath) as! PPLTableViewCell).exerciseType()
-        navigateToNextWorkout()
-        exerciseType = nil
+        if let del = delegate, let type = exerciseType {
+            del.workoutSelectedWithType(type)
+        } else {
+            navigateToNextWorkout()
+            exerciseType = nil
+        }
     }
     
     func navigateToNextWorkout() {

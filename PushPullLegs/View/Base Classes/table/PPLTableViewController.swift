@@ -85,9 +85,13 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         guard let tableView = tableView else { return }
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        topConstraint = tableView.topAnchor.constraint(equalTo: guide.topAnchor, constant: bannerHeight())
-        topConstraint.isActive = true
+        setTableViewY(bannerHeight())
         tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
+    }
+    
+    func setTableViewY(_ y: CGFloat) {
+        topConstraint = tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: y)
+        topConstraint.isActive = true
     }
     
     fileprivate func addTableFooter() {

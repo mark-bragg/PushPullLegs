@@ -103,9 +103,7 @@ class TemplateManagement {
                 req.predicate = PPLPredicate.typeIsEqualTo(type)
                 if let exerciseTemplates = try? coreDataManager.mainContext.fetch(req) as? [ExerciseTemplate] {
                     return exerciseTemplates.filter { (temp) -> Bool in
-                        return names.contains { (name) -> Bool in
-                            return temp.name! == name
-                        }
+                        names.contains { temp.name! == $0 }
                     }
                 }
             }

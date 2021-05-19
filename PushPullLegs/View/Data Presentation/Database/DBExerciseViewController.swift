@@ -27,6 +27,13 @@ class DBExerciseViewController: ExerciseViewController {
         tableView.reloadData()
     }
     
+    override func setupRightBarButtonItems() {
+        let addBtnItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction(_:)))
+        let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit(_:)))
+        navigationItem.rightBarButtonItem = nil
+        navigationItem.rightBarButtonItems = [addBtnItem, editBtnItem]
+    }
+    
     override func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel) {
         let dvc = DurationCollectionViewController()
         dvc.exerciseSetViewModel = exerciseSetViewModel

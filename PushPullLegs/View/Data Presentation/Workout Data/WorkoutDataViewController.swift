@@ -12,6 +12,9 @@ let ExerciseDataCellReuseIdentifier = "ExerciseDataCellReuseIdentifier"
 
 class WorkoutDataViewController: DatabaseTableViewController {
     
+    var exerciseSelectionViewModel: ExerciseSelectionViewModel?
+    var workoutDataViewModel: WorkoutDataViewModel? { viewModel as? WorkoutDataViewModel }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         dbViewModel.refresh()
@@ -24,7 +27,7 @@ class WorkoutDataViewController: DatabaseTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        if let vm = workoutDataViewModel() {
+        if let vm = workoutDataViewModel {
             cell.rootView.removeAllSubviews()
             let vc = ExerciseDataCellViewController()
             vc.preferredContentSize = cell.rootView.bounds.size
@@ -44,7 +47,7 @@ class WorkoutDataViewController: DatabaseTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let vm = workoutDataViewModel() else { return }
+        guard let vm = workoutDataViewModel else { return }
         vm.selectedIndex = indexPath
         let exerciseVm = ExerciseViewModel(exercise: vm.getSelected() as! Exercise)
         exerciseVm.deletionObserver = vm
@@ -53,8 +56,39 @@ class WorkoutDataViewController: DatabaseTableViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func workoutDataViewModel() -> WorkoutDataViewModel? {
-        return viewModel as? WorkoutDataViewModel
+    override func addAction(_ sender: Any) {
+        super.addAction(sender)
+        guard let vm = self.workoutDataViewModel else { return }
+        let esvm = ExerciseSelectionViewModel(withType: vm.exerciseType, templateManagement: TemplateManagement(), dataSource: workoutDataViewModel)
+        exerciseSelectionViewModel = esvm
+        if esvm.rowCount(section: 0) > 0 {
+            let vc = ExerciseTemplateSelectionViewController()
+            esvm.dataSource = workoutDataViewModel
+            vc.viewModel = esvm
+            vc.delegate = self
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            let vc = ExerciseTemplateCreationViewController()
+            vc.showExerciseType = false
+            vc.viewModel = ExerciseTemplateCreationViewModel(withType: vm.exerciseType, management: TemplateManagement())
+            vc.viewModel?.reloader = self
+            vc.modalPresentationStyle = .pageSheet
+            present(vc, animated: true, completion: nil)
+        }
     }
+    
+}
 
+extension WorkoutDataViewController: ExerciseTemplateSelectionDelegate {
+    func exerciseTemplatesAdded() {
+        guard let esvm = exerciseSelectionViewModel else { return }
+        let selectedNames = esvm.selectedExercises().compactMap({ $0.name! })
+        addNewExercises(selectedNames)
+        reload()
+    }
+    
+    fileprivate func addNewExercises(_ names: [String]) {
+        guard let vm = workoutDataViewModel else { return }
+        vm.addObjectsWithNames(names)
+    }
 }

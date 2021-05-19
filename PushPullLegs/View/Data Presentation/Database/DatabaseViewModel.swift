@@ -18,6 +18,7 @@ import CoreData
     @objc func deletionAlertTitle() -> String
     @objc func deletionAlertMessage() -> String?
     @objc func deleteDatabaseObject()
+    @objc func addObjectsWithNames(_ names: [String])
 }
 
 class DatabaseViewModel: NSObject, PPLTableViewModel, DeletionObserver {
@@ -58,6 +59,10 @@ class DatabaseViewModel: NSObject, PPLTableViewModel, DeletionObserver {
     }
     
     func objectDeleted(_ object: NSManagedObject) {
+        // no op
+    }
+    
+    func addObjectsWithNames(_ names: [String]) {
         // no op
     }
 }

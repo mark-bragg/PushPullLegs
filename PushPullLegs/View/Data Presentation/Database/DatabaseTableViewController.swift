@@ -22,7 +22,6 @@ class DatabaseTableViewController: PPLTableViewController {
     }
     
     @objc func edit(_ sender: Any?) {
-        
         let isEditing = !tableView.isEditing
         tableView.setEditing(isEditing, animated: false)
         if isEditing {
@@ -44,7 +43,7 @@ class DatabaseTableViewController: PPLTableViewController {
             self.reload()
         })
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-        present(alert, animated: false, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -65,8 +64,12 @@ class DatabaseTableViewController: PPLTableViewController {
     
     func setupRightBarButtonItems() {
         let addBtnItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction(_:)))
-        let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit(_:)))
         navigationItem.rightBarButtonItem = nil
-        navigationItem.rightBarButtonItems = [addBtnItem, editBtnItem]
+        if viewModel.rowCount(section: 0) == 0 {
+            navigationItem.rightBarButtonItems = [addBtnItem]
+        } else {
+            let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit(_:)))
+            navigationItem.rightBarButtonItems = [addBtnItem, editBtnItem]
+        }
     }
 }

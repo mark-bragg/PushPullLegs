@@ -22,6 +22,7 @@ class PPLDefaults: NSObject {
     private let kIsInstalled = "kIsInstalled"
     private let kCountdownInt = "kCountdownInt"
     private let kIsAdsEnabled = "kIsAdsEnabled"
+    private let kGraphInterstitalDate = "kGraphInterstitialDate"
     override private init() {
         super.init()
         setupUserDetails()
@@ -102,6 +103,21 @@ class PPLDefaults: NSObject {
     func disableAds() {
         userDetails.setValue(false, forKey: kIsAdsEnabled)
         SceneDelegate.shared.adsRemoved()
+    }
+    
+    func wasGraphInterstitialShownToday() -> Bool {
+        guard let date = userDetails.dictionary(forKey: kGraphInterstitalDate)?["date"] as? Date else { return false }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yy"
+        let dateString = formatter.string(from: date)
+        let todayDateString = formatter.string(from: Date())
+        return dateString == todayDateString
+    }
+    
+    func graphInterstitialWasJustShown() {
+        var dict = [String: Date]()
+        dict["date"] = Date()
+        userDetails.setValue(dict, forKey: kGraphInterstitalDate)
     }
 }
 

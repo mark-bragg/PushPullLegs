@@ -18,7 +18,7 @@ protocol WorkoutEditViewModelDelegate: NSObject {
     func workoutEditViewModelCompletedFirstExercise(_ model: WorkoutEditViewModel)
 }
 
-class WorkoutEditViewModel: WorkoutDataViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate, ExerciseViewModelDelegate {
+class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     
     private var exercisesToDo = [ExerciseTemplate]()
     private var startingTime: Date!
@@ -91,11 +91,11 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ReloadProtocol, ExerciseTempla
         reload()
     }
     
-    func exerciseTemplatesAdded() {
+    override func exerciseTemplatesAdded() {
         let templateManagement = TemplateManagement(coreDataManager: coreDataManager)
         let todo = templateManagement.exerciseTemplatesForWorkout(exerciseType)
         exercisesToDo = todo.sorted(by: exerciseTemplateSorter)
-        reload()
+        super.exerciseTemplatesAdded()
     }
     
     
@@ -104,7 +104,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ReloadProtocol, ExerciseTempla
         return exercisesToDo[indexPath.row]
     }
     
-    func reload() {
+    override func reload() {
         if let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
             let done = workout.exercises,
             let doneArray = done.array as? [Exercise] {

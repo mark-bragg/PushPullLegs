@@ -15,6 +15,25 @@ class WorkoutDataManager: DataManager {
         entityName = EntityName.workout
     }
     
+    func addExercises(withNames names: [String], to workout: Workout) {
+        guard names.count > 0, let workoutInContext = fetch(workout) as? Workout else {
+            return
+        }
+        backgroundContext.performAndWait {
+            for name in names {
+                if let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: backgroundContext) as? Exercise {
+                    exercise.name = name
+                    workoutInContext.addToExercises(exercise)
+                }
+            }
+            do {
+                try backgroundContext.save()
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
     func add(_ exercise: Exercise, to workout: Workout) {
         guard let exerciseInContext = fetch(exercise) as? Exercise,
             let workoutInContext = fetch(workout) as? Workout else {

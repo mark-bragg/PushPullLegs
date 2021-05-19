@@ -13,6 +13,7 @@ class DataManager {
     var creation: Any?
     let backgroundContext: NSManagedObjectContext
     var entityName: EntityName!
+    weak var deletionObserver: DeletionObserver?
     init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
         self.backgroundContext = backgroundContext
     }
@@ -22,8 +23,13 @@ class DataManager {
         backgroundContext.performAndWait {
             if let objectInContext = try? backgroundContext.existingObject(with: objectId) {
                 backgroundContext.delete(objectInContext)
-                try? backgroundContext.save()
-                creation = nil
+                do {
+                    try backgroundContext.save()
+                    creation = nil
+                    deletionObserver?.objectDeleted(objectInContext)
+                } catch {
+                    
+                }
             }
         }
     }

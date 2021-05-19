@@ -219,7 +219,8 @@ extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
         guard vcForRow(selectedRow).viewModel.pointCount() > 0 else { return }
-        if let interstitial = createAndLoadInterstitial(adUnitID: InterstitialAdUnitID.graphTableVC) {
+        if !PPLDefaults.instance.wasGraphInterstitialShownToday(), let interstitial = createAndLoadInterstitial(adUnitID: InterstitialAdUnitID.graphTableVC) {
+            PPLDefaults.instance.graphInterstitialWasJustShown()
             presentAdLoadingView()
             tableView.isUserInteractionEnabled = false
             interstitial.delegate = self

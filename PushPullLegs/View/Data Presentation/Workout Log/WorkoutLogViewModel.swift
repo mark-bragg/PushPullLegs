@@ -17,6 +17,7 @@ class WorkoutLogViewModel: DatabaseViewModel {
         super.init()
         formatter.dateFormat = "MM/dd/yy"
         dataManager = WorkoutDataManager()
+        dataManager.deletionObserver = self
         dbObjects = workoutManager().workouts()
         if WorkoutLogViewModel.ascending {
             dbObjects.reverse()
@@ -51,7 +52,7 @@ class WorkoutLogViewModel: DatabaseViewModel {
     
     override func objectDeleted(_ object: NSManagedObject) {
         guard let workout = object as? Workout else { return }
-        dbObjects = dbObjects.filter({ $0 != workout })
+        dbObjects = dbObjects.filter({ $0.objectID != workout.objectID })
         
     }
 }

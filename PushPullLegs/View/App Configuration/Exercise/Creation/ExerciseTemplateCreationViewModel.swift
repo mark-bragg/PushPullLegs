@@ -39,6 +39,15 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     }
     
     func saveExercise(withName name: String, successCompletion completion: () -> Void) {
+        saveExerciseTemplate(name)
+        if let exerciseTemplate = management.exerciseTemplate(name: name), preSetType {
+            management.addToWorkout(exercise: exerciseTemplate)
+        }
+        completion()
+        reloader?.reload()
+    }
+    
+    private func saveExerciseTemplate(_ name: String) {
         guard exerciseType != .error else {
             return
         }
@@ -47,13 +56,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
         } catch {
             // TODO: present duplicate exercise error to user
             print(error)
-            return
         }
-        if let exerciseTemplate = management.exerciseTemplate(name: name), preSetType {
-            management.addToWorkout(exercise: exerciseTemplate)
-        }
-        completion()
-        reloader?.reload()
     }
     
     private func exerciseNameIsValid(_ name: String?) -> Bool {

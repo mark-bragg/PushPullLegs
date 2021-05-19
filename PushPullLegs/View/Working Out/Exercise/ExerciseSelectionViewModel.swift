@@ -8,6 +8,10 @@
 
 import Foundation
 
+@objc protocol ExerciseSelectionViewModelDataSource {
+    func completedExercises() -> [String]
+}
+
 class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     private var exercises = [ExerciseTemplate]()
@@ -15,11 +19,13 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     let exerciseType: ExerciseType
     private var templateManagement: TemplateManagement
     var multiSelect: Bool = true
+    weak var dataSource: ExerciseSelectionViewModelDataSource?
     
-    init(withType type: ExerciseType, templateManagement: TemplateManagement) {
+    init(withType type: ExerciseType, templateManagement: TemplateManagement, dataSource: ExerciseSelectionViewModelDataSource? = nil) {
         self.templateManagement = templateManagement
         exerciseType = type
         super.init()
+        self.dataSource = dataSource
         reload()
     }
     
@@ -29,7 +35,8 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     func title(indexPath: IndexPath) -> String? {
         guard let name = exercises[indexPath.row].name else {
-            return "ERROR"
+            // TODO: LOG NO TITLE ERROR
+            return ""
         }
         return name
     }
@@ -62,11 +69,17 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     }
     
     func reload() {
-        let alreadyAddedExercises = templateManagement.exerciseTemplatesForWorkout(exerciseType)
-        if let exercisesToBeAdded = templateManagement.exerciseTemplates(withType: exerciseType) {
-            exercises = exercisesToBeAdded
-                .filter({ !alreadyAddedExercises.contains($0) })
+        if let completedExercises = dataSource?.completedExercises(), let alreadyAddedExercises = templateManagement.exerciseTemplates(withType: exerciseType) {
+            exercises = alreadyAddedExercises
+                .filter({ !completedExercises.contains($0.name!) })
                 .sorted(by: exerciseTemplateSorter)
+        } else {
+            let alreadyAddedExercises = templateManagement.exerciseTemplatesForWorkout(exerciseType)
+            if let exercisesToBeAdded = templateManagement.exerciseTemplates(withType: exerciseType) {
+                exercises = exercisesToBeAdded
+                    .filter({ !alreadyAddedExercises.contains($0) })
+                    .sorted(by: exerciseTemplateSorter)
+            }
         }
     }
 }

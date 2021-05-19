@@ -9,15 +9,17 @@
 import Foundation
 import CoreData
 
-class WorkoutDataViewModel: DatabaseViewModel {
+class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate {
     
     var exerciseType: ExerciseType!
+    var coreDataManager: CoreDataManagement!
+    var selectedIndex: IndexPath?
+    var workoutId: NSManagedObjectID!
     var workoutManager: WorkoutDataManager {
         get {
             dataManager as! WorkoutDataManager
         }
     }
-    var coreDataManager: CoreDataManagement!
     var exercisesDone: [Exercise] {
         set {
             dbObjects = newValue
@@ -26,8 +28,6 @@ class WorkoutDataViewModel: DatabaseViewModel {
             dbObjects as! [Exercise]
         }
     }
-    var selectedIndex: IndexPath?
-    var workoutId: NSManagedObjectID!
     
     init(withCoreDataManagement coreDataManagement: CoreDataManagement = CoreDataManager.shared, workout: Workout? = nil) {
         coreDataManager = coreDataManagement
@@ -53,7 +53,8 @@ class WorkoutDataViewModel: DatabaseViewModel {
         if indexPath.row < exercisesDone.count, let name = exercisesDone[indexPath.row].name {
             return name
         }
-        return "ERROR: CAN'T GET NAME FOR INDEX PATH: \(indexPath)"
+        // TODO: LOG ERROR: CAN'T GET NAME FOR INDEX PATH: \(indexPath)
+        return ""
     }
     
     func detailText(indexPath: IndexPath) -> String? { "\(exercisesDone[indexPath.row].volume())" }
@@ -100,6 +101,24 @@ class WorkoutDataViewModel: DatabaseViewModel {
         guard let exercise = object as? Exercise else { return }
         exercisesDone = exercisesDone.filter({ $0 != exercise })
     }
+    
+    func exerciseTemplatesAdded() {
+        reload()
+    }
+    
+    func reload() {
+        if let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
+            let done = workout.exercises,
+            let doneArray = done.array as? [Exercise] {
+            exercisesDone = doneArray.sorted(by: sorter)
+        }
+    }
+    
+    override func addObjectsWithNames(_ names: [String]) {
+        guard let wkt = dataManager.fetch(workoutId) as? Workout else { return }
+        workoutManager.addExercises(withNames: names, to: wkt)
+        reload()
+    }
 }
 
 extension Workout {
@@ -110,5 +129,11 @@ extension Workout {
             volume += exercise.volume()
         }
         return volume
+    }
+}
+
+extension WorkoutDataViewModel: ExerciseSelectionViewModelDataSource {
+    func completedExercises() -> [String] {
+        exercisesDone.compactMap({ $0.name! })
     }
 }

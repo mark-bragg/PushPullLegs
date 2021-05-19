@@ -32,6 +32,16 @@ class WorkoutLogViewController: DatabaseTableViewController {
         tableView.backgroundColor = .clear
         reload()
     }
+    
+    override func addAction(_ sender: Any) {
+        presentAddWorkoutSelection()
+    }
+    
+    func presentAddWorkoutSelection() {
+        let vc = StartWorkoutViewController()
+        vc.delegate = self
+        present(vc, animated: true, completion: nil)
+    }
 
     // MARK: - Table view data source
 
@@ -105,8 +115,9 @@ class WorkoutLogViewController: DatabaseTableViewController {
     }
     
     override func reload() {
-        viewModel = workoutLogViewModel
+        viewModel = WorkoutLogViewModel()
         super.reload()
+        tableView.reloadData()
     }
     
     override func insertAddButtonInstructions() {
@@ -169,5 +180,15 @@ fileprivate extension PPLTableViewCell {
         rootView.addSubview(label)
         label.topAnchor.constraint(equalTo: rootView.topAnchor).isActive = true
         label.bottomAnchor.constraint(equalTo: rootView.bottomAnchor).isActive = true
+    }
+}
+
+extension WorkoutLogViewController: WorkoutSelectionDelegate {
+    func workoutSelectedWithType(_ type: ExerciseType) {
+        WorkoutDataManager().create(name: type.rawValue, keyValuePairs: ["dateCreated": Date()])
+        dismiss(animated: true, completion: nil)
+        reload()
+        let row = WorkoutLogViewModel.ascending ? workoutLogViewModel.rowCount(section: 0) - 1 : 0
+        tableView(tableView, didSelectRowAt: IndexPath(row: row, section: 0))
     }
 }
