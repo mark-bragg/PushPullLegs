@@ -17,10 +17,10 @@ class GraphView: UIControl, ObservableObject {
     }
     private var circle = CAShapeLayer()
     private var circleLine = CAShapeLayer()
-    private let circleRadius: CGFloat = 10.0
+    private let circleRadius: CGFloat = 5.0
     private var lineWidth: CGFloat {
         get {
-            return 5.0
+            return smallDisplay ? 1.0 : 2.0
         }
     }
     private var drawingCircle = false
