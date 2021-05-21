@@ -72,6 +72,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
             self.reloader?.reload()
             PPLDefaults.instance.setWeight(self.weightForRow(self.rowCount() - 1), forExerciseWithName: name)
         }
+        collectFinishedCellData()
     }
     
     override func rowCount(section: Int = 0) -> Int {
@@ -120,6 +121,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     private func collectFinishedCellData() {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
+        finishedCellData.removeAll()
         for set in sets {
             finishedCellData.append(FinishedSetDataModel(withExerciseSet: set))
         }
