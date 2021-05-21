@@ -173,6 +173,10 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         return cell
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        tableView.isEditing
+    }
+    
 }
 
 protocol SetNavigationControllerDelegate {

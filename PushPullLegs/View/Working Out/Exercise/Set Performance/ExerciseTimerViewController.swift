@@ -25,6 +25,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         styleTimerLabel()
         addTimerLabelTap()
         timerLabel.text = exerciseSetViewModel?.initialTimerText()
+        timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 48, weight: .regular)
         bind()
     }
     
