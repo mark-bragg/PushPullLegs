@@ -104,6 +104,21 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         setupRestTimerView()
         if exerciseViewModel.rowCount() > 0 {
             AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel.title() : nil
+            presentProgressNotification()
+        }
+    }
+    
+    func presentProgressNotification() {
+        guard exerciseViewModel.isFirstTimePerformingExercise() && !readOnly else { return }
+        let content = UNMutableNotificationContent()
+        content.title = exerciseViewModel.progressTitle()
+        content.body = exerciseViewModel.progressMessage()
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request) { (error) in
+            if let error = error {
+                print(error)
+            }
         }
     }
     

@@ -12,7 +12,7 @@ import GoogleMobileAds
 import StoreKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     private let defaults = PPLDefaults.instance
     
@@ -23,7 +23,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         SKPaymentQueue.default().add(StoreObserver.shared)
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (b, e) in
+            if b {
+                UNUserNotificationCenter.current().delegate = self
+            }
+        }
         return true
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+        center.removeAllDeliveredNotifications()
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

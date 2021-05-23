@@ -60,6 +60,43 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         collectFinishedCellData()
     }
     
+    func isFirstTimePerformingExercise() -> Bool {
+        guard
+            let type = ExerciseType(rawValue: exercise.workout?.name ?? ""),
+            let currentWorkout = exercise.workout,
+            let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
+            let exercises = previousWorkout.exercises?.array as? [Exercise]
+        else { return false }
+        return exercises.contains(where: { $0.name == exercise.name && $0.sets != nil && $0.sets!.count > 0})
+    }
+    
+    func progressTitle() -> String {
+        if let prefix = exercise.name {
+            return "\(prefix) Progress"
+        }
+        return "Exercise Progress"
+    }
+    
+    func progressMessage() -> String {
+        let currentVolume = totalVolume()
+        let preVolume = previousVolume()
+        let percent = Int((currentVolume / preVolume) * 100)
+        let percentMessage = "You are at \(percent)% of your previous volume."
+        let motivationalMessage = percent < 100 ? " Progressive overload requires more than 100% you got this!" : " You overloaded! Congratulations! This is progress!"
+        return "\(percentMessage)\(motivationalMessage)"
+    }
+    
+    func previousVolume() -> Double {
+        guard
+            let type = ExerciseType(rawValue: exercise.workout?.name ?? ""),
+            let currentWorkout = exercise.workout,
+            let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
+            let previousExercises = previousWorkout.exercises?.array as? [Exercise],
+            let previousExercise = previousExercises.first(where: { $0.name == exercise.name })
+        else { return 0 }
+        return previousExercise.volume()
+    }
+    
     func collectSet(duration: Int, weight: Double, reps: Double) {
         if finishedCellData.count == 0 {
             exerciseManager.create(name: exerciseName)
@@ -93,6 +130,14 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func repsForRow(_ row: Int) -> Double {
         return finishedCellData[row].reps
+    }
+    
+    func totalVolume() -> Double {
+        var total = Double(0)
+        for row in 0..<finishedCellData.count {
+            total += volumeForRow(row)
+        }
+        return total
     }
     
     func volumeForRow(_ row: Int) -> Double {
