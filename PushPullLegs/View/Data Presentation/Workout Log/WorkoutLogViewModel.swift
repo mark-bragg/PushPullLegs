@@ -12,6 +12,7 @@ import CoreData
 class WorkoutLogViewModel: DatabaseViewModel {
     let formatter = DateFormatter()
     static var ascending = false
+    weak var reloader: ReloadProtocol?
     
     override init() {
         super.init()
@@ -53,6 +54,6 @@ class WorkoutLogViewModel: DatabaseViewModel {
     override func objectDeleted(_ object: NSManagedObject) {
         guard let workout = object as? Workout else { return }
         dbObjects = dbObjects.filter({ $0.objectID != workout.objectID })
-        
+        reloader?.reload()
     }
 }

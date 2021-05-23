@@ -72,4 +72,8 @@ class DatabaseTableViewController: PPLTableViewController {
             navigationItem.rightBarButtonItems = [addBtnItem, editBtnItem]
         }
     }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        tableView.isEditing
+    }
 }

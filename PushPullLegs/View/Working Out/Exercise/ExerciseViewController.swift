@@ -72,6 +72,9 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     override func setupRightBarButtonItems() {
+        guard !readOnly else {
+            return super.setupRightBarButtonItems()
+        }
         navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
     }
     
@@ -186,10 +189,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         labels.r.text = "\(exerciseViewModel.repsForRow(indexPath.row))"
         labels.t.text = exerciseViewModel.durationForRow(indexPath.row)
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        tableView.isEditing
     }
     
 }

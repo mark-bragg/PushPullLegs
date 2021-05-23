@@ -116,6 +116,7 @@ class WorkoutLogViewController: DatabaseTableViewController {
     
     override func reload() {
         viewModel = WorkoutLogViewModel()
+        workoutLogViewModel.reloader = self
         super.reload()
         tableView.reloadData()
     }
