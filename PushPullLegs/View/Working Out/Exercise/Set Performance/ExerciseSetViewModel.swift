@@ -60,7 +60,7 @@ class ExerciseSetViewModel: NSObject {
             self.timerDelegate?.timerUpdate(String.format(seconds: self.currentTime(seconds)))
         })
         $setBegan.sink { (began) in
-            guard let began = began, began else { return }
+            guard PPLDefaults.instance.areTimerSoundsEnabled(), let began = began, began else { return }
             SoundManager.shared.playStartSound()
         }.store(in: &cancellables)
     }
@@ -123,9 +123,11 @@ class ExerciseSetViewModel: NSObject {
             multiplier *= -1
             let time = calculateCurrentTime(s, multiplier)
             setBegan = countdown == s
-            if time <= 3 && !setBegan {
+            if time <= 3 && !setBegan && PPLDefaults.instance.areTimerSoundsEnabled() {
                 SoundManager.shared.playCountdownSound()
             }
+        } else if PPLDefaults.instance.areTimerSoundsEnabled() {
+            SoundManager.shared.playTickSound()
         }
         return calculateCurrentTime(s, multiplier)
     }

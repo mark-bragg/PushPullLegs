@@ -48,12 +48,14 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         cell.selectionStyle = .default
         if indexPath.row < 3 {
             cell.addDisclosureIndicator()
-        } else if indexPath.row < 5 {
+        } else if indexPath.row < 6 {
             cell.selectionStyle = .none
             if indexPath.row == 3 {
                 configureImperialMetricSegmenedControl(cell: cell)
-            } else {
+            } else if indexPath.row == 4 {
                 configureCustomCountdownCell(cell: cell)
+            } else if indexPath.row == 5 {
+                configureTimerSoundsCell(cell: cell)
             }
         } else {
             
@@ -140,6 +142,17 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         })
     }
     
+    func configureTimerSoundsCell(cell: PPLTableViewCell) {
+        cell.rootView.isUserInteractionEnabled = true
+        let cellSwitch = switchView(cell)
+        cellSwitch.isOn = PPLDefaults.instance.areTimerSoundsEnabled()
+        cellSwitch.addTarget(self, action: #selector(setTimerSoundsEnabled(_:)), for: .valueChanged)
+    }
+    
+    @objc func setTimerSoundsEnabled(_ sender: UISwitch) {
+        PPLDefaults.instance.setTimerSoundsEnabled(sender.isOn)
+    }
+    
     fileprivate func textLabelForCell(_ cell: PPLTableViewCell) -> PPLNameLabel {
         let lbl = PPLNameLabel()
         lbl.numberOfLines = 2
@@ -175,6 +188,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
             let vc = ExerciseTemplateListViewController()
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
+        } else if rowId == .timerSounds {
+            return
         } else if rowId == .disableAds {
             showSpinner()
             StoreManager.shared.restoreDisabledAds({ [weak self] in

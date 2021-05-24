@@ -23,6 +23,7 @@ class PPLDefaults: NSObject {
     private let kCountdownInt = "kCountdownInt"
     private let kIsAdsEnabled = "kIsAdsEnabled"
     private let kGraphInterstitalDate = "kGraphInterstitialDate"
+    private let kTimerSoundsEnabled = "kTimerSoundsEnabled"
     override private init() {
         super.init()
         setupUserDetails()
@@ -118,6 +119,14 @@ class PPLDefaults: NSObject {
         var dict = [String: Date]()
         dict["date"] = Date()
         userDetails.setValue(dict, forKey: kGraphInterstitalDate)
+    }
+    
+    func setTimerSoundsEnabled(_ enabled: Bool) {
+        userDetails.setValue(enabled, forKey: kTimerSoundsEnabled)
+    }
+    
+    func areTimerSoundsEnabled() -> Bool {
+        userDetails.bool(forKey: kTimerSoundsEnabled)
     }
 }
 

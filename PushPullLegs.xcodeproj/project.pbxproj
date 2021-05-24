@@ -69,6 +69,7 @@
 		4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49937899243B86D400EAD55E /* WorkoutTemplateListViewModel.swift */; };
 		4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993789D243B964200EAD55E /* ReloadProtocol.swift */; };
 		4997C1DB2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */; };
+		49A1B398265B298100FE73F5 /* tick.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49A1B397265B298100FE73F5 /* tick.m4a */; };
 		49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB1D7A24849C980003CFA1 /* AppState.swift */; };
 		49AB68CB24E8BD8E0057D5F7 /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB68CA24E8BD8E0057D5F7 /* ArrowView.swift */; };
 		49AB68CD24FB0E5C0057D5F7 /* ArrowHelperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */; };
@@ -203,6 +204,7 @@
 		49937899243B86D400EAD55E /* WorkoutTemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewModel.swift; sourceTree = "<group>"; };
 		4993789D243B964200EAD55E /* ReloadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadProtocol.swift; sourceTree = "<group>"; };
 		4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewController.swift; sourceTree = "<group>"; };
+		49A1B397265B298100FE73F5 /* tick.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.m4a; sourceTree = "<group>"; };
 		49AB1D7A24849C980003CFA1 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		49AB68CA24E8BD8E0057D5F7 /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowHelperViewController.swift; sourceTree = "<group>"; };
@@ -615,6 +617,7 @@
 		49ABACB825F463A200517F6F /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				49A1B397265B298100FE73F5 /* tick.m4a */,
 				49ABACAF25F45CE700517F6F /* start.m4a */,
 				49ABACA225F45BEF00517F6F /* countdown.m4a */,
 			);
@@ -957,6 +960,7 @@
 				49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */,
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
 				4989BA5B24BB905F001C17B3 /* PPLTableViewCell.xib in Resources */,
+				49A1B398265B298100FE73F5 /* tick.m4a in Resources */,
 				49CD440C261AC3C500C8A6C8 /* DurationCollectionViewController.xib in Resources */,
 				490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */,
 			);

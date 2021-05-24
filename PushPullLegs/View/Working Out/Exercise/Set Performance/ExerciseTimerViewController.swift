@@ -29,6 +29,13 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         bind()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if PPLDefaults.instance.areTimerSoundsEnabled() {
+            SoundManager.shared.silenceNextNoise = true
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if shouldShowStartText() {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum AppConfigurationRowID {
     case about
@@ -14,11 +15,12 @@ enum AppConfigurationRowID {
     case editExercises
     case massUnitsControl
     case countdownControl
+    case timerSounds
     case disableAds
 }
 
 class AppConfigurationViewModel: NSObject, PPLTableViewModel {
-    private var titles = ["About", "Edit Workout List", "Edit Exercise List", "", "Countdown for each set"]
+    private var titles = ["About", "Edit Workout List", "Edit Exercise List", "", "Countdown for each set", "Timer Sounds"]
     private var hasDisableAdsRow: Bool
     
     override init() {
@@ -55,6 +57,8 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
             return .massUnitsControl
         case 4:
             return .countdownControl
+        case 5:
+            return .timerSounds
         default:
             return hasDisableAdsRow ? .disableAds : nil
         }
