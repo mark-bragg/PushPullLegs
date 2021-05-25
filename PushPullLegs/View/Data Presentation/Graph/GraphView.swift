@@ -29,6 +29,7 @@ class GraphView: UIControl, ObservableObject {
     @Published private(set) var index: Int?
     private var firstLoad = true
     private weak var lineLayer: CAShapeLayer!
+    private weak var axesLayer: CALayer?
     private var noDataView: NoDataGraphView!
     private let singlePointCircleDiameter: CGFloat = 5
     var smallDisplay = false
@@ -77,14 +78,14 @@ class GraphView: UIControl, ObservableObject {
     override func draw(_ rect: CGRect) {
         if firstLoad {
             firstLoad = false
-            drawAxes()
             circle.backgroundColor = UIColor.white.cgColor
-            circle.borderColor = PPLColor.grey!.cgColor
+            circle.borderColor = PPLColor.pplGray!.cgColor
             circle.borderWidth = 2.5
             layer.addSublayer(circle)
         } else {
             eraseLine()
         }
+        drawAxes()
         drawLine()
     }
     
@@ -136,22 +137,8 @@ class GraphView: UIControl, ObservableObject {
         CATransaction.commit()
     }
     
-    fileprivate func drawAxes() {
-        let axesLayer = CAShapeLayer()
-        axesLayer.frame = layer.bounds
-        let axesPath = UIBezierPath()
-        layer.addSublayer(axesLayer)
-        axesPath.move(to: CGPoint(x: frame.width * 0.025, y: frame.height * 0.025))
-        axesPath.addLine(to: origin())
-        axesPath.addLine(to: CGPoint(x: frame.width * 0.975, y: frame.height * 0.975))
-        axesLayer.path = axesPath.cgPath
-        axesLayer.strokeColor = lineStrokeColor()
-        axesLayer.lineWidth = lineWidth
-        axesLayer.fillColor = UIColor.clear.cgColor
-    }
-    
     private func lineStrokeColor() -> CGColor {
-        PPLColor.textGreen!.cgColor
+        PPLColor.pplTextBlue!.cgColor
     }
     
     func eraseLine() {
@@ -229,7 +216,7 @@ class GraphView: UIControl, ObservableObject {
     
     func showNoDataView() {
         eraseLine()
-        drawAxes()
+        eraseAxes()
         if noDataView == nil {
             noDataView = NoDataGraphView()
             noDataView.whiteBackground = smallDisplay
@@ -239,6 +226,28 @@ class GraphView: UIControl, ObservableObject {
         }
         noDataView.frame = bounds
         addSubview(noDataView)
+    }
+    
+    fileprivate func drawAxes() {
+        eraseAxes()
+        let axesLayer = CAShapeLayer()
+        axesLayer.frame = layer.bounds
+        let axesPath = UIBezierPath()
+        layer.addSublayer(axesLayer)
+        axesPath.move(to: CGPoint(x: frame.width * 0.025, y: frame.height * 0.025))
+        axesPath.addLine(to: origin())
+        axesPath.addLine(to: CGPoint(x: frame.width * 0.975, y: frame.height * 0.975))
+        axesLayer.path = axesPath.cgPath
+        axesLayer.strokeColor = lineStrokeColor()
+        axesLayer.lineWidth = lineWidth
+        axesLayer.fillColor = UIColor.clear.cgColor
+        self.axesLayer = axesLayer
+    }
+    
+    fileprivate func eraseAxes() {
+        if let axes = axesLayer {
+            axes.removeFromSuperlayer()
+        }
     }
     
     func removeNoDataView() {

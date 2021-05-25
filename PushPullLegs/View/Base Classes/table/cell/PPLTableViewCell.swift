@@ -58,7 +58,7 @@ class PPLTableViewCell: UITableViewCell {
     func addDisclosureIndicator() {
         removeIndicator()
         let indicator = UIImage.init(systemName: "chevron.right")!
-        let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.lightGrey!, renderingMode: .alwaysOriginal))
+        let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.pplLightGray!, renderingMode: .alwaysOriginal))
         rootView.addSubview(indicatorView)
         indicatorView.translatesAutoresizingMaskIntoConstraints = false
         indicatorView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -20).isActive = true

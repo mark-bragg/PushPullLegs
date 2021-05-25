@@ -34,7 +34,7 @@ class ArrowView: UIView {
     }
     
     fileprivate func styleArrowComponent(_ component: CAShapeLayer) {
-        component.fillColor = PPLColor.offWhite!.cgColor
+        component.fillColor = PPLColor.pplOffWhite!.cgColor
         component.shadowPath = component.path
         component.shadowOffset = CGSize(width: -5, height: 5)
         component.shadowRadius = 5

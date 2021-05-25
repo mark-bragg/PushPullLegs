@@ -95,7 +95,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         segment.selectedSegmentIndex = PPLDefaults.instance.isKilograms() ? 1 : 0
         segment.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
         segment.selectedSegmentTintColor = PPLColor.headerBackgroundBlue
-        segment.backgroundColor = .grey
+        segment.backgroundColor = .pplGray
         cell.rootView.addSubview(segment)
         segment.translatesAutoresizingMaskIntoConstraints = false
         segment.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
@@ -261,7 +261,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         switchView.layer.masksToBounds = true
         switchView.layer.borderWidth = 2.0
         switchView.layer.cornerRadius = 16
-        switchView.layer.borderColor = PPLColor.lightGrey?.cgColor
+        switchView.layer.borderColor = PPLColor.pplLightGray?.cgColor
         cell.rootView.addSubview(switchView)
         switchView.translatesAutoresizingMaskIntoConstraints = false
         switchView.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -20).isActive = true

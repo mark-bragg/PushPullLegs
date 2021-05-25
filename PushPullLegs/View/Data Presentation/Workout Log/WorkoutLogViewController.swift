@@ -137,7 +137,7 @@ class PPLNameLabel: UILabel {
     }
     
     private func commonInit() {
-        textColor = .textGreen
+        textColor = .pplTextBlue
         font = UIFont.systemFont(ofSize: 23, weight: .medium)
     }
 }

@@ -53,9 +53,12 @@ class GraphViewController: UIViewController {
         if isInteractive {
             bind()
         }
-        if navigationController != nil {
-            addBackNavigationGesture()
-        }
+    }
+    
+    func reload() {
+        viewModel.reload()
+        graphView.removeFromSuperview()
+        addGraphView()
     }
     
     var needConstraints = true
@@ -139,14 +142,13 @@ class GraphViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         view.addSubview(label)
         label.numberOfLines = 1
-        label.textColor = isInteractive ? .white : .textGreen
+        label.textColor = isInteractive ? .white : .pplTextBlue
         return label
     }
     
     func addGraphView() {
         let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: containerView.frame.width - padding * 2, height: heightForGraph()))
         graph.smallDisplay = !isInteractive
-        containerView.addSubview(graph)
         containerView.addSubview(graph)
         if isInteractive {
             graph.setInteractivity()
@@ -189,15 +191,6 @@ class GraphViewController: UIViewController {
             volumeLabel.text = nil
         }
         
-    }
-    
-    fileprivate func addBackNavigationGesture() {
-        if let grs = view.gestureRecognizers, grs.contains(where: { $0.isKind(of: UISwipeGestureRecognizer.self ) }) { return }
-        if let vcs = navigationController?.viewControllers, vcs.count > 1 {
-            let swipey = UISwipeGestureRecognizer(target: self, action: #selector(pop))
-            swipey.direction = .right
-            graphView.addGestureRecognizer(swipey)
-        }
     }
     
     @objc private func pop() {

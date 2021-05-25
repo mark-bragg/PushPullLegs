@@ -61,7 +61,7 @@ class ExerciseDataCellViewController: UIViewController {
             tint = .red
         default:
             imageName = "minus"
-            tint = PPLColor.offWhite!
+            tint = PPLColor.pplOffWhite!
         }
         imageView.image = UIImage.init(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = tint

@@ -61,7 +61,7 @@ extension UIViewController {
         let countdownLabel = UILabel()
         countdownLabel.textAlignment = .center
         countdownLabel.font = UIFont.systemFont(ofSize: 36)
-        countdownLabel.textColor = .darkGrey
+        countdownLabel.textColor = .pplDarkGray
         if let seconds = seconds {
             countdownLabel.text = "\(seconds)"
             countdownLabel.sizeToFit()

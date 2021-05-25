@@ -109,7 +109,7 @@ extension GraphTableViewController: UITableViewDataSource {
         cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
         let view = viewForRow(indexPath.row)
         cell.rootView.addSubview(view)
-        cell.contentView.clipsToBounds = false
+        constrain(view, toInsideOf: cell.rootView)
         vcForRow(indexPath.row).viewModel.reload()
         if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
             cell.addDisclosureIndicator()
@@ -126,8 +126,8 @@ extension GraphTableViewController: UITableViewDataSource {
         lbl.numberOfLines = 3
         lbl.text = "This graph has no data.\nStart working out,\nand build your graph!"
         lbl.textAlignment = .center
-        lbl.textColor = PPLColor.darkGreyText
-        vc.view.backgroundColor = PPLColor.offWhite
+        lbl.textColor = PPLColor.pplDarkGrayText
+        vc.view.backgroundColor = PPLColor.pplOffWhite
         lbl.sizeToFit()
         vc.view.addSubview(lbl)
         vc.modalPresentationStyle = .popover
@@ -136,6 +136,10 @@ extension GraphTableViewController: UITableViewDataSource {
         lbl.frame = CGRect(x: lbl.frame.origin.x + 5, y: lbl.frame.origin.y + 5, width: lbl.frame.width, height: lbl.frame.height)
         helpTag = control.tag
         present(vc, animated: true, completion: nil)
+    }
+    
+    func viewForRow(_ row: Int) -> UIView {
+        vcForRow(row).view
     }
     
     func vcForRow(_ row: Int) -> GraphViewController {
@@ -147,10 +151,6 @@ extension GraphTableViewController: UITableViewDataSource {
         default:
             return legsVc
         }
-    }
-    
-    func viewForRow(_ row: Int) -> UIView {
-        vcForRow(row).view
     }
     
     @objc private func showGraph(_ row: Int) {
@@ -232,7 +232,7 @@ extension GraphTableViewController: UITableViewDelegate {
 }
 
 extension UIViewController {
-    func constrain(_ subview: UIView, toInsideOf superview: UIView, insets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 20
+    func constrain(_ subview: UIView, toInsideOf superview: UIView, insets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8
         , right: 8)) {
         subview.translatesAutoresizingMaskIntoConstraints = false
         subview.topAnchor.constraint(equalTo: superview.topAnchor, constant: insets.top).isActive = true
