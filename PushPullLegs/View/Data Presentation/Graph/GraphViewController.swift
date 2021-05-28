@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import GoogleMobileAds
 
-class GraphViewController: UIViewController {
+class GraphViewController: UIViewController, UIPopoverPresentationControllerDelegate, ExerciseDropdownViewControllerDelegate {
 
     var viewModel: WorkoutGraphViewModel!
     weak var containerView: UIView!
@@ -52,7 +52,42 @@ class GraphViewController: UIViewController {
         addViews()
         if isInteractive {
             bind()
+            setupRightBarButtonItem()
         }
+    }
+    
+    func setupRightBarButtonItem() {
+        let ellipsis = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: ellipsis, style: .plain, target: self, action: #selector(showExerciseNamesDropdown(_:)))
+    }
+    
+    @objc func showExerciseNamesDropdown(_ sender: Any) {
+        let vc = ExerciseDropdownViewController()
+        vc.names = viewModel.getExerciseNames()
+        vc.delegate = self
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
+        vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.cellBackgroundBlue
+        vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.cellBackgroundBlue
+        present(vc, animated: true, completion: nil)
+    }
+    
+    func didSelectName(_ name: String) {
+        dismiss(animated: true) {
+            // TODO: navigate to exercise graph
+        }
+    }
+    
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        popoverPresentationController.permittedArrowDirections = .up
+        guard let item = navigationItem.rightBarButtonItem else {
+            return
+        }
+        popoverPresentationController.barButtonItem = item
+    }
+
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
     
     func reload() {

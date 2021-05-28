@@ -9,42 +9,19 @@
 import Foundation
 import UIKit
 
-class WorkoutGraphViewModel: NSObject, ReloadProtocol {
+class WorkoutGraphViewModel: GraphViewModel {
     
-    private var yValues = [CGFloat]()
-    private var xValues = [String]()
+    private var workoutDataManager: WorkoutDataManager { dataManager as! WorkoutDataManager }
     private var type: ExerciseType
-    private var dataManager: WorkoutDataManager!
     
-    init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
+    init(type: ExerciseType) {
         self.type = type
-        super.init()
-        self.dataManager = dataManager
-        reload()
+        super.init(dataManager: WorkoutDataManager())
     }
     
-    func title() -> String {
-        type.rawValue
-    }
-    
-    func pointCount() -> Int {
-        xValues.count
-    }
-    
-    func dates() -> [String]? {
-        guard pointCount() > 0 else { return nil }
-        return xValues
-    }
-    
-    func volumes() -> [CGFloat]? {
-        guard pointCount() > 0 else { return nil }
-        return yValues
-    }
-    
-    func reload() {
-        yValues.removeAll()
-        xValues.removeAll()
-        let workouts = dataManager.workouts(ascending: true, types: [type])
+    override func reload() {
+        super.reload()
+        let workouts = workoutDataManager.workouts(ascending: true, types: [type])
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/YY"
         for workout in workouts {
@@ -53,4 +30,16 @@ class WorkoutGraphViewModel: NSObject, ReloadProtocol {
         }
     }
     
+    override func title() -> String {
+        type.rawValue
+    }
+    
+    func getExerciseNames() -> [String] {
+        guard let temps = TemplateManagement().exerciseTemplates(withType: type) else { return [] }
+        return temps.map {
+            $0.name!
+        }.filter {
+            ExerciseDataManager().exists(name: $0)
+        }
+    }
 }

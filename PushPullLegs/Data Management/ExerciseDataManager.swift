@@ -57,4 +57,13 @@ class ExerciseDataManager: DataManager {
             }
         }
     }
+    
+    func exercises(name: String) -> [Exercise] {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName.rawValue)
+        request.predicate = NSPredicate(format: "name = %@", argumentArray: [name])
+        guard let exercises = try? backgroundContext.fetch(request) as? [Exercise] else { return [] }
+        return exercises.sorted { (e1, e2) -> Bool in
+            e1.workout!.dateCreated! < e2.workout!.dateCreated!
+        }
+    }
 }
