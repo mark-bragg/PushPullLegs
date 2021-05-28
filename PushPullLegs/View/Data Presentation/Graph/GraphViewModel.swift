@@ -42,4 +42,10 @@ class GraphViewModel: NSObject, ReloadProtocol {
         yValues.removeAll()
         xValues.removeAll()
     }
+    
+    func formatter() -> DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/YY"
+        return formatter
+    }
 }

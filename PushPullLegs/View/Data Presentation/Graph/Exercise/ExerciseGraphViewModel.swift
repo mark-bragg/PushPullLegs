@@ -20,6 +20,16 @@ class ExerciseGraphViewModel: GraphViewModel {
     }
     
     override func reload() {
+        super.reload()
         let exercises = exerciseDataManager.exercises(name: name)
+        let formatter = formatter()
+        for exercise in exercises {
+            xValues.append(formatter.string(from: exercise.workout!.dateCreated!))
+            yValues.append(CGFloat(exercise.volume()))
+        }
+    }
+    
+    override func title() -> String {
+        name
     }
 }

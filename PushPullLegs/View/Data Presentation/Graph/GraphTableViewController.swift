@@ -12,9 +12,9 @@ import GoogleMobileAds
 class GraphTableViewController: UIViewController {
     
     weak var tableView: PPLTableView!
-    var pushVc: GraphViewController!
-    var pullVc: GraphViewController!
-    var legsVc: GraphViewController!
+    var pushVc: WorkoutGraphViewController!
+    var pullVc: WorkoutGraphViewController!
+    var legsVc: WorkoutGraphViewController!
     private var helpTag = 0
     private var interstitial: NSObject?
     private var selectedRow: Int!
@@ -68,9 +68,9 @@ class GraphTableViewController: UIViewController {
             return
         }
         let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: tableView.rowHeight - 16)
-        pushVc = GraphViewController(type: .push, frame: frame)
-        pullVc = GraphViewController(type: .pull, frame: frame)
-        legsVc = GraphViewController(type: .legs, frame: frame)
+        pushVc = WorkoutGraphViewController(type: .push, frame: frame)
+        pullVc = WorkoutGraphViewController(type: .pull, frame: frame)
+        legsVc = WorkoutGraphViewController(type: .legs, frame: frame)
         pushVc.isInteractive = false
         pullVc.isInteractive = false
         legsVc.isInteractive = false
@@ -110,8 +110,8 @@ extension GraphTableViewController: UITableViewDataSource {
         let view = viewForRow(indexPath.row)
         cell.rootView.addSubview(view)
         constrain(view, toInsideOf: cell.rootView)
-        vcForRow(indexPath.row).viewModel.reload()
-        if vcForRow(indexPath.row).viewModel.pointCount() > 0 {
+        vcForRow(indexPath.row).workoutGraphViewModel.reload()
+        if vcForRow(indexPath.row).workoutGraphViewModel.pointCount() > 0 {
             cell.addDisclosureIndicator()
         } else {
             cell.addHelpIndicator(target: self, action: #selector(help(_:)))
@@ -142,7 +142,7 @@ extension GraphTableViewController: UITableViewDataSource {
         vcForRow(row).view
     }
     
-    func vcForRow(_ row: Int) -> GraphViewController {
+    func vcForRow(_ row: Int) -> WorkoutGraphViewController {
         switch row {
         case 0:
             return pushVc
@@ -155,7 +155,7 @@ extension GraphTableViewController: UITableViewDataSource {
     
     @objc private func showGraph(_ row: Int) {
         guard let nav = navigationController else { return }
-        let vc = GraphViewController(type: typeForRow(row))
+        let vc = WorkoutGraphViewController(type: typeForRow(row))
         vc.isInteractive = true
         vc.hidesBottomBarWhenPushed = true
         nav.show(vc, sender: self)
@@ -218,7 +218,7 @@ extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
 extension GraphTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
-        guard vcForRow(selectedRow).viewModel.pointCount() > 0 else { return }
+        guard vcForRow(selectedRow).workoutGraphViewModel.pointCount() > 0 else { return }
         if !PPLDefaults.instance.wasGraphInterstitialShownToday(), let interstitial = createAndLoadInterstitial(adUnitID: InterstitialAdUnitID.graphTableVC) {
             PPLDefaults.instance.graphInterstitialWasJustShown()
             presentAdLoadingView()

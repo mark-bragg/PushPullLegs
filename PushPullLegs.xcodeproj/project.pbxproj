@@ -31,11 +31,13 @@
 		492B3B3126608FE500929BB3 /* ExerciseGraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B3026608FE500929BB3 /* ExerciseGraphViewModel.swift */; };
 		492B3B362660928000929BB3 /* GraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B352660928000929BB3 /* GraphViewModel.swift */; };
 		492B3B3B26609F2700929BB3 /* ExerciseDropdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B3A26609F2700929BB3 /* ExerciseDropdownViewController.swift */; };
+		492B3B432660AF8F00929BB3 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B422660AF8F00929BB3 /* GraphViewController.swift */; };
+		492B3B4A2660B17600929BB3 /* ExerciseGraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B492660B17600929BB3 /* ExerciseGraphViewController.swift */; };
 		49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */; };
 		49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8624C28C64005FF7A8 /* PPLTableView.swift */; };
 		49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8824C29886005FF7A8 /* PPLAddButton.swift */; };
 		49359B8D24D60001005FF7A8 /* PPLButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8C24D60001005FF7A8 /* PPLButton.swift */; };
-		49359B9324D91E4E005FF7A8 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9224D91E4E005FF7A8 /* GraphViewController.swift */; };
+		49359B9324D91E4E005FF7A8 /* WorkoutGraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9224D91E4E005FF7A8 /* WorkoutGraphViewController.swift */; };
 		49359B9724DCE3E7005FF7A8 /* PPLTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */; };
 		49359B9D24DD01AC005FF7A8 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49359B9C24DD01AC005FF7A8 /* Combine.framework */; };
 		49359BA024DD052F005FF7A8 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9F24DD052F005FF7A8 /* GraphView.swift */; };
@@ -170,11 +172,13 @@
 		492B3B3026608FE500929BB3 /* ExerciseGraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGraphViewModel.swift; sourceTree = "<group>"; };
 		492B3B352660928000929BB3 /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
 		492B3B3A26609F2700929BB3 /* ExerciseDropdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDropdownViewController.swift; sourceTree = "<group>"; };
+		492B3B422660AF8F00929BB3 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
+		492B3B492660B17600929BB3 /* ExerciseGraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGraphViewController.swift; sourceTree = "<group>"; };
 		49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushPullLegs.xcdatamodel; sourceTree = "<group>"; };
 		49359B8624C28C64005FF7A8 /* PPLTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableView.swift; sourceTree = "<group>"; };
 		49359B8824C29886005FF7A8 /* PPLAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAddButton.swift; sourceTree = "<group>"; };
 		49359B8C24D60001005FF7A8 /* PPLButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLButton.swift; sourceTree = "<group>"; };
-		49359B9224D91E4E005FF7A8 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
+		49359B9224D91E4E005FF7A8 /* WorkoutGraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutGraphViewController.swift; sourceTree = "<group>"; };
 		49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewModel.swift; sourceTree = "<group>"; };
 		49359B9C24DD01AC005FF7A8 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
 		49359B9F24DD052F005FF7A8 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
@@ -420,16 +424,34 @@
 			path = "Store Kit";
 			sourceTree = "<group>";
 		};
+		492B3B472660B0B100929BB3 /* Workout */ = {
+			isa = PBXGroup;
+			children = (
+				49680BDB24DD266500DFF1E0 /* WorkoutGraphViewModel.swift */,
+				49359B9224D91E4E005FF7A8 /* WorkoutGraphViewController.swift */,
+			);
+			path = Workout;
+			sourceTree = "<group>";
+		};
+		492B3B482660B0C100929BB3 /* Exercise */ = {
+			isa = PBXGroup;
+			children = (
+				492B3B3A26609F2700929BB3 /* ExerciseDropdownViewController.swift */,
+				492B3B3026608FE500929BB3 /* ExerciseGraphViewModel.swift */,
+				492B3B492660B17600929BB3 /* ExerciseGraphViewController.swift */,
+			);
+			path = Exercise;
+			sourceTree = "<group>";
+		};
 		49359B9E24DD0519005FF7A8 /* Graph */ = {
 			isa = PBXGroup;
 			children = (
-				49359B9224D91E4E005FF7A8 /* GraphViewController.swift */,
+				492B3B482660B0C100929BB3 /* Exercise */,
+				492B3B472660B0B100929BB3 /* Workout */,
 				49359B9F24DD052F005FF7A8 /* GraphView.swift */,
-				49680BDB24DD266500DFF1E0 /* WorkoutGraphViewModel.swift */,
-				492B3B3026608FE500929BB3 /* ExerciseGraphViewModel.swift */,
 				49680BDD24DE430B00DFF1E0 /* GraphTableViewController.swift */,
 				492B3B352660928000929BB3 /* GraphViewModel.swift */,
-				492B3B3A26609F2700929BB3 /* ExerciseDropdownViewController.swift */,
+				492B3B422660AF8F00929BB3 /* GraphViewController.swift */,
 			);
 			path = Graph;
 			sourceTree = "<group>";
@@ -1102,7 +1124,7 @@
 				49C1EA572608181F00330CBF /* AppConfigurationViewModel.swift in Sources */,
 				4973C124244BCC26009460F2 /* WorkoutEditViewModel.swift in Sources */,
 				494865A125ACB021004A5FCC /* Shadows.swift in Sources */,
-				49359B9324D91E4E005FF7A8 /* GraphViewController.swift in Sources */,
+				49359B9324D91E4E005FF7A8 /* WorkoutGraphViewController.swift in Sources */,
 				491C8CFF254A6841003A7526 /* AboutViewModel.swift in Sources */,
 				49C1EA5D260AF84F00330CBF /* WorkoutLogViewModel.swift in Sources */,
 				4929DB112454DB0C009DCC7F /* RepsCollectionViewController.swift in Sources */,
@@ -1120,10 +1142,12 @@
 				49680BDC24DD266500DFF1E0 /* WorkoutGraphViewModel.swift in Sources */,
 				49453378244FC8FA00FA1665 /* WorkoutLogViewController.swift in Sources */,
 				491DD62B248C565C0001F9F8 /* PPLStopWatch.swift in Sources */,
+				492B3B432660AF8F00929BB3 /* GraphViewController.swift in Sources */,
 				4989BA5A24BB905F001C17B3 /* PPLTableViewCell.swift in Sources */,
 				49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */,
 				490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */,
 				4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */,
+				492B3B4A2660B17600929BB3 /* ExerciseGraphViewController.swift in Sources */,
 				49E675FA244CDA54001F5974 /* ExerciseTemplateSelectionViewController.swift in Sources */,
 				493C2C712455E5D2005308AF /* WeightCollectionViewController.swift in Sources */,
 				490D88EA2452B5FD005FFEA3 /* ExerciseTimerViewController.swift in Sources */,

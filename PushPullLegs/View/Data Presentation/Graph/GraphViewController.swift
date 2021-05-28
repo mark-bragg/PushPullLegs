@@ -2,41 +2,25 @@
 //  GraphViewController.swift
 //  PushPullLegs
 //
-//  Created by Mark Bragg on 8/3/20.
-//  Copyright © 2020 Mark Bragg. All rights reserved.
+//  Created by Mark Bragg on 5/27/21.
+//  Copyright © 2021 Mark Bragg. All rights reserved.
 //
 
 import UIKit
 import Combine
-import GoogleMobileAds
 
-class GraphViewController: UIViewController, UIPopoverPresentationControllerDelegate, ExerciseDropdownViewControllerDelegate {
-
-    var viewModel: WorkoutGraphViewModel!
+class GraphViewController: UIViewController {
+    var viewModel: GraphViewModel!
     weak var containerView: UIView!
     weak var graphView: GraphView!
     weak var dateLabel: UILabel!
     weak var volumeLabel: UILabel!
-    var isInteractive = true
-    private var cancellables: Set<AnyCancellable> = []
-    private var padding: CGFloat {
-        get {
-            return view.frame.width * 0.05
-        }
-    }
-    private var frame: CGRect?
     weak var labelStack: UIStackView!
-    private var firstLoad = true
-    
-    init(type: ExerciseType, frame: CGRect? = nil) {
-        super.init(nibName: nil, bundle: nil)
-        viewModel = WorkoutGraphViewModel(type: type)
-        self.frame = frame
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
+    var firstLoad = true
+    private var cancellables: Set<AnyCancellable> = []
+    var padding: CGFloat { view.frame.width * 0.05 }
+    var needConstraints = true
+    var isInteractive = true
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -46,48 +30,10 @@ class GraphViewController: UIViewController, UIPopoverPresentationControllerDele
         lbl.font = titleLabelFont()
         navigationItem.titleView = lbl
         firstLoad = false
-        if let frame = frame {
-            view.frame = frame
-        }
         addViews()
         if isInteractive {
             bind()
-            setupRightBarButtonItem()
         }
-    }
-    
-    func setupRightBarButtonItem() {
-        let ellipsis = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: ellipsis, style: .plain, target: self, action: #selector(showExerciseNamesDropdown(_:)))
-    }
-    
-    @objc func showExerciseNamesDropdown(_ sender: Any) {
-        let vc = ExerciseDropdownViewController()
-        vc.names = viewModel.getExerciseNames()
-        vc.delegate = self
-        vc.modalPresentationStyle = .popover
-        vc.popoverPresentationController?.delegate = self
-        vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.cellBackgroundBlue
-        vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.cellBackgroundBlue
-        present(vc, animated: true, completion: nil)
-    }
-    
-    func didSelectName(_ name: String) {
-        dismiss(animated: true) {
-            // TODO: navigate to exercise graph
-        }
-    }
-    
-    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
-        popoverPresentationController.permittedArrowDirections = .up
-        guard let item = navigationItem.rightBarButtonItem else {
-            return
-        }
-        popoverPresentationController.barButtonItem = item
-    }
-
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
     }
     
     func reload() {
@@ -96,10 +42,30 @@ class GraphViewController: UIViewController, UIPopoverPresentationControllerDele
         addGraphView()
     }
     
-    var needConstraints = true
-    override func viewDidLayoutSubviews() {
-        viewModel.reload()
-        graphView.yValues = viewModel.volumes()
+    func yForGraph() -> CGFloat {
+        return labelStack.frame.origin.y + labelStack.frame.height
+    }
+    
+    func heightForGraph() -> CGFloat {
+        return containerView.frame.height - yForGraph() - padding
+    }
+    
+    func bind() {
+        graphView.$index.sink { [weak self] index in
+            guard let self = self else { return }
+            self.updateLabels(index)
+        }.store(in: &cancellables)
+    }
+    
+    func updateLabels(_ index: Int?) {
+        if let index = index, let date = viewModel.dates()?[index], let volume = viewModel.volumes()?[index] {
+            dateLabel.text = date
+            volumeLabel.text = "volume: \(volume)".trimDecimalDigitsToTwo()
+        } else {
+            dateLabel.text = nil
+            volumeLabel.text = nil
+        }
+        
     }
     
     func addViews() {
@@ -144,7 +110,33 @@ class GraphViewController: UIViewController, UIPopoverPresentationControllerDele
         }
     }
     
-    private func addLabels() {
+    func addGraphView() {
+        let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: containerView.frame.width - padding * 2, height: heightForGraph()))
+        graph.smallDisplay = !isInteractive
+        containerView.addSubview(graph)
+        if isInteractive {
+            graph.setInteractivity()
+            graph.backgroundColor = .cellBackgroundBlue
+            containerView.backgroundColor = .backgroundBlue
+        } else {
+            containerView.backgroundColor = .clear
+            graph.translatesAutoresizingMaskIntoConstraints = false
+            graph.topAnchor.constraint(equalTo: labelStack.bottomAnchor).isActive = true
+            graph.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -16).isActive = true
+            graph.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20).isActive = true
+            graph.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8).isActive = true
+            graph.backgroundColor = .clear
+        }
+        graphView = graph
+        graph.yValues = viewModel.volumes()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        viewModel.reload()
+        graphView.yValues = viewModel.volumes()
+    }
+    
+    func addLabels() {
         var labels = [UILabel]()
         if !isInteractive {
             labels.append(titleLabel())
@@ -180,56 +172,4 @@ class GraphViewController: UIViewController, UIPopoverPresentationControllerDele
         label.textColor = isInteractive ? .white : .pplTextBlue
         return label
     }
-    
-    func addGraphView() {
-        let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: containerView.frame.width - padding * 2, height: heightForGraph()))
-        graph.smallDisplay = !isInteractive
-        containerView.addSubview(graph)
-        if isInteractive {
-            graph.setInteractivity()
-            graph.backgroundColor = .cellBackgroundBlue
-            containerView.backgroundColor = .backgroundBlue
-        } else {
-            containerView.backgroundColor = .clear
-            graph.translatesAutoresizingMaskIntoConstraints = false
-            graph.topAnchor.constraint(equalTo: labelStack.bottomAnchor).isActive = true
-            graph.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -16).isActive = true
-            graph.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20).isActive = true
-            graph.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8).isActive = true
-            graph.backgroundColor = .clear
-        }
-        graphView = graph
-        graph.yValues = viewModel.volumes()
-    }
-    
-    func yForGraph() -> CGFloat {
-        return labelStack.frame.origin.y + labelStack.frame.height
-    }
-    
-    func heightForGraph() -> CGFloat {
-        return containerView.frame.height - yForGraph() - padding
-    }
-    
-    func bind() {
-        graphView.$index.sink { [weak self] index in
-            guard let self = self else { return }
-            self.updateLabels(index)
-        }.store(in: &cancellables)
-    }
-    
-    func updateLabels(_ index: Int?) {
-        if let index = index, let date = viewModel.dates()?[index], let volume = viewModel.volumes()?[index] {
-            dateLabel.text = date
-            volumeLabel.text = "volume: \(volume)".trimDecimalDigitsToTwo()
-        } else {
-            dateLabel.text = nil
-            volumeLabel.text = nil
-        }
-        
-    }
-    
-    @objc private func pop() {
-        navigationController?.popViewController(animated: true)
-    }
-
 }
