@@ -45,8 +45,8 @@ class WorkoutGraphViewController: GraphViewController, UIPopoverPresentationCont
         vc.delegate = self
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.delegate = self
-        vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.cellBackgroundBlue
-        vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.cellBackgroundBlue
+        vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.clear
+        vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.clear
         present(vc, animated: true, completion: nil)
     }
     

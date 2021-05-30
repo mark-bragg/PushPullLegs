@@ -17,26 +17,28 @@ class ExerciseDropdownViewController: UIViewController {
     var names: [String]!
     var delegate: ExerciseDropdownViewControllerDelegate?
     private let rowHeight: CGFloat = 40
+    private var tableHeight: CGFloat { rowsByRowHeight > maxTableHeight ? maxTableHeight : rowsByRowHeight }
     private let maxTableHeight: CGFloat = 300
+    private var rowsByRowHeight: CGFloat { rowHeight * CGFloat(names.count) }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = PPLColor.cellBackgroundBlue
         let tblv = UITableView()
-        tblv.backgroundColor = PPLColor.cellBackgroundBlue
+        tblv.backgroundColor = PPLColor.clear
         tblv.delegate = self
         tblv.dataSource = self
         constrainTableView(tblv)
         tblv.rowHeight = rowHeight
-        let tableHeight = rowHeight * CGFloat(names.count) > 300 ? 300 : rowHeight * CGFloat(names.count)
-        preferredContentSize = CGSize(width: 200, height: tableHeight)
+        tblv.isScrollEnabled = tableHeight == maxTableHeight
+        preferredContentSize = CGSize(width: 200, height: tableHeight + 24)
     }
     
     func constrainTableView(_ tblv: UITableView) {
         view.addSubview(tblv)
         tblv.translatesAutoresizingMaskIntoConstraints = false
-        tblv.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
-        tblv.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 10).isActive = true
+        tblv.topAnchor.constraint(equalTo: view.topAnchor, constant: 24).isActive = true
+        tblv.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12).isActive = true
         tblv.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tblv.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
@@ -59,6 +61,7 @@ extension ExerciseDropdownViewController: UITableViewDataSource {
         cell.textLabel?.text = names[indexPath.item]
         cell.textLabel?.textColor = PPLColor.pplTextBlue
         cell.backgroundColor = .clear
+        cell.selectionStyle = .none
         return cell
     }
 }

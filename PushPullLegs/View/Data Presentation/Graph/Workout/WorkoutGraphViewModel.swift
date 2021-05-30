@@ -22,9 +22,9 @@ class WorkoutGraphViewModel: GraphViewModel {
     override func reload() {
         super.reload()
         let workouts = workoutDataManager.workouts(ascending: true, types: [type])
-        let formatter = formatter()
+        let format = formatter()
         for workout in workouts {
-            xValues.append(formatter.string(from: workout.dateCreated!))
+            xValues.append(format.string(from: workout.dateCreated!))
             yValues.append(CGFloat(workout.volume()))
         }
     }
