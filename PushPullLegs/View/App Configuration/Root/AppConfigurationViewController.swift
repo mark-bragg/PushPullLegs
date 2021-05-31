@@ -191,7 +191,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         } else if rowId == .timerSounds {
             return
         } else if rowId == .disableAds {
-            showSpinner()
+            showSpinner(indexPath)
             StoreManager.shared.restoreDisabledAds({ [weak self] in
                 guard let self = self else { return }
                 let alert = UIAlertController(title: "In-app Purchase Required", message: nil, preferredStyle: .alert)
@@ -209,8 +209,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         }
     }
     
-    func showSpinner() {
-        guard let cell = tableView.cellForRow(at: IndexPath(row: 5, section: 0)) as? PPLTableViewCell else { return }
+    func showSpinner(_ indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? PPLTableViewCell else { return }
         let spinner = UIActivityIndicatorView(frame: cell.rootView.frame)
         spinner.layer.cornerRadius = cell.rootView.layer.cornerRadius
         spinner.style = .large
