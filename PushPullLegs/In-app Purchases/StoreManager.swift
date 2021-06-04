@@ -25,11 +25,7 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
     static let shared = StoreManager()
     private var request: SKProductsRequest!
     private var availableTransactions: Set<IAPTransaction>!
-    #if DEBUG
-        private let certificate = "StoreKitTestCertificate"
-    #else
-        private let certificate = "AppleIncRootCertificate"
-    #endif
+    private let certificate = "AppleIncRootCertificate"
     private var adDisabler: (() -> Void)?
     private var failedPurchaseHandler: (() -> Void)?
     private var preparingToDisableAds = false

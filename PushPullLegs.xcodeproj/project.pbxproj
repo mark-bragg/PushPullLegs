@@ -167,7 +167,6 @@
 		491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLStopWatch.swift; sourceTree = "<group>"; };
 		4925AE1C25BFDE1100232B76 /* StoreObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreObserver.swift; sourceTree = "<group>"; };
 		4925AE3C25C5360500232B76 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
-		4925AE4125C53E6A00232B76 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsCollectionViewController.swift; sourceTree = "<group>"; };
 		492B3B3026608FE500929BB3 /* ExerciseGraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGraphViewModel.swift; sourceTree = "<group>"; };
 		492B3B352660928000929BB3 /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
@@ -224,7 +223,6 @@
 		49ABACAF25F45CE700517F6F /* start.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.m4a; sourceTree = "<group>"; };
 		49AF0CF8259AB59F003F8C60 /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		49AF0D20259D23D2003F8C60 /* BannerAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdController.swift; sourceTree = "<group>"; };
-		49C1EA4D2605CDF000330CBF /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		49C1EA512608179100330CBF /* IAPTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTransaction.swift; sourceTree = "<group>"; };
 		49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurationViewModel.swift; sourceTree = "<group>"; };
 		49C1EA5C260AF84F00330CBF /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
@@ -413,15 +411,6 @@
 				49C1EA512608179100330CBF /* IAPTransaction.swift */,
 			);
 			path = "In-app Purchases";
-			sourceTree = "<group>";
-		};
-		4925AE5625C5409500232B76 /* Store Kit */ = {
-			isa = PBXGroup;
-			children = (
-				4925AE4125C53E6A00232B76 /* Configuration.storekit */,
-				49C1EA4D2605CDF000330CBF /* StoreKitTestCertificate.cer */,
-			);
-			path = "Store Kit";
 			sourceTree = "<group>";
 		};
 		492B3B472660B0B100929BB3 /* Workout */ = {
@@ -727,7 +716,6 @@
 				49EF4B9123F838380071687D /* PushPullLegsTests */,
 				49EF4B9C23F838380071687D /* PushPullLegsUITests */,
 				49EF4B7623F8381F0071687D /* Products */,
-				4925AE5625C5409500232B76 /* Store Kit */,
 				8D8F617318F0F23D90079219 /* Pods */,
 				CDA679AB1CC11F56992E85E0 /* Frameworks */,
 			);
@@ -1388,7 +1376,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1409,7 +1397,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
