@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class WorkoutGraphViewController: GraphViewController, UIPopoverPresentationControllerDelegate, ExerciseDropdownViewControllerDelegate {
+class WorkoutGraphViewController: GraphViewController, UIPopoverPresentationControllerDelegate, PPLDropdownViewControllerDelegate, PPLDropdownViewControllerDataSource {
 
     var workoutGraphViewModel: WorkoutGraphViewModel { viewModel as! WorkoutGraphViewModel }
     private var frame: CGRect?
@@ -36,18 +36,22 @@ class WorkoutGraphViewController: GraphViewController, UIPopoverPresentationCont
     
     func setupRightBarButtonItem() {
         let ellipsis = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: ellipsis, style: .plain, target: self, action: #selector(showExerciseNamesDropdown(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: ellipsis, style: .plain, target: self, action: #selector(showDropdown(_:)))
     }
     
-    @objc func showExerciseNamesDropdown(_ sender: Any) {
-        let vc = ExerciseDropdownViewController()
-        vc.names = workoutGraphViewModel.getExerciseNames()
+    @objc func showDropdown(_ sender: Any) {
+        let vc = PPLDropDownViewController()
+        vc.dataSource = self
         vc.delegate = self
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.delegate = self
         vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.clear
         vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.clear
         present(vc, animated: true, completion: nil)
+    }
+    
+    func names() -> [String] {
+        workoutGraphViewModel.getExerciseNames()
     }
     
     func didSelectName(_ name: String) {

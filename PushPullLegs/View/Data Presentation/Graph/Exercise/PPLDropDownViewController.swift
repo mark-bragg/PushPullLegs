@@ -1,5 +1,5 @@
 //
-//  ExerciseDropdownViewController.swift
+//  PPLDropDownViewController.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 5/27/21.
@@ -8,14 +8,19 @@
 
 import UIKit
 
-protocol ExerciseDropdownViewControllerDelegate {
+protocol PPLDropdownViewControllerDelegate: NSObject {
     func didSelectName(_ name: String)
 }
 
-class ExerciseDropdownViewController: UIViewController {
+protocol PPLDropdownViewControllerDataSource: NSObject {
+    func names() -> [String]
+}
+
+class PPLDropDownViewController: UIViewController {
 
     var names: [String]!
-    var delegate: ExerciseDropdownViewControllerDelegate?
+    weak var delegate: PPLDropdownViewControllerDelegate?
+    weak var dataSource: PPLDropdownViewControllerDataSource!
     private let rowHeight: CGFloat = 40
     private var tableHeight: CGFloat { rowsByRowHeight > maxTableHeight ? maxTableHeight : rowsByRowHeight }
     private let maxTableHeight: CGFloat = 300
@@ -23,6 +28,7 @@ class ExerciseDropdownViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        names = dataSource.names()
         view.backgroundColor = PPLColor.cellBackgroundBlue
         let tblv = UITableView()
         tblv.backgroundColor = PPLColor.clear
@@ -45,13 +51,13 @@ class ExerciseDropdownViewController: UIViewController {
 
 }
 
-extension ExerciseDropdownViewController: UITableViewDelegate {
+extension PPLDropDownViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.didSelectName(names[indexPath.item])
     }
 }
 
-extension ExerciseDropdownViewController: UITableViewDataSource {
+extension PPLDropDownViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         names.count
     }

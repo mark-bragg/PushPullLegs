@@ -192,16 +192,19 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
             return
         } else if rowId == .disableAds {
             showSpinner(indexPath)
+            let alert = UIAlertController(title: "In-app Purchase Required", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
+                self.removeSpinner()
+            }))
+            alert.addAction(UIAlertAction(title: "Continue", style: .default, handler: { action in
+                StoreManager.shared.startDisableAdsTransaction()
+            }))
+            self.present(alert, animated: true, completion: nil)
+        } else if rowId == .restorePurchases {
+            showSpinner(indexPath)
             StoreManager.shared.restoreDisabledAds({ [weak self] in
                 guard let self = self else { return }
-                let alert = UIAlertController(title: "In-app Purchase Required", message: nil, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
-                    self.removeSpinner()
-                }))
-                alert.addAction(UIAlertAction(title: "Continue", style: .default, handler: { action in
-                    StoreManager.shared.startDisableAdsTransaction()
-                }))
-                self.present(alert, animated: true, completion: nil)
+                self.removeSpinner()
             }, failure: { [weak self] in
                 guard let self = self else { return }
                 self.removeSpinner()

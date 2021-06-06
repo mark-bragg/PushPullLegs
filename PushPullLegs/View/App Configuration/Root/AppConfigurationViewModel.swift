@@ -17,6 +17,7 @@ enum AppConfigurationRowID {
     case countdownControl
     case timerSounds
     case disableAds
+    case restorePurchases
 }
 
 class AppConfigurationViewModel: NSObject, PPLTableViewModel {
@@ -28,6 +29,7 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
         super.init()
         if hasDisableAdsRow {
             titles.append("Disable Ads")
+            titles.append("Restore Purchases")
         }
     }
     func rowCount(section: Int) -> Int {
@@ -59,8 +61,10 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
             return .countdownControl
         case 5:
             return .timerSounds
-        default:
+        case 6:
             return hasDisableAdsRow ? .disableAds : nil
+        default:
+            return hasDisableAdsRow ? .restorePurchases : nil
         }
     }
     

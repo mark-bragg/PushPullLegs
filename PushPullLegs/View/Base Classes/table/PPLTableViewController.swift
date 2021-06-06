@@ -100,31 +100,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         tableView.tableFooterView = footer
     }
     
-//    override func viewWillLayoutSubviews() {
-//        if shouldRemoveAdViews() {
-//            removeAdViews()
-//        } else if bannerShouldBeShowing() {
-//            topConstraint.constant = bannerHeight()
-//            addBannerView(bannerAdUnitID())
-//        }
-//    }
-//    
-//    func shouldRemoveAdViews() -> Bool {
-//        return !PPLDefaults.instance.isAdsEnabled() && topConstraint.constant != 0
-//    }
-//    
-//    func removeAdViews() {
-//        topConstraint.constant = 0
-//    }
-//    
-//    func bannerShouldBeShowing() -> Bool {
-//        var adsButNoTopConstraint = PPLDefaults.instance.isAdsEnabled() && topConstraint.constant == 0
-//        if let container = view.viewWithTag(bannerTag) {
-////            adsButNoTopConstraint = container.subviews.contains(where: { $0.isKind })
-//        }
-//        return adsButNoTopConstraint
-//    }
-    
     private func setTitle() {
         let lbl = titleLabel()
         navigationItem.titleView = lbl
@@ -251,7 +226,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         let ndv = NoDataView(frame: view.bounds)
         view.addSubview(ndv)
         ndv.isHidden = true
-        if let ndt = viewModel.noDataText?() {
+        if let vm = viewModel, let ndt = vm.noDataText?() {
             ndv.text = ndt
         }
         noDataView = ndv
