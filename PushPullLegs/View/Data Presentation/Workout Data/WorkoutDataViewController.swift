@@ -77,6 +77,10 @@ class WorkoutDataViewController: DatabaseTableViewController {
         }
     }
     
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.workoutDataVC
+    }
+    
 }
 
 extension WorkoutDataViewController: ExerciseTemplateSelectionDelegate {

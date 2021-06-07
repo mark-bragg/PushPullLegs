@@ -36,7 +36,11 @@ class GraphTableViewController: UIViewController {
     
     func setupViews() {
         view.backgroundColor = PPLColor.backgroundBlue
-        addBannerView(bannerAdUnitID())
+        if PPLDefaults.instance.isAdsEnabled() {
+            addBannerView(bannerAdUnitID())
+        } else {
+            removeBanner()
+        }
         prepareTableView()
         prepareGraphViewControllers()
         navigationItem.titleView = titleLabel()

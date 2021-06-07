@@ -72,6 +72,10 @@ class StartWorkoutViewController: PPLTableViewController {
         return viewModel as! StartWorkoutViewModel
     }
     
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.startWorkoutVC
+    }
+    
 }
 
 

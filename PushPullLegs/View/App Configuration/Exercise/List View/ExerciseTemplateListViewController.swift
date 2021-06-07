@@ -114,4 +114,8 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
         super.reload()
     }
     
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.exerciseTemplateListVC
+    }
+    
 }

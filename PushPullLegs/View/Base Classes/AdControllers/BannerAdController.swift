@@ -79,7 +79,7 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
     }
     
     func bannerAdUnitID() -> String {
-        AdUnitID.exampleBannerAdUnitID
+        ""
     }
     
     @objc func removeBanner() {

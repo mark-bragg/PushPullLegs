@@ -159,6 +159,10 @@ class WorkoutViewController: PPLTableViewController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return workoutEditViewModel.rowCount(section: section) > 0 ? super.tableView(tableView, heightForHeaderInSection: section) : 0
     }
+    
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.workoutVC
+    }
 }
 
 extension WorkoutViewController: WorkoutEditViewModelDelegate {

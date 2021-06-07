@@ -124,6 +124,10 @@ class WorkoutLogViewController: DatabaseTableViewController {
     override func insertAddButtonInstructions() {
         // no op
     }
+    
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.workoutLogVC
+    }
 }
 
 class PPLNameLabel: UILabel {

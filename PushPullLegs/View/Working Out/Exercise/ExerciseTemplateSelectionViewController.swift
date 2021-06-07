@@ -81,6 +81,10 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         exerciseSelectionViewModel.reload()
         tableView.reloadData()
     }
+    
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.exerciseTemplateSelectionVC
+    }
 }
 
 extension ExerciseTemplateSelectionViewController: UIAdaptivePresentationControllerDelegate {
