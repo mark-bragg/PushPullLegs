@@ -58,12 +58,24 @@ class ExerciseDataManager: DataManager {
         }
     }
     
-    func exercises(name: String) -> [Exercise] {
+    func exercises(name: String) throws -> [Exercise] {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName.rawValue)
         request.predicate = NSPredicate(format: "name = %@", argumentArray: [name])
         guard let exercises = try? backgroundContext.fetch(request) as? [Exercise] else { return [] }
-        return exercises.sorted { (e1, e2) -> Bool in
-            e1.workout!.dateCreated! < e2.workout!.dateCreated!
+        do {
+            let sorted = try exercises.sorted { (e1, e2) -> Bool in
+                if e1.workout == nil || e2.workout == nil {
+                    throw NilReferenceError.nilWorkout
+                }
+                return e1.workout!.dateCreated! < e2.workout!.dateCreated!
+            }
+            return sorted
+        } catch {
+            throw NilReferenceError.nilWorkout
         }
     }
+}
+
+enum NilReferenceError: Error {
+    case nilWorkout
 }

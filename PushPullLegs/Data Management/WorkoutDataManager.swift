@@ -114,4 +114,22 @@ class WorkoutDataManager: DataManager {
         }
         return []
     }
+    
+    func exercises(type: ExerciseType, name: String) -> [Exercise] {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName.rawValue)
+        request.predicate = NSPredicate(format: "name = %@", argumentArray: [type.rawValue])
+        request.sortDescriptors = [.dateCreated]
+        guard let workouts = try? backgroundContext.fetch(request) as? [Workout] else { return [] }
+        var exercisesToReturn = [Exercise]()
+        for workout in workouts {
+            if let exercises = workout.exercises?.array as? [Exercise] {
+                for exercise in exercises {
+                    if exercise.name == name {
+                        exercisesToReturn.append(exercise)
+                    }
+                }
+            }
+        }
+        return exercisesToReturn.reversed()
+    }
 }

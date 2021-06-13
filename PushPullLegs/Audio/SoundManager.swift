@@ -28,12 +28,12 @@ class SoundManager: NSObject {
     private var tickPlayer1: AVAudioPlayer? = getPlayer(.tick)
     private var tickPlayer2: AVAudioPlayer? = getPlayer(.tick)
     private static var volume: Float = {
-        let volumeMultiplier: Float = 0.03
+        let volumeMultiplier: Float = 0.5
         return AVAudioSession.sharedInstance().outputVolume * volumeMultiplier
     }()
     private override init() {
         super.init()
-        try? AVAudioSession.sharedInstance().setCategory(.playback)
+        try? AVAudioSession.sharedInstance().setCategory(.playback, options: .mixWithOthers)
     }
     var silenceNextNoise = false
     

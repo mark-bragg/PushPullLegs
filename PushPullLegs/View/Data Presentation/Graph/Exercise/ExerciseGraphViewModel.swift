@@ -13,15 +13,24 @@ class ExerciseGraphViewModel: GraphViewModel {
     
     private var name: String
     private var exerciseDataManager: ExerciseDataManager { dataManager as! ExerciseDataManager }
+    private var type: ExerciseType
     
-    init(name: String) {
+    init(name: String, type: ExerciseType) {
         self.name = name
+        self.type = type
         super.init(dataManager: ExerciseDataManager())
     }
     
     override func reload() {
         super.reload()
-        let exercises = exerciseDataManager.exercises(name: name)
+        var exercises: [Exercise]
+        do {
+            exercises = try exerciseDataManager.exercises(name: name)
+        } catch NilReferenceError.nilWorkout {
+            exercises = WorkoutDataManager().exercises(type: type, name: name)
+        } catch {
+            exercises = []
+        }
         let format = formatter()
         for exercise in exercises {
             xValues.append(format.string(from: exercise.workout!.dateCreated!))

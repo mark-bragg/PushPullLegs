@@ -56,7 +56,7 @@ class WorkoutGraphViewController: GraphViewController, UIPopoverPresentationCont
     
     func didSelectName(_ name: String) {
         dismiss(animated: true) {
-            let vc = ExerciseGraphViewController(name: name)
+            let vc = ExerciseGraphViewController(name: name, type: self.workoutGraphViewModel.type)
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

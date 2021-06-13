@@ -12,9 +12,9 @@ class ExerciseGraphViewController: GraphViewController {
 
     var exerciseGraphViewModel: ExerciseGraphViewModel { viewModel as! ExerciseGraphViewModel }
     
-    init(name: String, frame: CGRect? = nil) {
+    init(name: String, type: ExerciseType, frame: CGRect? = nil) {
         super.init(nibName: nil, bundle: nil)
-        viewModel = ExerciseGraphViewModel(name: name)
+        viewModel = ExerciseGraphViewModel(name: name, type: type)
     }
     
     required init?(coder: NSCoder) {

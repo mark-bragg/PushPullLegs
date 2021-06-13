@@ -12,7 +12,7 @@ import UIKit
 class WorkoutGraphViewModel: GraphViewModel {
     
     private var workoutDataManager: WorkoutDataManager { dataManager as! WorkoutDataManager }
-    private var type: ExerciseType
+    private(set) var type: ExerciseType
     
     init(type: ExerciseType) {
         self.type = type
