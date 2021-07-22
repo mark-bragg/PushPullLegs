@@ -26,6 +26,7 @@ class DurationCollectionViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         timeLabel.becomeFirstResponder()
+        exerciseSetViewModel?.startSet()
     }
 
 }

@@ -10,10 +10,10 @@ import XCTest
 import Combine
 @testable import PushPullLegs
 
-class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, ExerciseSetTimerDelegate, ExerciseSetCollector {
+class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, ExerciseSetCollector {
     
     var sut: ExerciseSetViewModel!
-    var firstSetup = true
+    static var firstSetup = true
     var timerDelegateExpectations = [XCTestExpectation]()
     var vmStartedExpectation: XCTestExpectation?
     var vmStoppedTimerExpectation: XCTestExpectation?
@@ -33,11 +33,14 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         testingShouldHaveBegunAlready = true
         PPLDefaults.instance.setCountdown(countdown)
         sut = ExerciseSetViewModel()
-        if firstSetup {
-            firstSetup = false
+        sut.stopWatch = PPLStopWatch(withHandler: { (seconds) in
+            self.timerUpdate(String.format(seconds: self.sut.currentTime(seconds ?? 0)))
+        })
+        if ExerciseSetViewModelTests.firstSetup {
+            ExerciseSetViewModelTests.firstSetup = false
             sut.$setBegan.sink { [weak self] (began) in
-                guard let began = began,let self = self, self.testingShouldHaveBegunAlready else { return }
-                XCTAssert(began == self.shouldHaveBegunAlready)
+                guard let began = began, let self = self, self.testingShouldHaveBegunAlready else { return }
+                XCTAssert(began == self.shouldHaveBegunAlready, "expected \(began)\nactual \(self.shouldHaveBegunAlready)")
             }
             .store(in: &setBeganObservers)
         }
@@ -53,19 +56,19 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
             expectations.append(ex)
         }
         expectationsCount = 9
-        sut.timerDelegate = self
         sut.delegate = self
+        sut.willStartSetWithWeight(10)
         shouldHaveBegunAlready = true
-        sut.startSetWithWeight(10)
+        sut.startSet()
         XCTAssert(!sut.completedExerciseSet)
         wait(for: expectations, timeout: 9)
     }
     
     func testStopTimer_delegateCalled() {
-        sut.timerDelegate = self
         sut.delegate = self
         shouldHaveBegunAlready = true
-        sut.startSetWithWeight(10)
+        sut.willStartSetWithWeight(10)
+        sut.startSet()
         XCTAssert(!sut.completedExerciseSet)
         vmStoppedTimerExpectation = XCTestExpectation(description: "timer stopped expectation")
         sut.stopTimer()
@@ -75,12 +78,12 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     
     func testFinishSetWithReps_delegateCalled_setDataCorrect() {
         sut.setCollector = self
-        sut.timerDelegate = self
         sut.delegate = self
         collectSetExpectation = XCTestExpectation(description: "ExerciseSetCollector collectSet(duration:weight:reps:)")
         vmFinishedSetExpectation = XCTestExpectation(description: "ExerciseSetViewModelDelegate func exerciseSetViewModelStoppedTimer(_:)")
         shouldHaveBegunAlready = true
-        sut.startSetWithWeight(10)
+        sut.willStartSetWithWeight(10)
+        sut.startSet()
         XCTAssert(!sut.completedExerciseSet)
         sleep(5)
         sut.stopTimer()
@@ -94,7 +97,8 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         sut.delegate = self
         vmCanceledSetExpectation = XCTestExpectation(description: "ExerciseSetViewModelDelegate exerciseSetViewModelCanceledSet(_:)")
         shouldHaveBegunAlready = true
-        sut.startSetWithWeight(10)
+        sut.willStartSetWithWeight(10)
+        sut.startSet()
         XCTAssert(!sut.completedExerciseSet)
         sut.cancel()
         XCTAssert(!sut.completedExerciseSet)
@@ -106,7 +110,8 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         sut.delegate = self
         vmCanceledSetExpectation = XCTestExpectation(description: "ExerciseSetViewModelDelegate exerciseSetViewModelCanceledSet(_:)")
         shouldHaveBegunAlready = true
-        sut.startSetWithWeight(10)
+        sut.willStartSetWithWeight(10)
+        sut.startSet()
         XCTAssert(!sut.completedExerciseSet)
         sut.stopTimer()
         XCTAssert(!sut.completedExerciseSet)
@@ -131,10 +136,10 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         }
         expectationsCount = 9
         sut.setCollector = self
-        sut.timerDelegate = self
         sut.delegate = self
         shouldHaveBegunAlready = true
-        sut.startSetWithWeight(10)
+        sut.willStartSetWithWeight(10)
+        sut.startSet()
         XCTAssert(!sut.completedExerciseSet)
         sleep(5)
         sut.stopTimer()
@@ -169,9 +174,9 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
             timerDelegateExpectations.append(ex)
         }
         expectationsCount = 11
-        sut.timerDelegate = self
         shouldHaveBegunAlready = true
-        sut.startSetWithWeight(10)
+        sut.willStartSetWithWeight(10)
+        sut.startSet()
         wait(for: timerDelegateExpectations, timeout: 15)
     }
     
@@ -188,21 +193,22 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
             timerDelegateExpectations.append(ex)
         }
         expectationsCount = 6
-        sut.timerDelegate = self
         shouldHaveBegunAlready = true
         PPLDefaults.instance.setWorkoutInProgress(true)
-        sut.startSetWithWeight(10)
+        sut.willStartSetWithWeight(10)
+        sut.startSet()
         wait(for: timerDelegateExpectations, timeout: 15)
     }
     
     func testRevertState_stateReverted() {
-        sut.startSetWithWeight(90)
+        sut.willStartSetWithWeight(90)
         do {
             try sut.revertState()
         } catch {
             XCTFail()
         }
-        sut.startSetWithWeight(90)
+        sut.willStartSetWithWeight(90)
+        sut.startSet()
         sut.finishSetWithReps(10)
         do {
             try sut.revertState()
@@ -215,7 +221,8 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
     func testRevertStateDuringRepCollection_timerStateIsValid() {
         self.testingShouldHaveBegunAlready = false
         PPLDefaults.instance.setWorkoutInProgress(true)
-        sut.startSetWithWeight(50)
+        sut.willStartSetWithWeight(50)
+        sut.startSet()
         sut.stopTimer()
         do {
             try sut.revertState()
@@ -234,7 +241,8 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
                     XCTAssert(begun)
                 }
             }.store(in: &setBeganObservers)
-            sut.startSetWithWeight(1)
+            sut.willStartSetWithWeight(1)
+            sut.startSet()
             sut.cancel()
         }
     }
@@ -273,7 +281,7 @@ class ExerciseSetViewModelTests: XCTestCase, ExerciseSetViewModelDelegate, Exerc
         XCTAssert(reps == 20)
     }
     
-    func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel) {
+    func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel) {
         vmStartedExpectation?.fulfill()
     }
     

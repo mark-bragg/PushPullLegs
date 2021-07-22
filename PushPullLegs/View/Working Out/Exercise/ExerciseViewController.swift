@@ -87,10 +87,9 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         }
     }
     
-    func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel) {
+    func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel) {
         let et = ExerciseTimerViewController()
         et.exerciseSetViewModel = self.exerciseSetViewModel
-        et.exerciseSetViewModel?.timerDelegate = et
         self.setNavController.pushViewController(et, animated: true)
         self.exerciseTimer = et
     }

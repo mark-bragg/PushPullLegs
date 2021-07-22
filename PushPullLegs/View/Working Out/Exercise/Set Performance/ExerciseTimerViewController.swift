@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, ExercisingViewController, PPLButtonDelegate {
+class ExerciseTimerViewController: UIViewController, ExercisingViewController, PPLButtonDelegate {
     var exerciseSetViewModel: ExerciseSetViewModel?
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var finishButton: PPLButton!
@@ -27,6 +27,7 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
         timerLabel.text = exerciseSetViewModel?.initialTimerText()
         timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 48, weight: .regular)
         bind()
+        exerciseSetViewModel?.startSet()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -117,6 +118,10 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
                 self.finishButton.isEnabled = exerciseBegan
             }
         }).store(in: &cancellables)
+        exerciseSetViewModel?.stopWatch = PPLStopWatch(withHandler: { [weak self] (seconds) in
+            guard let self = self else { return }
+            self.timerUpdate(String.format(seconds: self.exerciseSetViewModel?.currentTime(seconds) ?? 0))
+        })
     }
     
     func buttonReleased(_ sender: Any) {
@@ -124,8 +129,8 @@ class ExerciseTimerViewController: UIViewController, ExerciseSetTimerDelegate, E
     }
     
     func timerUpdate(_ text: String) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, let lbl = self.timerLabel else { return }
+        DispatchQueue.main.async {
+            guard let lbl = self.timerLabel else { return }
             lbl.text = text
             if self.shouldShowStartText() {
                 self.showStartText()

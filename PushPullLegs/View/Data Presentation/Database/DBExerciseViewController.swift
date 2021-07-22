@@ -27,7 +27,7 @@ class DBExerciseViewController: ExerciseViewController {
         tableView.reloadData()
     }
     
-    override func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel) {
+    override func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel) {
         let dvc = DurationCollectionViewController()
         dvc.exerciseSetViewModel = exerciseSetViewModel
         setNavController.pushViewController(dvc, animated: true)

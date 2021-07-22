@@ -14,9 +14,9 @@ class WorkoutGraphViewModel: GraphViewModel {
     private var workoutDataManager: WorkoutDataManager { dataManager as! WorkoutDataManager }
     private(set) var type: ExerciseType
     
-    init(type: ExerciseType) {
+    init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
         self.type = type
-        super.init(dataManager: WorkoutDataManager())
+        super.init(dataManager: dataManager)
     }
     
     override func reload() {

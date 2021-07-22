@@ -9,10 +9,6 @@
 import Foundation
 import Combine
 
-protocol ExerciseSetTimerDelegate: NSObject {
-    func timerUpdate(_ text: String)
-}
-
 protocol ExerciseSetCollector: NSObject {
     func collectSet(duration: Int, weight: Double, reps: Double)
 }
@@ -26,7 +22,7 @@ fileprivate enum ExerciseSetState {
 }
 
 protocol ExerciseSetViewModelDelegate: NSObject {
-    func exerciseSetViewModelStartedSet(_ viewModel: ExerciseSetViewModel)
+    func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel)
     func exerciseSetViewModelStoppedTimer(_ viewModel: ExerciseSetViewModel)
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel)
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel)
@@ -37,7 +33,6 @@ struct ExerciseStateError: Error { }
 class ExerciseSetViewModel: NSObject {
     
     weak var delegate: ExerciseSetViewModelDelegate?
-    weak var timerDelegate: ExerciseSetTimerDelegate?
     weak var setCollector: ExerciseSetCollector!
     var completedExerciseSet: Bool {
         return state == .finished
@@ -45,7 +40,7 @@ class ExerciseSetViewModel: NSObject {
     private var totalTime: Int!
     private var weight: Double!
     private var state: ExerciseSetState
-    private var stopWatch: PPLStopWatch!
+    var stopWatch: PPLStopWatch!
     private var countdown = PPLDefaults.instance.countdown()
     private var countdownCanceled = false
     @Published private(set) var setBegan: Bool!
@@ -55,10 +50,6 @@ class ExerciseSetViewModel: NSObject {
     override init() {
         state = .notStarted
         super.init()
-        stopWatch = PPLStopWatch(withHandler: { [weak self] (seconds) in
-            guard let self = self else { return }
-            self.timerDelegate?.timerUpdate(String.format(seconds: self.currentTime(seconds)))
-        })
         $setBegan.sink { (began) in
             guard PPLDefaults.instance.areTimerSoundsEnabled(), let began = began, began else { return }
             SoundManager.shared.playStartSound()
@@ -70,14 +61,17 @@ class ExerciseSetViewModel: NSObject {
         stopWatch.start()
     }
     
-    func startSetWithWeight(_ weight: Double) {
-        setStateForStartSet()
+    func willStartSetWithWeight(_ weight: Double) {
         self.weight = weight
+        delegate?.exerciseSetViewModelWillStartSet(self)
+    }
+    
+    func startSet() {
+        setStateForStartSet()
         if PPLDefaults.instance.isWorkoutInProgress() {
             countdown = PPLDefaults.instance.countdown()
             stopWatch.start()
         }
-        delegate?.exerciseSetViewModelStartedSet(self)
     }
     
     fileprivate func setStateForStartSet() {
@@ -112,7 +106,7 @@ class ExerciseSetViewModel: NSObject {
         delegate?.exerciseSetViewModelStoppedTimer(self)
     }
     
-    private func currentTime(_ seconds: Int? = nil) -> Int {
+    func currentTime(_ seconds: Int? = nil) -> Int {
         let s = seconds ?? stopWatch.currentTime()
         var multiplier = -1
         if countdownCanceled {

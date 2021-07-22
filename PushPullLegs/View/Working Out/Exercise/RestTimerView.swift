@@ -26,11 +26,10 @@ class RestTimerView: UIView {
     }
     
     func restartTimer() {
-        weak var weakSelf = self
-        stopWatch = PPLStopWatch(withHandler: { (seconds) in
+        stopWatch = PPLStopWatch(withHandler: { [weak self] (seconds) in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                guard let strongSelf = weakSelf else { return }
-                strongSelf.text = String.format(seconds: seconds)
+                self.text = String.format(seconds: seconds ?? 0)
             }
         })
         stopWatch.start()
@@ -49,7 +48,7 @@ class RestTimerView: UIView {
     
     func setupTimerLabel() {
         timerLabel.frame = CGRect(x: 20, y: 10, width: frame.width - 40, height: frame.height - 20)
-        timerLabel.font = UIFont.systemFont(ofSize: 40, weight: .semibold)
+        timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 40, weight: .semibold)
         timerLabel.textColor = .white
         addSubview(timerLabel)
         timerLabel.textAlignment = .center

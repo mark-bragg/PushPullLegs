@@ -9,49 +9,39 @@
 import Foundation
 
 class PPLStopWatch {
-    weak var timerDelegate: ExerciseSetTimerDelegate?
     private var startingTime: Double!
-    private var queue: DispatchQueue?
-    var timeBetweenReadings: UInt32 = 1
-    var handler: ((Int) -> Void)?
+    var timeBetweenReadings: TimeInterval = 1
+    var handler: ((Int?) -> Void)?
     private var running = false
+    private weak var timer: Timer?
+    private var count = 0
     
-    init(withHandler handler: ((Int) -> Void)? = nil) {
+    init(withHandler handler: ((Int?) -> Void)? = nil) {
         self.handler = handler
     }
     
     func start() {
-        if queue == nil {
-            queue = DispatchQueue(label: "timer queue")
-        } else {
-            queue?.activate()
-        }
         startingTime = CFAbsoluteTimeGetCurrent()
-        beginUpdating()
+        let timer = Timer.scheduledTimer(withTimeInterval: self.timeBetweenReadings, repeats: true) { [weak self] (timer) in
+            guard let self = self else { return }
+            self.handler?(self.count)
+            self.count += 1
+        }
+        timer.fire()
+        self.timer = timer
     }
     
     func stop() {
         running = false
-        queue?.suspend()
         handler = nil
+        timer?.invalidate()
     }
     
     func currentTime() -> Int {
         return Int(CFAbsoluteTimeGetCurrent() - self.startingTime)
     }
-    
-    private func beginUpdating() {
-        running = true
-        queue!.async { [weak self] in
-            guard let self = self, self.running else { return }
-            while let handler = self.handler {
-                handler(self.currentTime())
-                sleep(self.timeBetweenReadings)
-            }
-        }
-    }
-    
-    func isRunning() -> Bool {
-        return running
-    }
+}
+
+extension Date {
+    static var now: Date { Date() }
 }
