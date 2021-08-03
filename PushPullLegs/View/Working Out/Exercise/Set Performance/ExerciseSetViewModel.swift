@@ -156,6 +156,7 @@ class ExerciseSetViewModel: NSObject {
         switch state {
         case .inProgress:
             state = .notStarted
+            stopWatch.stopTimer()
             setBegan = false
         case .ending:
             state = .inProgress

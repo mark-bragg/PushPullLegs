@@ -30,13 +30,6 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
         exerciseSetViewModel?.startSet()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if PPLDefaults.instance.areTimerSoundsEnabled() {
-            SoundManager.shared.silenceNextNoise = true
-        }
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if shouldShowStartText() {
@@ -122,6 +115,12 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
             guard let self = self else { return }
             self.timerUpdate(String.format(seconds: self.exerciseSetViewModel?.currentTime(seconds) ?? 0))
         })
+    }
+    
+    @objc func buttonPressed(_ sender: Any) {
+        if PPLDefaults.instance.areTimerSoundsEnabled() {
+            SoundManager.shared.silenceNextNoise = true
+        }
     }
     
     func buttonReleased(_ sender: Any) {

@@ -9,8 +9,9 @@
 import Foundation
 import UIKit
 
-protocol PPLButtonDelegate {
+@objc protocol PPLButtonDelegate: NSObjectProtocol {
     func buttonReleased(_ sender: Any)
+    @objc optional func buttonPressed(_ sender: Any)
 }
 
 fileprivate let timerDelay = 250
@@ -66,6 +67,7 @@ class PPLButton : UIButton {
         guard delegate != nil else {
             return NotificationCenter.default.post(name: PPLButton.touchDownNotificationName(), object: self)
         }
+        delegate?.buttonPressed?(self)
         startTimer()
     }
     
@@ -102,7 +104,7 @@ class PPLButton : UIButton {
     }
     
     static func touchDownNotificationName() -> NSNotification.Name {
-        return NSNotification.Name("PPLButtonTouchUpInside")
+        return NSNotification.Name("PPLButtonTouchDown")
     }
 }
 

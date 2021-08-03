@@ -22,13 +22,21 @@ class PPLStopWatch {
     
     func start() {
         startingTime = CFAbsoluteTimeGetCurrent()
+        setTimer()
+        timer?.fire()
+    }
+    
+    func setTimer() {
         let timer = Timer.scheduledTimer(withTimeInterval: self.timeBetweenReadings, repeats: true) { [weak self] (timer) in
             guard let self = self else { return }
             self.handler?(self.count)
             self.count += 1
         }
-        timer.fire()
         self.timer = timer
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
     }
     
     func stop() {
