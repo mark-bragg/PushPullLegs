@@ -38,6 +38,7 @@ class WorkoutViewController: PPLTableViewController {
         setupAddButton()
         reload()
         navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
+        navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(presentNoteViewController)), animated: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -162,6 +163,15 @@ class WorkoutViewController: PPLTableViewController {
     
     override func bannerAdUnitID() -> String {
         BannerAdUnitID.workoutVC
+    }
+    
+    override func noteText() -> String {
+        workoutEditViewModel.noteText()
+    }
+    
+    override func saveNote(_ text: String) {
+        super.saveNote(text)
+        workoutEditViewModel.updateNote(text)
     }
 }
 

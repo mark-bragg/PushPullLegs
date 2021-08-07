@@ -20,6 +20,12 @@ class WorkoutDataViewController: DatabaseTableViewController {
         dbViewModel.refresh()
     }
     
+    override func getRightBarButtonItems() -> [UIBarButtonItem] {
+        var items = super.getRightBarButtonItems()
+        items.append(UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(presentNoteViewController)))
+        return items
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let vm = viewModel else { return 0 }
         return vm.rowCount(section: section)
@@ -79,6 +85,16 @@ class WorkoutDataViewController: DatabaseTableViewController {
     
     override func bannerAdUnitID() -> String {
         BannerAdUnitID.workoutDataVC
+    }
+    
+    override func saveNote(_ text: String) {
+        super.saveNote(text)
+        guard let vm = workoutDataViewModel else { return }
+        vm.updateNote(text)
+    }
+    
+    override func noteText() -> String {
+        return workoutDataViewModel?.noteText() ?? ""
     }
     
 }

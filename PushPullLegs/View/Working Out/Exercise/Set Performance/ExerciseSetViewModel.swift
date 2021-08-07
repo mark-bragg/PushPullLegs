@@ -40,7 +40,7 @@ class ExerciseSetViewModel: NSObject {
     private var totalTime: Int!
     private var weight: Double!
     private var state: ExerciseSetState
-    var stopWatch: PPLStopWatch!
+    var stopWatch: PPLStopWatch?
     private var countdown = PPLDefaults.instance.countdown()
     private var countdownCanceled = false
     @Published private(set) var setBegan: Bool!
@@ -58,7 +58,7 @@ class ExerciseSetViewModel: NSObject {
     
     func restartSet() {
         countdown = PPLDefaults.instance.countdown()
-        stopWatch.start()
+        stopWatch?.start()
     }
     
     func willStartSetWithWeight(_ weight: Double) {
@@ -70,7 +70,7 @@ class ExerciseSetViewModel: NSObject {
         setStateForStartSet()
         if PPLDefaults.instance.isWorkoutInProgress() {
             countdown = PPLDefaults.instance.countdown()
-            stopWatch.start()
+            stopWatch?.start()
         }
     }
     
@@ -90,7 +90,7 @@ class ExerciseSetViewModel: NSObject {
             print("invalid state error")
             return
         }
-        stopWatch.stop()
+        stopWatch?.stop()
         totalTime = currentTime()
         delegate?.exerciseSetViewModelStoppedTimer(self)
     }
@@ -107,7 +107,7 @@ class ExerciseSetViewModel: NSObject {
     }
     
     func currentTime(_ seconds: Int? = nil) -> Int {
-        let s = seconds ?? stopWatch.currentTime()
+        let s = seconds ?? (stopWatch?.currentTime() ?? 0)
         var multiplier = -1
         if countdownCanceled {
             countdownCanceled = false
@@ -149,14 +149,14 @@ class ExerciseSetViewModel: NSObject {
     func cancel() {
         state = .canceled
         self.delegate?.exerciseSetViewModelCanceledSet(self)
-        stopWatch.stop()
+        stopWatch?.stop()
     }
     
     func revertState() throws {
         switch state {
         case .inProgress:
             state = .notStarted
-            stopWatch.stopTimer()
+            stopWatch?.stopTimer()
             setBegan = false
         case .ending:
             state = .inProgress

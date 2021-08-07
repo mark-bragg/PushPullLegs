@@ -63,13 +63,18 @@ class DatabaseTableViewController: PPLTableViewController {
     }
     
     func setupRightBarButtonItems() {
+        navigationItem.rightBarButtonItem = nil
+        navigationItem.rightBarButtonItems = getRightBarButtonItems()
+    }
+    
+    func getRightBarButtonItems() -> [UIBarButtonItem] {
         let addBtnItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction(_:)))
         navigationItem.rightBarButtonItem = nil
         if viewModel.rowCount(section: 0) == 0 {
-            navigationItem.rightBarButtonItems = [addBtnItem]
+            return [addBtnItem]
         } else {
             let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit(_:)))
-            navigationItem.rightBarButtonItems = [addBtnItem, editBtnItem]
+            return [addBtnItem, editBtnItem]
         }
     }
     

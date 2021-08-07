@@ -119,6 +119,17 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
         workoutManager.addExercises(withNames: names, to: wkt)
         reload()
     }
+    
+    func updateNote(_ text: String) {
+        guard let wkt = dataManager.fetch(workoutId) as? Workout else { return }
+        wkt.note = text
+        try? dataManager.backgroundContext.save()
+    }
+    
+    func noteText() -> String {
+        guard let wkt = dataManager.fetch(workoutId) as? Workout else { return "" }
+        return wkt.note ?? ""
+    }
 }
 
 extension Workout {
