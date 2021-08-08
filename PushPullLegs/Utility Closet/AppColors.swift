@@ -24,4 +24,7 @@ extension PPLColor {
     static let navbarBackgroundBlue = UIColor(named: "navbar_background_blue")
     static let cellBackgroundBlue = UIColor(named: "cell_background_blue")
     static let pplTextBlue = UIColor(named: "ppl_text_blue")
+    
+    static let pplArrowGreen = UIColor(named: "ppl_arrow_green")!
+    static let pplArrowRed = UIColor(named: "ppl_arrow_red")!
 }

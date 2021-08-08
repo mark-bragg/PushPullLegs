@@ -55,10 +55,10 @@ class ExerciseDataCellViewController: UIViewController {
         switch progress {
         case .increase:
             imageName = "arrow.up"
-            tint = .green
+            tint = .pplArrowGreen
         case .decrease:
             imageName = "arrow.down"
-            tint = .red
+            tint = .pplArrowRed
         default:
             imageName = "minus"
             tint = PPLColor.pplOffWhite!
