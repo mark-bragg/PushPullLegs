@@ -40,6 +40,8 @@ class ExerciseDataCellViewController: UIViewController {
         totalWorkTextLabel.text = workText
         titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         totalWorkTextLabel.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        titleLabel.textColor = PPLColor.text
+        totalWorkTextLabel.textColor = PPLColor.text
         setWorkoutProgressionImage()
     }
     

@@ -50,7 +50,7 @@ class AboutViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.contentView.backgroundColor = .backgroundBlue
+        cell.contentView.backgroundColor = .primary
         let tv = UITextView()
         tv.backgroundColor = .clear
         tv.textColor = .black

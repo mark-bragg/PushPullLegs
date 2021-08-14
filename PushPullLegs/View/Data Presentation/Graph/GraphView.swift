@@ -138,7 +138,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     private func lineStrokeColor() -> CGColor {
-        PPLColor.pplTextBlue!.cgColor
+        PPLColor.text!.cgColor
     }
     
     func eraseLine() {
@@ -157,7 +157,7 @@ class GraphView: UIControl, ObservableObject {
         lineLayer.lineCap = .round
         lineLayer.strokeColor = lineStrokeColor()
         lineLayer.lineWidth = lineWidth
-        lineLayer.fillColor = isSinglePoint() ? PPLColor.backgroundBlue!.cgColor : UIColor.clear.cgColor
+        lineLayer.fillColor = isSinglePoint() ? PPLColor.primary!.cgColor : UIColor.clear.cgColor
     }
     
     func getPath() -> CGPath {

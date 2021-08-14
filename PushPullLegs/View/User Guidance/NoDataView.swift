@@ -29,7 +29,7 @@ class NoDataView: UIView {
             addSubview(styledNoDataLabel(frame: bounds))
             positionLabel()
         }
-        backgroundColor = lightBackground ? PPLColor.backgroundBlue : PPLColor.pplDarkGray
+        backgroundColor = lightBackground ? PPLColor.primary : PPLColor.pplDarkGray
     }
     
     func styledNoDataLabel(frame: CGRect) -> UILabel {
@@ -62,9 +62,9 @@ class NoDataGraphView: NoDataView {
         lightBackground = true
         super.layoutSubviews()
         if whiteBackground {
-            backgroundColor = .cellBackgroundBlue
+            backgroundColor = .quaternary
         }
-        label()?.textColor = PPLColor.pplTextBlue
+        label()?.textColor = PPLColor.text
     }
 }
 

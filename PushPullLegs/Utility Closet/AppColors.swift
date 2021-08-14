@@ -10,20 +10,44 @@ import UIKit
 
 typealias PPLColor = UIColor
 
+class ColorNames {
+    static let red = "red"
+    static let orange = "orange"
+    static let yellow = "yellow"
+    static let green = "green"
+    static let blue = "blue"
+    static let purple = "purple"
+}
+
 extension PPLColor {
     static let pplOffWhite = UIColor(named: "ppl_off_white")
     static let disabledSaveWhiteColor: UIColor = UIColor(white: 0.75, alpha: 0.5)
+    static let readyStatePlusSign: UIColor = UIColor(white: 0.85, alpha: 1)
+    static let pressedStatePlusSign: UIColor = UIColor(white: 0.33, alpha: 1)
     
     static let pplGray = UIColor(named: "ppl_gray")
     static let pplLightGray = UIColor(named: "ppl_light_gray")
     static let pplDarkGray = UIColor(named: "ppl_dark_gray")
     static let pplDarkGrayText = UIColor(named: "ppl_dark_gray_text")
     
-    static let backgroundBlue = UIColor(named: "background_blue")
-    static let headerBackgroundBlue = UIColor(named: "header_background_blue")
-    static let navbarBackgroundBlue = UIColor(named: "navbar_background_blue")
-    static let cellBackgroundBlue = UIColor(named: "cell_background_blue")
-    static let pplTextBlue = UIColor(named: "ppl_text_blue")
+    static var primary: UIColor? {
+        UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_primary")
+    }
+    static var secondary: UIColor? {
+        UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_secondary")
+    }
+    static var tertiary: UIColor? {
+        UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_tertiary")
+    }
+    static var quaternary: UIColor? {
+        UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_quaternary")
+    }
+    static var text: UIColor? {
+        let color = UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_text")
+        UITextField.appearance().tintColor = color
+        UITextField.appearance().textColor = color
+        return color
+    }
     
     static let pplArrowGreen = UIColor(named: "ppl_arrow_green")!
     static let pplArrowRed = UIColor(named: "ppl_arrow_red")!

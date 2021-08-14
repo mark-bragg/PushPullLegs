@@ -19,7 +19,7 @@ class CountdownPickerViewController: UIViewController, UIPickerViewDataSource, U
         picker.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(picker)
         picker.delegate = self
-        picker.backgroundColor = .cellBackgroundBlue
+        picker.backgroundColor = .quaternary
         picker.tintColor = .black
         picker.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         picker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true

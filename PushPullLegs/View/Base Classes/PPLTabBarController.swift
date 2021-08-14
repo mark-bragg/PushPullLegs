@@ -22,7 +22,7 @@ class PPLTabBarController: UITabBarController {
         ]
         for navigationController in viewControllers as! [PPLNavigationController] {
             navigationController.navigationBar.isTranslucent = false
-            navigationController.navigationBar.barTintColor = .navbarBackgroundBlue
+            navigationController.navigationBar.barTintColor = PPLColor.secondary
             navigationController.navigationBar.tintColor = .white
         }
     }

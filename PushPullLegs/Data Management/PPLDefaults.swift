@@ -24,6 +24,7 @@ class PPLDefaults: NSObject {
     private let kIsAdsEnabled = "kIsAdsEnabled"
     private let kGraphInterstitalDate = "kGraphInterstitialDate"
     private let kTimerSoundsEnabled = "kTimerSoundsEnabled"
+    private let kDefaultColor = "kDefaultColor"
     override private init() {
         super.init()
         setupUserDetails()
@@ -148,5 +149,20 @@ extension PPLDefaults: WeightDefaults {
     func deleteDefaultWeightForExerciseWith(name: String?) {
         guard let name = name else { return }
         userDetails.removeObject(forKey: name)
+    }
+}
+
+protocol ColorDefaults {
+    func setDefaultColor(_ colorName: String)
+    func getDefaultColor() -> String
+}
+
+extension PPLDefaults: ColorDefaults {
+    func setDefaultColor(_ colorName: String) {
+        userDetails.set(colorName, forKey: kDefaultColor)
+    }
+    
+    func getDefaultColor() -> String {
+        (userDetails.value(forKey: kDefaultColor) as? String) ?? ColorNames.red
     }
 }

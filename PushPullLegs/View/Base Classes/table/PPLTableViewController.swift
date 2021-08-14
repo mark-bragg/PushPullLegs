@@ -54,7 +54,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         setupTableView()
         hideBottomBar()
         addBackNavigationGesture()
-        view.backgroundColor = PPLColor.backgroundBlue
+        view.backgroundColor = PPLColor.primary
         addNoDataView()
         tableView.reloadData()
         setTitle()
@@ -252,10 +252,10 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         let labelWidth = headerView.frame.width / widthDenominator
         let gradientTop = CAGradientLayer()
         gradientTop.frame = headerView.layer.bounds
-        gradientTop.colors = [PPLColor.backgroundBlue!.cgColor, UIColor.clear.cgColor]
+        gradientTop.colors = [PPLColor.primary!.cgColor, UIColor.clear.cgColor]
         gradientTop.locations = [0.0, 1.0]
         headerView.layer.addSublayer(gradientTop)
-        headerView.backgroundColor = .headerBackgroundBlue
+        headerView.backgroundColor = .tertiary
         for title in titles {
             let label = UILabel.headerLabel(title)
             label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight - CGSize.shadowOffsetTableHeader.height)

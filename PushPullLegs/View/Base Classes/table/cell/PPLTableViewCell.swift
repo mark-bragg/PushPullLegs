@@ -22,7 +22,7 @@ class PPLTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         rootView.isUserInteractionEnabled = false
-        rootView.backgroundColor = .cellBackgroundBlue
+        rootView.backgroundColor = .quaternary
     }
     
     static func nib() -> UINib {
@@ -88,7 +88,7 @@ class PPLTableViewCell: UITableViewCell {
 
 class QuestionMarkView: UIImageView {
     init() {
-        super.init(image: UIImage(systemName: "questionmark.circle")?.withTintColor(PPLColor.backgroundBlue!, renderingMode: .alwaysOriginal))
+        super.init(image: UIImage(systemName: "questionmark.circle")?.withTintColor(PPLColor.primary!, renderingMode: .alwaysOriginal))
         isUserInteractionEnabled = true
     }
     

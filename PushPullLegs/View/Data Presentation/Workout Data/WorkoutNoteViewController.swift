@@ -48,6 +48,7 @@ class WorkoutNoteViewController: UIViewController {
     
     private func addToolbar() {
         let toolbar = UIToolbar()
+        toolbar.tintColor = PPLColor.white
         view.addSubview(toolbar)
         self.toolbar = toolbar
         constrainToolbar()
@@ -79,7 +80,7 @@ class WorkoutNoteViewController: UIViewController {
         let textView = UITextView()
         view.addSubview(textView)
         textView.text = self.dataSource.noteText()
-        textView.font = UIFont.systemFont(ofSize: 18)
+        textView.font = UIFont.systemFont(ofSize: 22)
         self.textView = textView
     }
     

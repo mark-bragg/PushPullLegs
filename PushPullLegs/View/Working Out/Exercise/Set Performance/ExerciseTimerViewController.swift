@@ -18,6 +18,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        view.backgroundColor = PPLColor.primary
         finishButton.delegate = self
         navigationItem.title = "Timer"
         finishButton.setTitle("Finish Set", for: .normal)
@@ -39,7 +40,8 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
     
     fileprivate func styleTimerLabel() {
         timerLabel.layer.borderColor = PPLColor.pplLightGray!.cgColor
-        timerLabel.layer.backgroundColor = PPLColor.cellBackgroundBlue!.cgColor
+        timerLabel.layer.backgroundColor = PPLColor.quaternary!.cgColor
+        timerLabel.textColor = PPLColor.text
         timerLabel.layer.borderWidth = 1.5
         timerLabel.layer.cornerRadius = timerLabel.frame.height / 12
     }
@@ -70,7 +72,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.text = "Start!"
         lbl.font = UIFont.systemFont(ofSize: 72, weight: .bold)
-        lbl.textColor = .pplTextBlue
+        lbl.textColor = PPLColor.text
         lbl.textAlignment = .center
         return lbl
     }

@@ -116,8 +116,8 @@ class GraphViewController: UIViewController {
         containerView.addSubview(graph)
         if isInteractive {
             graph.setInteractivity()
-            graph.backgroundColor = .cellBackgroundBlue
-            containerView.backgroundColor = .backgroundBlue
+            graph.backgroundColor = .quaternary
+            containerView.backgroundColor = .primary
         } else {
             containerView.backgroundColor = .clear
             graph.translatesAutoresizingMaskIntoConstraints = false
@@ -169,7 +169,7 @@ class GraphViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         view.addSubview(label)
         label.numberOfLines = 1
-        label.textColor = isInteractive ? .white : .pplTextBlue
+        label.textColor = isInteractive ? .white : .text
         return label
     }
 }

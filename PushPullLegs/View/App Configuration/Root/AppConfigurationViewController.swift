@@ -94,7 +94,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         segment.insertSegment(withTitle: "Metric", at: 1, animated: false)
         segment.selectedSegmentIndex = PPLDefaults.instance.isKilograms() ? 1 : 0
         segment.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
-        segment.selectedSegmentTintColor = PPLColor.headerBackgroundBlue
+        segment.selectedSegmentTintColor = PPLColor.primary
         segment.backgroundColor = .pplGray
         cell.rootView.addSubview(segment)
         segment.translatesAutoresizingMaskIntoConstraints = false

@@ -205,7 +205,9 @@ class SetNavigationController: UINavigationController {
     
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        navigationBar.backgroundColor = PPLColor.navbarBackgroundBlue
+        navigationBar.backgroundColor = PPLColor.secondary
+        navigationBar.barTintColor = PPLColor.secondary
+        navigationBar.tintColor = .white
     }
     
     required init?(coder aDecoder: NSCoder) {

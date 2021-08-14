@@ -35,7 +35,7 @@ class GraphTableViewController: UIViewController {
     }
     
     func setupViews() {
-        view.backgroundColor = PPLColor.backgroundBlue
+        view.backgroundColor = PPLColor.primary
         if PPLDefaults.instance.isAdsEnabled() {
             addBannerView(bannerAdUnitID())
         } else {
