@@ -39,8 +39,8 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
     }
     
     fileprivate func styleTimerLabel() {
-        timerLabel.layer.borderColor = PPLColor.pplLightGray!.cgColor
-        timerLabel.layer.backgroundColor = PPLColor.quaternary!.cgColor
+        timerLabel.layer.borderColor = PPLColor.tertiary.cgColor
+        timerLabel.layer.backgroundColor = PPLColor.quaternary.cgColor
         timerLabel.textColor = PPLColor.text
         timerLabel.layer.borderWidth = 1.5
         timerLabel.layer.cornerRadius = timerLabel.frame.height / 12
@@ -78,7 +78,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
     }
     
     fileprivate func styleStartLabel(_ lbl: UILabel, _ diameter: CGFloat) {
-        let color = UIColor(red: 151/255, green: 251/255, blue: 152/255, alpha: 1.0).cgColor
+        let color = PPLColor.quaternary.cgColor
         lbl.layer.backgroundColor = color
         lbl.layer.cornerRadius = diameter / 2
         lbl.layer.shadowPath = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: diameter, height: diameter)).cgPath

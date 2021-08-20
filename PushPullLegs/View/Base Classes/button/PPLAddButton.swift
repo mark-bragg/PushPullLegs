@@ -38,7 +38,7 @@ class PPLAddButton: UIControl {
     
     private func style() {
         clipsToBounds = false
-        layer.backgroundColor = PPLColor.primary!.cgColor
+        layer.backgroundColor = PPLColor.primary.cgColor
         layer.cornerRadius = layer.frame.height / 2
         addLightGradientLayer()
         addDarkGradientLayer()

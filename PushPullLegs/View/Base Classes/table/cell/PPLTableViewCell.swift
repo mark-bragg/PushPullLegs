@@ -22,7 +22,6 @@ class PPLTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         rootView.isUserInteractionEnabled = false
-        rootView.backgroundColor = .quaternary
     }
     
     static func nib() -> UINib {
@@ -31,21 +30,13 @@ class PPLTableViewCell: UITableViewCell {
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         guard !multiSelect && selectionStyle != .none else { return }
-        if highlighted {
-            rootView.removeShadow()
-        } else {
-            addShadowAnimated()
-        }
+        rootView.backgroundColor = highlighted ? PPLColor.secondary : PPLColor.quaternary
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         guard multiSelect && animated else { return }
         rootView.isSelected = selected
-        if selected {
-            rootView.removeShadow()
-        } else if animated {
-            rootView.addShadow(.shadowOffsetCell)
-        }
+        rootView.backgroundColor = selected ? PPLColor.secondary : PPLColor.quaternary
     }
     
     private func addShadowAnimated() {
@@ -58,7 +49,7 @@ class PPLTableViewCell: UITableViewCell {
     func addDisclosureIndicator() {
         removeIndicator()
         let indicator = UIImage.init(systemName: "chevron.right")!
-        let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.pplLightGray!, renderingMode: .alwaysOriginal))
+        let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.text, renderingMode: .alwaysOriginal))
         rootView.addSubview(indicatorView)
         indicatorView.translatesAutoresizingMaskIntoConstraints = false
         indicatorView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -20).isActive = true
@@ -88,7 +79,7 @@ class PPLTableViewCell: UITableViewCell {
 
 class QuestionMarkView: UIImageView {
     init() {
-        super.init(image: UIImage(systemName: "questionmark.circle")?.withTintColor(PPLColor.primary!, renderingMode: .alwaysOriginal))
+        super.init(image: UIImage(systemName: "questionmark.circle")?.withTintColor(PPLColor.text, renderingMode: .alwaysOriginal))
         isUserInteractionEnabled = true
     }
     
@@ -107,10 +98,9 @@ class QuestionMarkView: UIImageView {
 
 class ShadowBackground: UIView {
     var isSelected = false
+    
     override func layoutSubviews() {
-        if !isSelected {
-            addShadow(.shadowOffsetCell)
-        }
+        backgroundColor = isSelected ? PPLColor.secondary : PPLColor.quaternary
         layer.borderWidth = PPLTableViewCell.borderWidth
         layer.borderColor = UIColor.white.cgColor
         layer.cornerRadius = layer.bounds.height * 0.03

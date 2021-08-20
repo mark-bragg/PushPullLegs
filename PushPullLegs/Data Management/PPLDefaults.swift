@@ -160,9 +160,10 @@ protocol ColorDefaults {
 extension PPLDefaults: ColorDefaults {
     func setDefaultColor(_ colorName: String) {
         userDetails.set(colorName, forKey: kDefaultColor)
+        DefaultColorUpdate.notifyObservers()
     }
     
     func getDefaultColor() -> String {
-        (userDetails.value(forKey: kDefaultColor) as? String) ?? ColorNames.red
+        (userDetails.value(forKey: kDefaultColor) as? String) ?? "black"
     }
 }

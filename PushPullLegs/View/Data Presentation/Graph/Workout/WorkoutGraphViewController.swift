@@ -72,5 +72,10 @@ class WorkoutGraphViewController: GraphViewController, UIPopoverPresentationCont
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
+    
+    override func reload() {
+        super.reload()
+        
+    }
 
 }

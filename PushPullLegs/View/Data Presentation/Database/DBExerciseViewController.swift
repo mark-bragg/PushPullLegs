@@ -16,15 +16,15 @@ class DBExerciseViewController: ExerciseViewController {
     }
     
     @objc override func edit(_ sender: Any?) {
-        let isEditing = !tableView.isEditing
-        tableView.setEditing(isEditing, animated: false)
+        let isEditing = !(tableView?.isEditing ?? true)
+        tableView?.setEditing(isEditing, animated: false)
         if isEditing {
             navigationItem.rightBarButtonItems = nil
-            navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
+            navigationItem.rightBarButtonItem = viewModel?.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
         } else {
             setupRightBarButtonItems()
         }
-        tableView.reloadData()
+        tableView?.reloadData()
     }
     
     override func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel) {

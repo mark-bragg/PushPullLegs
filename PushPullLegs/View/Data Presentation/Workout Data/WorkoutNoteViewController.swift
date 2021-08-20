@@ -63,8 +63,10 @@ class WorkoutNoteViewController: UIViewController {
     
     private func addToolbarItems() {
         let saveItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
+        saveItem.tintColor = PPLColor.quaternary
         let separator = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        cancelItem.tintColor = PPLColor.quaternary
         toolbar.setItems([cancelItem, separator, saveItem], animated: false)
     }
     

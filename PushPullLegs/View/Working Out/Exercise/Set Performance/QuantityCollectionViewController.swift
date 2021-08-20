@@ -34,7 +34,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, P
         view.backgroundColor = PPLColor.primary
         textField.backgroundColor = PPLColor.quaternary
         textField.becomeFirstResponder()
-        label.textColor = PPLColor.quaternary
+        label.textColor = UIColor.white
     }
     
     override func viewWillDisappear(_ animated: Bool) {

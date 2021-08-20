@@ -29,7 +29,7 @@ class WorkoutLogViewController: DatabaseTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         viewModel = WorkoutLogViewModel()
         super.viewWillAppear(animated)
-        tableView.backgroundColor = .clear
+        tableView?.backgroundColor = .clear
         reload()
     }
     
@@ -98,8 +98,10 @@ class WorkoutLogViewController: DatabaseTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        cell.nameLabel.text = viewModel.title(indexPath: indexPath)
+        cell.nameLabel.text = viewModel?.title(indexPath: indexPath)
         cell.dateLabel.text = workoutLogViewModel.dateLabel(indexPath: indexPath)
+        cell.nameLabel.textColor = PPLColor.text
+        cell.dateLabel.textColor = PPLColor.text
         if !tableView.isEditing {
             cell.addDisclosureIndicator()
         }
@@ -118,7 +120,9 @@ class WorkoutLogViewController: DatabaseTableViewController {
         viewModel = WorkoutLogViewModel()
         workoutLogViewModel.reloader = self
         super.reload()
-        tableView.reloadData()
+        self.tableView?.beginUpdates()
+        tableView?.reloadData()
+        self.tableView?.endUpdates()
     }
     
     override func insertAddButtonInstructions() {
@@ -141,7 +145,6 @@ class PPLNameLabel: UILabel {
     }
     
     private func commonInit() {
-        textColor = .text
         font = UIFont.systemFont(ofSize: 23, weight: .medium)
     }
 }
@@ -194,6 +197,6 @@ extension WorkoutLogViewController: WorkoutSelectionDelegate {
         dismiss(animated: true, completion: nil)
         reload()
         let row = WorkoutLogViewModel.ascending ? workoutLogViewModel.rowCount(section: 0) - 1 : 0
-        tableView(tableView, didSelectRowAt: IndexPath(row: row, section: 0))
+        tableView((tableView ?? UITableView()), didSelectRowAt: IndexPath(row: row, section: 0))
     }
 }

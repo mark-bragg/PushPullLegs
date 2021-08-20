@@ -53,7 +53,7 @@ class AboutViewController: PPLTableViewController {
         cell.contentView.backgroundColor = .primary
         let tv = UITextView()
         tv.backgroundColor = .clear
-        tv.textColor = .black
+        tv.textColor = PPLColor.text
         tv.text = aboutViewModel().title(indexPath: indexPath)
         tv.isScrollEnabled = false
         tv.isEditable = false
@@ -80,7 +80,7 @@ class AboutViewController: PPLTableViewController {
     
     private func heightForSection(_ section: Int, _ tv: UITextView) -> CGFloat {
         if aboutViewModel().isSectionExpanded(section) {
-            return tv.sizeThatFits(CGSize(width: tableView.frame.size.width - 32, height: CGFloat.greatestFiniteMagnitude)).height
+            return tv.sizeThatFits(CGSize(width: (tableView?.frame.size.width ?? 32) - 32, height: CGFloat.greatestFiniteMagnitude)).height
         }
         return 75
     }
@@ -113,9 +113,9 @@ class AboutViewController: PPLTableViewController {
         } else {
             aboutViewModel().collapseSection(section)
         }
-        tableView.reloadData()
+        tableView?.reloadData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.tableView.scrollToRow(at: IndexPath(row: 0, section: rowToScrollTo), at: .top, animated: true)
+            self.tableView?.scrollToRow(at: IndexPath(row: 0, section: rowToScrollTo), at: .top, animated: true)
         }
     }
     

@@ -25,7 +25,7 @@ class WorkoutTemplateListViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        label(forCell: cell).text = viewModel.title(indexPath: indexPath)
+        label(forCell: cell).text = viewModel?.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 3.0, rect: cell.frame)
         cell.addDisclosureIndicator()
         return cell
@@ -72,6 +72,7 @@ extension UIViewController {
             label?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
             label?.font = UIFont.systemFont(ofSize: 26, weight: .semibold)
             label?.textAlignment = .center
+            label?.textColor = cell.isSelected ? .white : .text
         }
         return label!
     }

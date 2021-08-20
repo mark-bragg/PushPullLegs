@@ -33,6 +33,7 @@
 		492B3B3B26609F2700929BB3 /* PPLDropDownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B3A26609F2700929BB3 /* PPLDropDownViewController.swift */; };
 		492B3B432660AF8F00929BB3 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B422660AF8F00929BB3 /* GraphViewController.swift */; };
 		492B3B4A2660B17600929BB3 /* ExerciseGraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B492660B17600929BB3 /* ExerciseGraphViewController.swift */; };
+		492E9FF826C8EA58006FDF37 /* PPLLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492E9FF726C8EA58006FDF37 /* PPLLabel.swift */; };
 		49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */; };
 		49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8624C28C64005FF7A8 /* PPLTableView.swift */; };
 		49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8824C29886005FF7A8 /* PPLAddButton.swift */; };
@@ -48,6 +49,7 @@
 		4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4945337B2450895500FA1665 /* ExerciseViewModel.swift */; };
 		49453382245090F600FA1665 /* ExerciseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453381245090F600FA1665 /* ExerciseViewModelTests.swift */; };
 		494865A125ACB021004A5FCC /* Shadows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494865A025ACB021004A5FCC /* Shadows.swift */; };
+		49565A25267E450B00F13E44 /* PPLColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49565A24267E450B00F13E44 /* PPLColorPickerViewController.swift */; };
 		49565A2D26B9FF1400F13E44 /* WorkoutNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49565A2C26B9FF1400F13E44 /* WorkoutNoteViewController.swift */; };
 		49568BA424422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */; };
 		4957DFB4246B549F00574C89 /* WorkoutReadViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */; };
@@ -83,7 +85,6 @@
 		49ABAC9D25F44E3500517F6F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ABAC9C25F44E3500517F6F /* SoundManager.swift */; };
 		49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACA225F45BEF00517F6F /* countdown.m4a */; };
 		49ABACBC25F463C700517F6F /* start.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACAF25F45CE700517F6F /* start.m4a */; };
-		49AF0CF9259AB59F003F8C60 /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 49AF0CF8259AB59F003F8C60 /* launch.png */; };
 		49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF0D20259D23D2003F8C60 /* BannerAdController.swift */; };
 		49C1EA522608179100330CBF /* IAPTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA512608179100330CBF /* IAPTransaction.swift */; };
 		49C1EA572608181F00330CBF /* AppConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */; };
@@ -174,6 +175,7 @@
 		492B3B3A26609F2700929BB3 /* PPLDropDownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropDownViewController.swift; sourceTree = "<group>"; };
 		492B3B422660AF8F00929BB3 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		492B3B492660B17600929BB3 /* ExerciseGraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGraphViewController.swift; sourceTree = "<group>"; };
+		492E9FF726C8EA58006FDF37 /* PPLLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLLabel.swift; sourceTree = "<group>"; };
 		49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushPullLegs.xcdatamodel; sourceTree = "<group>"; };
 		49359B8624C28C64005FF7A8 /* PPLTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableView.swift; sourceTree = "<group>"; };
 		49359B8824C29886005FF7A8 /* PPLAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAddButton.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 		4945337B2450895500FA1665 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		49453381245090F600FA1665 /* ExerciseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModelTests.swift; sourceTree = "<group>"; };
 		494865A025ACB021004A5FCC /* Shadows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shadows.swift; sourceTree = "<group>"; };
+		49565A24267E450B00F13E44 /* PPLColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLColorPickerViewController.swift; sourceTree = "<group>"; };
 		49565A2C26B9FF1400F13E44 /* WorkoutNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutNoteViewController.swift; sourceTree = "<group>"; };
 		49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewModelTests.swift; sourceTree = "<group>"; };
 		4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutReadViewModelTests.swift; sourceTree = "<group>"; };
@@ -223,7 +226,6 @@
 		49ABAC9C25F44E3500517F6F /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		49ABACA225F45BEF00517F6F /* countdown.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = countdown.m4a; sourceTree = "<group>"; };
 		49ABACAF25F45CE700517F6F /* start.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.m4a; sourceTree = "<group>"; };
-		49AF0CF8259AB59F003F8C60 /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		49AF0D20259D23D2003F8C60 /* BannerAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdController.swift; sourceTree = "<group>"; };
 		49C1EA512608179100330CBF /* IAPTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTransaction.swift; sourceTree = "<group>"; };
 		49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurationViewModel.swift; sourceTree = "<group>"; };
@@ -536,7 +538,6 @@
 				49ABACB825F463A200517F6F /* Sounds */,
 				49EF4B8923F838370071687D /* Info.plist */,
 				49EF4B8423F838370071687D /* Assets.xcassets */,
-				49AF0CF8259AB59F003F8C60 /* launch.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -584,6 +585,7 @@
 				491C8D01254BC166003A7526 /* table */,
 				491C8D00254BC157003A7526 /* button */,
 				49453379244FCC1900FA1665 /* PPLTabBarController.swift */,
+				492E9FF726C8EA58006FDF37 /* PPLLabel.swift */,
 			);
 			path = "Base Classes";
 			sourceTree = "<group>";
@@ -614,6 +616,7 @@
 				49028D23243D85AC005EC078 /* AppConfigurationViewController.swift */,
 				49AB68D024FC63FF0057D5F7 /* CountdownPickerViewController.swift */,
 				49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */,
+				49565A24267E450B00F13E44 /* PPLColorPickerViewController.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -975,7 +978,6 @@
 				491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController.xib in Resources */,
 				4989BA6024BB94B0001C17B3 /* ExerciseDataCellViewController.xib in Resources */,
 				496BE36724DE7C7000A4E08B /* Workout.storyboard in Resources */,
-				49AF0CF9259AB59F003F8C60 /* launch.png in Resources */,
 				49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */,
 				490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */,
 				49ABACBC25F463C700517F6F /* start.m4a in Resources */,
@@ -1139,6 +1141,7 @@
 				490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */,
 				4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */,
 				492B3B4A2660B17600929BB3 /* ExerciseGraphViewController.swift in Sources */,
+				49565A25267E450B00F13E44 /* PPLColorPickerViewController.swift in Sources */,
 				49E675FA244CDA54001F5974 /* ExerciseTemplateSelectionViewController.swift in Sources */,
 				49565A2D26B9FF1400F13E44 /* WorkoutNoteViewController.swift in Sources */,
 				493C2C712455E5D2005308AF /* WeightCollectionViewController.swift in Sources */,
@@ -1172,6 +1175,7 @@
 				49EF4BAF23F838F60071687D /* DataManager.swift in Sources */,
 				491C8CFB254A523E003A7526 /* StartWorkoutViewController.swift in Sources */,
 				4989BA5524B94344001C17B3 /* AppColors.swift in Sources */,
+				492E9FF826C8EA58006FDF37 /* PPLLabel.swift in Sources */,
 				49AB68CB24E8BD8E0057D5F7 /* ArrowView.swift in Sources */,
 				491C8CFD254A67DC003A7526 /* AboutViewController.swift in Sources */,
 				4989BA6224BB9A10001C17B3 /* ExerciseDataCellViewController.swift in Sources */,

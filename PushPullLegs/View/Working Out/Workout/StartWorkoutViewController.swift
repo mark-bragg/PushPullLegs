@@ -33,11 +33,13 @@ class StartWorkoutViewController: PPLTableViewController {
             removeBanner()
             setTableViewY(0)
         }
+        tableView?.isScrollEnabled = false
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         cell.setWorkoutTitle(startWorkoutViewModel().title(indexPath: indexPath)!)
+        cell.updateTitleText()
         cell.addDisclosureIndicator()
         return cell
     }
@@ -96,6 +98,11 @@ fileprivate extension PPLTableViewCell {
         lbl.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
         lbl.centerXAnchor.constraint(equalTo: rootView.centerXAnchor).isActive = true
         lbl.sizeToFit()
+    }
+    
+    func updateTitleText() {
+        guard let lbl = rootView.viewWithTag(1) as? UILabel else { return }
+        lbl.textColor = PPLColor.text
     }
     
     func exerciseType() -> ExerciseType {

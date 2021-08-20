@@ -12,9 +12,9 @@ import Combine
 
 class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
-    var viewModel: PPLTableViewModel!
-    weak var tableView: PPLTableView!
-    weak var noDataView: NoDataView!
+    var viewModel: PPLTableViewModel?
+    weak var tableView: PPLTableView?
+    weak var noDataView: NoDataView?
     weak var addButton: PPLAddButton!
     private let addButtonSize = CGSize(width: 75, height: 75)
     weak var addButtonHelperVc: ArrowHelperViewController?
@@ -56,7 +56,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         addBackNavigationGesture()
         view.backgroundColor = PPLColor.primary
         addNoDataView()
-        tableView.reloadData()
+        tableView?.reloadData()
         setTitle()
     }
     
@@ -64,8 +64,8 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         setTableView()
         constrainTableView()
         addTableFooter()
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableView?.delegate = self
+        tableView?.dataSource = self
     }
     
     fileprivate func setTableView() {
@@ -90,14 +90,14 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     func setTableViewY(_ y: CGFloat) {
-        topConstraint = tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: y)
+        topConstraint = tableView?.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: y)
         topConstraint.isActive = true
     }
     
     fileprivate func addTableFooter() {
         let footer = UIView(frame: .zero)
-        footer.backgroundColor = tableView.backgroundColor
-        tableView.tableFooterView = footer
+        footer.backgroundColor = tableView?.backgroundColor
+        tableView?.tableFooterView = footer
     }
     
     private func setTitle() {
@@ -119,7 +119,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if addButton != nil && !viewModel.hasData() {
+        if addButton != nil, let vm = viewModel, !vm.hasData() {
             insertAddButtonInstructions()
         }
     }
@@ -159,9 +159,9 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard let count = viewModel.sectionCount?() else { return }
+        guard let vm = viewModel, let count = vm.sectionCount?() else { return }
         for i in 0..<count {
-            if viewModel.rowCount(section: i) > 0 {
+            if let vm = viewModel, vm.rowCount(section: i) > 0 {
                 hideNoDataView()
                 return
             }
@@ -234,15 +234,15 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     func showNoDataView() {
-        noDataView.isHidden = false
+        noDataView?.isHidden = false
     }
     
     func hideNoDataView() {
-        noDataView.isHidden = true
+        noDataView?.isHidden = true
     }
     
     func tableHeaderViewContainer(titles: [String], section: Int = 0) -> HeaderViewContainer {
-        let headerHeight: CGFloat = tableView(tableView, heightForHeaderInSection: section)
+        let headerHeight: CGFloat = tableView(tableView ?? UITableView(), heightForHeaderInSection: section)
         if headerHeight == 0 {
             return HeaderViewContainer(frame: .zero)
         }
@@ -252,7 +252,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         let labelWidth = headerView.frame.width / widthDenominator
         let gradientTop = CAGradientLayer()
         gradientTop.frame = headerView.layer.bounds
-        gradientTop.colors = [PPLColor.primary!.cgColor, UIColor.clear.cgColor]
+        gradientTop.colors = [PPLColor.primary.cgColor, UIColor.clear.cgColor]
         gradientTop.locations = [0.0, 1.0]
         headerView.layer.addSublayer(gradientTop)
         headerView.backgroundColor = .tertiary
@@ -303,12 +303,13 @@ extension PPLTableViewController: UITableViewDataSource {
 
 extension PPLTableViewController: ReloadProtocol {
     @objc func reload() {
-        if viewModel.hasData() {
+        if let vm = viewModel, vm.hasData() {
             if let btn = addButton, btn.superview == view {
                 removeAddButtonInstructions()
             }
             hideNoDataView()
-            tableView.reloadData()
+            tableView?.reloadData()
+            view.backgroundColor = PPLColor.primary
         } else {
             insertAddButtonInstructions()
             showNoDataView()

@@ -16,7 +16,7 @@ class GraphView: UIControl, ObservableObject {
         }
     }
     private var circle = CAShapeLayer()
-    private var circleLine = CAShapeLayer()
+    private var circleLine = CAGradientLayer()
     private let circleRadius: CGFloat = 5.0
     private var lineWidth: CGFloat {
         get {
@@ -33,6 +33,8 @@ class GraphView: UIControl, ObservableObject {
     private var noDataView: NoDataGraphView!
     private let singlePointCircleDiameter: CGFloat = 5
     var smallDisplay = false
+    var circleLineY: CGFloat = 0.0
+    var topGraphY: CGFloat = 0.0
     
     func setInteractivity() {
         addTarget(self, action: #selector(touchUp(_:)), for: .touchDragExit)
@@ -48,7 +50,7 @@ class GraphView: UIControl, ObservableObject {
     @objc func eraseCircle() {
         index = nil
         circle.frame = .zero
-        circleLine.strokeColor = UIColor.clear.cgColor
+        circleLine.frame = .zero
     }
     
     @objc func touchDown(_ sender: GraphView, with event: UIEvent) {
@@ -79,9 +81,10 @@ class GraphView: UIControl, ObservableObject {
         if firstLoad {
             firstLoad = false
             circle.backgroundColor = UIColor.white.cgColor
-            circle.borderColor = PPLColor.pplGray!.cgColor
+            circle.borderColor = PPLColor.quaternary.cgColor
             circle.borderWidth = 2.5
             layer.addSublayer(circle)
+            layer.addSublayer(circleLine)
         } else {
             eraseLine()
         }
@@ -92,16 +95,6 @@ class GraphView: UIControl, ObservableObject {
     func hasData() -> Bool {
         guard let vals = yValues, vals.count > 0 else { return false }
         return true
-    }
-
-    func addCircleLine() {
-        let path = UIBezierPath()
-        path.lineWidth = 1.5
-        path.move(to: .zero)
-        path.addLine(to: CGPoint(x: 0, y: frame.height))
-        circleLine.path = path.cgPath
-        circleLine.frame = CGRect(x: 0, y: 0, width: 2.0, height: frame.height)
-        layer.addSublayer(circleLine)
     }
     
     @objc fileprivate func drawCircle() {
@@ -118,9 +111,15 @@ class GraphView: UIControl, ObservableObject {
         self.index = index
         circle.frame = CGRect(x: closestPoint.x - circleRadius, y: closestPoint.y - circleRadius, width: circleRadius * 2, height: circleRadius * 2)
         circle.cornerRadius = circle.frame.height / 2
-        circleLine.frame = CGRect(x: touchPoint!.x, y: 0, width: 2.0, height: frame.height)
-        circleLine.strokeColor = UIColor.black.cgColor
+        drawCircleLine(closestPoint)
         bringCircleToFront()
+    }
+    
+    private func drawCircleLine(_ closestPoint: CGPoint) {
+        circleLine.frame = CGRect(x: closestPoint.x - 1, y: circleLineY, width: 2, height: frame.height - circleLineY)
+        circleLine.colors = [PPLColor.primary.cgColor, PPLColor.quaternary.cgColor, PPLColor.primary.cgColor]
+        let highlight = (closestPoint.y - 1) / frame.height as NSNumber
+        circleLine.locations = [0.05, highlight, 0.95]
     }
     
     private func bringCircleToFront() {
@@ -138,7 +137,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     private func lineStrokeColor() -> CGColor {
-        PPLColor.text!.cgColor
+        PPLColor.white.cgColor
     }
     
     func eraseLine() {
@@ -157,7 +156,7 @@ class GraphView: UIControl, ObservableObject {
         lineLayer.lineCap = .round
         lineLayer.strokeColor = lineStrokeColor()
         lineLayer.lineWidth = lineWidth
-        lineLayer.fillColor = isSinglePoint() ? PPLColor.primary!.cgColor : UIColor.clear.cgColor
+        lineLayer.fillColor = isSinglePoint() ? PPLColor.primary.cgColor : UIColor.clear.cgColor
     }
     
     func getPath() -> CGPath {
@@ -219,7 +218,7 @@ class GraphView: UIControl, ObservableObject {
         eraseAxes()
         if noDataView == nil {
             noDataView = NoDataGraphView()
-            noDataView.whiteBackground = smallDisplay
+//            noDataView.whiteBackground = smallDisplay
         }
         if subviews.contains(noDataView) {
             return

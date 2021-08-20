@@ -39,7 +39,7 @@ class RestTimerView: UIView {
         if !subviews.contains(timerLabel) {
             setupTimerLabel()
         }
-        layer.backgroundColor = UIColor.systemRed.cgColor
+        layer.backgroundColor = PPLColor.secondary.cgColor
         layer.borderColor = UIColor.white.cgColor
         layer.borderWidth = 1.5
         layer.cornerRadius = frame.height/2

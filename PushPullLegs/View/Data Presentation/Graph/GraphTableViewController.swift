@@ -9,9 +9,8 @@
 import UIKit
 import GoogleMobileAds
 
-class GraphTableViewController: UIViewController {
+class GraphTableViewController: PPLTableViewController {
     
-    weak var tableView: PPLTableView!
     var pushVc: WorkoutGraphViewController!
     var pullVc: WorkoutGraphViewController!
     var legsVc: WorkoutGraphViewController!
@@ -23,9 +22,16 @@ class GraphTableViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupViews()
+        tableView?.isScrollEnabled = false
     }
     
-    func adsRemoved() {
+    override func reload() {
+        for wgvc in [pushVc, pullVc, legsVc] {
+            wgvc?.reload()
+        }
+    }
+    
+    override func adsRemoved() {
         if let tbv = tableView {
             tbv.removeFromSuperview()
             tableView = nil
@@ -45,13 +51,16 @@ class GraphTableViewController: UIViewController {
         prepareGraphViewControllers()
         navigationItem.titleView = titleLabel()
         constrainTableView()
-        tableView.rowHeight = (tableView.frame.height) / 3
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        tableView.frame.height / 3
     }
     
     fileprivate func prepareTableView() {
         guard tableView == nil else {
-            tableView.isUserInteractionEnabled = true
-            tableView.reloadData()
+            tableView?.isUserInteractionEnabled = true
+            tableView?.reloadData()
             return
         }
         let height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0) - bannerHeight()
@@ -61,6 +70,7 @@ class GraphTableViewController: UIViewController {
         tbv.dataSource = self
         tbv.delegate = self
         tbv.separatorStyle = .none
+        tbv.isScrollEnabled = false
         tableView = tbv
     }
     
@@ -71,7 +81,7 @@ class GraphTableViewController: UIViewController {
             legsVc.view.setNeedsLayout()
             return
         }
-        let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: tableView.rowHeight - 16)
+        let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: (tableView?.rowHeight ?? view.frame.height / 3) - 16)
         pushVc = WorkoutGraphViewController(type: .push, frame: frame)
         pullVc = WorkoutGraphViewController(type: .pull, frame: frame)
         legsVc = WorkoutGraphViewController(type: .legs, frame: frame)
@@ -82,11 +92,11 @@ class GraphTableViewController: UIViewController {
     
     private func constrainTableView() {
         let guide = view.safeAreaLayoutGuide
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: guide.topAnchor, constant: bannerHeight()).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
+        tableView?.translatesAutoresizingMaskIntoConstraints = false
+        tableView?.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
+        tableView?.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+        tableView?.topAnchor.constraint(equalTo: guide.topAnchor, constant: bannerHeight()).isActive = true
+        tableView?.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
     }
     
     func titleLabel() -> UILabel {
@@ -99,22 +109,21 @@ class GraphTableViewController: UIViewController {
     @objc override func bannerAdUnitID() -> String {
         BannerAdUnitID.graphTableVC
     }
-
-}
-
-extension GraphTableViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    // MARK: UITableViewDataSource
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         3
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         cell.tag = indexPath.row
         cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
         let view = viewForRow(indexPath.row)
         cell.rootView.addSubview(view)
         constrain(view, toInsideOf: cell.rootView)
-        vcForRow(indexPath.row).workoutGraphViewModel.reload()
+        vcForRow(indexPath.row).reload()
         if vcForRow(indexPath.row).workoutGraphViewModel.pointCount() > 0 {
             cell.addDisclosureIndicator()
         } else {
@@ -193,7 +202,7 @@ extension GraphTableViewController: UITableViewDataSource {
     }
     
     override func presentAdLoadingView() {
-        guard let cell = tableView.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell else { return }
+        guard let cell = tableView?.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell else { return }
         let spinner = UIActivityIndicatorView(frame: cell.rootView.frame)
         spinner.layer.cornerRadius = cell.rootView.layer.cornerRadius
         spinner.style = .large
@@ -203,23 +212,7 @@ extension GraphTableViewController: UITableViewDataSource {
         self.spinner = spinner
     }
     
-}
-
-extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
-    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
-        popoverPresentationController.permittedArrowDirections = .right
-        guard let cell = tableView.cellForRow(at: IndexPath(row: helpTag, section: 0)) as? PPLTableViewCell else {
-            return
-        }
-        popoverPresentationController.sourceView = cell.indicator
-    }
-
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
-    }
-}
-
-extension GraphTableViewController: UITableViewDelegate {
+    // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
         guard vcForRow(selectedRow).workoutGraphViewModel.pointCount() > 0 else { return }
@@ -232,6 +225,21 @@ extension GraphTableViewController: UITableViewDelegate {
         } else {
             showGraph(selectedRow)
         }
+    }
+    
+}
+
+extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        popoverPresentationController.permittedArrowDirections = .right
+        guard let cell = tableView?.cellForRow(at: IndexPath(row: helpTag, section: 0)) as? PPLTableViewCell else {
+            return
+        }
+        popoverPresentationController.sourceView = cell.indicator
+    }
+
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
 }
 
