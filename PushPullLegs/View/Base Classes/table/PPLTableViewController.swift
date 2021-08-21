@@ -161,7 +161,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         super.viewDidLayoutSubviews()
         guard let vm = viewModel, let count = vm.sectionCount?() else { return }
         for i in 0..<count {
-            if let vm = viewModel, vm.rowCount(section: i) > 0 {
+            if vm.rowCount(section: i) > 0 {
                 hideNoDataView()
                 return
             }

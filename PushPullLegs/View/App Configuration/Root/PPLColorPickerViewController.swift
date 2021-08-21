@@ -16,15 +16,11 @@ class PPLColorPickerViewController: UIViewController, UIPickerViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         let picker = UIPickerView()
-        picker.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(picker)
         picker.delegate = self
         picker.backgroundColor = PPLColor.quaternary
         picker.tintColor = .black
-        picker.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        picker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        picker.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        picker.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        constrain(picker, toInsideOf: view)
         self.picker = picker
         if let selectedRow = ColorNames.list.firstIndex(of: PPLDefaults.instance.getDefaultColor()) {
             picker.selectRow(selectedRow, inComponent: 0, animated: false)

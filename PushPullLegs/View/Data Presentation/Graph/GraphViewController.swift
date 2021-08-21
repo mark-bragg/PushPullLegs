@@ -207,6 +207,7 @@ class GraphViewController: UIViewController, ReloadProtocol {
     }
     
     func bind() {
+        cancellables.removeAll()
         graphView.$index.sink { [weak self] index in
             guard let self = self else { return }
             self.updateLabels(index)

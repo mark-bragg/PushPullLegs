@@ -72,7 +72,6 @@ extension UIViewController {
             label?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
             label?.font = UIFont.systemFont(ofSize: 26, weight: .semibold)
             label?.textAlignment = .center
-            label?.textColor = cell.isSelected ? .white : .text
         }
         return label!
     }

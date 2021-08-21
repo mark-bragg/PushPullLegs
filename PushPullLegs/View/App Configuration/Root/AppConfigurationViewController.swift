@@ -15,7 +15,7 @@ let defaultCellIdentifier = "DefaultTableViewCell"
 class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentationControllerDelegate {
     
     private weak var countdownLabel: UILabel!
-    private weak var appThemeView: UIView!
+    private weak var defaultColorView: UIView!
     private var interstitial: NSObject?
     
     override func viewDidLoad() {
@@ -160,15 +160,15 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         appThemeView.widthAnchor.constraint(equalToConstant: 75).isActive = true
         appThemeView.heightAnchor.constraint(equalToConstant: cell.rootView.frame.height).isActive = true
         cell.rootView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showDefaultColorPicker)))
-        self.appThemeView = appThemeView
+        self.defaultColorView = appThemeView
     }
     
     @objc private func showDefaultColorPicker() {
         let pickerVC = PPLColorPickerViewController()
         pickerVC.modalPresentationStyle = .popover
         pickerVC.preferredContentSize = CGSize(width: 75, height: 250)
-        pickerVC.popoverPresentationController?.sourceView = appThemeView
-        pickerVC.popoverPresentationController?.sourceRect = CGRect(x: appThemeView.frame.width/2, y: 6, width: 0, height: appThemeView.frame.height)
+        pickerVC.popoverPresentationController?.sourceView = defaultColorView
+        pickerVC.popoverPresentationController?.sourceRect = CGRect(x: defaultColorView.frame.width/2, y: 6, width: 0, height: defaultColorView.frame.height)
         pickerVC.popoverPresentationController?.delegate = self
         present(pickerVC, animated: true, completion: {
             pickerVC.$colorSelection.sink { [weak self] (value) in

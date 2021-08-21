@@ -35,7 +35,7 @@ class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: TimeInterval(1), delay: TimeInterval(0.33)) {
+        UIView.animate(withDuration: TimeInterval(0.67), delay: TimeInterval(0.33)) {
             self.view.backgroundColor = .clear
             self.imageView.frame = CGRect(x: self.view.frame.width/2, y: self.view.frame.height/2, width: 1, height: 1)
         } completion: { (b) in

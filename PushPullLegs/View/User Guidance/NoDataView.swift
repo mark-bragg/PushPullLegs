@@ -62,7 +62,7 @@ class NoDataGraphView: NoDataView {
         lightBackground = true
         super.layoutSubviews()
         if whiteBackground {
-            backgroundColor = .quaternary
+            backgroundColor = PPLColor.quaternary
         }
         label()?.textColor = UIColor.white
         

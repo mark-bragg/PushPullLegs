@@ -35,7 +35,6 @@
 		492B3B4A2660B17600929BB3 /* ExerciseGraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B3B492660B17600929BB3 /* ExerciseGraphViewController.swift */; };
 		492B642F26D13F140004171D /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 492B642E26D13F140004171D /* launch.png */; };
 		492B643A26D1A4AD0004171D /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B643926D1A4AD0004171D /* SplashViewController.swift */; };
-		492E9FF826C8EA58006FDF37 /* PPLLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492E9FF726C8EA58006FDF37 /* PPLLabel.swift */; };
 		49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */; };
 		49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8624C28C64005FF7A8 /* PPLTableView.swift */; };
 		49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8824C29886005FF7A8 /* PPLAddButton.swift */; };
@@ -179,7 +178,6 @@
 		492B3B492660B17600929BB3 /* ExerciseGraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGraphViewController.swift; sourceTree = "<group>"; };
 		492B642E26D13F140004171D /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		492B643926D1A4AD0004171D /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
-		492E9FF726C8EA58006FDF37 /* PPLLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLLabel.swift; sourceTree = "<group>"; };
 		49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushPullLegs.xcdatamodel; sourceTree = "<group>"; };
 		49359B8624C28C64005FF7A8 /* PPLTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableView.swift; sourceTree = "<group>"; };
 		49359B8824C29886005FF7A8 /* PPLAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAddButton.swift; sourceTree = "<group>"; };
@@ -590,7 +588,6 @@
 				491C8D01254BC166003A7526 /* table */,
 				491C8D00254BC157003A7526 /* button */,
 				49453379244FCC1900FA1665 /* PPLTabBarController.swift */,
-				492E9FF726C8EA58006FDF37 /* PPLLabel.swift */,
 			);
 			path = "Base Classes";
 			sourceTree = "<group>";
@@ -1183,7 +1180,6 @@
 				49EF4BAF23F838F60071687D /* DataManager.swift in Sources */,
 				491C8CFB254A523E003A7526 /* StartWorkoutViewController.swift in Sources */,
 				4989BA5524B94344001C17B3 /* AppColors.swift in Sources */,
-				492E9FF826C8EA58006FDF37 /* PPLLabel.swift in Sources */,
 				49AB68CB24E8BD8E0057D5F7 /* ArrowView.swift in Sources */,
 				491C8CFD254A67DC003A7526 /* AboutViewController.swift in Sources */,
 				4989BA6224BB9A10001C17B3 /* ExerciseDataCellViewController.swift in Sources */,

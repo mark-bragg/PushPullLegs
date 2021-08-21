@@ -218,7 +218,6 @@ class GraphView: UIControl, ObservableObject {
         eraseAxes()
         if noDataView == nil {
             noDataView = NoDataGraphView()
-//            noDataView.whiteBackground = smallDisplay
         }
         if subviews.contains(noDataView) {
             return
