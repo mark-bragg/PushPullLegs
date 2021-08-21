@@ -46,6 +46,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         removeSwitch(cell)
         removeSegmentedControl(cell)
+        removeDefaultColorView(cell)
+        cell.removeIndicator()
         cell.selectionStyle = .default
         if indexPath.row < 3 {
             cell.addDisclosureIndicator()
@@ -174,6 +176,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
                 PPLDefaults.instance.setDefaultColor(color)
                 self.updateForNewDefaultColor()
                 pickerVC.picker.backgroundColor = PPLColor.quaternary
+                self.dismiss(animated: true, completion: nil)
             }
             .store(in: &self.cancellables)
         })

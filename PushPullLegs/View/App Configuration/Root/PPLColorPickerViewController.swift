@@ -68,6 +68,10 @@ extension UIViewController {
         cell.rootView.viewWithTag(UIViewController.appThemeColorViewTag)
     }
     
+    func removeDefaultColorView(_ cell: PPLTableViewCell) {
+        cell.rootView.viewWithTag(UIViewController.appThemeColorViewTag)?.removeFromSuperview()
+    }
+    
     func viewForAppColor(_ color: String = PPLDefaults.instance.getDefaultColor()) -> UIView {
         let superView = UIView(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
         superView.tag = UIViewController.appThemeColorViewTag

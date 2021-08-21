@@ -34,6 +34,7 @@ class WorkoutNoteViewController: UIViewController {
         addToolbar()
         addToolbarItems()
         addTextView()
+        textView.backgroundColor = PPLColor.quaternary
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,7 +49,7 @@ class WorkoutNoteViewController: UIViewController {
     
     private func addToolbar() {
         let toolbar = UIToolbar()
-        toolbar.tintColor = PPLColor.white
+        toolbar.backgroundColor = PPLColor.primary
         view.addSubview(toolbar)
         self.toolbar = toolbar
         constrainToolbar()
@@ -84,6 +85,7 @@ class WorkoutNoteViewController: UIViewController {
         textView.text = self.dataSource.noteText()
         textView.font = UIFont.systemFont(ofSize: 22)
         self.textView = textView
+        textView.textColor = PPLColor.text
     }
     
     private func constrainTextView(_ keyboardHeight: CGFloat) {

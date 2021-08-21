@@ -17,6 +17,8 @@ class StartWorkoutViewController: PPLTableViewController {
     private var exerciseType: ExerciseType?
     private var didNavigateToWorkout: Bool = false
     weak var delegate: WorkoutSelectionDelegate?
+    var splashVC: SplashViewController!
+    private var firstAppearence = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +27,10 @@ class StartWorkoutViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if firstAppearence {
+            firstAppearence = false
+            presentSplash()
+        }
         hidesBottomBarWhenPushed = false
         if AppState.shared.workoutInProgress {
             self.navigateToNextWorkout()
@@ -34,6 +40,14 @@ class StartWorkoutViewController: PPLTableViewController {
             setTableViewY(0)
         }
         tableView?.isScrollEnabled = false
+    }
+    
+    func presentSplash() {
+        let splashVC = SplashViewController()
+        splashVC.delegate = self
+        UIApplication.shared.windows.first!.addSubview(splashVC.view)
+        splashVC.view.frame = UIApplication.shared.windows.first!.bounds
+        self.splashVC = splashVC
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -113,6 +127,13 @@ fileprivate extension PPLTableViewCell {
         return (viewWithTag(1) as! UILabel).text!
     }
     
+}
+
+extension StartWorkoutViewController: SplashViewControllerDelegate {
+    func splashViewControllerDidDisappear(_ splash: SplashViewController) {
+        splashVC.view.removeFromSuperview()
+        splashVC = nil
+    }
 }
 
 class StartWorkoutViewModel: NSObject, PPLTableViewModel {
