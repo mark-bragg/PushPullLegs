@@ -29,7 +29,7 @@ class PPLDropDownViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         names = dataSource.names()
-        view.backgroundColor = PPLColor.cellBackgroundBlue
+        view.backgroundColor = PPLColor.quaternary
         let tblv = UITableView()
         tblv.backgroundColor = PPLColor.clear
         tblv.delegate = self
@@ -65,7 +65,7 @@ extension PPLDropDownViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.textLabel?.text = names[indexPath.item]
-        cell.textLabel?.textColor = PPLColor.pplTextBlue
+        cell.textLabel?.textColor = PPLColor.text
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         return cell

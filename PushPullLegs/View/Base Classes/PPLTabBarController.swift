@@ -10,10 +10,14 @@ import UIKit
 import AppTrackingTransparency
 import AdSupport
 
-class PPLTabBarController: UITabBarController {
+class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
+    
+    var isGraphPresented = false
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { isGraphPresented ? .allButUpsideDown : .portrait }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        DefaultColorUpdate.addObserver(self)
         viewControllers = [
             workoutNavigationController(),
             workoutLogNavigationController(),
@@ -22,7 +26,7 @@ class PPLTabBarController: UITabBarController {
         ]
         for navigationController in viewControllers as! [PPLNavigationController] {
             navigationController.navigationBar.isTranslucent = false
-            navigationController.navigationBar.barTintColor = .navbarBackgroundBlue
+            navigationController.navigationBar.barTintColor = PPLColor.secondary
             navigationController.navigationBar.tintColor = .white
         }
     }
@@ -58,6 +62,17 @@ class PPLTabBarController: UITabBarController {
         let vc = PPLNavigationController(rootViewController: AppConfigurationViewController())
         vc.tabBarItem = .settingsTab
         return vc
+    }
+    
+    func handleDefaultColorUpdate() {
+        guard let viewControllers = viewControllers as? [PPLNavigationController] else { return }
+        
+        for navController in viewControllers {
+            navController.navigationBar.barTintColor = PPLColor.secondary
+            if let defaultColorObserver = navController.viewControllers.first as? PPLTableViewController {
+                defaultColorObserver.reload()
+            }
+        }
     }
 
 }

@@ -24,6 +24,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = PPLColor.primary
         if showExerciseType {
             setupExerciseTypeButtons()
             saveButton.setTitle("Select Type", for: .normal)
@@ -38,6 +39,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         super.viewWillAppear(animated)
         textField.autocorrectionType = .no
         textField.textAlignment = .center
+        textField.backgroundColor = PPLColor.quaternary
         textField.becomeFirstResponder()
     }
     

@@ -15,6 +15,7 @@ let defaultCellIdentifier = "DefaultTableViewCell"
 class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentationControllerDelegate {
     
     private weak var countdownLabel: UILabel!
+    private weak var defaultColorView: UIView!
     private var interstitial: NSObject?
     
     override func viewDidLoad() {
@@ -38,17 +39,19 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.rowCount(section: section)
+        viewModel?.rowCount(section: section) ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         removeSwitch(cell)
         removeSegmentedControl(cell)
+        removeDefaultColorView(cell)
+        cell.removeIndicator()
         cell.selectionStyle = .default
         if indexPath.row < 3 {
             cell.addDisclosureIndicator()
-        } else if indexPath.row < 6 {
+        } else if indexPath.row < 7 {
             cell.selectionStyle = .none
             if indexPath.row == 3 {
                 configureImperialMetricSegmenedControl(cell: cell)
@@ -56,6 +59,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
                 configureCustomCountdownCell(cell: cell)
             } else if indexPath.row == 5 {
                 configureTimerSoundsCell(cell: cell)
+            } else if indexPath.row == 6 {
+                configureDefaultColorCell(cell: cell)
             }
         } else {
             
@@ -65,7 +70,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         if textLabel == nil && indexPath.row != 3 {
             textLabel = textLabelForCell(cell)
         }
-        textLabel?.text = viewModel.title(indexPath: indexPath)
+        textLabel?.textColor = PPLColor.text
+        textLabel?.text = viewModel?.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 4.0, rect: cell.frame)
         return cell
     }
@@ -94,7 +100,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         segment.insertSegment(withTitle: "Metric", at: 1, animated: false)
         segment.selectedSegmentIndex = PPLDefaults.instance.isKilograms() ? 1 : 0
         segment.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
-        segment.selectedSegmentTintColor = PPLColor.headerBackgroundBlue
+        segment.selectedSegmentTintColor = PPLColor.primary
         segment.backgroundColor = .pplGray
         cell.rootView.addSubview(segment)
         segment.translatesAutoresizingMaskIntoConstraints = false
@@ -107,7 +113,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     @objc func toggleKilogramsPoundsValue(_ control: UISegmentedControl) {
         let measurementType = control.selectedSegmentIndex == 0 ? MeasurementType.imperial : MeasurementType.metric
         PPLDefaults.instance.setImperialMetric(measurementType)
-        self.tableView.reloadData()
+        tableView?.reloadData()
     }
     
     func configureCustomCountdownCell(cell: PPLTableViewCell) {
@@ -137,6 +143,40 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
                 guard let seconds = value, let self = self else { return }
                 PPLDefaults.instance.setCountdown(seconds)
                 self.countdownLabel.text = "\(seconds)"
+            }
+            .store(in: &self.cancellables)
+        })
+    }
+    
+    
+    func configureDefaultColorCell(cell: PPLTableViewCell) {
+        if let _ = defaultColorView(cell) { return }
+        cell.rootView.isUserInteractionEnabled = true
+        let appThemeView = viewForAppColor()
+        cell.rootView.addSubview(appThemeView)
+        appThemeView.translatesAutoresizingMaskIntoConstraints = false
+        appThemeView.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -18).isActive = true
+        appThemeView.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
+        appThemeView.widthAnchor.constraint(equalToConstant: 75).isActive = true
+        appThemeView.heightAnchor.constraint(equalToConstant: cell.rootView.frame.height).isActive = true
+        cell.rootView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showDefaultColorPicker)))
+        self.defaultColorView = appThemeView
+    }
+    
+    @objc private func showDefaultColorPicker() {
+        let pickerVC = PPLColorPickerViewController()
+        pickerVC.modalPresentationStyle = .popover
+        pickerVC.preferredContentSize = CGSize(width: 75, height: 250)
+        pickerVC.popoverPresentationController?.sourceView = defaultColorView
+        pickerVC.popoverPresentationController?.sourceRect = CGRect(x: defaultColorView.frame.width/2, y: 6, width: 0, height: defaultColorView.frame.height)
+        pickerVC.popoverPresentationController?.delegate = self
+        present(pickerVC, animated: true, completion: {
+            pickerVC.$colorSelection.sink { [weak self] (value) in
+                guard let color = value, let self = self else { return }
+                PPLDefaults.instance.setDefaultColor(color)
+                self.updateForNewDefaultColor()
+                pickerVC.picker.backgroundColor = PPLColor.quaternary
+                self.dismiss(animated: true, completion: nil)
             }
             .store(in: &self.cancellables)
         })
@@ -213,7 +253,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     func showSpinner(_ indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? PPLTableViewCell else { return }
+        guard let cell = tableView?.cellForRow(at: indexPath) as? PPLTableViewCell else { return }
         let spinner = UIActivityIndicatorView(frame: cell.rootView.frame)
         spinner.layer.cornerRadius = cell.rootView.layer.cornerRadius
         spinner.style = .large
@@ -252,7 +292,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
         popoverPresentationController.permittedArrowDirections = []
-        popoverPresentationController.sourceView = countdownLabel
     }
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {

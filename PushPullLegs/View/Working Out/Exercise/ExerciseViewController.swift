@@ -31,15 +31,15 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         super.viewWillAppear(animated)
         if !readOnly && addButton == nil {
             setupAddButton()
-            if viewModel.hasData() {
+            if ((viewModel?.hasData()) != nil) {
                 hideNoDataView()
             }
         }
-        tableView.allowsSelection = false
+        tableView?.allowsSelection = false
     }
 
     private func backNavigationBarButtonItem() -> UIBarButtonItem.SystemItem {
-        if viewModel.rowCount(section: 1) == 0 {
+        if viewModel?.rowCount(section: 1) == 0 {
             return .cancel
         }
         isLeftBarItemSetToDone = true
@@ -75,7 +75,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         guard !readOnly else {
             return super.setupRightBarButtonItems()
         }
-        navigationItem.rightBarButtonItem = viewModel.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
+        navigationItem.rightBarButtonItem = viewModel?.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
     }
     
     func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController) {
@@ -205,14 +205,18 @@ class SetNavigationController: UINavigationController {
     
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        navigationBar.backgroundColor = PPLColor.navbarBackgroundBlue
+        navigationBar.backgroundColor = PPLColor.secondary
+        navigationBar.barTintColor = PPLColor.secondary
+        navigationBar.tintColor = .white
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     override func popViewController(animated: Bool) -> UIViewController? {
-        setDelegate?.navigationController(self, willPop: topViewController!)
+        if let topViewController = topViewController {
+            setDelegate?.navigationController(self, willPop: topViewController)
+        }
         return super.popViewController(animated: animated)
     }
 }
@@ -241,6 +245,7 @@ fileprivate extension PPLTableViewCell {
         timeLabel.tag = durationLabelTag
         for lbl in [weightLabel, repsLabel, timeLabel] {
             lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+            lbl.textColor = PPLColor.text
             lbl.textAlignment = .center
             rootView.addSubview(lbl)
             lbl.translatesAutoresizingMaskIntoConstraints = false

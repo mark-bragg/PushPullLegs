@@ -18,6 +18,7 @@ class DurationCollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = PPLColor.primary
         navigationItem.title = "Duration"
         button.setTitle("Submit", for: .normal)
         button.delegate = self

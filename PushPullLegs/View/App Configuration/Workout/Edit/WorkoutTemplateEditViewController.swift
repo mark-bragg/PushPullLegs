@@ -42,15 +42,17 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var isSelected = false
         if indexPath.section == 0 {
             if workoutTemplateEditViewModel().sectionCount() == 2 { workoutTemplateEditViewModel().selected(indexPath: indexPath) } else {
                 workoutTemplateEditViewModel().selected(indexPath: indexPath)
             }
         } else {
             workoutTemplateEditViewModel().selected(indexPath: indexPath)
+            isSelected = true
         }
-        if let cell = tableView.cellForRow(at: indexPath) {
-            cell.setSelected(workoutTemplateEditViewModel().isSelected(indexPath), animated: true)
+        if let cell = tableView.cellForRow(at: indexPath) as? PPLTableViewCell {
+            cell.setSelected(isSelected, animated: true)
         }
         reload()
     }

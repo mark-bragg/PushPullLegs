@@ -19,8 +19,8 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
-        tableView.allowsMultipleSelection = true
+        tableView?.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
+        tableView?.allowsMultipleSelection = true
         navigationItem.title = "Select Exercises"
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(pop))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addExercise))
@@ -45,10 +45,11 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        cell.multiSelect = viewModel.multiSelect ?? false
+        cell.multiSelect = viewModel?.multiSelect ?? false
         var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
+            textLabel?.textColor = PPLColor.text
             textLabel?.textAlignment = .center
             cell.rootView.addSubview(textLabel!)
             textLabel?.translatesAutoresizingMaskIntoConstraints = false
@@ -79,7 +80,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func reload() {
         exerciseSelectionViewModel.reload()
-        tableView.reloadData()
+        tableView?.reloadData()
     }
     
     override func bannerAdUnitID() -> String {

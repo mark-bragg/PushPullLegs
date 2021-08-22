@@ -14,6 +14,7 @@ class RepsCollectionViewController: QuantityCollectionViewController, Exercising
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = PPLColor.primary
         navigationItem.title = "Rep Count"
         label.text = "Enter Number of Reps"
         button.setTitle("Save Set", for: .normal)

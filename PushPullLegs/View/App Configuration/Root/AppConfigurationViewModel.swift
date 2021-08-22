@@ -16,12 +16,13 @@ enum AppConfigurationRowID {
     case massUnitsControl
     case countdownControl
     case timerSounds
+    case appColor
     case disableAds
     case restorePurchases
 }
 
 class AppConfigurationViewModel: NSObject, PPLTableViewModel {
-    private var titles = ["About", "Edit Workout List", "Edit Exercise List", "", "Countdown for each set", "Timer Sounds"]
+    private var titles = ["About", "Edit Workout List", "Edit Exercise List", "", "Countdown for each set", "Timer Sounds", "App Color"]
     private var hasDisableAdsRow: Bool
     
     override init() {
@@ -62,6 +63,8 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
         case 5:
             return .timerSounds
         case 6:
+            return .appColor
+        case 7:
             return hasDisableAdsRow ? .disableAds : nil
         default:
             return hasDisableAdsRow ? .restorePurchases : nil
@@ -71,4 +74,6 @@ class AppConfigurationViewModel: NSObject, PPLTableViewModel {
     func disableAds() {
         
     }
+    
+    
 }

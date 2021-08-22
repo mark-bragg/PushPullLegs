@@ -22,7 +22,7 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupAddButton()
-        tableView.allowsSelection = false
+        tableView?.allowsSelection = false
     }
     
     private func exerciseTemplateListViewModel() -> ExerciseTemplateListViewModel {
@@ -79,7 +79,7 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
             textLabel?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: -10).isActive = true
             textLabel?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor, constant: 0).isActive = true
         }
-        textLabel?.text = viewModel.title(indexPath: indexPath)
+        textLabel?.text = viewModel?.title(indexPath: indexPath)
         return cell
     }
     
@@ -110,7 +110,7 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     
     override func reload() {
         exerciseTemplateListViewModel().reload()
-        tableView.reloadData()
+        tableView?.reloadData()
         super.reload()
     }
     

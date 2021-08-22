@@ -24,7 +24,7 @@ class WorkoutViewController: PPLTableViewController {
         workoutEditViewModel.delegate = self
         navigationItem.title = workoutEditViewModel.exerciseType.rawValue
         exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: workoutEditViewModel.exerciseType, templateManagement: TemplateManagement())
-        tableView.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
+        tableView?.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
         if let exerciseInProgressName = AppState.shared.exerciseInProgress {
             for i in 0..<workoutEditViewModel.rowCount(section: section2) {
                 let indexPath = IndexPath(row: i, section: section2)
@@ -37,7 +37,7 @@ class WorkoutViewController: PPLTableViewController {
         workoutEditViewModel.reload()
         setupAddButton()
         reload()
-        navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
+        navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel?.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
         navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(presentNoteViewController)), animated: false)
     }
     
@@ -64,15 +64,15 @@ class WorkoutViewController: PPLTableViewController {
     }
     
     @objc override func pop() {
-        if viewModel.rowCount(section: 1) > 0 {
-            presentFinishWorkoutPrompt()
-        } else {
+        if viewModel?.rowCount(section: 1) == 0 {
             deleteWorkoutAndPop()
+        } else {
+            presentFinishWorkoutPrompt()
         }
     }
     
     func presentFinishWorkoutPrompt() {
-        guard viewModel.rowCount(section: 1) > 0 else {
+        if viewModel?.rowCount(section: 1) == 0 {
             workoutEditViewModel.deleteWorkout()
             popFromNavStack()
             return
@@ -112,7 +112,7 @@ class WorkoutViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        let title = viewModel.title(indexPath: indexPath)
+        let title = viewModel?.title(indexPath: indexPath)
         cell.rootView.removeAllSubviews()
         if indexPath.section == 1 {
             let vc = ExerciseDataCellViewController()
@@ -129,6 +129,7 @@ class WorkoutViewController: PPLTableViewController {
             label.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
             label.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
             label.text = title
+            label.textColor = PPLColor.text
         }
         cell.addDisclosureIndicator()
         return cell
@@ -184,7 +185,7 @@ extension WorkoutViewController: WorkoutEditViewModelDelegate {
 extension WorkoutViewController {
     override func reload() {
         workoutEditViewModel.exerciseTemplatesAdded()
-        tableView.reloadData()
+        tableView?.reloadData()
         if !firstLoad {
             super.reload()
         }

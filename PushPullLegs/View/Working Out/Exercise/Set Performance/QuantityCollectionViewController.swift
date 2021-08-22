@@ -31,9 +31,10 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, P
         textField.delegate = self
         textField.autocorrectionType = .no
         button.disable()
-        view.backgroundColor = .backgroundBlue
+        view.backgroundColor = PPLColor.primary
+        textField.backgroundColor = PPLColor.quaternary
         textField.becomeFirstResponder()
-        label.textColor = .cellBackgroundBlue
+        label.textColor = UIColor.white
     }
     
     override func viewWillDisappear(_ animated: Bool) {
