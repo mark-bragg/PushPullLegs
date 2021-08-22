@@ -19,7 +19,7 @@ import Foundation
 
 class AppState {
     static let shared = AppState()
-    var workoutInProgress: Bool {
+    @Published var workoutInProgress: Bool {
         willSet {
             PPLDefaults.instance.setWorkoutInProgress(newValue)
         }

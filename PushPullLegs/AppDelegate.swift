@@ -10,15 +10,20 @@ import UIKit
 import CoreData
 import GoogleMobileAds
 import StoreKit
+import Combine
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     private let defaults = PPLDefaults.instance
+    var wipCancellable: AnyCancellable?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         // MARK: NSInMemoryStoreType for testing purposes
+        wipCancellable = AppState.shared.$workoutInProgress.sink { (inProgress) in
+            application.isIdleTimerDisabled = inProgress
+        }
         CoreDataManager.shared.setup(completion: nil)
         CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
         GADMobileAds.sharedInstance().start(completionHandler: nil)
