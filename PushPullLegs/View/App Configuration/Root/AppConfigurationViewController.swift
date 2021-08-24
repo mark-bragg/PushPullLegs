@@ -95,13 +95,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     func configureImperialMetricSegmenedControl(cell: PPLTableViewCell) {
         if let _ = cell.rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
         cell.rootView.isUserInteractionEnabled = true
-        let segment = UISegmentedControl()
-        segment.insertSegment(withTitle: "Imperial", at: 0, animated: false)
-        segment.insertSegment(withTitle: "Metric", at: 1, animated: false)
+        let segment = UISegmentedControl.PPLSegmentedControl(titles: ["Imperial", "Metric"], target: self, selector: #selector(toggleKilogramsPoundsValue(_:)))
         segment.selectedSegmentIndex = PPLDefaults.instance.isKilograms() ? 1 : 0
-        segment.addTarget(self, action: #selector(toggleKilogramsPoundsValue(_:)), for: .valueChanged)
-        segment.selectedSegmentTintColor = PPLColor.primary
-        segment.backgroundColor = .pplGray
         cell.rootView.addSubview(segment)
         segment.translatesAutoresizingMaskIntoConstraints = false
         segment.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
@@ -323,4 +318,17 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
 
 class AppConfigurationRowView: UIView {
     var mainTitle: String?
+}
+
+extension UISegmentedControl {
+    static func PPLSegmentedControl(titles: [String], target: Any, selector: Selector) -> UISegmentedControl {
+        let segment = UISegmentedControl()
+        for i in 0..<titles.count {
+            segment.insertSegment(withTitle: titles[i], at: i, animated: false)
+        }
+        segment.addTarget(target, action: selector, for: .valueChanged)
+        segment.selectedSegmentTintColor = PPLColor.primary
+        segment.backgroundColor = .pplGray
+        return segment
+    }
 }

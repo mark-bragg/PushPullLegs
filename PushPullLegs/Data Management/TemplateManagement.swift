@@ -17,13 +17,13 @@ class TemplateManagement {
         self.coreDataManager = coreDataManager
     }
     
-    func addExerciseTemplate(name: String, type: ExerciseType) throws {
+    func addExerciseTemplate(name: String, type: ExerciseType, unilateral: Bool = false) throws {
         let er = exerciseReader()
         if er.exists(name: name) {
             throw TemplateError.duplicateExercise
         }
         let ew = exerciseWriter()
-        ew.create(name: name, keyValuePairs: [PPLObjectKey.type: type.rawValue])
+        ew.create(name: name, keyValuePairs: [PPLObjectKey.type: type.rawValue, PPLObjectKey.unilateral: unilateral])
     }
     
     func deleteExerciseTemplate(name: String) {

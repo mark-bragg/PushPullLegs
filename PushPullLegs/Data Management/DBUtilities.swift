@@ -28,3 +28,14 @@ enum TemplateError: Error {
     case duplicateExercise
     case missingExercise
 }
+
+extension Exercise {
+    var isUnilateral: Bool {
+        TemplateManagement.init().exerciseTemplate(name: name ?? "")?.unilateral ?? false
+    }
+}
+
+enum LateralType {
+    case bilateral
+    case unilateral
+}

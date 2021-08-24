@@ -34,6 +34,7 @@ extension PPLObjectKey {
     static let duration = "duration"
     static let type = "type"
     static let exerciseNames = "exerciseNames"
+    static let unilateral = "unilateral"
 }
 
 let persistentContainerName = "PushPullLegs"
