@@ -112,13 +112,13 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func handleFinishedSet(_ exerciseSet: ExerciseSet, _ name: String) {
         appendFinishedSetData(FinishedSetDataModel(withExerciseSet: exerciseSet))
-        self.reloader?.reload()
-        let row = self.rowCount() - 1
-        PPLDefaults.instance.setWeight(self.weightForIndexPath(IndexPath(row: row, section: 0)), forExerciseWithName: name)
+        reloader?.reload()
+        let row = rowCount() - 1
+        PPLDefaults.instance.setWeight(weightForIndexPath(IndexPath(row: row, section: 0)), forExerciseWithName: name)
     }
     
     func appendFinishedSetData(_ data: FinishedSetDataModel) {
-        self.finishedCellData.append(data)
+        finishedCellData.append(data)
     }
     
     override func rowCount(section: Int = 0) -> Int {

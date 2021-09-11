@@ -24,10 +24,6 @@ class UnilateralExerciseViewModelTests: XCTestCase {
         let template = dbHelper.fetchExerciseTemplates()!.first!
         sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exerciseTemplate: template)
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
     
     func assertFinishedSet(_ d: Int, _ w: Double, _ r: Double, _ exercise: Exercise, _ rowCount: Int, _ side: HandSide) {
         let section = side == .left ? 0 : 1

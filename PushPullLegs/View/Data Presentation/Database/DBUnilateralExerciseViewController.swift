@@ -9,12 +9,6 @@
 import UIKit
 
 class DBUnilateralExerciseViewController: DBExerciseViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         viewModel?.sectionCount?() ?? 1
@@ -22,8 +16,7 @@ class DBUnilateralExerciseViewController: DBExerciseViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let view = super.tableView(tableView, viewForHeaderInSection: section) else { return nil }
-        updateSectionHeaders(section, view)
-        return view
+        return updateSectionHeaders(section, view)
     }
     
     override func addAction(_ sender: Any) {

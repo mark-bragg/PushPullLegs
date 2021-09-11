@@ -141,36 +141,9 @@ class WorkoutViewController: PPLTableViewController {
     }
     
     func navigateToExercise() {
-        guard let vc = getExerciseViewController() else { return }
+        guard let vc = ExerciseViewControllerFactory.getExerciseViewController(workoutEditViewModel.getSelected()) else { return }
+        (vc.viewModel as! ExerciseViewModel).delegate = workoutEditViewModel
         navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    private func getExerciseViewController() -> PPLTableViewController? {
-        guard let vm = getViewModelForExerciseVC() else { return nil }
-        let vc = vm.isKind(of: UnilateralExerciseViewModel.self) ? UnilateralExerciseViewController() : ExerciseViewController()
-        vm.reloader = vc
-        vm.delegate = workoutEditViewModel
-        vc.viewModel = vm
-        return vc
-    }
-    
-    private func getViewModelForExerciseVC() -> ExerciseViewModel? {
-        if let exerciseTemplate = workoutEditViewModel.getSelected() as? ExerciseTemplate {
-            return getTemplateViewModel(exerciseTemplate.unilateral)
-        } else if let exercise = workoutEditViewModel.getSelected() as? Exercise {
-            return getExerciseViewModel(exercise.isUnilateral)
-        }
-        return nil
-    }
-    
-    private func getTemplateViewModel(_ unilateral: Bool) -> ExerciseViewModel? {
-        guard let exerciseTemplate = workoutEditViewModel.getSelected() as? ExerciseTemplate else { return nil }
-        return unilateral ? UnilateralExerciseViewModel(exerciseTemplate: exerciseTemplate) : ExerciseViewModel(exerciseTemplate: exerciseTemplate)
-    }
-    
-    private func getExerciseViewModel(_ unilateral: Bool) -> ExerciseViewModel? {
-        guard let exercise = workoutEditViewModel.getSelected() as? Exercise else { return nil }
-        return unilateral ? UnilateralExerciseViewModel(exercise: exercise) : ExerciseViewModel(exercise: exercise)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

@@ -18,18 +18,18 @@ class UnilateralExerciseViewController: ExerciseViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let superHeader = super.tableView(tableView, viewForHeaderInSection: section) else { return nil }
-        updateSectionHeaders(section, superHeader)
-        return superHeader
+        return updateSectionHeaders(section, superHeader)
     }
 
 }
 
 extension ExerciseViewController {
-    func updateSectionHeaders(_ section: Int, _ superHeader: UIView) {
+    func updateSectionHeaders(_ section: Int, _ superHeader: UIView) -> UIView {
         let sectLbl = UILabel()
         sectLbl.text = headerTitle(section)
         sectLbl.sizeToFit()
         superHeader.addSubview(sectLbl)
+        return superHeader
     }
     
     private func headerTitle(_ section: Int) -> String {

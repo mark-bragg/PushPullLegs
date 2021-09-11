@@ -60,15 +60,15 @@ class ExerciseDataManager: DataManager {
     }
     
     func set(reps: Int, forSet set: ExerciseSet) {
-        self.set(value: reps, forSet: set, withKey: PPLObjectKey.reps)
+        self.set(value: reps, forSet: set, withKey: DBAttributeKey.reps)
     }
     
     func set(weight: Int, forSet set: ExerciseSet) {
-        self.set(value: weight, forSet: set, withKey: PPLObjectKey.weight)
+        self.set(value: weight, forSet: set, withKey: DBAttributeKey.weight)
     }
     
     func set(duration: Int, forSet set: ExerciseSet) {
-        self.set(value: duration, forSet: set, withKey: PPLObjectKey.duration)
+        self.set(value: duration, forSet: set, withKey: DBAttributeKey.duration)
     }
     
     func set(value: Int, forSet set: ExerciseSet, withKey key: String) {
@@ -112,12 +112,18 @@ class UnilateralExerciseDataManager: ExerciseDataManager {
         guard
             let e = fetch(exercise.objectID) as? UnilateralExercise,
             var s = e.sets?.array as? [UnilateralExerciseSet],
-            let i = s.firstIndex(where: { $0.weight == data.w && $0.reps == data.r && $0.duration == data.d && $0.isLeftSide == data.l })
+            let i = s.firstIndex(where: { $0.isEqualToData(data) })
         else { return }
         
         delete(s[i])
         s.remove(at: i)
         exercise.sets = NSOrderedSet(array: s)
         try? backgroundContext.save()
+    }
+}
+
+extension UnilateralExerciseSet {
+    public func isEqualToData(_ data: (w: Double, r: Double, d: Int, l: Bool)) -> Bool {
+        return self.weight == data.w && self.reps == data.r && self.duration == data.d && self.isLeftSide == data.l
     }
 }

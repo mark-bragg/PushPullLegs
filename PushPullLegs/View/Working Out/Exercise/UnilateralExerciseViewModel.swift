@@ -134,13 +134,13 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
         refresh()
     }
     
+    override func objectDeleted(_ object: NSManagedObject) {
+        refresh()
+    }
+    
     override func refresh() {
         collectFinishedCellData()
         reloader?.reload()
-    }
-    
-    override func objectDeleted(_ object: NSManagedObject) {
-        refresh()
     }
     
 }
@@ -152,13 +152,13 @@ extension Int {
         return  seconds + (minutes * 60)
     }
     
-    private static func getMinutes(_ duration: String) -> Int? {
-        Int(duration.dropLast(3))
-    }
-    
     private static func getSeconds(_ duration: String) -> Int? {
         guard let minutes = getMinutes(duration) else { return nil }
         let dropCount = minutes < 10 ? 2 : 3
         return Int(duration.dropFirst(dropCount))
+    }
+    
+    private static func getMinutes(_ duration: String) -> Int? {
+        Int(duration.dropLast(3))
     }
 }

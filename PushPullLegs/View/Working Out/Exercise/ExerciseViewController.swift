@@ -69,14 +69,10 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     private func prepareExerciseSetViewModel() {
-        exerciseSetViewModel = newExerciseSetViewModel()
+        exerciseSetViewModel = ExerciseSetViewModel()
         exerciseSetViewModel?.delegate = self
         exerciseSetViewModel?.setCollector = exerciseViewModel
         exerciseSetViewModel?.defaultWeight = exerciseViewModel.defaultWeight
-    }
-    
-    func newExerciseSetViewModel() -> ExerciseSetViewModel {
-        ExerciseSetViewModel()
     }
     
     override func setupRightBarButtonItems() {

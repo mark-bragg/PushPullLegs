@@ -26,8 +26,8 @@ extension PPLPredicate {
     }
 }
 
-typealias PPLObjectKey = String
-extension PPLObjectKey {
+typealias DBAttributeKey = String
+extension DBAttributeKey {
     static let name = "name"
     static let reps = "reps"
     static let weight = "weight"

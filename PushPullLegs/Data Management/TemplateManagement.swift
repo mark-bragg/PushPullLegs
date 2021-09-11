@@ -23,7 +23,7 @@ class TemplateManagement {
             throw TemplateError.duplicateExercise
         }
         let ew = exerciseWriter()
-        ew.create(name: name, keyValuePairs: [PPLObjectKey.type: type.rawValue, PPLObjectKey.unilateral: unilateral])
+        ew.create(name: name, keyValuePairs: [DBAttributeKey.type: type.rawValue, DBAttributeKey.unilateral: unilateral])
     }
     
     func deleteExerciseTemplate(name: String) {
@@ -60,7 +60,7 @@ class TemplateManagement {
         let names =  exercises.map({ (temp) -> String in
             return temp.name!
         })
-        workoutWriter().update(workoutTemplate(type: type), keyValuePairs: [PPLObjectKey.exerciseNames: names])
+        workoutWriter().update(workoutTemplate(type: type), keyValuePairs: [DBAttributeKey.exerciseNames: names])
     }
     
     func workoutTemplate(type: ExerciseType) -> WorkoutTemplate {
