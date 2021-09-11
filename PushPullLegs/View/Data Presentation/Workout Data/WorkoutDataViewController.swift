@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 let ExerciseDataCellReuseIdentifier = "ExerciseDataCellReuseIdentifier"
 
@@ -55,9 +56,17 @@ class WorkoutDataViewController: DatabaseTableViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let vm = workoutDataViewModel else { return }
         vm.selectedIndex = indexPath
-        let exerciseVm = ExerciseViewModel(exercise: vm.getSelected() as! Exercise)
+        var exerciseVm: ExerciseViewModel
+        var vc: DBExerciseViewController
+        guard let selected = vm.getSelected() as? NSManagedObject else { return }
+        if selected.isKind(of: UnilateralExercise.self) {
+            exerciseVm = UnilateralExerciseViewModel(exercise: vm.getSelected() as! UnilateralExercise)
+            vc = DBUnilateralExerciseViewController()
+        } else {
+            exerciseVm = ExerciseViewModel(exercise: selected as! Exercise)
+            vc = DBExerciseViewController()
+        }
         exerciseVm.deletionObserver = vm
-        let vc = DBExerciseViewController()
         vc.viewModel = exerciseVm
         navigationController?.pushViewController(vc, animated: true)
     }

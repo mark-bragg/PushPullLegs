@@ -11,11 +11,6 @@ import CoreData
 
 @testable import PushPullLegs
 
-let ExTemp = "ExerciseTemplate"
-let TempName = "TestTemplateName"
-let WrkTemp = "WorkoutTemplate"
-let Names = ["ex1", "ex2", "ex3"]
-
 // TODO: uniqueness of names tests
 
 class TemplateManagementTests: XCTestCase {

@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-fileprivate struct FinishedSetDataModel {
+class FinishedSetDataModel {
     var duration: Int
     var weight: Double
     var reps: Double
@@ -34,11 +34,11 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     weak var reloader: ReloadProtocol?
     weak var delegate: ExerciseViewModelDelegate?
-    private var exerciseManager: ExerciseDataManager {
+    private(set) var exerciseManager: ExerciseDataManager {
         set { dataManager = newValue }
         get { dataManager as! ExerciseDataManager }
     }
-    private var exercise: Exercise!
+    var exercise: Exercise!
     private var finishedCellData = [FinishedSetDataModel]()
     private var exerciseName: String!
     var defaultWeight: Double? {
@@ -99,17 +99,26 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func collectSet(duration: Int, weight: Double, reps: Double) {
         if finishedCellData.count == 0 {
-            exerciseManager.create(name: exerciseName)
+            createExercise()
             exercise = exercise ?? exerciseManager.creation as? Exercise
             delegate?.exerciseViewModel(self, started: exercise)
         }
         exerciseManager.insertSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
             guard let self = self, let name = self.title() else { return }
-            self.finishedCellData.append(FinishedSetDataModel(withExerciseSet: exerciseSet))
-            self.reloader?.reload()
-            PPLDefaults.instance.setWeight(self.weightForRow(self.rowCount() - 1), forExerciseWithName: name)
+            self.handleFinishedSet(exerciseSet, name)
         }
         collectFinishedCellData()
+    }
+    
+    func handleFinishedSet(_ exerciseSet: ExerciseSet, _ name: String) {
+        appendFinishedSetData(FinishedSetDataModel(withExerciseSet: exerciseSet))
+        self.reloader?.reload()
+        let row = self.rowCount() - 1
+        PPLDefaults.instance.setWeight(self.weightForIndexPath(IndexPath(row: row, section: 0)), forExerciseWithName: name)
+    }
+    
+    func appendFinishedSetData(_ data: FinishedSetDataModel) {
+        self.finishedCellData.append(data)
     }
     
     override func rowCount(section: Int = 0) -> Int {
@@ -120,28 +129,28 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         return nil
     }
     
-    func weightForRow(_ row: Int) -> Double {
-        return finishedCellData[row].weight
+    func weightForIndexPath(_ indexPath: IndexPath) -> Double {
+        return finishedCellData[indexPath.row].weight
     }
     
-    func durationForRow(_ row: Int) -> String {
-        return String.format(seconds: finishedCellData[row].duration)
+    func durationForIndexPath(_ indexPath: IndexPath) -> String {
+        return String.format(seconds: finishedCellData[indexPath.row].duration)
     }
     
-    func repsForRow(_ row: Int) -> Double {
-        return finishedCellData[row].reps
+    func repsForIndexPath(_ indexPath: IndexPath) -> Double {
+        return finishedCellData[indexPath.row].reps
     }
     
     func totalVolume() -> Double {
         var total = Double(0)
         for row in 0..<finishedCellData.count {
-            total += volumeForRow(row)
+            total += volumeForIndexPath(IndexPath(row: row, section: 0))
         }
         return total
     }
     
-    func volumeForRow(_ row: Int) -> Double {
-        return finishedCellData[row].volume
+    func volumeForIndexPath(_ indexPath: IndexPath) -> Double {
+        return finishedCellData[indexPath.row].volume
     }
     
     func title() -> String? {
@@ -164,7 +173,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         ""
     }
     
-    private func collectFinishedCellData() {
+    func collectFinishedCellData() {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
         finishedCellData.removeAll()
         for set in sets {
@@ -184,6 +193,14 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         if finishedCellData.count == 0 {
             reloader?.reload()
         }
+    }
+    
+    func hasData() -> Bool {
+        finishedCellData.count > 0
+    }
+    
+    func createExercise() {
+        exerciseManager.create(name: exerciseName)
     }
     
 }

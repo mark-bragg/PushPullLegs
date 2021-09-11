@@ -39,13 +39,6 @@ class PPLTableViewCell: UITableViewCell {
         rootView.backgroundColor = selected ? PPLColor.secondary : PPLColor.quaternary
     }
     
-    private func addShadowAnimated() {
-        UIView.animate(withDuration: 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.rootView.addShadow(.shadowOffsetCell)
-        }
-    }
-    
     func addDisclosureIndicator() {
         removeIndicator()
         let indicator = UIImage.init(systemName: "chevron.right")!

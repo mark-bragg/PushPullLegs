@@ -16,6 +16,10 @@
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="unilateral" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
+    <entity name="UnilateralExercise" representedClassName="UnilateralExercise" parentEntity="Exercise" syncable="YES" codeGenerationType="class"/>
+    <entity name="UnilateralExerciseSet" representedClassName="UnilateralExerciseSet" parentEntity="ExerciseSet" syncable="YES" codeGenerationType="class">
+        <attribute name="isLeftSide" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+    </entity>
     <entity name="Workout" representedClassName="Workout" syncable="YES" codeGenerationType="class">
         <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -28,6 +32,8 @@
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
     <elements>
+        <element name="UnilateralExercise" positionX="-45" positionY="54" width="128" height="43"/>
+        <element name="UnilateralExerciseSet" positionX="-36" positionY="63" width="128" height="58"/>
         <element name="Exercise" positionX="-54" positionY="18" width="128" height="88"/>
         <element name="ExerciseSet" positionX="-54" positionY="18" width="128" height="103"/>
         <element name="ExerciseTemplate" positionX="-36" positionY="54" width="128" height="88"/>

@@ -36,6 +36,11 @@ class DatabaseTableViewController: PPLTableViewController {
         }
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        dbTblViewModel.objectToDelete = indexPath
+        presentDeleteConfirmation(self)
+    }
+    
     @objc func presentDeleteConfirmation(_ sender: Any) {
         let alert = UIAlertController.init(title: dbTblViewModel.deletionAlertTitle(), message: dbTblViewModel.deletionAlertMessage(), preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { action in
@@ -44,11 +49,6 @@ class DatabaseTableViewController: PPLTableViewController {
         })
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        dbTblViewModel.objectToDelete = indexPath
-        presentDeleteConfirmation(self)
     }
     
     private var dbTblViewModel: DatabaseViewModel {

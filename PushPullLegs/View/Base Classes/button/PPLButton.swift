@@ -53,13 +53,11 @@ class PPLButton : UIButton {
     func enable() {
         isEnabled = true
         layer.borderColor = UIColor.white.cgColor
-        addSimpleShadow()
     }
     
     func disable() {
         isEnabled = false
         layer.borderColor = PPLColor.disabledSaveWhiteColor.cgColor
-        removeShadow()
     }
     
     @objc func touchDown() {
@@ -74,7 +72,6 @@ class PPLButton : UIButton {
     @objc func selection() {
         isSelected = true
         layer.borderColor = PPLColor.disabledSaveWhiteColor.cgColor
-        removeShadow()
     }
     
     private func startTimer() {
@@ -89,7 +86,6 @@ class PPLButton : UIButton {
     @objc func deselection() {
         isSelected = false
         layer.borderColor = UIColor.white.cgColor
-        addSimpleShadow()
     }
     
     func style() {

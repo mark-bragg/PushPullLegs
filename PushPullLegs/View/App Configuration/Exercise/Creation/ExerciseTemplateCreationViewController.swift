@@ -184,11 +184,12 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         let segmentedControl = UISegmentedControl.PPLSegmentedControl(titles: ["Bilateral", "Unilateral"], target: self, selector: #selector(lateralTypeChanged(_:)))
         lateralTypeParentView.addSubview(segmentedControl)
         segmentedControl.selectedSegmentIndex = 0
+        viewModel?.lateralType = .bilateral
         constrain(segmentedControl, toInsideOf: lateralTypeParentView, insets: UIEdgeInsets(top: 4, left: 24, bottom: 4, right: 24))
     }
     
     @objc fileprivate func lateralTypeChanged(_ control: UISegmentedControl) {
-        viewModel?.lateralType = control.selectedSegmentIndex == 0 ? LateralType.unilateral : LateralType.bilateral
+        viewModel?.lateralType = control.selectedSegmentIndex == 0 ? LateralType.bilateral : .unilateral
     }
     
     fileprivate func hideExerciseType() {

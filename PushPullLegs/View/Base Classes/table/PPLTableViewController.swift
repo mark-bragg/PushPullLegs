@@ -246,23 +246,17 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         if headerHeight == 0 {
             return HeaderViewContainer(frame: .zero)
         }
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight - CGSize.shadowOffsetTableHeader.height))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
         var i = 0
         let widthDenominator = CGFloat(titles.count)
         let labelWidth = headerView.frame.width / widthDenominator
-        let gradientTop = CAGradientLayer()
-        gradientTop.frame = headerView.layer.bounds
-        gradientTop.colors = [PPLColor.primary.cgColor, UIColor.clear.cgColor]
-        gradientTop.locations = [0.0, 1.0]
-        headerView.layer.addSublayer(gradientTop)
         headerView.backgroundColor = .tertiary
         for title in titles {
             let label = UILabel.headerLabel(title)
-            label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight - CGSize.shadowOffsetTableHeader.height)
+            label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight)
             headerView.addSubview(label)
             i += 1
         }
-        headerView.addShadow(.shadowOffsetTableHeader)
         let headerViewContainer = HeaderViewContainer(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: headerHeight))
         headerViewContainer.headerView = headerView
         return headerViewContainer
@@ -277,7 +271,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
 
 extension PPLTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 90
+        return 60
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

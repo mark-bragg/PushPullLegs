@@ -54,10 +54,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     override func addAction(_ sender: Any) {
         super.addAction(sender)
-        exerciseSetViewModel = ExerciseSetViewModel()
-        exerciseSetViewModel?.delegate = self
-        exerciseSetViewModel?.setCollector = exerciseViewModel
-        exerciseSetViewModel?.defaultWeight = exerciseViewModel.defaultWeight
+        prepareExerciseSetViewModel()
         let wc = WeightCollectionViewController()
         let setNavController = SetNavigationController(rootViewController: wc)
         wc.exerciseSetViewModel = exerciseSetViewModel
@@ -69,6 +66,17 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
             v.isHidden = true
         }
         removeAddButtonInstructions()
+    }
+    
+    private func prepareExerciseSetViewModel() {
+        exerciseSetViewModel = newExerciseSetViewModel()
+        exerciseSetViewModel?.delegate = self
+        exerciseSetViewModel?.setCollector = exerciseViewModel
+        exerciseSetViewModel?.defaultWeight = exerciseViewModel.defaultWeight
+    }
+    
+    func newExerciseSetViewModel() -> ExerciseSetViewModel {
+        ExerciseSetViewModel()
     }
     
     override func setupRightBarButtonItems() {
@@ -184,9 +192,9 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
         let labels = cell.labels(width: tableView.frame.width / 3)
-        labels.w.text = "\(exerciseViewModel.weightForRow(indexPath.row))"
-        labels.r.text = "\(exerciseViewModel.repsForRow(indexPath.row))"
-        labels.t.text = exerciseViewModel.durationForRow(indexPath.row)
+        labels.w.text = "\(exerciseViewModel.weightForIndexPath(indexPath))"
+        labels.r.text = "\(exerciseViewModel.repsForIndexPath(indexPath))"
+        labels.t.text = exerciseViewModel.durationForIndexPath(indexPath)
         return cell
     }
     

@@ -25,15 +25,37 @@ class ExerciseDataManager: DataManager {
         backgroundContext.performAndWait {
             if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseSet.rawValue, into: backgroundContext) as? ExerciseSet,
                 let exerciseInContext = fetch(exercise) as? Exercise {
-                set.duration = Int16(duration)
-                set.weight = weight
-                set.reps = reps
-                exerciseInContext.addToSets(set)
-                try? backgroundContext.save()
-                if let completion = completion {
-                    completion(set)
-                }
+                addSet(set, toExercise: exerciseInContext, withData: (Int16(duration), weight, reps), completion: completion)
             }
+        }
+    }
+    
+    func insertLeftSet(duration: Int, weight: Double, reps: Double, exercise: UnilateralExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
+        insertSetRightLeft(true, duration: duration, weight: weight, reps: reps, exercise: exercise, completion: completion)
+    }
+    
+    func insertRightSet(duration: Int, weight: Double, reps: Double, exercise: UnilateralExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
+        insertSetRightLeft(false, duration: duration, weight: weight, reps: reps, exercise: exercise, completion: completion)
+    }
+    
+    fileprivate func insertSetRightLeft(_ isLeft: Bool, duration: Int, weight: Double, reps: Double, exercise: UnilateralExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
+        backgroundContext.performAndWait {
+            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.unilateralExerciseSet.rawValue, into: backgroundContext) as? UnilateralExerciseSet,
+                let exerciseInContext = fetch(exercise) as? Exercise {
+                set.isLeftSide = isLeft
+                addSet(set, toExercise: exerciseInContext, withData: (Int16(duration), weight, reps), completion: completion)
+            }
+        }
+    }
+    
+    fileprivate func addSet(_ set: ExerciseSet, toExercise exerciseInContext: Exercise, withData data: (duration: Int16, weight: Double, reps: Double), completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
+        set.duration = data.duration
+        set.weight = data.weight
+        set.reps = data.reps
+        exerciseInContext.addToSets(set)
+        try? backgroundContext.save()
+        if let completion = completion {
+            completion(set)
         }
     }
     
@@ -78,4 +100,24 @@ class ExerciseDataManager: DataManager {
 
 enum NilReferenceError: Error {
     case nilWorkout
+}
+
+class UnilateralExerciseDataManager: ExerciseDataManager {
+    override init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
+        super.init(backgroundContext: backgroundContext)
+        entityName = .unilateralExercise
+    }
+    
+    func delete(set data: (w: Double, r: Double, d: Int, l: Bool), from exercise: UnilateralExercise) {
+        guard
+            let e = fetch(exercise.objectID) as? UnilateralExercise,
+            var s = e.sets?.array as? [UnilateralExerciseSet],
+            let i = s.firstIndex(where: { $0.weight == data.w && $0.reps == data.r && $0.duration == data.d && $0.isLeftSide == data.l })
+        else { return }
+        
+        delete(s[i])
+        s.remove(at: i)
+        exercise.sets = NSOrderedSet(array: s)
+        try? backgroundContext.save()
+    }
 }
