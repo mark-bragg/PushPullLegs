@@ -295,10 +295,17 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     
     fileprivate func switchView(_ cell: PPLTableViewCell) -> UISwitch {
         let switchView = UISwitch()
+        if #available(iOS 14, *) {
+            switchView.preferredStyle = .checkbox
+        }
         switchView.layer.masksToBounds = true
         switchView.layer.borderWidth = 2.0
         switchView.layer.cornerRadius = 16
-        switchView.layer.borderColor = PPLColor.pplLightGray?.cgColor
+        switchView.layer.borderColor = PPLColor.darkGray.cgColor
+        switchView.tintColor = PPLColor.black
+        switchView.backgroundColor = .gray
+//        switchView.onTintColor = PPLColor.primary
+//        switchView.style
         cell.rootView.addSubview(switchView)
         switchView.translatesAutoresizingMaskIntoConstraints = false
         switchView.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -20).isActive = true

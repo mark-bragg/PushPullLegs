@@ -26,6 +26,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     weak var setNavController: SetNavigationController!
     private var isLeftBarItemSetToDone = false
     private var exerciseViewModel: ExerciseViewModel { viewModel as! ExerciseViewModel }
+    private var isTimerViewHidden = true
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -62,8 +63,8 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         self.setNavController = setNavController
         setNavController.setDelegate = self
         weightCollector = wc
-        if let v = restTimerView {
-            v.isHidden = true
+        if let _ = restTimerView {
+            hideRestTimerView()
         }
         removeAddButtonInstructions()
     }
@@ -79,7 +80,8 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         guard !readOnly else {
             return super.setupRightBarButtonItems()
         }
-        navigationItem.rightBarButtonItem = viewModel?.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
+        
+        navigationItem.rightBarButtonItem = exerciseViewModel.hasData() ? UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:))) : nil
     }
     
     func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController) {
@@ -106,8 +108,10 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
-        dismiss(animated: true, completion: { self.reload() })
-        setupRestTimerView()
+        dismiss(animated: true, completion: {
+            self.reload()
+            self.setupRestTimerView()
+        })
         if exerciseViewModel.rowCount() > 0 {
             AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel.title() : nil
             presentProgressNotification()
@@ -129,13 +133,14 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            if let _ = self.restTimerView {
+                self.showRestTimerView()
+            }
+        }
         resetState()
         if exerciseViewModel.rowCount() == 0 {
             insertAddButtonInstructions()
-        }
-        if let v = restTimerView, v.isHidden {
-            v.isHidden = false
         }
     }
     
@@ -143,11 +148,34 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         if let v = restTimerView {
             v.removeFromSuperview()
         }
-        let yOffset: CGFloat = 15
-        let timerView = RestTimerView(frame: CGRect(x: 15, y: view.frame.height - timerHeight - yOffset, width: timerHeight, height: timerHeight))
+        let timerView = RestTimerView(frame: timerFrameHidden())
         view.addSubview(timerView)
         restTimerView = timerView
         restTimerView.restartTimer()
+        showRestTimerView()
+    }
+    
+    func showRestTimerView() {
+        self.restTimerView.isHidden = false
+        UIView.animate(withDuration: 01) {
+            self.restTimerView.frame = self.timerFrameVisible()
+        }
+    }
+    
+    func hideRestTimerView() {
+        UIView.animate(withDuration: 1.0, animations: {
+            self.restTimerView.frame = self.timerFrameHidden()
+        }) { (s) in
+            self.restTimerView.isHidden = true
+        }
+    }
+    
+    func timerFrameVisible() -> CGRect {
+        CGRect(x: 0, y: view.frame.height - timerHeight, width: timerHeight, height: timerHeight)
+    }
+    
+    func timerFrameHidden() -> CGRect {
+        CGRect(x: timerHeight/2, y: view.frame.height - timerHeight/2, width: 0, height: 0)
     }
     
     func presentModally(_ vc: UIViewController) {
@@ -181,7 +209,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         for i in 0...2 {
             titles.append(exerciseViewModel.headerLabelText(i))
         }
-        let view = tableHeaderViewContainer(titles: titles)
+        let view = tableHeaderViewContainer(titles: titles, section: section)
         return view
     }
     

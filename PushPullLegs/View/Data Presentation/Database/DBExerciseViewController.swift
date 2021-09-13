@@ -20,7 +20,7 @@ class DBExerciseViewController: ExerciseViewController {
         tableView?.setEditing(isEditing, animated: false)
         if isEditing {
             navigationItem.rightBarButtonItems = nil
-            navigationItem.rightBarButtonItem = viewModel?.rowCount(section: 0) == 0 ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
+            navigationItem.rightBarButtonItem = dbViewModel.hasData() ? nil : UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:)))
         } else {
             setupRightBarButtonItems()
         }

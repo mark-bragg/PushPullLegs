@@ -17,8 +17,18 @@ class UnilateralExerciseViewController: ExerciseViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let superHeader = super.tableView(tableView, viewForHeaderInSection: section) else { return nil }
+        guard let vm = viewModel,
+              vm.rowCount(section: section) > 0,
+              let superHeader = super.tableView(tableView, viewForHeaderInSection: section)
+        else { return nil }
         return updateSectionHeaders(section, superHeader)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let vm = viewModel,
+              vm.rowCount(section: section) > 0
+        else { return 0 }
+        return super.tableView(tableView, heightForHeaderInSection: section)
     }
 
 }

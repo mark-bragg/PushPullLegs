@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class GraphViewController: UIViewController, ReloadProtocol {
+class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewControllerDelegate, PPLDropdownViewControllerDataSource, UIPopoverPresentationControllerDelegate {
     var viewModel: GraphViewModel!
     weak var containerView: UIView?
     weak var graphView: GraphView!
@@ -31,14 +31,12 @@ class GraphViewController: UIViewController, ReloadProtocol {
         }
         view.backgroundColor = PPLColor.primary
         guard firstLoad else { return }
-        let lbl = UILabel()
-        lbl.text = viewModel.title()
-        lbl.font = titleLabelFont()
-        navigationItem.titleView = lbl
+        setTitleLabel()
         firstLoad = false
         reloadViews()
         if isInteractive {
             bind()
+            setupRightBarButtonItem()
         }
     }
     
@@ -51,6 +49,13 @@ class GraphViewController: UIViewController, ReloadProtocol {
         if let tabBarController = tabBarController as? PPLTabBarController {
             tabBarController.isGraphPresented = presented
         }
+    }
+    
+    func setTitleLabel() {
+        let lbl = UILabel()
+        lbl.text = viewModel.title()
+        lbl.font = titleLabelFont()
+        navigationItem.titleView = lbl
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -217,7 +222,7 @@ class GraphViewController: UIViewController, ReloadProtocol {
     func updateLabels(_ index: Int?) {
         if let index = index, let date = viewModel.dates()?[index], let volume = viewModel.volumes()?[index] {
             dateLabel?.text = date
-            volumeLabel?.text = "volume: \(volume)".trimDecimalDigitsToTwo()
+            volumeLabel?.text = "Volume: \(volume)".trimDecimalDigitsToTwo()
         } else {
             dateLabel?.text = nil
             volumeLabel?.text = nil
@@ -237,6 +242,43 @@ class GraphViewController: UIViewController, ReloadProtocol {
     
     private func removeLabels() {
         labelStack?.removeAllSubviews()
+    }
+    
+    func setupRightBarButtonItem() {
+        guard viewModel.hasEllipsis else { return }
+        let ellipsis = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: ellipsis, style: .plain, target: self, action: #selector(showDropdown(_:)))
+    }
+    
+    @objc func showDropdown(_ sender: Any) {
+        let vc = PPLDropDownViewController()
+        vc.dataSource = self
+        vc.delegate = self
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
+        vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.clear
+        vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.clear
+        present(vc, animated: true, completion: nil)
+    }
+    
+    func names() -> [String] {
+        []
+    }
+    
+    func didSelectName(_ name: String) {
+        // no op
+    }
+    
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        popoverPresentationController.permittedArrowDirections = .up
+        guard let item = navigationItem.rightBarButtonItem else {
+            return
+        }
+        popoverPresentationController.barButtonItem = item
+    }
+
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
 }
 

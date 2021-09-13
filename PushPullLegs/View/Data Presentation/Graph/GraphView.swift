@@ -116,10 +116,17 @@ class GraphView: UIControl, ObservableObject {
     }
     
     private func drawCircleLine(_ closestPoint: CGPoint) {
-        circleLine.frame = CGRect(x: closestPoint.x - 1, y: circleLineY, width: 2, height: frame.height - circleLineY)
+        let height = (origin().y - circleLineY)
+        circleLine.frame = CGRect(x: closestPoint.x - 1, y: circleLineY, width: 2, height: height)
         circleLine.colors = [PPLColor.primary.cgColor, PPLColor.quaternary.cgColor, PPLColor.primary.cgColor]
-        let highlight = (closestPoint.y - 1) / frame.height as NSNumber
-        circleLine.locations = [0.05, highlight, 0.95]
+        let highlight = (closestPoint.y - circleLineY) / height
+        if highlight < 0.12 {
+            circleLine.locations = [0.05, highlight as NSNumber, 0.8]
+        } else if highlight > 0.88 {
+            circleLine.locations = [0.05, highlight as NSNumber, 0.95]
+        } else {
+            circleLine.locations = [0.2, highlight as NSNumber, 0.95]
+        }
     }
     
     private func bringCircleToFront() {
@@ -178,14 +185,14 @@ class GraphView: UIControl, ObservableObject {
     }
     
     private func multiplePointPath(_ yValues: [CGFloat]) -> CGPath {
-        let xSpacing = (frame.width * 0.95) / CGFloat(yValues.count)
+        let xSpacing = (frame.width * 0.875) / CGFloat(yValues.count - 1)
         let biggestY = yValues.max()!
         let normalizedYs = yValues.map { (y) -> CGFloat in
             CGFloat(y) / CGFloat(biggestY)
         }
         let path = UIBezierPath()
         func x (index: Int) -> CGFloat{
-            return self.frame.width * 0.05 + xSpacing * CGFloat(index)
+            return lowestPoint().x + xSpacing * CGFloat(index)
         }
         let yShift = convertToGraphY(normalizedYs.min()!) - lowestPoint().y
         var y = convertToGraphY(normalizedYs[0]) - yShift

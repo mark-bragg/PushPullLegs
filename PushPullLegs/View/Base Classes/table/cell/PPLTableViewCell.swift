@@ -39,10 +39,10 @@ class PPLTableViewCell: UITableViewCell {
         rootView.backgroundColor = selected ? PPLColor.secondary : PPLColor.quaternary
     }
     
-    func addDisclosureIndicator() {
+    func addDisclosureIndicator(_ color: UIColor = PPLColor.text) {
         removeIndicator()
         let indicator = UIImage.init(systemName: "chevron.right")!
-        let indicatorView = UIImageView(image: indicator.withTintColor(PPLColor.text, renderingMode: .alwaysOriginal))
+        let indicatorView = UIImageView(image: indicator.withTintColor(color, renderingMode: .alwaysOriginal))
         rootView.addSubview(indicatorView)
         indicatorView.translatesAutoresizingMaskIntoConstraints = false
         indicatorView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -20).isActive = true
@@ -50,9 +50,9 @@ class PPLTableViewCell: UITableViewCell {
         self.indicator = indicatorView
     }
     
-    func addHelpIndicator(target: Any?, action: Selector) {
+    func addHelpIndicator(target: Any?, action: Selector, color: UIColor = PPLColor.text) {
         removeIndicator()
-        let indicatorView = QuestionMarkView()
+        let indicatorView = QuestionMarkView(color)
         indicatorView.tag = tag
         indicatorView.add(target: target, action: action)
         addSubview(indicatorView)
@@ -71,8 +71,8 @@ class PPLTableViewCell: UITableViewCell {
 }
 
 class QuestionMarkView: UIImageView {
-    init() {
-        super.init(image: UIImage(systemName: "questionmark.circle")?.withTintColor(PPLColor.text, renderingMode: .alwaysOriginal))
+    init(_ color: UIColor) {
+        super.init(image: UIImage(systemName: "questionmark.circle")?.withTintColor(color, renderingMode: .alwaysOriginal))
         isUserInteractionEnabled = true
     }
     

@@ -13,25 +13,25 @@ let spinnerTag = 7469
 let bannerTag = 98765
 
 @objc protocol BannerAdController {
-    @objc func addBannerView(_ adUnitID: String)
-    @objc func bannerHeight() -> CGFloat
+    @objc func addBannerView()
+    @objc func bannerContainerHeight() -> CGFloat
     @objc func refreshBanner()
     @objc func bannerAdUnitID() -> String
     @objc func removeBanner()
 }
 
 extension UIViewController: BannerAdController, GADBannerViewDelegate {
-    @objc func addBannerView(_ adUnitID: String) {
+    @objc func addBannerView() {
         guard AppState.shared.isAdEnabled else { return }
-        let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
-        let container = bannerContainerView(bannerHeight())
+        let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(bannerWidth())
+        let container = bannerContainerView(bannerContainerHeight())
         if let v =  container.subviews.first(where: { $0.isKind(of: GADBannerView.self) }) {
             v.removeFromSuperview()
         }
         let bannerView = GADBannerView(adSize: adSize)
         add(bannerView, toContainer: container)
         bannerView.center = CGPoint(x: container.frame.width / 2, y: container.frame.height / 2)
-        bannerView.adUnitID = adUnitID
+        bannerView.adUnitID = bannerAdUnitID()
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
         bannerView.delegate = self
@@ -44,7 +44,7 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
         bannerView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
     }
     
-    func bannerContainerView(_ height: CGFloat) -> UIView {
+    @objc func bannerContainerView(_ height: CGFloat) -> UIView {
         if let container = view.viewWithTag(bannerViewContainerTag()) {
             return container
         }
@@ -52,18 +52,26 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
         container.tag = bannerViewContainerTag()
         view.addSubview(container)
         container.backgroundColor = .black
+        constrainContainerView(container, height)
+        return container
+    }
+    
+    fileprivate func constrainContainerView(_ container: UIView, _ height: CGFloat) {
         container.translatesAutoresizingMaskIntoConstraints = false
         container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         container.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
         container.heightAnchor.constraint(equalToConstant: height).isActive = true
         container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        return container
     }
     
-    @objc func bannerHeight() -> CGFloat {
+    @objc func bannerContainerHeight() -> CGFloat {
         guard AppState.shared.isAdEnabled else { return 0 }
-        let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(view.frame.width)
+        let adSize = GADPortraitAnchoredAdaptiveBannerAdSizeWithWidth(bannerWidth())
         return adSize.size.height + (heightBuffer() * 2)
+    }
+    
+    @objc func bannerWidth() -> CGFloat {
+        view.frame.width
     }
     
     fileprivate func heightBuffer() -> CGFloat { 10.0 }
@@ -75,7 +83,7 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
     }
     
     @objc func refreshBanner() {
-        addBannerView(bannerAdUnitID())
+        addBannerView()
     }
     
     func bannerAdUnitID() -> String {

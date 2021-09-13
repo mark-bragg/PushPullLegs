@@ -8,11 +8,13 @@
 
 import UIKit
 import Combine
+import GoogleMobileAds
 
 class ExerciseTimerViewController: UIViewController, ExercisingViewController, PPLButtonDelegate {
     var exerciseSetViewModel: ExerciseSetViewModel?
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var finishButton: PPLButton!
+    @IBOutlet weak var bannerContainerView: UIView!
     var cancellables = [AnyCancellable]()
     private var isShowingStartText = false
     
@@ -29,6 +31,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
         timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 48, weight: .regular)
         bind()
         exerciseSetViewModel?.startSet()
+        handleAds()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -143,4 +146,23 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
         timerLabel.text == "0:00" && !isShowingStartText
     }
     
+}
+
+extension ExerciseTimerViewController {
+    func handleAds() {
+        bannerContainerView.constraints.first(where: { $0.identifier == "height" })!.constant = bannerContainerHeight()
+        addBannerView()
+    }
+    
+    override func bannerContainerView(_ height: CGFloat) -> UIView {
+        bannerContainerView
+    }
+    
+    override func bannerAdUnitID() -> String {
+        BannerAdUnitID.exerciseTimerVC
+    }
+    
+    override func bannerWidth() -> CGFloat {
+        bannerContainerView.frame.width
+    }
 }

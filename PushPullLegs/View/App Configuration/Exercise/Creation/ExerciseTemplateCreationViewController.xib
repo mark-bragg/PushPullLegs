@@ -61,10 +61,10 @@
                             <rect key="frame" x="0.0" y="154" width="374" height="69"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="CR5-5g-2SQ">
-                                    <rect key="frame" x="2" y="16" width="370" height="37"/>
+                                    <rect key="frame" x="2" y="0.0" width="370" height="69"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cvA-gm-OWJ" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="115.5" height="37"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="115.5" height="69"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Button">
@@ -72,7 +72,7 @@
                                             </state>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wql-CW-NlU" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                            <rect key="frame" x="127.5" y="0.0" width="115" height="37"/>
+                                            <rect key="frame" x="127.5" y="0.0" width="115" height="69"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Button">
@@ -80,7 +80,7 @@
                                             </state>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aCv-Xk-76G" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                            <rect key="frame" x="254.5" y="0.0" width="115.5" height="37"/>
+                                            <rect key="frame" x="254.5" y="0.0" width="115.5" height="69"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Button">
@@ -93,9 +93,9 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstItem="CR5-5g-2SQ" firstAttribute="leading" secondItem="0A2-zc-k32" secondAttribute="leading" constant="2" id="5qM-7k-ULU"/>
-                                <constraint firstItem="CR5-5g-2SQ" firstAttribute="top" secondItem="0A2-zc-k32" secondAttribute="top" constant="16" id="H2r-Is-KpR"/>
+                                <constraint firstItem="CR5-5g-2SQ" firstAttribute="top" secondItem="0A2-zc-k32" secondAttribute="top" id="H2r-Is-KpR"/>
                                 <constraint firstAttribute="trailing" secondItem="CR5-5g-2SQ" secondAttribute="trailing" constant="2" id="cDk-44-aNX"/>
-                                <constraint firstAttribute="bottom" secondItem="CR5-5g-2SQ" secondAttribute="bottom" constant="16" id="o0S-QD-vxE"/>
+                                <constraint firstAttribute="bottom" secondItem="CR5-5g-2SQ" secondAttribute="bottom" id="o0S-QD-vxE"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4V4-wb-tY5">

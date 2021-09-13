@@ -17,6 +17,7 @@ class WorkoutGraphViewModel: GraphViewModel {
     init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
         self.type = type
         super.init(dataManager: dataManager)
+        hasEllipsis = true
     }
     
     override func reload() {

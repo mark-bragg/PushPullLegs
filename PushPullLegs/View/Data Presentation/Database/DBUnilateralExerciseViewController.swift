@@ -15,8 +15,13 @@ class DBUnilateralExerciseViewController: DBExerciseViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let view = super.tableView(tableView, viewForHeaderInSection: section) else { return nil }
+        guard let vm = viewModel, vm.rowCount(section: section) > 0, let view = super.tableView(tableView, viewForHeaderInSection: section) else { return nil }
         return updateSectionHeaders(section, view)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let vm = viewModel else { return 0 }
+        return vm.rowCount(section: section) > 0 ? super.tableView(tableView, heightForHeaderInSection: section) : 0
     }
     
     override func addAction(_ sender: Any) {

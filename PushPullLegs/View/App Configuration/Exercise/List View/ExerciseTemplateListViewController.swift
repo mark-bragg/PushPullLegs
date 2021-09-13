@@ -73,6 +73,7 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
         if textLabel == nil {
             textLabel = PPLNameLabel()
             textLabel?.textAlignment = .center
+            textLabel?.textColor = PPLColor.text
             cell.rootView.addSubview(textLabel!)
             textLabel?.translatesAutoresizingMaskIntoConstraints = false
             textLabel?.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: 10).isActive = true

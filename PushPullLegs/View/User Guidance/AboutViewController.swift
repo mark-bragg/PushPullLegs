@@ -24,11 +24,11 @@ class AboutViewController: PPLTableViewController {
         firstLoad = false
     }
     
-    override func addBannerView(_ adUnitID: String) {
+    override func addBannerView() {
         // no op
     }
     
-    override func bannerHeight() -> CGFloat {
+    override func bannerContainerHeight() -> CGFloat {
         0
     }
     
@@ -53,7 +53,7 @@ class AboutViewController: PPLTableViewController {
         cell.contentView.backgroundColor = PPLColor.primary
         let tv = UITextView()
         tv.backgroundColor = .clear
-        tv.textColor = PPLColor.text
+        tv.textColor = PPLColor.white
         tv.text = aboutViewModel().title(indexPath: indexPath)
         tv.isScrollEnabled = false
         tv.isEditable = false
@@ -92,7 +92,7 @@ class AboutViewController: PPLTableViewController {
         } else {
             btn = CellExpansionButton(type: .roundedRect)
         }
-        btn.setTitleColor(.white, for: .normal)
+        btn.setTitleColor(.systemBlue, for: .normal)
         btn.tag = section + buttonTagConstant
         btn.isCollapsed = !aboutViewModel().isSectionExpanded(section)
         btn.sizeToFit()

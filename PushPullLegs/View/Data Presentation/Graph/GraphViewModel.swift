@@ -13,6 +13,7 @@ class GraphViewModel: NSObject, ReloadProtocol {
     var yValues = [CGFloat]()
     var xValues = [String]()
     var dataManager: DataManager!
+    var hasEllipsis: Bool = false
     
     init(dataManager: DataManager) {
         super.init()

@@ -50,7 +50,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     private func setupViews() {
-        addBannerView(bannerAdUnitID())
+        addBannerView()
         setupTableView()
         hideBottomBar()
         addBackNavigationGesture()
@@ -85,7 +85,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         guard let tableView = tableView else { return }
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        setTableViewY(bannerHeight())
+        setTableViewY(bannerContainerHeight())
         tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
     }
     
