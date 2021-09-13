@@ -33,10 +33,7 @@ class ExerciseGraphViewController: GraphViewController {
             newOtherNames.append(oldName)
             let newVm = ExerciseGraphViewModel(name: name, otherNames: newOtherNames, type: exerciseGraphViewModel.type)
             viewModel = newVm
-            view.setNeedsLayout()
-////            navigationItem.title = name
-//            navigationItem.t
-//            navigationController?.title = name
+//            view.setNeedsLayout()
             reloadViews()
             setTitleLabel()
         }

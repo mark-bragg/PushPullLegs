@@ -304,8 +304,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         switchView.layer.borderColor = PPLColor.darkGray.cgColor
         switchView.tintColor = PPLColor.black
         switchView.backgroundColor = .gray
-//        switchView.onTintColor = PPLColor.primary
-//        switchView.style
         cell.rootView.addSubview(switchView)
         switchView.translatesAutoresizingMaskIntoConstraints = false
         switchView.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: -20).isActive = true
