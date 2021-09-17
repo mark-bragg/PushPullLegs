@@ -39,4 +39,13 @@ class AppState {
         workoutInProgress = PPLDefaults.instance.isWorkoutInProgress()
         exerciseInProgress = PPLDefaults.instance.exerciseInProgress()
     }
+    private static var isLaunching = true
+    
+    static func isLaunch() -> Bool {
+        if (isLaunching) {
+            isLaunching = false
+            return true
+        }
+        return isLaunching
+    }
 }

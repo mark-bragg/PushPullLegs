@@ -22,7 +22,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     var padding: CGFloat { view.frame.width * 0.05 }
     var needConstraints = true
     var isInteractive = true
-    private var heightForLabelStack: CGFloat { 75 * ((volumeLabel != nil && dateLabel != nil) ? 2 : 1) }
+    private var heightForLabelStack: CGFloat { (isLandscape() ? 25 : 75) * ((volumeLabel != nil && dateLabel != nil) ? 2 : 1) }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -195,7 +195,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         graph.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
         graphView = graph
         graph.yValues = viewModel.volumes()
-        graph.circleLineY = heightForLabelStack
+        graph.circleLineY = heightForLabelStack - (isLandscape() ? 0 : 50)
     }
     
     func yForGraph() -> CGFloat {

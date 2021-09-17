@@ -121,11 +121,11 @@ class GraphView: UIControl, ObservableObject {
         circleLine.colors = [PPLColor.primary.cgColor, PPLColor.quaternary.cgColor, PPLColor.primary.cgColor]
         let highlight = (closestPoint.y - circleLineY) / height
         if highlight < 0.12 {
-            circleLine.locations = [0.05, highlight as NSNumber, 0.8]
+            circleLine.locations = [0.01, highlight as NSNumber, 0.9]
         } else if highlight > 0.88 {
-            circleLine.locations = [0.05, highlight as NSNumber, 0.95]
+            circleLine.locations = [0.1, highlight as NSNumber, 0.99]
         } else {
-            circleLine.locations = [0.2, highlight as NSNumber, 0.95]
+            circleLine.locations = [0.1, highlight as NSNumber, 0.9]
         }
     }
     
@@ -209,7 +209,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     func convertToGraphY(_ oldY: CGFloat) -> CGFloat {
-        return CGFloat(frame.height * 0.95) - CGFloat(oldY) * CGFloat(frame.height * 0.9)
+        return CGFloat(frame.height) - CGFloat(oldY) * CGFloat(frame.height)
     }
     
     private func origin() -> CGPoint {
