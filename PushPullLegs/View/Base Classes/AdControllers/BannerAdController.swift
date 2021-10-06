@@ -71,7 +71,7 @@ extension UIViewController: BannerAdController, GADBannerViewDelegate {
     fileprivate func bannerViewContainerTag() -> Int { bannerTag }
     
     public func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        perform(#selector(refreshBanner), with: self, afterDelay: 2)
+        perform(#selector(refreshBanner), with: self, afterDelay: 5)
     }
     
     @objc func refreshBanner() {

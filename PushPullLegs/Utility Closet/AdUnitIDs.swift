@@ -19,7 +19,8 @@ class BannerAdUnitID: AdUnitID {
     static let startWorkoutVC = "ca-app-pub-3612249788893677/2514570821"//
     static let workoutVC = "ca-app-pub-3612249788893677/8369532735"//
     static let exerciseVC = "ca-app-pub-3612249788893677/8888407486"//
-    static let exerciseTemplateSelectionVC = "ca-app-pub-3612249788893677/5175761630"
+    static let exerciseTemplateSelectionVC = "ca-app-pub-3612249788893677/5175761630"//
+    static let exerciseTimerVC = "ca-app-pub-3612249788893677/1156278464"//
     
     // MARK: DB Flow
     static let workoutLogVC = "ca-app-pub-3612249788893677/1843459317"//
@@ -33,9 +34,12 @@ class BannerAdUnitID: AdUnitID {
     static let appConfigurationVC = "ca-app-pub-3612249788893677/6262244145"//
     static let exerciseTemplateListVC = "ca-app-pub-3612249788893677/9051865499"//
     static let workoutTemplateListVC = "ca-app-pub-3612249788893677/9491042716"//
-    static let workoutTemplateEditVC = "ca-app-pub-3612249788893677/8177961043"
+    static let workoutTemplateEditVC = "ca-app-pub-3612249788893677/8177961043"//
+    
+    private static let test = "ca-app-pub-3940256099942544/2934735716"
 }
 
 class InterstitialAdUnitID: AdUnitID {
-    static let graphTableVC = "ca-app-pub-3612249788893677/6453815831"
+    static let graphTableVC = "ca-app-pub-3612249788893677/6453815831"//
+    private static let test = "ca-app-pub-3940256099942544/4411468910"
 }

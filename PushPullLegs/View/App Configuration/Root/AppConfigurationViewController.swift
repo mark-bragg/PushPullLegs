@@ -269,15 +269,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         view.isUserInteractionEnabled = true
     }
     
-    override func interstitialWillDismissScreen(_ ad: GADInterstitial) {
-        super.interstitialWillDismissScreen(ad)
-        navigateToAbout()
-    }
-    
-    func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
-        navigateToAbout()
-    }
-    
     private func navigateToAbout() {
         let vc = AboutViewController()
         vc.hidesBottomBarWhenPushed = true

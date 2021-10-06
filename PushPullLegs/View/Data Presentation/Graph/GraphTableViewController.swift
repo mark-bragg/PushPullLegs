@@ -193,6 +193,10 @@ class GraphTableViewController: PPLTableViewController {
         navigateToGraphDetail()
     }
     
+    func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
+        navigateToGraphDetail()
+    }
+    
     private func navigateToGraphDetail() {
         if let spinner = spinner {
             spinner.removeFromSuperview()
