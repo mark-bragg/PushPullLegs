@@ -18,6 +18,8 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     @IBOutlet weak var typeSelectionStackView: UIStackView!
     @IBOutlet weak var saveButton: PPLButton!
     @IBOutlet weak var parentStackView: UIStackView!
+    @IBOutlet weak var lateralTypeParentView: UIView!
+    weak var lateralTypeSegmentedControl: UISegmentedControl!
     private var cancellables: Set<AnyCancellable> = []
     var showExerciseType: Bool = false
     var viewModel: ExerciseTemplateCreationViewModel?
@@ -31,6 +33,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         } else {
             hideExerciseType()
         }
+        setupLateralTypeSegmentedControl()
         styleButtons()
         bind()
     }
@@ -175,6 +178,18 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         default:
             return nil
         }
+    }
+    
+    fileprivate func setupLateralTypeSegmentedControl() {
+        let segmentedControl = UISegmentedControl.PPLSegmentedControl(titles: ["Bilateral", "Unilateral"], target: self, selector: #selector(lateralTypeChanged(_:)))
+        lateralTypeParentView.addSubview(segmentedControl)
+        segmentedControl.selectedSegmentIndex = 0
+        viewModel?.lateralType = .bilateral
+        constrain(segmentedControl, toInsideOf: lateralTypeParentView, insets: UIEdgeInsets(top: 4, left: 24, bottom: 4, right: 24))
+    }
+    
+    @objc fileprivate func lateralTypeChanged(_ control: UISegmentedControl) {
+        viewModel?.lateralType = control.selectedSegmentIndex == 0 ? LateralType.bilateral : .unilateral
     }
     
     fileprivate func hideExerciseType() {

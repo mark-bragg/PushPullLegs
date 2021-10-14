@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class WorkoutGraphViewController: GraphViewController, UIPopoverPresentationControllerDelegate, PPLDropdownViewControllerDelegate, PPLDropdownViewControllerDataSource {
+class WorkoutGraphViewController: GraphViewController {
 
     var workoutGraphViewModel: WorkoutGraphViewModel { viewModel as! WorkoutGraphViewModel }
     private var frame: CGRect?
@@ -29,48 +29,17 @@ class WorkoutGraphViewController: GraphViewController, UIPopoverPresentationCont
         if let frame = frame {
             view.frame = frame
         }
-        if isInteractive {
-            setupRightBarButtonItem()
-        }
     }
     
-    func setupRightBarButtonItem() {
-        let ellipsis = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: ellipsis, style: .plain, target: self, action: #selector(showDropdown(_:)))
-    }
-    
-    @objc func showDropdown(_ sender: Any) {
-        let vc = PPLDropDownViewController()
-        vc.dataSource = self
-        vc.delegate = self
-        vc.modalPresentationStyle = .popover
-        vc.popoverPresentationController?.delegate = self
-        vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.clear
-        vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.clear
-        present(vc, animated: true, completion: nil)
-    }
-    
-    func names() -> [String] {
+    override func names() -> [String] {
         workoutGraphViewModel.getExerciseNames()
     }
     
-    func didSelectName(_ name: String) {
+    override func didSelectName(_ name: String) {
         dismiss(animated: true) {
-            let vc = ExerciseGraphViewController(name: name, type: self.workoutGraphViewModel.type)
+            let vc = ExerciseGraphViewController(name: name, otherNames: self.workoutGraphViewModel.getExerciseNames().filter({$0 != name}), type: self.workoutGraphViewModel.type)
             self.navigationController?.pushViewController(vc, animated: true)
         }
-    }
-    
-    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
-        popoverPresentationController.permittedArrowDirections = .up
-        guard let item = navigationItem.rightBarButtonItem else {
-            return
-        }
-        popoverPresentationController.barButtonItem = item
-    }
-
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
     }
 
 }

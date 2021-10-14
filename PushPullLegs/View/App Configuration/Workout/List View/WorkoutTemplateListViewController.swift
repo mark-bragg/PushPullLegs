@@ -25,7 +25,7 @@ class WorkoutTemplateListViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        label(forCell: cell).text = viewModel?.title(indexPath: indexPath)
+        label(forCell: cell, fontSize: 64).text = viewModel?.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 3.0, rect: cell.frame)
         cell.addDisclosureIndicator()
         return cell
@@ -61,7 +61,7 @@ extension CGRect {
 }
 
 extension UIViewController {
-    func label(forCell cell: PPLTableViewCell) -> PPLNameLabel {
+    func label(forCell cell: PPLTableViewCell, fontSize: CGFloat = 26) -> PPLNameLabel {
         var label = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if label == nil {
             label = PPLNameLabel()
@@ -70,8 +70,9 @@ extension UIViewController {
             label?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
             label?.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
             label?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
-            label?.font = UIFont.systemFont(ofSize: 26, weight: .semibold)
+            label?.font = UIFont.systemFont(ofSize: fontSize, weight: .medium)
             label?.textAlignment = .center
+            label?.textColor = PPLColor.text
         }
         return label!
     }

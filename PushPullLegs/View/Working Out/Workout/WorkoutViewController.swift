@@ -141,16 +141,8 @@ class WorkoutViewController: PPLTableViewController {
     }
     
     func navigateToExercise() {
-        let vc = ExerciseViewController()
-        var vm: ExerciseViewModel?
-        if let exerciseTemplate = workoutEditViewModel.getSelected() as? ExerciseTemplate {
-            vm = ExerciseViewModel(exerciseTemplate: exerciseTemplate)
-        } else if let exercise = workoutEditViewModel.getSelected() as? Exercise {
-            vm = ExerciseViewModel(exercise: exercise)
-        }
-        vm?.reloader = vc
-        vm?.delegate = workoutEditViewModel
-        vc.viewModel = vm
+        guard let vc = ExerciseViewControllerFactory.getExerciseViewController(workoutEditViewModel.getSelected()) else { return }
+        (vc.viewModel as! ExerciseViewModel).delegate = workoutEditViewModel
         navigationController?.pushViewController(vc, animated: true)
     }
     

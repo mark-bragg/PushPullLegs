@@ -17,13 +17,13 @@ class TemplateManagement {
         self.coreDataManager = coreDataManager
     }
     
-    func addExerciseTemplate(name: String, type: ExerciseType) throws {
+    func addExerciseTemplate(name: String, type: ExerciseType, unilateral: Bool = false) throws {
         let er = exerciseReader()
         if er.exists(name: name) {
             throw TemplateError.duplicateExercise
         }
         let ew = exerciseWriter()
-        ew.create(name: name, keyValuePairs: [PPLObjectKey.type: type.rawValue])
+        ew.create(name: name, keyValuePairs: [DBAttributeKey.type: type.rawValue, DBAttributeKey.unilateral: unilateral])
     }
     
     func deleteExerciseTemplate(name: String) {
@@ -60,7 +60,7 @@ class TemplateManagement {
         let names =  exercises.map({ (temp) -> String in
             return temp.name!
         })
-        workoutWriter().update(workoutTemplate(type: type), keyValuePairs: [PPLObjectKey.exerciseNames: names])
+        workoutWriter().update(workoutTemplate(type: type), keyValuePairs: [DBAttributeKey.exerciseNames: names])
     }
     
     func workoutTemplate(type: ExerciseType) -> WorkoutTemplate {

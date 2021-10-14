@@ -13,7 +13,7 @@ import StoreKit
 import Combine
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     private let defaults = PPLDefaults.instance
     var wipCancellable: AnyCancellable?

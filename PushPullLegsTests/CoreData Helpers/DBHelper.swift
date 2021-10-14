@@ -10,6 +10,11 @@ import Foundation
 import CoreData
 @testable import PushPullLegs
 
+let Names = ["ex1", "ex2", "ex3"]
+let ExTemp = "ExerciseTemplate"
+let TempName = "TestTemplateName"
+let WrkTemp = "WorkoutTemplate"
+
 class DBHelper {
     
     var coreDataStack: CoreDataTestStack!
@@ -125,6 +130,23 @@ class DBHelper {
         return exercise
     }
     
+    func createUnilateralExercise(_ name: String? = nil, sets: [(d: Int, r: Double, w: Double, l: Bool)]? = nil) -> UnilateralExercise {
+        let exercise = NSEntityDescription.insertNewObject(forEntityName: "UnilateralExercise", into: coreDataStack.backgroundContext) as! UnilateralExercise
+        exercise.name = name
+        if let sets = sets {
+            for set in sets {
+                let exerciseSet = NSEntityDescription.insertNewObject(forEntityName: "UnilateralExerciseSet", into: coreDataStack.backgroundContext) as! UnilateralExerciseSet
+                exerciseSet.duration = Int16(set.d)
+                exerciseSet.reps = set.r
+                exerciseSet.weight = set.w
+                exerciseSet.isLeftSide = set.l
+                exercise.addToSets(exerciseSet)
+            }
+        }
+        try? coreDataStack.backgroundContext.save()
+        return exercise
+    }
+    
     func addSetTo(_ exercise: Exercise, data: (r: Double, w: Double, d: Int)? = nil) {
         let set = NSEntityDescription.insertNewObject(forEntityName: "ExerciseSet", into: coreDataStack.backgroundContext) as! ExerciseSet
         if let exerciseInContext = try? coreDataStack.backgroundContext.existingObject(with: exercise.objectID) as? Exercise {
@@ -133,6 +155,20 @@ class DBHelper {
                 set.duration = Int16(data.d)
                 set.reps = data.r
                 set.weight = data.w
+            }
+            try? coreDataStack.backgroundContext.save()
+        }
+    }
+    
+    func addUnilateralExerciseSetTo(_ exercise: UnilateralExercise, data: (r: Double, w: Double, d: Int, l: Bool)? = nil) {
+        let set = NSEntityDescription.insertNewObject(forEntityName: "UnilateralExerciseSet", into: coreDataStack.backgroundContext) as! UnilateralExerciseSet
+        if let exerciseInContext = try? coreDataStack.backgroundContext.existingObject(with: exercise.objectID) as? UnilateralExercise {
+            exerciseInContext.addToSets(set)
+            if let data = data {
+                set.duration = Int16(data.d)
+                set.reps = data.r
+                set.weight = data.w
+                set.isLeftSide = data.l
             }
             try? coreDataStack.backgroundContext.save()
         }

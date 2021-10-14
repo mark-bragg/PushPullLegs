@@ -18,7 +18,7 @@ class StartWorkoutViewController: PPLTableViewController {
     private var didNavigateToWorkout: Bool = false
     weak var delegate: WorkoutSelectionDelegate?
     var splashVC: SplashViewController!
-    private var firstAppearence = true
+    private(set) static var firstAppearence = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +27,7 @@ class StartWorkoutViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if firstAppearence {
-            firstAppearence = false
-            presentSplash()
-        }
+        presentSplash()
         hidesBottomBarWhenPushed = false
         if AppState.shared.workoutInProgress {
             self.navigateToNextWorkout()
@@ -43,6 +40,7 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     func presentSplash() {
+        guard AppState.isLaunch() else { return }
         let splashVC = SplashViewController()
         splashVC.delegate = self
         UIApplication.shared.windows.first!.addSubview(splashVC.view)

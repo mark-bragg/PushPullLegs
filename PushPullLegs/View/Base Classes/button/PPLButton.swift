@@ -50,16 +50,25 @@ class PPLButton : UIButton {
         }
     }
     
+    func style() {
+        contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        layer.cornerRadius = radius != 0 ? radius : frame.height/2
+        layer.borderWidth = 2.0
+        layer.borderColor = UIColor.white.cgColor
+        setTitleColor(.disabledSaveWhiteColor, for: .disabled)
+        setTitleColor(.text, for: .normal)
+        titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)
+        backgroundColor = .quaternary
+    }
+    
     func enable() {
         isEnabled = true
         layer.borderColor = UIColor.white.cgColor
-        addSimpleShadow()
     }
     
     func disable() {
         isEnabled = false
         layer.borderColor = PPLColor.disabledSaveWhiteColor.cgColor
-        removeShadow()
     }
     
     @objc func touchDown() {
@@ -74,7 +83,7 @@ class PPLButton : UIButton {
     @objc func selection() {
         isSelected = true
         layer.borderColor = PPLColor.disabledSaveWhiteColor.cgColor
-        removeShadow()
+        backgroundColor = PPLColor.secondary
     }
     
     private func startTimer() {
@@ -89,18 +98,7 @@ class PPLButton : UIButton {
     @objc func deselection() {
         isSelected = false
         layer.borderColor = UIColor.white.cgColor
-        addSimpleShadow()
-    }
-    
-    func style() {
-        contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-        layer.cornerRadius = radius != 0 ? radius : frame.height/2
-        layer.borderWidth = 2.0
-        layer.borderColor = UIColor.white.cgColor
-        setTitleColor(.disabledSaveWhiteColor, for: .disabled)
-        setTitleColor(.text, for: .normal)
-        titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)
-        backgroundColor = .quaternary
+        backgroundColor = PPLColor.quaternary
     }
     
     static func touchDownNotificationName() -> NSNotification.Name {

@@ -50,7 +50,7 @@ class DataManager {
         backgroundContext.performAndWait {
             let object = NSEntityDescription.insertNewObject(forEntityName: entityNameString(), into: backgroundContext)
             if let name = name {
-                object.setValue(name, forKey: PPLObjectKey.name)
+                object.setValue(name, forKey: DBAttributeKey.name)
             }
             if pairs.count > 0 {
                 for (key, value) in pairs {

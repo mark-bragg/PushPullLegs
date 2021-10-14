@@ -13,8 +13,8 @@ import CoreData
 class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
 
     var sut: ExerciseTemplateCreationViewModel!
-    var expectionReload: XCTestExpectation?
-    var expectionCompletion: XCTestExpectation?
+    var expectationReload: XCTestExpectation?
+    var expectationCompletion: XCTestExpectation?
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
 
     func testSave_noTypeSelection() {
@@ -24,21 +24,31 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
         }
     }
     
-    func testSave_typeSelected_reloadDelegateCalled_exerciseSavedAnNotAddedToWorkout() {
+    func testSave_typeSelected_reloadDelegateCalled_exerciseSavedAndNotAddedToWorkout_isNotUnilateral() {
+        assertNewExerciseTemplateWithTypeSelected(unilateral: false)
+    }
+    
+    func testSave_typeSelected_reloadDelegateCalled_exerciseSavedAndNotAddedToWorkout_isUnilateral() {
+        assertNewExerciseTemplateWithTypeSelected(unilateral: true)
+    }
+    
+    func assertNewExerciseTemplateWithTypeSelected(unilateral: Bool) {
         dbHelper.insertWorkoutTemplate(type: .push)
         sut = ExerciseTemplateCreationViewModel(management: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
-        expectionCompletion = XCTestExpectation(description: "save exercise template success completion")
-        expectionReload = XCTestExpectation(description: "save exercise template reload delegate")
+        expectationCompletion = XCTestExpectation(description: "save exercise template success completion")
+        expectationReload = XCTestExpectation(description: "save exercise template reload delegate")
         sut.selectedType(.push)
         sut.reloader = self
+        sut.lateralType = unilateral ? .unilateral : .bilateral
         sut.saveExercise(withName: "testing") {
-            expectionCompletion?.fulfill()
+            expectationCompletion?.fulfill()
         }
-        wait(for: [expectionCompletion!, expectionReload!], timeout: 60)
+        wait(for: [expectationCompletion!, expectationReload!], timeout: 60)
         let temps = dbHelper.fetchExerciseTemplates()!
         XCTAssert(temps.count == 1)
         XCTAssert(temps.first!.name == "testing")
         XCTAssert(temps.first!.type == ExerciseType.push.rawValue)
+        XCTAssert(temps.first!.unilateral == unilateral)
         guard let wktTemp = dbHelper.fetchWorkoutTemplates().first else {
             XCTFail()
             return
@@ -51,13 +61,13 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
     func testSave_typeInjected_reloadDelegateCalled_exerciseSavedAndAddedToWorkout() {
         dbHelper.insertWorkoutTemplate(type: .push)
         sut = ExerciseTemplateCreationViewModel(withType: .push, management: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
-        expectionCompletion = XCTestExpectation(description: "save exercise template success completion")
-        expectionReload = XCTestExpectation(description: "save exercise template reload delegate")
+        expectationCompletion = XCTestExpectation(description: "save exercise template success completion")
+        expectationReload = XCTestExpectation(description: "save exercise template reload delegate")
         sut.reloader = self
         sut.saveExercise(withName: "testing") {
-            expectionCompletion?.fulfill()
+            expectationCompletion?.fulfill()
         }
-        wait(for: [expectionCompletion!, expectionReload!], timeout: 60)
+        wait(for: [expectationCompletion!, expectationReload!], timeout: 60)
         let temps = dbHelper.fetchExerciseTemplates()!
         XCTAssert(temps.count == 1)
         XCTAssert(temps.first!.name == "testing")
@@ -70,7 +80,7 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
     }
     
     func reload() {
-        expectionReload?.fulfill()
+        expectationReload?.fulfill()
     }
     
     func testIsTypeSelected_notSelected_falseReturned() {

@@ -38,7 +38,7 @@ class WorkoutDataViewController: DatabaseTableViewController {
             let vc = ExerciseDataCellViewController()
             vc.preferredContentSize = cell.rootView.bounds.size
             vc.exerciseName = vm.title(indexPath: indexPath)
-            vc.workText = "Total Work: \(vm.detailText(indexPath: indexPath)!)"
+            vc.workText = vm.detailText(indexPath: indexPath)!
             vc.progress = vm.exerciseVolumeComparison(row: indexPath.row)
             cell.rootView.addSubview(vc.view)
             if !tableView.isEditing {
@@ -55,10 +55,8 @@ class WorkoutDataViewController: DatabaseTableViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let vm = workoutDataViewModel else { return }
         vm.selectedIndex = indexPath
-        let exerciseVm = ExerciseViewModel(exercise: vm.getSelected() as! Exercise)
-        exerciseVm.deletionObserver = vm
-        let vc = DBExerciseViewController()
-        vc.viewModel = exerciseVm
+        guard let vc = ExerciseViewControllerFactory.getExerciseViewController(vm.getSelected(), isDB: true) else { return }
+        (vc.viewModel as! ExerciseViewModel).deletionObserver = vm
         navigationController?.pushViewController(vc, animated: true)
     }
     

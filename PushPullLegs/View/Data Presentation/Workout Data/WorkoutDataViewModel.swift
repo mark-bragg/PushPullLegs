@@ -57,7 +57,7 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
         return ""
     }
     
-    func detailText(indexPath: IndexPath) -> String? { "\(exercisesDone[indexPath.row].volume())" }
+    func detailText(indexPath: IndexPath) -> String? { "Volume: \(exercisesDone[indexPath.row].volume())" }
     
     func getSelected() -> Any? {
         guard let indexPath = selectedIndex, indexPath.row < exercisesDone.count else { return nil }

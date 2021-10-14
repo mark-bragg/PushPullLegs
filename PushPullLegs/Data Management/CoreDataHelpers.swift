@@ -26,14 +26,15 @@ extension PPLPredicate {
     }
 }
 
-typealias PPLObjectKey = String
-extension PPLObjectKey {
+typealias DBAttributeKey = String
+extension DBAttributeKey {
     static let name = "name"
     static let reps = "reps"
     static let weight = "weight"
     static let duration = "duration"
     static let type = "type"
     static let exerciseNames = "exerciseNames"
+    static let unilateral = "unilateral"
 }
 
 let persistentContainerName = "PushPullLegs"

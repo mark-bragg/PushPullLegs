@@ -75,28 +75,28 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     func testWeightForRow_oneFinishedSet() {
         sut.collectSet(duration: 35, weight: 135, reps: 12)
         XCTAssert(sut.rowCount(section: 0) == 1)
-        let weight = sut.weightForRow(0)
+        let weight = sut.weightForIndexPath(IndexPath(row: 0, section: 0 ))
         XCTAssert(weight == 135)
     }
     
     func testDurationForRow_oneFinishedSet() {
         sut.collectSet(duration: 35, weight: 135, reps: 12)
         XCTAssert(sut.rowCount(section: 0) == 1)
-        let duration = sut.durationForRow(0)
+        let duration = sut.durationForIndexPath(IndexPath(row: 0, section: 0 ))
         XCTAssert(duration == "0:35")
     }
     
     func testRepsForRow_oneFinishedSet() {
         sut.collectSet(duration: 35, weight: 135, reps: 12)
         XCTAssert(sut.rowCount(section: 0) == 1)
-        let reps = sut.repsForRow(0)
+        let reps = sut.repsForIndexPath(IndexPath(row: 0, section: 0 ))
         XCTAssert(reps == 12)
     }
     
     func testVolumeForRow_oneFinishedSet() {
         sut.collectSet(duration: 35, weight: 135, reps: 12)
         XCTAssert(sut.rowCount(section: 0) == 1)
-        let volume = sut.volumeForRow(0)
+        let volume = sut.volumeForIndexPath(IndexPath(row: 0, section: 0 ))
         XCTAssert(volume == (35 * 135 * 12) / 60)
     }
     
@@ -105,7 +105,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
             let w = Double.random(in: 20...500).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
             sut.collectSet(duration: 0, weight: w, reps: 0)
             XCTAssert(sut.rowCount(section: 0) == i + 1)
-            XCTAssert(sut.weightForRow(i) == w)
+            XCTAssert(sut.weightForIndexPath(IndexPath(row: i, section: 0 )) == w)
         }
     }
     
@@ -114,7 +114,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
             let d = Int.random(in: 10...100)
             sut.collectSet(duration: d, weight: 0, reps: 0)
             XCTAssert(sut.rowCount(section: 0) == i + 1)
-            XCTAssert(sut.durationForRow(i) == String.format(seconds: d))
+            XCTAssert(sut.durationForIndexPath(IndexPath(row: i, section: 0 )) == String.format(seconds: d))
         }
     }
     
@@ -123,7 +123,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
             let r = Double.random(in: 12...20)
             sut.collectSet(duration: 0, weight: 0, reps: r)
             XCTAssert(sut.rowCount(section: 0) == i + 1)
-            XCTAssert(sut.repsForRow(i) == r)
+            XCTAssert(sut.repsForIndexPath(IndexPath(row: i, section: 0)) == r)
         }
     }
 
@@ -134,11 +134,11 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
             let r = Double.random(in: 12...20)
             sut.collectSet(duration: d, weight: w, reps: r)
             XCTAssert(sut.rowCount(section: 0) == i + 1)
-            XCTAssert(sut.durationForRow(i) == String.format(seconds: d))
-            XCTAssert(sut.weightForRow(i) == w)
-            XCTAssert(sut.repsForRow(i) == r)
+            XCTAssert(sut.durationForIndexPath(IndexPath(row: i, section: 0)) == String.format(seconds: d))
+                      XCTAssert(sut.weightForIndexPath(IndexPath(row: i, section: 0)) == w)
+                                XCTAssert(sut.repsForIndexPath(IndexPath(row: i, section: 0)) == r)
             let volume = ((Double(d) * w * Double(r)) / 60.0).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
-            XCTAssert(sut.volumeForRow(i).distance(to: volume) <= 0.02, "\nexpected: \(volume)\nactual: \(sut.volumeForRow(i))")
+            XCTAssert(sut.volumeForIndexPath(IndexPath(row: i, section: 0)).distance(to: volume) <= 0.02, "\nexpected: \(volume)\nactual: \(sut.volumeForIndexPath(IndexPath(row: i, section: 0)))")
         }
     }
     

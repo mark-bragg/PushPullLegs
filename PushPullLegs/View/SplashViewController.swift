@@ -38,7 +38,20 @@ class SplashViewController: UIViewController {
         imageView = imgv
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(imageLiteralResourceName: "launch.png")
-        imageView.frame = view.bounds
+        imageView.frame = imageViewFrame
+    }
+    
+    private var imageViewFrame: CGRect {
+        let width = view.frame.width - insets.left
+        let height = view.frame.height - insets.top
+        return CGRect(x: insets.left, y: view.safeAreaInsets.top, width: width + insets.right, height: height + insets.bottom)
+    }
+    
+    private var insets: UIEdgeInsets {
+        var i = view.safeAreaInsets
+        i.bottom = -view.safeAreaInsets.bottom
+        i.right = -view.safeAreaInsets.right
+        return i
     }
     
     override func viewDidAppear(_ animated: Bool) {

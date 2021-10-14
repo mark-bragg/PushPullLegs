@@ -12,13 +12,16 @@ import UIKit
 class ExerciseGraphViewModel: GraphViewModel {
     
     private var name: String
+    private(set) var otherNames: [String]
     private var exerciseDataManager: ExerciseDataManager { dataManager as! ExerciseDataManager }
-    private var type: ExerciseType
+    private(set) var type: ExerciseType
     
-    init(name: String, type: ExerciseType) {
+    init(name: String, otherNames: [String], type: ExerciseType) {
         self.name = name
+        self.otherNames = otherNames
         self.type = type
         super.init(dataManager: ExerciseDataManager())
+        hasEllipsis = otherNames.count > 0
     }
     
     override func reload() {

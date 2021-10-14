@@ -16,6 +16,17 @@ class RestTimerView: UIView {
     }
     private var timerLabel = UILabel()
     private var stopWatch: PPLStopWatch!
+    override var frame: CGRect {
+        willSet {
+            if newValue.width == 0 {
+                timerLabel.transform = timerLabel.transform.scaledBy(x:0.1, y:0.1)
+            } else {
+                timerLabel.transform = timerLabel.transform.scaledBy(x:10, y:10)
+            }
+            timerLabel.center = CGPoint(x: newValue.width/2, y: newValue.height/2)
+            layer.cornerRadius = newValue.height/2
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,15 +54,16 @@ class RestTimerView: UIView {
         layer.borderColor = UIColor.white.cgColor
         layer.borderWidth = 1.5
         layer.cornerRadius = frame.height/2
-        addSimpleShadow(.shadowOffsetAddButton)
     }
     
     func setupTimerLabel() {
-        timerLabel.frame = CGRect(x: 20, y: 10, width: frame.width - 40, height: frame.height - 20)
+        timerLabel.adjustsFontSizeToFitWidth = true
+        timerLabel.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 40, weight: .semibold)
         timerLabel.textColor = .white
         addSubview(timerLabel)
         timerLabel.textAlignment = .center
         timerLabel.backgroundColor = .clear
+        timerLabel.center = CGPoint(x: frame.width/2, y: frame.height/2)
     }
 }

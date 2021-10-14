@@ -43,7 +43,7 @@ class GraphTableViewController: PPLTableViewController {
     func setupViews() {
         view.backgroundColor = PPLColor.primary
         if PPLDefaults.instance.isAdsEnabled() {
-            addBannerView(bannerAdUnitID())
+            addBannerView()
         } else {
             removeBanner()
         }
@@ -63,7 +63,7 @@ class GraphTableViewController: PPLTableViewController {
             tableView?.reloadData()
             return
         }
-        let height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0) - bannerHeight()
+        let height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0) - bannerContainerHeight()
         let tbv = PPLTableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height))
         tbv.backgroundColor = PPLColor.clear
         view.addSubview(tbv)
@@ -95,7 +95,7 @@ class GraphTableViewController: PPLTableViewController {
         tableView?.translatesAutoresizingMaskIntoConstraints = false
         tableView?.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView?.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        tableView?.topAnchor.constraint(equalTo: guide.topAnchor, constant: bannerHeight()).isActive = true
+        tableView?.topAnchor.constraint(equalTo: guide.topAnchor, constant: bannerContainerHeight()).isActive = true
         tableView?.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
     }
     
@@ -125,9 +125,9 @@ class GraphTableViewController: PPLTableViewController {
         constrain(view, toInsideOf: cell.rootView)
         vcForRow(indexPath.row).reload()
         if vcForRow(indexPath.row).workoutGraphViewModel.pointCount() > 0 {
-            cell.addDisclosureIndicator()
+            cell.addDisclosureIndicator(PPLColor.white)
         } else {
-            cell.addHelpIndicator(target: self, action: #selector(help(_:)))
+            cell.addHelpIndicator(target: self, action: #selector(help(_:)), color: .white)
             cell.selectionStyle = .none
         }
         return cell

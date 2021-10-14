@@ -11,7 +11,9 @@ import Foundation
 enum EntityName: String {
     case workout = "Workout"
     case exercise = "Exercise"
+    case unilateralExercise = "UnilateralExercise"
     case exerciseSet = "ExerciseSet"
+    case unilateralExerciseSet = "UnilateralExerciseSet"
     case workoutTemplate = "WorkoutTemplate"
     case exerciseTemplate = "ExerciseTemplate"
 }
@@ -27,4 +29,15 @@ enum TemplateError: Error {
     case duplicateWorkout
     case duplicateExercise
     case missingExercise
+}
+
+extension Exercise {
+    var isUnilateral: Bool {
+        return TemplateManagement.init().exerciseTemplate(name: name ?? "")?.unilateral ?? false
+    }
+}
+
+enum LateralType {
+    case bilateral
+    case unilateral
 }
