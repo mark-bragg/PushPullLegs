@@ -23,6 +23,34 @@ class SplashViewController: UIViewController {
         addBackgroundView()
         addImageView()
         view.frame = view.superview?.bounds ?? .zero
+        showSplashAd()
+    }
+    
+    private func showSplashAd() {
+        guard let sdk = STAStartAppSDK.sharedInstance() else {
+            fatalError("StartAppSDK initialization failed!")
+        }
+        
+        let splashPreferences : STASplashPreferences = STASplashPreferences()
+        splashPreferences.splashMode = STASplashModeTemplate
+        splashPreferences.splashTemplateTheme = STASplashTemplateThemeOcean;
+        splashPreferences.splashLoadingIndicatorType = STASplashLoadingIndicatorTypeDots;
+        splashPreferences.splashTemplateIconImageName = "512 x 512";
+        splashPreferences.splashTemplateAppName = "Push Pull Legs";
+        
+        sdk.showSplashAd(withDelegate: self, with: splashPreferences)
+    }
+    
+    override func failedLoad(_ ad: STAAbstractAd!, withError error: Error!) {
+        disappear()
+    }
+    
+    override func failedShow(_ ad: STAAbstractAd!, withError error: Error!) {
+        disappear()
+    }
+    
+    override func didClose(_ ad: STAAbstractAd!) {
+        disappear()
     }
     
     private func addBackgroundView() {
@@ -56,6 +84,12 @@ class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if !PPLDefaults.instance.isAdsEnabled() {
+            disappear()
+        }
+    }
+    
+    private func disappear() {
         UIView.animate(withDuration: TimeInterval(0.67), delay: TimeInterval(0.33)) {
             self.backgroundView.alpha = 0
             self.imageView.frame = CGRect(x: self.view.frame.width/2, y: self.view.frame.height/2, width: 1, height: 1)
