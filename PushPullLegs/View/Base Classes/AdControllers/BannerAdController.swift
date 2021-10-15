@@ -10,25 +10,24 @@ import UIKit
 
 let spinnerTag = 7469
 let bannerContainerTag = 98765
+fileprivate let bannerHolderTag = 6583
 
 @objc protocol BannerAdController {
-    @objc func addBannerView()
-    @objc func bannerContainerHeight() -> CGFloat
+    @objc func addBannerView(size: STABannerSizeEnum)
+    @objc func bannerContainerHeight(size: STABannerSizeEnum) -> CGFloat
     @objc func refreshBanner()
     @objc func bannerAdUnitID() -> String
     @objc func removeBanner()
 }
 
-fileprivate let bannerTag = 6583
-
 extension UIViewController: BannerAdController, STABannerDelegateProtocol {
-    @objc func addBannerView() {
+    @objc func addBannerView(size: STABannerSizeEnum = STA_PortraitAdSize_320x50) {
         guard AppState.shared.isAdEnabled else { return }
-        let container = bannerContainerView(bannerContainerHeight())
-        if let v =  container.viewWithTag(bannerTag) {
+        let container = bannerContainerView(bannerContainerHeight(size: size))
+        if let v =  container.viewWithTag(bannerHolderTag) {
             v.removeFromSuperview()
         }
-        guard let bannerView = STABannerView(size: STA_PortraitAdSize_320x50, origin: .zero, withDelegate: self) else { return }
+        guard let bannerView = STABannerView(size: size, origin: .zero, withDelegate: self) else { return }
         add(bannerView, toContainer: container)
         bannerView.center = CGPoint(x: container.frame.width / 2, y: container.frame.height / 2)
         bannerView.loadAd()
@@ -38,7 +37,7 @@ extension UIViewController: BannerAdController, STABannerDelegateProtocol {
         let bannerHolder = UIView()
         container.addSubview(bannerHolder)
         bannerHolder.addSubview(banner)
-        bannerHolder.tag = bannerTag
+        bannerHolder.tag = bannerHolderTag
         bannerHolder.translatesAutoresizingMaskIntoConstraints = false
         bannerHolder.heightAnchor.constraint(equalToConstant: banner.frame.height).isActive = true
         bannerHolder.widthAnchor.constraint(equalToConstant: banner.frame.width).isActive = true
@@ -66,9 +65,9 @@ extension UIViewController: BannerAdController, STABannerDelegateProtocol {
         container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
-    @objc func bannerContainerHeight() -> CGFloat {
+    @objc func bannerContainerHeight(size: STABannerSizeEnum = STA_PortraitAdSize_320x50) -> CGFloat {
         guard AppState.shared.isAdEnabled else { return 0 }
-        let adSize = STA_PortraitAdSize_320x50.size
+        let adSize = size.size
         return adSize.height + (heightBuffer() * 2)
     }
     

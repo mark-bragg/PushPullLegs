@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -23,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dcw-hj-xTd">
-                    <rect key="frame" x="20" y="160" width="374" height="300"/>
+                    <rect key="frame" x="20" y="44" width="374" height="300"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lgt-Xx-Awz">
                             <rect key="frame" x="0.0" y="0.0" width="374" height="150"/>
@@ -71,7 +70,7 @@
                     </constraints>
                 </stackView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Oa-CO-gXY">
-                    <rect key="frame" x="0.0" y="44" width="414" height="100"/>
+                    <rect key="frame" x="0.0" y="762" width="414" height="100"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="100" identifier="height" id="iGX-eO-Wjd"/>
@@ -82,9 +81,9 @@
             <color key="backgroundColor" name="background_blue"/>
             <constraints>
                 <constraint firstItem="dcw-hj-xTd" firstAttribute="leading" secondItem="6Ue-AM-FrE" secondAttribute="leading" constant="20" id="8qy-bk-rFL"/>
-                <constraint firstItem="dcw-hj-xTd" firstAttribute="top" secondItem="1Oa-CO-gXY" secondAttribute="bottom" constant="16" id="8yA-9m-3e2"/>
+                <constraint firstItem="6Ue-AM-FrE" firstAttribute="bottom" secondItem="1Oa-CO-gXY" secondAttribute="bottom" id="CkE-HD-v4M"/>
                 <constraint firstItem="1Oa-CO-gXY" firstAttribute="leading" secondItem="6Ue-AM-FrE" secondAttribute="leading" id="NrS-HS-fmY"/>
-                <constraint firstItem="1Oa-CO-gXY" firstAttribute="top" secondItem="6Ue-AM-FrE" secondAttribute="top" id="av2-a0-6h2"/>
+                <constraint firstItem="dcw-hj-xTd" firstAttribute="top" secondItem="6Ue-AM-FrE" secondAttribute="top" id="Y7z-bo-Q4v"/>
                 <constraint firstItem="6Ue-AM-FrE" firstAttribute="trailing" secondItem="1Oa-CO-gXY" secondAttribute="trailing" id="doM-FY-POi"/>
                 <constraint firstItem="6Ue-AM-FrE" firstAttribute="trailing" secondItem="dcw-hj-xTd" secondAttribute="trailing" constant="20" id="sM2-Hl-xDv"/>
             </constraints>

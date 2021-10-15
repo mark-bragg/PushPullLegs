@@ -24,11 +24,11 @@ class AboutViewController: PPLTableViewController {
         firstLoad = false
     }
     
-    override func addBannerView() {
+    override func addBannerView(size: STABannerSizeEnum) {
         // no op
     }
     
-    override func bannerContainerHeight() -> CGFloat {
+    override func bannerContainerHeight(size: STABannerSizeEnum) -> CGFloat {
         0
     }
     
