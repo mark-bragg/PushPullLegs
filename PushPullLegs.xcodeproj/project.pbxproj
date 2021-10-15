@@ -199,6 +199,7 @@
 		49453379244FCC1900FA1665 /* PPLTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTabBarController.swift; sourceTree = "<group>"; };
 		4945337B2450895500FA1665 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		49453381245090F600FA1665 /* ExerciseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModelTests.swift; sourceTree = "<group>"; };
+		494B3E212718ED0D0085058C /* PushPullLegs-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PushPullLegs-Bridging-Header.h"; sourceTree = "<group>"; };
 		49565A24267E450B00F13E44 /* PPLColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLColorPickerViewController.swift; sourceTree = "<group>"; };
 		49565A2C26B9FF1400F13E44 /* WorkoutNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutNoteViewController.swift; sourceTree = "<group>"; };
 		49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewModelTests.swift; sourceTree = "<group>"; };
@@ -413,6 +414,7 @@
 				4989BA5424B94344001C17B3 /* AppColors.swift */,
 				49F6083E254DFF1700407D0A /* AppImages.swift */,
 				4980D99925A267090054EA5F /* AdUnitIDs.swift */,
+				494B3E212718ED0D0085058C /* PushPullLegs-Bridging-Header.h */,
 			);
 			path = "Utility Closet";
 			sourceTree = "<group>";
@@ -899,7 +901,7 @@
 				49EF4B7123F8381F0071687D /* Sources */,
 				49EF4B7223F8381F0071687D /* Frameworks */,
 				49EF4B7323F8381F0071687D /* Resources */,
-				D2A45A37ABB53C91F4BB2F9F /* [CP] Embed Pods Frameworks */,
+				53030ACE9EEC3C6521B00A60 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -937,7 +939,7 @@
 				49EF4B9523F838380071687D /* Sources */,
 				49EF4B9623F838380071687D /* Frameworks */,
 				49EF4B9723F838380071687D /* Resources */,
-				3EF434DA5C07AAAB7BC3128F /* [CP] Embed Pods Frameworks */,
+				5F05C22A1F82BB0DCD1D8DED /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -961,6 +963,7 @@
 				TargetAttributes = {
 					49EF4B7423F8381F0071687D = {
 						CreatedOnToolsVersion = 11.3;
+						LastSwiftMigration = 1240;
 					};
 					49EF4B8D23F838380071687D = {
 						CreatedOnToolsVersion = 11.3;
@@ -1031,21 +1034,38 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3EF434DA5C07AAAB7BC3128F /* [CP] Embed Pods Frameworks */ = {
+		53030ACE9EEC3C6521B00A60 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5F05C22A1F82BB0DCD1D8DED /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8EBC292FB69213CDA492BC6A /* [CP] Check Pods Manifest.lock */ = {
@@ -1112,23 +1132,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D2A45A37ABB53C91F4BB2F9F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1341,7 +1344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1396,7 +1399,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1411,6 +1414,7 @@
 			baseConfigurationReference = 9B6FAD279D331E12AB08D13E /* Pods-PushPullLegs.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBlack;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
@@ -1441,14 +1445,6 @@
 					"-framework",
 					"\"CoreVideo\"",
 					"-framework",
-					"\"FBLPromises\"",
-					"-framework",
-					"\"GoogleAppMeasurement\"",
-					"-framework",
-					"\"GoogleMobileAds\"",
-					"-framework",
-					"\"GoogleUtilities\"",
-					"-framework",
 					"\"MediaPlayer\"",
 					"-framework",
 					"\"MessageUI\"",
@@ -1463,11 +1459,7 @@
 					"-framework",
 					"\"SystemConfiguration\"",
 					"-framework",
-					"\"UserMessagingPlatform\"",
-					"-framework",
 					"\"WebKit\"",
-					"-framework",
-					"\"nanopb\"",
 					"-weak_framework",
 					"\"AdSupport\"",
 					"-weak_framework",
@@ -1479,6 +1471,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.braggbuilds.PushPullLegs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PushPullLegs/Utility Closet/PushPullLegs-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1489,6 +1483,7 @@
 			baseConfigurationReference = 7F3F290DF0486DAAA1185EAD /* Pods-PushPullLegs.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBlack;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
@@ -1519,14 +1514,6 @@
 					"-framework",
 					"\"CoreVideo\"",
 					"-framework",
-					"\"FBLPromises\"",
-					"-framework",
-					"\"GoogleAppMeasurement\"",
-					"-framework",
-					"\"GoogleMobileAds\"",
-					"-framework",
-					"\"GoogleUtilities\"",
-					"-framework",
 					"\"MediaPlayer\"",
 					"-framework",
 					"\"MessageUI\"",
@@ -1541,11 +1528,7 @@
 					"-framework",
 					"\"SystemConfiguration\"",
 					"-framework",
-					"\"UserMessagingPlatform\"",
-					"-framework",
 					"\"WebKit\"",
-					"-framework",
-					"\"nanopb\"",
 					"-weak_framework",
 					"\"AdSupport\"",
 					"-weak_framework",
@@ -1557,6 +1540,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.braggbuilds.PushPullLegs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PushPullLegs/Utility Closet/PushPullLegs-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

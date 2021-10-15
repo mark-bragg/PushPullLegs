@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMobileAds
 
 class GraphTableViewController: PPLTableViewController {
     
@@ -18,6 +17,7 @@ class GraphTableViewController: PPLTableViewController {
     private var interstitial: NSObject?
     private var selectedRow: Int!
     private weak var spinner: UIActivityIndicatorView!
+    private var interstitialAd: STAStartAppAd?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -189,12 +189,13 @@ class GraphTableViewController: PPLTableViewController {
         navigateToGraphDetail()
     }
     
-    func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
+    override func failedLoad(_ ad: STAAbstractAd!, withError error: Error!) {
         navigateToGraphDetail()
     }
     
-    func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
+    override func didClose(_ ad: STAAbstractAd!) {
         navigateToGraphDetail()
+        PPLDefaults.instance.graphInterstitialWasJustShown()
     }
     
     private func navigateToGraphDetail() {
@@ -220,14 +221,14 @@ class GraphTableViewController: PPLTableViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
         guard vcForRow(selectedRow).workoutGraphViewModel.pointCount() > 0 else { return }
-        if !PPLDefaults.instance.wasGraphInterstitialShownToday(), let interstitial = createAndLoadInterstitial(adUnitID: InterstitialAdUnitID.graphTableVC) {
-            PPLDefaults.instance.graphInterstitialWasJustShown()
-            presentAdLoadingView()
-            tableView.isUserInteractionEnabled = false
-            interstitial.delegate = self
-            self.interstitial = interstitial
-        } else {
+        if PPLDefaults.instance.wasGraphInterstitialShownToday() {
             showGraph(selectedRow)
+        } else {
+            presentAdLoadingView()
+            if let i = createAndLoadInterstitial() {
+                interstitial = i
+                tableView.isUserInteractionEnabled = false
+            }
         }
     }
     

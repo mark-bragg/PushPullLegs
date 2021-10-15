@@ -7,19 +7,18 @@
 //
 
 import Foundation
-import GoogleMobileAds
 
 @objc protocol InterstitialAdController {
-    @objc func createAndLoadInterstitial(adUnitID: String) -> GADInterstitial?
+    @objc func createAndLoadInterstitial() -> STAStartAppAd?
     @objc func presentAdLoadingView()
     @objc func interstitialWillDismiss()
 }
 
-extension UIViewController: InterstitialAdController {
-    func createAndLoadInterstitial(adUnitID: String) -> GADInterstitial? {
-        guard AppState.shared.isAdEnabled else { return nil }
-        let interstitial = GADInterstitial(adUnitID: adUnitID)
-        interstitial.load(GADRequest())
+extension UIViewController: InterstitialAdController, STADelegateProtocol {
+    
+    func createAndLoadInterstitial() -> STAStartAppAd? {
+        let interstitial = STAStartAppAd()
+        interstitial?.load(withDelegate: self)
         return interstitial
     }
     
@@ -30,14 +29,27 @@ extension UIViewController: InterstitialAdController {
     func interstitialWillDismiss() {
         // no op
     }
-}
-
-extension UIViewController: GADInterstitialDelegate {
-    public func interstitialDidReceiveAd(_ ad: GADInterstitial) {
-        ad.present(fromRootViewController: self)
+    
+    public func didLoad(_ ad: STAAbstractAd!) {
+        guard let ad = ad as? STAStartAppAd else { return }
+        ad.show()
     }
     
-    public func interstitialWillDismissScreen(_ ad: GADInterstitial) {
-        interstitialWillDismiss()
+    public func failedLoad(_ ad: STAAbstractAd!, withError error: Error!) {
+        print("failure")
     }
+    
+    public func didClose(_ ad: STAAbstractAd!) {
+        print("did close")
+    }
+    
+    public func failedShow(_ ad: STAAbstractAd!, withError error: Error!) {
+        print("failed to show")
+    }
+    
+    public func didShow(_ ad: STAAbstractAd!) {
+        print("did show")
+    }
+    
+    
 }

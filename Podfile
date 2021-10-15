@@ -6,7 +6,7 @@ target 'PushPullLegs' do
   use_frameworks!
 
   # Pods for PushPullLegs
-  pod 'Google-Mobile-Ads-SDK', '~> 7.69'
+  pod 'StartAppSDK', '~> 4.5.0'
 
   target 'PushPullLegsTests' do
     inherit! :search_paths

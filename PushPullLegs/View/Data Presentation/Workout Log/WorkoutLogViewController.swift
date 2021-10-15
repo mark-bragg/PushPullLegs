@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMobileAds
 
 class HeaderViewContainer: UIView {
     var headerView: UIView! {

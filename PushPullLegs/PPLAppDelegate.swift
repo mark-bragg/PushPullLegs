@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import GoogleMobileAds
 import StoreKit
 import Combine
 
@@ -26,7 +25,8 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
         }
         CoreDataManager.shared.setup(completion: nil)
         CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        let sdk: STAStartAppSDK = STAStartAppSDK.sharedInstance()
+        sdk.appID = "208303813"
         SKPaymentQueue.default().add(StoreObserver.shared)
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (b, e) in
             if b {

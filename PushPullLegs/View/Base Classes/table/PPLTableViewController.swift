@@ -6,7 +6,6 @@
 //  Copyright © 2020 Mark Bragg. All rights reserved.
 //
 
-import GoogleMobileAds
 import UIKit
 import Combine
 

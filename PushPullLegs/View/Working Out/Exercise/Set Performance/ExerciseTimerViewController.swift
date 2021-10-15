@@ -8,7 +8,6 @@
 
 import UIKit
 import Combine
-import GoogleMobileAds
 
 class ExerciseTimerViewController: UIViewController, ExercisingViewController, PPLButtonDelegate {
     var exerciseSetViewModel: ExerciseSetViewModel?
