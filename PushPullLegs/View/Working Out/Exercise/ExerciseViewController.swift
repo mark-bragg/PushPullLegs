@@ -21,13 +21,13 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     weak var repsCollector: RepsCollectionViewController!
     var exerciseSetViewModel: ExerciseSetViewModel?
     var readOnly = false
-    weak var restTimerView: RestTimerView!
+    weak var restTimerView: RestTimerView?
     private let timerHeight: CGFloat = 150.0
     weak var setNavController: SetNavigationController!
     private var isLeftBarItemSetToDone = false
     private var exerciseViewModel: ExerciseViewModel { viewModel as! ExerciseViewModel }
     private var isTimerViewHidden = true
-    private var restTimerHeightConstraint: NSLayoutConstraint!
+    private var restTimerHeightConstraint: NSLayoutConstraint?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -59,8 +59,8 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         rtv.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         rtv.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         restTimerHeightConstraint = rtv.heightAnchor.constraint(equalToConstant: 0)
-        restTimerHeightConstraint.identifier = "rest timer height"
-        restTimerHeightConstraint.isActive = true
+        restTimerHeightConstraint?.identifier = "rest timer height"
+        restTimerHeightConstraint?.isActive = true
     }
     
     private func showRestTimerView() {
@@ -68,6 +68,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     private func repositionAddButton() {
+        guard let addButton = addButton else { return }
         addButton.removeConstraints(addButton.constraints)
         positionAddButton()
     }
@@ -119,7 +120,8 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     private func updateRestTimerViewTableViewConstraints(_ constant: CGFloat) {
         guard
-            let bottom = view.constraints.first(where: { $0.identifier == "bottom" })
+            let bottom = view.constraints.first(where: { $0.identifier == "bottom" }),
+            let restTimerHeightConstraint = restTimerHeightConstraint
         else { return }
         bottom.constant = -constant
         restTimerHeightConstraint.constant = constant
@@ -167,8 +169,10 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
         dismiss(animated: true, completion: {
             self.reload()
-            self.showRestTimerView()
-            self.restTimerView.restartTimer()
+            if let rtv = self.restTimerView {
+                self.showRestTimerView()
+                rtv.restartTimer()
+            }
         })
         if exerciseViewModel.rowCount() > 0 {
             AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel.title() : nil
@@ -192,7 +196,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel) {
         dismiss(animated: true) {
-            if let _ = self.restTimerView {
+            if let _ = self.restTimerView, let hasData = self.viewModel?.hasData(), hasData {
                 self.showRestTimerView()
             }
         }

@@ -30,8 +30,8 @@ class RestTimerView: UIView {
         tl.tag = topLineTag
         addSubview(tl)
         tl.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        tl.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        tl.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        tl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4).isActive = true
+        tl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4).isActive = true
         tl.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.0125).isActive = true
         return tl
     }
