@@ -124,7 +124,7 @@ class WorkoutLogViewController: DatabaseTableViewController {
         self.tableView?.endUpdates()
     }
     
-    override func insertAddButtonInstructions() {
+    override func insertAddButtonInstructions(_ dataSource: ArrowHelperDataSource? = nil) {
         // no op
     }
     

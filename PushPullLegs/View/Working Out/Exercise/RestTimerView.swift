@@ -16,27 +16,30 @@ class RestTimerView: UIView {
     }
     private var timerLabel = UILabel()
     private var stopWatch: PPLStopWatch!
-    override var frame: CGRect {
-        willSet {
-            if newValue.width == 0 {
-                timerLabel.transform = timerLabel.transform.scaledBy(x:0.1, y:0.1)
-            } else {
-                timerLabel.transform = timerLabel.transform.scaledBy(x:10, y:10)
-            }
-            timerLabel.center = CGPoint(x: newValue.width/2, y: newValue.height/2)
-            layer.cornerRadius = newValue.height/2
+    private var topLine: UIView {
+        if let v = viewWithTag(topLineTag) {
+            return v
         }
+        return insertTopLine()
     }
+    private let topLineTag = 83629
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    private func insertTopLine() -> UIView {
+        let tl = UIView()
+        tl.translatesAutoresizingMaskIntoConstraints = false
+        tl.tag = topLineTag
+        addSubview(tl)
+        tl.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        tl.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        tl.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        tl.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.0125).isActive = true
+        return tl
     }
     
     func restartTimer() {
+        timerLabel.removeFromSuperview()
+        timerLabel = UILabel()
+        setupTimerLabel()
         stopWatch = PPLStopWatch(withHandler: { [weak self] (seconds) in
             guard let self = self else { return }
             DispatchQueue.main.async {
@@ -47,23 +50,24 @@ class RestTimerView: UIView {
     }
     
     override func layoutSubviews() {
-        if !subviews.contains(timerLabel) {
-            setupTimerLabel()
-        }
-        layer.backgroundColor = PPLColor.secondary.cgColor
-        layer.borderColor = UIColor.white.cgColor
-        layer.borderWidth = 1.5
-        layer.cornerRadius = frame.height/2
+        layer.backgroundColor = PPLColor.primary.cgColor
+        topLine.backgroundColor = .white
     }
     
-    func setupTimerLabel() {
-        timerLabel.adjustsFontSizeToFitWidth = true
-        timerLabel.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-        timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 40, weight: .semibold)
-        timerLabel.textColor = .white
+    private func setupTimerLabel() {
         addSubview(timerLabel)
+        timerLabel.translatesAutoresizingMaskIntoConstraints = false
+        timerLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        timerLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        timerLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        timerLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 24, weight: .semibold)
+        timerLabel.textColor = .white
         timerLabel.textAlignment = .center
         timerLabel.backgroundColor = .clear
-        timerLabel.center = CGPoint(x: frame.width/2, y: frame.height/2)
+    }
+    
+    @objc func getDragAndDropView() -> UIView {
+        self
     }
 }

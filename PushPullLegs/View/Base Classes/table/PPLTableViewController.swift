@@ -15,7 +15,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     weak var tableView: PPLTableView?
     weak var noDataView: NoDataView?
     weak var addButton: PPLAddButton!
-    private let addButtonSize = CGSize(width: 75, height: 75)
+    let addButtonSize = CGSize(width: 75, height: 75)
     weak var addButtonHelperVc: ArrowHelperViewController?
     private let tableViewTag = 1776
     private let headerTag = 1984
@@ -85,7 +85,9 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
         setTableViewY(bannerContainerHeight())
-        tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
+        let bottom = tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
+        bottom.identifier = "bottom"
+        bottom.isActive = true
     }
     
     func setTableViewY(_ y: CGFloat) {
@@ -123,12 +125,13 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         }
     }
     
-    func insertAddButtonInstructions() {
+    func insertAddButtonInstructions(_ dataSource: ArrowHelperDataSource? = nil) {
         guard let addButton = addButton else { return }
         if addButtonHelperVc != nil {
             removeAddButtonInstructions()
         }
         let addButtonHelperVc = ArrowHelperViewController()
+        addButtonHelperVc.dataSource = dataSource
         addButtonHelperVc.bottomY = addButton.frame.origin.y
         addButtonHelperVc.centerX_arrowView = addButton.center.x
         addChild(addButtonHelperVc)
@@ -199,7 +202,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         self.addButton = button
     }
     
-    private func positionAddButton() {
+    func positionAddButton() {
         let y: CGFloat = -15
         addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true

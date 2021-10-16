@@ -34,8 +34,7 @@ class WorkoutNoteViewController: UIViewController {
         addToolbar()
         addToolbarItems()
         addTextView()
-        view.backgroundColor = PPLColor.primary
-        textView.backgroundColor = .clear
+        view.backgroundColor = PPLColor.secondary
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,7 +49,7 @@ class WorkoutNoteViewController: UIViewController {
     
     private func addToolbar() {
         let toolbar = UIToolbar()
-        toolbar.backgroundColor = PPLColor.primary
+        toolbar.backgroundColor = PPLColor.secondary
         view.addSubview(toolbar)
         self.toolbar = toolbar
         constrainToolbar()
@@ -65,10 +64,10 @@ class WorkoutNoteViewController: UIViewController {
     
     private func addToolbarItems() {
         let saveItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
-        saveItem.tintColor = PPLColor.quaternary
+        saveItem.tintColor = .white
         let separator = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
-        cancelItem.tintColor = PPLColor.quaternary
+        cancelItem.tintColor = .white
         toolbar.setItems([cancelItem, separator, saveItem], animated: false)
     }
     
@@ -87,13 +86,14 @@ class WorkoutNoteViewController: UIViewController {
         textView.font = UIFont.systemFont(ofSize: 22)
         self.textView = textView
         textView.textColor = PPLColor.white
+        textView.backgroundColor = PPLColor.primary
     }
     
     private func constrainTextView(_ keyboardHeight: CGFloat) {
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.topAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 8).isActive = true
-        textView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        textView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        textView.topAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 12).isActive = true
+        textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12).isActive = true
+        textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
         textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -keyboardHeight).isActive = true
     }
     

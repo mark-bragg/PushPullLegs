@@ -8,8 +8,13 @@
 
 import UIKit
 
+@objc protocol ArrowHelperDataSource {
+    func arrowCenterX() -> CGFloat
+}
+
 class ArrowHelperViewController: UIViewController {
     weak var arrowView: DownwardsArrowView!
+    weak var dataSource: ArrowHelperDataSource?
     var message: String = "Tap to create new exercises!" {
         didSet {
             redrawText()
@@ -68,6 +73,9 @@ class ArrowHelperViewController: UIViewController {
     fileprivate func addArrow() {
         guard arrowView == nil else { return }
         let dims = VerticalArrowViewDimensions()
+        if let ds = dataSource {
+            centerX_arrowView = ds.arrowCenterX()
+        }
         let v = DownwardsArrowView(frame: CGRect(x: centerX_arrowView - dims.width / 2, y: 0, width: dims.width, height: dims.height))
         view.addSubview(v)
         arrowView = v
