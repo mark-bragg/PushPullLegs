@@ -196,7 +196,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel) {
         dismiss(animated: true) {
-            if let _ = self.restTimerView, let hasData = self.viewModel?.hasData(), hasData {
+            if let _ = self.restTimerView, self.exerciseViewModel.hasData(), !self.exerciseViewModel.isFirstSet {
                 self.showRestTimerView()
             }
         }

@@ -46,6 +46,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         else { return nil }
         return PPLDefaults.instance.weightForExerciseWith(name: name)
     }
+    private(set) var isFirstSet = true
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
         exerciseName = exerciseTemplate.name!
@@ -111,6 +112,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     }
     
     func handleFinishedSet(_ exerciseSet: ExerciseSet, _ name: String) {
+        isFirstSet = false
         appendFinishedSetData(FinishedSetDataModel(withExerciseSet: exerciseSet))
         reloader?.reload()
         let row = rowCount() - 1
