@@ -29,7 +29,7 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
         sdk.appID = "208303813"
         
         // MARK: only on when testing
-        sdk.testAdsEnabled = true
+//        sdk.testAdsEnabled = true
         
         SKPaymentQueue.default().add(StoreObserver.shared)
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (b, e) in
@@ -41,7 +41,7 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert, .sound])
+        completionHandler([.list, .banner, .sound])
         center.removeAllDeliveredNotifications()
     }
     
