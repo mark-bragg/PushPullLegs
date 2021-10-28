@@ -23,6 +23,7 @@ class StartWorkoutViewController: PPLTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = StartWorkoutViewModel()
+        rotateBackToPortrait()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,6 +93,11 @@ class StartWorkoutViewController: PPLTableViewController {
     
 }
 
+extension UIViewController {
+    func rotateBackToPortrait() {
+        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+    }
+}
 
 fileprivate extension PPLTableViewCell {
     

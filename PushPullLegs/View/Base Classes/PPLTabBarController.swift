@@ -13,7 +13,9 @@ import AdSupport
 class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
     
     var isGraphPresented = false
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { isGraphPresented ? .allButUpsideDown : .portrait }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        AppState.isLaunch() || isGraphPresented ? .allButUpsideDown : .portrait
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

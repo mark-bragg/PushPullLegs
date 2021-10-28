@@ -1416,14 +1416,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBlack;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1485,14 +1485,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBlack;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

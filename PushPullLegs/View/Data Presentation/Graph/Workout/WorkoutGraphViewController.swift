@@ -13,6 +13,7 @@ class WorkoutGraphViewController: GraphViewController {
 
     var workoutGraphViewModel: WorkoutGraphViewModel { viewModel as! WorkoutGraphViewModel }
     private var frame: CGRect?
+    private var isNavigatingToExercise = false
     
     init(type: ExerciseType, frame: CGRect? = nil) {
         super.init(nibName: nil, bundle: nil)
@@ -29,6 +30,14 @@ class WorkoutGraphViewController: GraphViewController {
         if let frame = frame {
             view.frame = frame
         }
+        isNavigatingToExercise = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if !isNavigatingToExercise {
+            rotateBackToPortrait()
+        }
     }
     
     override func names() -> [String] {
@@ -38,6 +47,7 @@ class WorkoutGraphViewController: GraphViewController {
     override func didSelectName(_ name: String) {
         dismiss(animated: true) {
             let vc = ExerciseGraphViewController(name: name, otherNames: self.workoutGraphViewModel.getExerciseNames().filter({$0 != name}), type: self.workoutGraphViewModel.type)
+            self.isNavigatingToExercise = true
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
