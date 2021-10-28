@@ -143,6 +143,17 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
         reloader?.reload()
     }
     
+    override func totalVolume() -> Double {
+        var total = Double(0)
+        for row in 0..<finishedCellDataLeft.count {
+            total += volumeForIndexPath(IndexPath(row: row, section: 0))
+        }
+        for row in 0..<finishedCellDataRight.count {
+            total += volumeForIndexPath(IndexPath(row: row, section: 0))
+        }
+        return total
+    }
+    
 }
 
 extension Int {

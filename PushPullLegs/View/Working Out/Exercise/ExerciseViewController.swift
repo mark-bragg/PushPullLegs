@@ -174,7 +174,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
                 rtv.restartTimer()
             }
         })
-        if exerciseViewModel.rowCount() > 0 {
+        if exerciseViewModel.hasData() {
             AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel.title() : nil
             presentProgressNotification()
         }
