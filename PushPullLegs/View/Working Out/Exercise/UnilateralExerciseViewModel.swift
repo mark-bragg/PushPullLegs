@@ -61,6 +61,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
     override func handleFinishedSet(_ exerciseSet: ExerciseSet, _ name: String) {
         guard let exerciseSet = exerciseSet as? UnilateralExerciseSet else { return }
         appendFinishedSetData(FinishedUnilateralSetDataModel(withExerciseSet: exerciseSet))
+        PPLDefaults.instance.setWeight(exerciseSet.weight, forExerciseWithName: name)
         self.reloader?.reload()
     }
     
