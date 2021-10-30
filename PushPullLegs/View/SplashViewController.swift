@@ -27,9 +27,10 @@ class SplashViewController: UIViewController {
     }
     
     private func showSplashAd() {
-        guard let sdk = STAStartAppSDK.sharedInstance() else {
-            fatalError("StartAppSDK initialization failed!")
-        }
+        guard
+            PPLDefaults.instance.isAdvertisingEnabled(),
+            let sdk = STAStartAppSDK.sharedInstance()
+        else { return }
         
         let splashPreferences : STASplashPreferences = STASplashPreferences()
         splashPreferences.splashMode = STASplashModeTemplate
@@ -84,7 +85,7 @@ class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if !PPLDefaults.instance.isAdsEnabled() {
+        if !PPLDefaults.instance.isAdvertisingEnabled() {
             disappear()
         }
     }

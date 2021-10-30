@@ -38,7 +38,7 @@ class StoreObserver: NSObject, SKPaymentTransactionObserver {
     }
     
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        if StoreManager.shared.restoringAdsDisabled && PPLDefaults.instance.isAdsEnabled() {
+        if StoreManager.shared.restoringAdsDisabled && PPLDefaults.instance.isAdvertisingEnabled() {
             StoreManager.shared.runAdDisabler()
         }
     }

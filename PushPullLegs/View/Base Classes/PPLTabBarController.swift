@@ -35,7 +35,7 @@ class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if #available(iOS 14, *), PPLDefaults.instance.isAdsEnabled() {
+        if #available(iOS 14, *), PPLDefaults.instance.isAdvertisingEnabled() {
             ATTrackingManager.requestTrackingAuthorization { (status) in
                 print("status \(status.rawValue)")
             }

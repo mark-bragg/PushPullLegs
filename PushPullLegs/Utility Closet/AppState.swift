@@ -31,7 +31,7 @@ class AppState {
     }
     var isAdEnabled: Bool {
         get {
-            PPLDefaults.instance.isAdsEnabled()
+            PPLDefaults.instance.isAdvertisingEnabled()
         }
     }
     private let ADVERTISE = "ADVERTISE"

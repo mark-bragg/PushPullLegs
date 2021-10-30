@@ -35,7 +35,7 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
     // MARK: purchase
     
     func prepareToDisableAds() {
-        guard PPLDefaults.instance.isAdsEnabled() else { return }
+        guard PPLDefaults.instance.isAdvertisingEnabled() else { return }
         preparingToDisableAds = true
         request = SKProductsRequest(productIdentifiers: [IAPProductId.kDisableAds.rawValue])
         request.delegate = self
@@ -92,7 +92,7 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
     }
     
     func restoreDisableAds(_ transaction: SKPaymentTransaction) {
-        if PPLDefaults.instance.isAdsEnabled() {
+        if PPLDefaults.instance.isAdvertisingEnabled() {
             PPLDefaults.instance.disableAds()
         }
         SKPaymentQueue.default().finishTransaction(transaction)

@@ -98,7 +98,7 @@ class PPLDefaults: NSObject {
         }
     }
     
-    func isAdsEnabled() -> Bool {
+    func isAdvertisingEnabled() -> Bool {
         userDetails.bool(forKey: kIsAdsEnabled)
     }
     
