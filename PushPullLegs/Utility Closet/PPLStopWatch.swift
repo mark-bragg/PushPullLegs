@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PPLStopWatch {
+class PPLStopWatch: ForegroundObserver {
     private var startingTime: Double!
     var timeBetweenReadings: TimeInterval = 1
     var handler: ((Int?) -> Void)?
@@ -18,6 +18,7 @@ class PPLStopWatch {
     
     init(withHandler handler: ((Int?) -> Void)? = nil) {
         self.handler = handler
+        SceneDelegate.shared.foregroundObserver = self
     }
     
     func start() {
@@ -47,6 +48,10 @@ class PPLStopWatch {
     
     func currentTime() -> Int {
         return Int(CFAbsoluteTimeGetCurrent() - self.startingTime)
+    }
+    
+    func willEnterForeground() {
+        count = currentTime()
     }
 }
 

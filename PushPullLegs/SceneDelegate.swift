@@ -8,10 +8,15 @@
 
 import UIKit
 
+@objc protocol ForegroundObserver {
+    @objc func willEnterForeground()
+}
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, AdsRemovedResponder {
 
     var window: UIWindow?
     static var shared: SceneDelegate!
+    weak var foregroundObserver: ForegroundObserver?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         SceneDelegate.shared = self
@@ -56,6 +61,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, AdsRemovedResponder {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
+        foregroundObserver?.willEnterForeground()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
