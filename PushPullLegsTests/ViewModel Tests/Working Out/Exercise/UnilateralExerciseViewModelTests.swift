@@ -252,6 +252,22 @@ class UnilateralExerciseViewModelTests: XCTestCase {
         }
     }
     
+    func testTotalVolume_singleRightSet() {
+        let exercise = dbHelper.createUnilateralExercise()
+        dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90, w: 25, d: 7, l: false))
+        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exercise: exercise)
+        let v = sut.totalVolume()
+        XCTAssert(v == (90 * 25 * 7) / 60, "volume for single right set is incorrect")
+    }
+    
+    func testTotalVolume_singleLeftSet() {
+        let exercise = dbHelper.createUnilateralExercise()
+        dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90, w: 25, d: 7, l: true))
+        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exercise: exercise)
+        let v = sut.totalVolume()
+        XCTAssert(v == (90 * 25 * 7) / 60, "volume for single left set is incorrect")
+    }
+    
     func testSectionCount() {
         XCTAssert(sut.sectionCount() == 2)
     }

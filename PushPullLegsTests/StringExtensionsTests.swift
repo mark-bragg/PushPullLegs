@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import PushPullLegs
+//import PushPullLegs
 
 class StringExtensionsTests: XCTestCase {
 

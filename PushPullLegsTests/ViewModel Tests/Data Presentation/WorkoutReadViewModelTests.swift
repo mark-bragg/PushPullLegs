@@ -50,7 +50,7 @@ class WorkoutReadViewModelTests: XCTestCase {
         for exercise in dbHelper.fetchExercises() {
             dbHelper.addSetTo(exercise, data: (2, 20, 30))
         }
-        let volumeText = "\((2 * 20 * 30)/60).0"
+        let volumeText = "Volume: \((2 * 20 * 30)/60).0"
         for i in 0..<exerciseNames.count {
             guard let detailText = sut.detailText(indexPath: IndexPath(row: i, section: 0)) else {
                 XCTFail()

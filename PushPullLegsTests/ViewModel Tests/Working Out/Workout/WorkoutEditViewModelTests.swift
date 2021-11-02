@@ -447,7 +447,7 @@ class WorkoutEditViewModelTests: XCTestCase {
             XCTFail()
             return
         }
-        XCTAssert(volume == "\(10.0*60.0*3.0/60.0)")
+        XCTAssert(volume == "Volume: \(10.0*60.0*3.0/60.0)")
     }
     
     func testDetailTextForIndexPath_incorrectSection_nilReturned() {
