@@ -25,11 +25,13 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
         }
         CoreDataManager.shared.setup(completion: nil)
         CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
-        let sdk: STAStartAppSDK = STAStartAppSDK.sharedInstance()
-        sdk.appID = "208303813"
-        
-        // MARK: only on when testing
-        sdk.testAdsEnabled = true
+        if PPLDefaults.instance.isAdvertisingEnabled() {
+            let sdk: STAStartAppSDK = STAStartAppSDK.sharedInstance()
+            sdk.appID = "208303813"
+            
+            // MARK: only on when testing
+            sdk.testAdsEnabled = true
+        }
         
         SKPaymentQueue.default().add(StoreObserver.shared)
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (b, e) in

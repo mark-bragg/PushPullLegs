@@ -18,7 +18,7 @@ class StartWorkoutViewController: PPLTableViewController {
     private var didNavigateToWorkout: Bool = false
     weak var delegate: WorkoutSelectionDelegate?
     var splashVC: SplashViewController!
-    private(set) var isFirstAppearence = true
+    private static var isFirstAppearence = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,8 +41,8 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     func presentSplash() {
-        guard isFirstAppearence else { return }
-        isFirstAppearence = false
+        guard StartWorkoutViewController.isFirstAppearence else { return }
+        StartWorkoutViewController.isFirstAppearence = false
         let splashVC = SplashViewController()
         splashVC.delegate = self
         UIApplication.shared.windows.first!.addSubview(splashVC.view)
