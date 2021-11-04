@@ -30,7 +30,7 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
             sdk.appID = "208303813"
             
             // MARK: only on when testing
-            sdk.testAdsEnabled = true
+//            sdk.testAdsEnabled = true
         }
         
         SKPaymentQueue.default().add(StoreObserver.shared)
