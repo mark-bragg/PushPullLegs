@@ -81,10 +81,20 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     func progressMessage() -> String {
         let currentVolume = totalVolume()
         let preVolume = previousVolume()
-        let percent = Int((currentVolume / preVolume) * 100)
-        let percentMessage = "You are at \(percent)% of your previous volume."
-        let motivationalMessage = percent < 100 ? " Progressive overload requires more than 100% you got this!" : " You overloaded! Congratulations! This is progress!"
-        return "\(percentMessage)\(motivationalMessage)"
+        let percent = Int(((currentVolume / preVolume) - 1) * 100)
+        var percentMessage = "\(percent)%"
+        if percent == 0 {
+            // no change
+            percentMessage.append(" difference")
+        } else if percent < 0 {
+            // decrease in volume
+            percentMessage.append(" decrease")
+        } else {
+            // increase in volume
+            percentMessage.append(" increase")
+        }
+        percentMessage.append(" in volume from last workout.")
+        return "\(percentMessage)"
     }
     
     func previousVolume() -> Double {
