@@ -37,7 +37,7 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
             }
             sdk.setUserConsent(authorized, forConsentType: "pas", withTimestamp: Int(Date.now.timeIntervalSince1970))
             // MARK: only on when testing
-            sdk.testAdsEnabled = true
+//            sdk.testAdsEnabled = true
         }
         
         SKPaymentQueue.default().add(StoreObserver.shared)
