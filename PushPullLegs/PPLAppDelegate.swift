@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import StoreKit
 import Combine
+import AppTrackingTransparency
 
 @UIApplicationMain
 class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -26,11 +27,17 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
         CoreDataManager.shared.setup(completion: nil)
         CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
         if PPLDefaults.instance.isAdvertisingEnabled() {
+            let authorized = ATTrackingManager.trackingAuthorizationStatus == .authorized
             let sdk: STAStartAppSDK = STAStartAppSDK.sharedInstance()
             sdk.appID = "208303813"
-            
+            sdk.preferences = STASDKPreferences.prefrences(withAge: 18, andGender: STAGender(2))
+            sdk.returnAdEnabled = false
+            sdk.handleExtras { dict in
+                dict?["IABUSPrivacy_String"] = authorized ? "1---" : "1YNN"
+            }
+            sdk.setUserConsent(authorized, forConsentType: "pas", withTimestamp: Int(Date.now.timeIntervalSince1970))
             // MARK: only on when testing
-//            sdk.testAdsEnabled = true
+            sdk.testAdsEnabled = true
         }
         
         SKPaymentQueue.default().add(StoreObserver.shared)

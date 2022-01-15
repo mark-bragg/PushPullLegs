@@ -11,17 +11,17 @@ import UIKit
 let spinnerTag = 7469
 let bannerContainerTag = 98765
 fileprivate let bannerHolderTag = 6583
-
+//NSUserTrackingUsageDescription
 @objc protocol BannerAdController {
-    @objc func addBannerView(size: STABannerSizeEnum)
-    @objc func bannerContainerHeight(size: STABannerSizeEnum) -> CGFloat
+    @objc func addBannerView(size: STABannerSize)
+    @objc func bannerContainerHeight(size: STABannerSize) -> CGFloat
     @objc func refreshBanner()
     @objc func bannerAdUnitID() -> String
     @objc func removeBanner()
 }
 
 extension UIViewController: BannerAdController, STABannerDelegateProtocol {
-    @objc func addBannerView(size: STABannerSizeEnum = STA_PortraitAdSize_320x50) {
+    @objc func addBannerView(size: STABannerSize = STA_PortraitAdSize_320x50) {
         guard AppState.shared.isAdEnabled else { return }
         let container = bannerContainerView(bannerContainerHeight(size: size))
         if let v =  container.viewWithTag(bannerHolderTag) {
@@ -65,7 +65,7 @@ extension UIViewController: BannerAdController, STABannerDelegateProtocol {
         container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
-    @objc func bannerContainerHeight(size: STABannerSizeEnum = STA_PortraitAdSize_320x50) -> CGFloat {
+    @objc func bannerContainerHeight(size: STABannerSize = STA_PortraitAdSize_320x50) -> CGFloat {
         guard AppState.shared.isAdEnabled else { return 0 }
         let adSize = size.size
         return adSize.height + (heightBuffer() * 2)

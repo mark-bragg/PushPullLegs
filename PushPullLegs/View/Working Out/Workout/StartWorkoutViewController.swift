@@ -136,8 +136,43 @@ fileprivate extension PPLTableViewCell {
 
 extension StartWorkoutViewController: SplashViewControllerDelegate {
     func splashViewControllerDidDisappear(_ splash: SplashViewController) {
-        splashVC.view.removeFromSuperview()
+        splash.view.removeFromSuperview()
         splashVC = nil
+        StoreManager.shared.delegate = self
+        let launchCount = PPLDefaults.instance.launchCount()
+        if launchCount == 1 || (launchCount < 100 && launchCount % 10 == 0) {
+            StoreManager.shared.prepareToDisableAds()
+        }
+    }
+}
+
+extension StartWorkoutViewController: StoreManagerDelegate {
+    
+    func storeManagerPreparedDisableAdsSuccessfully(_ manager: StoreManager) {
+        DispatchQueue.main.async {
+            self.offerUserAdFreeExperience()
+        }
+    }
+    
+    func offerUserAdFreeExperience() {
+        let title = "Tired of Ads?"
+        let message = "Try an ad free experience for only 99 cents."
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+            StoreManager.shared.startDisableAdsTransaction()
+        }))
+        controller.addAction(UIAlertAction(title: "No", style: .cancel, handler: { [unowned self] action in
+            self.presentHowToDisableAlert()
+        }))
+        present(controller, animated: true, completion: nil)
+    }
+    
+    func presentHowToDisableAlert() {
+        let title = "In case you change your mind"
+        let message = "Go to settings in the tab bar, and you can disable ads there."
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(controller, animated: true, completion: nil)
     }
 }
 

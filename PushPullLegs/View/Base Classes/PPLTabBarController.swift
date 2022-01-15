@@ -37,7 +37,11 @@ class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
         super.viewDidAppear(animated)
         if #available(iOS 14, *), PPLDefaults.instance.isAdvertisingEnabled() {
             ATTrackingManager.requestTrackingAuthorization { (status) in
-                print("status \(status.rawValue)")
+                let authorized = status == .authorized
+                STAStartAppSDK.sharedInstance().handleExtras { dict in
+                    dict?["IABUSPrivacy_String"] = authorized ? "1---" : "1YNN"
+                }
+                STAStartAppSDK.sharedInstance().setUserConsent(authorized, forConsentType: "pas", withTimestamp: Int(Date.now.timeIntervalSince1970))
             }
         }
     }

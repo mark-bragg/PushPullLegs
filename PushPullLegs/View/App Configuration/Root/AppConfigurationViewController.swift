@@ -20,7 +20,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = AppConfigurationViewModel()
-        StoreManager.shared.prepareToDisableAds()
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -901,7 +901,6 @@
 				49EF4B7123F8381F0071687D /* Sources */,
 				49EF4B7223F8381F0071687D /* Frameworks */,
 				49EF4B7323F8381F0071687D /* Resources */,
-				53030ACE9EEC3C6521B00A60 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -939,7 +938,6 @@
 				49EF4B9523F838380071687D /* Sources */,
 				49EF4B9623F838380071687D /* Frameworks */,
 				49EF4B9723F838380071687D /* Resources */,
-				5F05C22A1F82BB0DCD1D8DED /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1034,40 +1032,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		53030ACE9EEC3C6521B00A60 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5F05C22A1F82BB0DCD1D8DED /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8EBC292FB69213CDA492BC6A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

@@ -20,6 +20,10 @@ enum ReceiptValidationError: Error {
     case expired
 }
 
+protocol StoreManagerDelegate: NSObjectProtocol {
+    func storeManagerPreparedDisableAdsSuccessfully(_ manager: StoreManager)
+}
+
 class StoreManager: NSObject, SKProductsRequestDelegate {
     
     static let shared = StoreManager()
@@ -31,6 +35,7 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
     private var preparingToDisableAds = false
     private(set) var restoringAdsDisabled = false
     private(set) var isPurchasing = false
+    weak var delegate: StoreManagerDelegate?
     
     // MARK: purchase
     
@@ -47,6 +52,7 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
         if preparingToDisableAds, let product = response.products.first(where: { $0.productIdentifier == IAPProductId.kDisableAds.rawValue }) {
             prepareTransaction(product)
             preparingToDisableAds = false
+            delegate?.storeManagerPreparedDisableAdsSuccessfully(self)
         }
     }
     

@@ -25,6 +25,7 @@ class PPLDefaults: NSObject {
     private let kGraphInterstitalDate = "kGraphInterstitialDate"
     private let kTimerSoundsEnabled = "kTimerSoundsEnabled"
     private let kDefaultColor = "kDefaultColor"
+    private let kLaunchCount = "kLaunchCount"
     override private init() {
         super.init()
         setupUserDetails()
@@ -91,10 +92,20 @@ class PPLDefaults: NSObject {
     func setupUserDetails() {
         if let details = UserDefaults(suiteName: user_details_suite_name) {
             userDetails = details
+            setupLaunchCount()
         } else {
             UserDefaults.standard.addSuite(named: user_details_suite_name)
             userDetails.set(5, forKey: kCountdownInt)
+            userDetails.set(1, forKey: kLaunchCount)
             setupUserDetails()
+        }
+    }
+    
+    private func setupLaunchCount() {
+        if let launchCount = userDetails.value(forKey:kLaunchCount) as? Int {
+            userDetails.set(launchCount + 1, forKey: kLaunchCount)
+        } else {
+            userDetails.set(1, forKey: kLaunchCount)
         }
     }
     
@@ -128,6 +139,13 @@ class PPLDefaults: NSObject {
     
     func areTimerSoundsEnabled() -> Bool {
         userDetails.bool(forKey: kTimerSoundsEnabled)
+    }
+    
+    func launchCount() -> Int {
+        guard let count = userDetails.value(forKey: kLaunchCount) as? Int else {
+            return 0
+        }
+        return count
     }
 }
 
