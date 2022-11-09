@@ -17,6 +17,15 @@ class SplashViewController: UIViewController {
     weak var backgroundView: UIView!
     weak var imageView: UIImageView!
     weak var delegate: SplashViewControllerDelegate?
+    private var splashPreferences: STASplashPreferences {
+        let splashPreferences = STASplashPreferences()
+        splashPreferences.splashMode = STASplashModeTemplate
+        splashPreferences.splashTemplateTheme = STASplashTemplateThemeOcean;
+        splashPreferences.splashLoadingIndicatorType = STASplashLoadingIndicatorTypeDots;
+        splashPreferences.splashTemplateIconImageName = "512 x 512";
+        splashPreferences.splashTemplateAppName = "Push Pull Legs";
+        return splashPreferences
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,14 +40,6 @@ class SplashViewController: UIViewController {
             PPLDefaults.instance.isAdvertisingEnabled(),
             let sdk = STAStartAppSDK.sharedInstance()
         else { return }
-        
-        let splashPreferences : STASplashPreferences = STASplashPreferences()
-        splashPreferences.splashMode = STASplashModeTemplate
-        splashPreferences.splashTemplateTheme = STASplashTemplateThemeOcean;
-        splashPreferences.splashLoadingIndicatorType = STASplashLoadingIndicatorTypeDots;
-        splashPreferences.splashTemplateIconImageName = "512 x 512";
-        splashPreferences.splashTemplateAppName = "Push Pull Legs";
-        
         sdk.showSplashAd(withDelegate: self, with: splashPreferences)
     }
     
