@@ -1,5 +1,5 @@
 //
-//  AboutViewController.swift
+//  HowToUseAppViewController.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 10/28/20.
@@ -8,14 +8,14 @@
 
 import UIKit
 
-class AboutViewController: PPLTableViewController {
+class HowToUseAppViewController: PPLTableViewController {
 
     private let buttonTagConstant = 123
     private var firstLoad = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = AboutViewModel()
+        viewModel = HowToUseAppViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,16 +32,16 @@ class AboutViewController: PPLTableViewController {
         0
     }
     
-    func aboutViewModel() -> AboutViewModel {
-        return viewModel as! AboutViewModel
+    func howToUseAppViewModel() -> HowToUseAppViewModel {
+        return viewModel as! HowToUseAppViewModel
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        aboutViewModel().sectionCount()
+        howToUseAppViewModel().sectionCount()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return aboutViewModel().titleForSection(section)
+        return howToUseAppViewModel().titleForSection(section)
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -53,18 +53,18 @@ class AboutViewController: PPLTableViewController {
         cell.contentView.backgroundColor = PPLColor.primary
         let tv = UITextView()
         tv.backgroundColor = .clear
-        tv.textColor = PPLColor.white
-        tv.text = aboutViewModel().title(indexPath: indexPath)
+        tv.textColor = .white
+        tv.text = howToUseAppViewModel().title(indexPath: indexPath)
         tv.isScrollEnabled = false
         tv.isEditable = false
         tv.font = tv.font?.withSize(20)
-        aboutViewModel().setHeight(heightForSection(indexPath.section, tv), forRow: indexPath.row)
+        howToUseAppViewModel().setHeight(heightForSection(indexPath.section, tv), forRow: indexPath.row)
         cell.contentView.addSubview(tv)
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
         tv.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
         tv.widthAnchor.constraint(equalTo: cell.contentView.widthAnchor, constant: -32).isActive = true
-        tv.heightAnchor.constraint(equalToConstant: aboutViewModel().heightForRow(indexPath.row)).isActive = true
+        tv.heightAnchor.constraint(equalToConstant: howToUseAppViewModel().heightForRow(indexPath.row)).isActive = true
         if let btn = buttonForCell(cell) {
             cell.contentView.bringSubviewToFront(btn)
         } else {
@@ -79,7 +79,7 @@ class AboutViewController: PPLTableViewController {
     }
     
     private func heightForSection(_ section: Int, _ tv: UITextView) -> CGFloat {
-        if aboutViewModel().isSectionExpanded(section) {
+        if howToUseAppViewModel().isSectionExpanded(section) {
             return tv.sizeThatFits(CGSize(width: (tableView?.frame.size.width ?? 32) - 32, height: CGFloat.greatestFiniteMagnitude)).height
         }
         return 75
@@ -94,7 +94,7 @@ class AboutViewController: PPLTableViewController {
         }
         btn.setTitleColor(.systemBlue, for: .normal)
         btn.tag = section + buttonTagConstant
-        btn.isCollapsed = !aboutViewModel().isSectionExpanded(section)
+        btn.isCollapsed = !howToUseAppViewModel().isSectionExpanded(section)
         btn.sizeToFit()
         cell.contentView.addSubview(btn)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -109,9 +109,9 @@ class AboutViewController: PPLTableViewController {
         let section = button.tag - buttonTagConstant
         let rowToScrollTo = button.isCollapsed ? section : 0
         if button.isCollapsed {
-            aboutViewModel().collapseEverythingExcept(section)
+            howToUseAppViewModel().collapseEverythingExcept(section)
         } else {
-            aboutViewModel().collapseSection(section)
+            howToUseAppViewModel().collapseSection(section)
         }
         tableView?.reloadData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -120,7 +120,7 @@ class AboutViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return aboutViewModel().heightForRow(indexPath.row)
+        return howToUseAppViewModel().heightForRow(indexPath.row)
     }
 
 }

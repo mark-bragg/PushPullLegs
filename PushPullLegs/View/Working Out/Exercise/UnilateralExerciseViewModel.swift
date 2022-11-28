@@ -79,7 +79,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
     }
     
     override func collectFinishedCellData() {
-        guard let exercise = exerciseManager.fetch(exercise.objectID) as? UnilateralExercise, let sets = exercise.sets?.array as? [UnilateralExerciseSet] else { return }
+        guard let objectID = exercise?.objectID, let exercise = exerciseManager.fetch(objectID) as? UnilateralExercise, let sets = exercise.sets?.array as? [UnilateralExerciseSet] else { return }
         finishedCellDataLeft.removeAll()
         finishedCellDataRight.removeAll()
         for set in sets {
@@ -122,7 +122,8 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
     override func delete(indexPath: IndexPath) {
         guard
             let man = dataManager as? UnilateralExerciseDataManager,
-            let exercise = exerciseManager.fetch(exercise.objectID) as? UnilateralExercise
+            let objectID = exercise?.objectID,
+            let exercise = exerciseManager.fetch(objectID) as? UnilateralExercise
         else {
             return }
         man.deletionObserver = self

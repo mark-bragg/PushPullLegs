@@ -66,8 +66,11 @@ class DataManager {
         }
     }
     
-    func fetch(_ object: NSManagedObject) -> Any? {
-        fetch(object.objectID)
+    func fetch(_ object: NSManagedObject?) -> Any? {
+        guard let objectID = object?.objectID else {
+            return nil
+        }
+        return fetch(objectID)
     }
     
     func fetch(_ objectId: NSManagedObjectID) -> Any? {

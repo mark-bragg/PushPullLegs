@@ -42,10 +42,8 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        removeSwitch(cell)
-        removeSegmentedControl(cell)
-        removeDefaultColorView(cell)
-        cell.removeIndicator()
+        cell.rootView.subviews.forEach { $0.removeFromSuperview() }
+        cell.rootView.gestureRecognizers?.forEach { cell.rootView.removeGestureRecognizer($0) }
         cell.selectionStyle = .default
         if indexPath.row < 3 {
             cell.addDisclosureIndicator()
@@ -72,22 +70,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         textLabel?.text = viewModel?.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 4.0, rect: cell.frame)
         return cell
-    }
-    
-    fileprivate func removeSwitch(_ cell: PPLTableViewCell) {
-        guard let switcheroo = cell.rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) else { return }
-        for c in switcheroo.constraints {
-            c.isActive = false
-        }
-        switcheroo.removeFromSuperview()
-    }
-    
-    fileprivate func removeSegmentedControl(_ cell: PPLTableViewCell) {
-        guard let segmenteroo = cell.rootView.subviews.first(where: { $0.isKind(of: UISegmentedControl.self) }) else { return }
-        for c in segmenteroo.constraints {
-            c.isActive = false
-        }
-        segmenteroo.removeFromSuperview()
     }
     
     func configureImperialMetricSegmenedControl(cell: PPLTableViewCell) {
@@ -263,7 +245,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     private func navigateToAbout() {
-        let vc = AboutViewController()
+        let vc = HowToUseAppViewController()
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
         view.isUserInteractionEnabled = true

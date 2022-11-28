@@ -22,7 +22,7 @@ enum AppConfigurationRowID {
 }
 
 class AppConfigurationViewModel: NSObject, PPLTableViewModel {
-    private var titles = ["About", "Edit Workout List", "Edit Exercise List", "", "Countdown for each set", "Timer Sounds", "App Color"]
+    private var titles = ["How to Use the App", "Edit Workout List", "Edit Exercise List", "", "Countdown for each set", "Timer Sounds", "App Color"]
     private var hasDisableAdsRow: Bool
     
     override init() {

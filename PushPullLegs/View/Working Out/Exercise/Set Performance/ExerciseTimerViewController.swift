@@ -74,13 +74,13 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.text = "Start!"
         lbl.font = UIFont.systemFont(ofSize: 72, weight: .bold)
-        lbl.textColor = PPLColor.text
+        lbl.textColor = PPLColor.primary
         lbl.textAlignment = .center
         return lbl
     }
     
     fileprivate func styleStartLabel(_ lbl: UILabel, _ diameter: CGFloat) {
-        let color = PPLColor.quaternary.cgColor
+        let color = PPLColor.tertiary.cgColor
         lbl.layer.backgroundColor = color
         lbl.layer.cornerRadius = diameter / 2
         lbl.layer.shadowPath = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: diameter, height: diameter)).cgPath
@@ -97,7 +97,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
     }
     
     fileprivate func animateStartLabel(_ lbl: UILabel) {
-        UIView.animate(withDuration: 1.0, delay: 0.5, options: .transitionFlipFromTop, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0.7, options: .curveEaseOut, animations: {
             lbl.alpha = 0
         }) { (b) in
             for c in lbl.constraints {

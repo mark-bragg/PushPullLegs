@@ -32,22 +32,21 @@ extension PPLColor {
     static let pplDarkGrayText = UIColor(named: "ppl_dark_gray_text")
     
     static var primary: UIColor {
-        primaryWithColor(PPLDefaults.instance.getDefaultColor())
+        UIColor.systemBackground
     }
     static var secondary: UIColor {
-        UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_secondary") ?? UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+        UIColor.secondarySystemBackground
     }
     static var tertiary: UIColor {
-        UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_tertiary") ?? .darkGray
+        UIColor.tertiarySystemBackground
     }
     static var quaternary: UIColor {
-        UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_quaternary") ?? .gray
+        UIColor.quaternarySystemFill
     }
     static var text: UIColor {
-        let color = UIColor(named: "\(PPLDefaults.instance.getDefaultColor())_text") ?? .white
-        UITextField.appearance().tintColor = color
-        UITextField.appearance().textColor = color
-        return color
+        UITextField.appearance().tintColor = .white
+        UITextField.appearance().textColor = .white
+        return .white
     }
     
     static let pplArrowGreen = UIColor(named: "ppl_arrow_green")!

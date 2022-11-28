@@ -21,19 +21,19 @@ protocol WorkoutEditViewModelDelegate: NSObject {
 class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     
     private var exercisesToDo = [ExerciseTemplate]()
-    private var startingTime: Date!
+    private(set) var startingTime: Date
     weak var delegate: WorkoutEditViewModelDelegate?
     
     init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
-        super.init(withCoreDataManagement: coreDataManagement)
         startingTime = Date()
+        super.init(withCoreDataManagement: coreDataManagement)
         if AppState.shared.workoutInProgress, let workout = workoutManager.previousWorkout(before: startingTime) {
             exerciseType = ExerciseType(rawValue: workout.name!)
             workoutId = workout.objectID
             startingTime = workout.dateCreated!
         } else {
             exerciseType = type != nil ? type : computeExerciseType()
-            workoutManager.create(name: exerciseType.rawValue, keyValuePairs: ["dateCreated": startingTime!])
+            workoutManager.create(name: exerciseType.rawValue, keyValuePairs: ["dateCreated": startingTime])
             workoutId = (workoutManager.creation as? Workout)?.objectID
         }
         exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
@@ -122,9 +122,11 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
         }
     }
     
-    func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise) {
+    func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise?) {
         guard let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout else { return }
-        workoutManager.add(exercise, to: workout)
+        if let exercise {
+            workoutManager.add(exercise, to: workout)
+        }
         reload()
         if exercisesDone.count == 1 {
             delegate?.workoutEditViewModelCompletedFirstExercise(self)

@@ -18,10 +18,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     let addButtonSize = CGSize(width: 75, height: 75)
     weak var addButtonHelperVc: ArrowHelperViewController?
     private let tableViewTag = 1776
-    private let headerTag = 1984
-    var headerView: UIView? {
-        return view.viewWithTag(headerTag)
-    }
     var cancellables: Set<AnyCancellable> = []
     private var topConstraint: NSLayoutConstraint!
     
@@ -59,7 +55,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         setTitle()
     }
     
-    fileprivate func setupTableView() {
+    func setupTableView() {
         setTableView()
         constrainTableView()
         addTableFooter()
@@ -248,7 +244,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         if headerHeight == 0 {
             return HeaderViewContainer(frame: .zero)
         }
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
+        let headerView = UIView(frame: CGRect(x: 0, y: 1, width: view.frame.width, height: headerHeight - 2))
         var i = 0
         let widthDenominator = CGFloat(titles.count)
         let labelWidth = headerView.frame.width / widthDenominator
@@ -273,11 +269,11 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
 
 extension PPLTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return 40
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 95
+        return 70
     }
 }
 

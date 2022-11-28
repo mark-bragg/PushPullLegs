@@ -1,5 +1,5 @@
 //
-//  AboutViewModel.swift
+//  HowToUseAppViewModel.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 10/28/20.
@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-class AboutViewModel: NSObject, PPLTableViewModel {
+class HowToUseAppViewModel: NSObject, PPLTableViewModel {
     
-    private var rowHeights = [Int:CGFloat]()
+    private var rowHeights = [Int: CGFloat]()
     private let sectionTitles = ["The Regimen", "Progressive Overload", "Initial Setup", "Working Out", "Observing Data"]
     private var sectionExpansions = Array(repeating: false, count: 5)
     
@@ -57,7 +57,7 @@ class AboutViewModel: NSObject, PPLTableViewModel {
     }
     
     func title() -> String? {
-        return "About the App"
+        return "How to Use the App"
     }
     
     func setHeight(_ height: CGFloat, forRow row: Int) {

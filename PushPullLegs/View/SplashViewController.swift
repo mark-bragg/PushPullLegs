@@ -20,10 +20,8 @@ class SplashViewController: UIViewController {
     private var splashPreferences: STASplashPreferences {
         let splashPreferences = STASplashPreferences()
         splashPreferences.splashMode = STASplashModeTemplate
-        splashPreferences.splashTemplateTheme = STASplashTemplateThemeOcean;
-        splashPreferences.splashLoadingIndicatorType = STASplashLoadingIndicatorTypeDots;
-        splashPreferences.splashTemplateIconImageName = "512 x 512";
-        splashPreferences.splashTemplateAppName = "Push Pull Legs";
+        splashPreferences.splashTemplateTheme = STASplashTemplateThemeGloomy;
+        splashPreferences.splashLoadingIndicatorType = STASplashLoadingIndicatorTypeIOS;
         return splashPreferences
     }
 

@@ -21,7 +21,7 @@ class ExerciseDataManager: DataManager {
         super.create(name: name, keyValuePairs: pairs)
     }
     
-    func insertSet(duration: Int, weight: Double, reps: Double, exercise: Exercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
+    func insertSet(duration: Int, weight: Double, reps: Double, exercise: Exercise?, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
         backgroundContext.performAndWait {
             if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseSet.rawValue, into: backgroundContext) as? ExerciseSet,
                 let exerciseInContext = fetch(exercise) as? Exercise {
@@ -86,15 +86,22 @@ class ExerciseDataManager: DataManager {
         guard let exercises = try? backgroundContext.fetch(request) as? [Exercise] else { return [] }
         do {
             let sorted = try exercises.sorted { (e1, e2) -> Bool in
-                if e1.workout == nil || e2.workout == nil {
+                guard let workoutDate1 = e1.workout?.dateCreated, let workoutDate2 = e2.workout?.dateCreated else {
                     throw NilReferenceError.nilWorkout
                 }
-                return e1.workout!.dateCreated! < e2.workout!.dateCreated!
+                return workoutDate1 < workoutDate2
             }
             return sorted
         } catch {
             throw NilReferenceError.nilWorkout
         }
+    }
+    
+    func latestPreviousExercise(name: String) -> Exercise? {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName.rawValue)
+        request.predicate = NSPredicate(format: "name = %@", argumentArray: [name])
+        request.sortDescriptors = [NSSortDescriptor.dateCreated]
+        return (try? backgroundContext.fetch(request) as? [Exercise])?.first
     }
 }
 

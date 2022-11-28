@@ -22,8 +22,8 @@
 		491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CF62547D65E003A7526 /* RestTimerView.swift */; };
 		491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */; };
 		491C8CFB254A523E003A7526 /* StartWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFA254A523E003A7526 /* StartWorkoutViewController.swift */; };
-		491C8CFD254A67DC003A7526 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFC254A67DC003A7526 /* AboutViewController.swift */; };
-		491C8CFF254A6841003A7526 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFE254A6841003A7526 /* AboutViewModel.swift */; };
+		491C8CFD254A67DC003A7526 /* HowToUseAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFC254A67DC003A7526 /* HowToUseAppViewController.swift */; };
+		491C8CFF254A6841003A7526 /* HowToUseAppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFE254A6841003A7526 /* HowToUseAppViewModel.swift */; };
 		491DD62B248C565C0001F9F8 /* PPLStopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */; };
 		4925AE1D25BFDE1100232B76 /* StoreObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4925AE1C25BFDE1100232B76 /* StoreObserver.swift */; };
 		4925AE3D25C5360500232B76 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4925AE3C25C5360500232B76 /* StoreManager.swift */; };
@@ -81,6 +81,8 @@
 		4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49937899243B86D400EAD55E /* WorkoutTemplateListViewModel.swift */; };
 		4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993789D243B964200EAD55E /* ReloadProtocol.swift */; };
 		4997C1DB2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */; };
+		49A08D80293468E000870DDA /* PreviousPerformanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A08D7F293468E000870DDA /* PreviousPerformanceViewController.swift */; };
+		49A08D82293469F000870DDA /* PreviousUnilateralPerformanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A08D81293469F000870DDA /* PreviousUnilateralPerformanceViewController.swift */; };
 		49A1B398265B298100FE73F5 /* tick.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49A1B397265B298100FE73F5 /* tick.m4a */; };
 		49A3E38126DB39A2005E477C /* DBUnilateralExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3E38026DB39A2005E477C /* DBUnilateralExerciseViewController.swift */; };
 		49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB1D7A24849C980003CFA1 /* AppState.swift */; };
@@ -169,8 +171,8 @@
 		491C8CF62547D65E003A7526 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
 		491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseTemplateCreationViewController.xib; sourceTree = "<group>"; };
 		491C8CFA254A523E003A7526 /* StartWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartWorkoutViewController.swift; sourceTree = "<group>"; };
-		491C8CFC254A67DC003A7526 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		491C8CFE254A6841003A7526 /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
+		491C8CFC254A67DC003A7526 /* HowToUseAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToUseAppViewController.swift; sourceTree = "<group>"; };
+		491C8CFE254A6841003A7526 /* HowToUseAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToUseAppViewModel.swift; sourceTree = "<group>"; };
 		491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLStopWatch.swift; sourceTree = "<group>"; };
 		4925AE1C25BFDE1100232B76 /* StoreObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreObserver.swift; sourceTree = "<group>"; };
 		4925AE3C25C5360500232B76 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
@@ -228,6 +230,8 @@
 		49937899243B86D400EAD55E /* WorkoutTemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewModel.swift; sourceTree = "<group>"; };
 		4993789D243B964200EAD55E /* ReloadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadProtocol.swift; sourceTree = "<group>"; };
 		4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewController.swift; sourceTree = "<group>"; };
+		49A08D7F293468E000870DDA /* PreviousPerformanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousPerformanceViewController.swift; sourceTree = "<group>"; };
+		49A08D81293469F000870DDA /* PreviousUnilateralPerformanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousUnilateralPerformanceViewController.swift; sourceTree = "<group>"; };
 		49A1B397265B298100FE73F5 /* tick.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.m4a; sourceTree = "<group>"; };
 		49A3E38026DB39A2005E477C /* DBUnilateralExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUnilateralExerciseViewController.swift; sourceTree = "<group>"; };
 		49AB1D7A24849C980003CFA1 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -476,6 +480,7 @@
 		4945337D2450904300FA1665 /* Exercise */ = {
 			isa = PBXGroup;
 			children = (
+				49A08D7E2934689000870DDA /* Previous Performance */,
 				490D88E1245282E5005FFEA3 /* Set Performance */,
 				4945337B2450895500FA1665 /* ExerciseViewModel.swift */,
 				49E675F9244CDA54001F5974 /* ExerciseTemplateSelectionViewController.swift */,
@@ -613,6 +618,15 @@
 			path = "Base Classes";
 			sourceTree = "<group>";
 		};
+		49A08D7E2934689000870DDA /* Previous Performance */ = {
+			isa = PBXGroup;
+			children = (
+				49A08D7F293468E000870DDA /* PreviousPerformanceViewController.swift */,
+				49A08D81293469F000870DDA /* PreviousUnilateralPerformanceViewController.swift */,
+			);
+			path = "Previous Performance";
+			sourceTree = "<group>";
+		};
 		49AB68C924E8BD770057D5F7 /* Shapes */ = {
 			isa = PBXGroup;
 			children = (
@@ -627,8 +641,8 @@
 			children = (
 				496BE36824E63F5C00A4E08B /* NoDataView.swift */,
 				49AB68CC24FB0E5C0057D5F7 /* ArrowHelperViewController.swift */,
-				491C8CFC254A67DC003A7526 /* AboutViewController.swift */,
-				491C8CFE254A6841003A7526 /* AboutViewModel.swift */,
+				491C8CFC254A67DC003A7526 /* HowToUseAppViewController.swift */,
+				491C8CFE254A6841003A7526 /* HowToUseAppViewModel.swift */,
 			);
 			path = "User Guidance";
 			sourceTree = "<group>";
@@ -1108,7 +1122,7 @@
 				49C1EA572608181F00330CBF /* AppConfigurationViewModel.swift in Sources */,
 				4973C124244BCC26009460F2 /* WorkoutEditViewModel.swift in Sources */,
 				49359B9324D91E4E005FF7A8 /* WorkoutGraphViewController.swift in Sources */,
-				491C8CFF254A6841003A7526 /* AboutViewModel.swift in Sources */,
+				491C8CFF254A6841003A7526 /* HowToUseAppViewModel.swift in Sources */,
 				49C1EA5D260AF84F00330CBF /* WorkoutLogViewModel.swift in Sources */,
 				4929DB112454DB0C009DCC7F /* RepsCollectionViewController.swift in Sources */,
 				49680BDE24DE430B00DFF1E0 /* GraphTableViewController.swift in Sources */,
@@ -1139,6 +1153,7 @@
 				49028D26243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift in Sources */,
 				49F8EF30244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift in Sources */,
 				49ABAC9D25F44E3500517F6F /* SoundManager.swift in Sources */,
+				49A08D82293469F000870DDA /* PreviousUnilateralPerformanceViewController.swift in Sources */,
 				4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */,
 				4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */,
 				49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */,
@@ -1170,7 +1185,7 @@
 				491C8CFB254A523E003A7526 /* StartWorkoutViewController.swift in Sources */,
 				4989BA5524B94344001C17B3 /* AppColors.swift in Sources */,
 				49AB68CB24E8BD8E0057D5F7 /* ArrowView.swift in Sources */,
-				491C8CFD254A67DC003A7526 /* AboutViewController.swift in Sources */,
+				491C8CFD254A67DC003A7526 /* HowToUseAppViewController.swift in Sources */,
 				4989BA6224BB9A10001C17B3 /* ExerciseDataCellViewController.swift in Sources */,
 				4997C1DB2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift in Sources */,
 				49EF4BB023F838F60071687D /* ExerciseDataManager.swift in Sources */,
@@ -1185,6 +1200,7 @@
 				49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */,
 				49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */,
 				4925AE3D25C5360500232B76 /* StoreManager.swift in Sources */,
+				49A08D80293468E000870DDA /* PreviousPerformanceViewController.swift in Sources */,
 				4957DFB6246B54F000574C89 /* WorkoutDataViewModel.swift in Sources */,
 				4973C11E244BB593009460F2 /* ExerciseViewController.swift in Sources */,
 				49EF4B7923F8381F0071687D /* PPLAppDelegate.swift in Sources */,
@@ -1380,14 +1396,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBlack;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1;
+				MARKETING_VERSION = 4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1449,14 +1466,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBlack;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1;
+				MARKETING_VERSION = 4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

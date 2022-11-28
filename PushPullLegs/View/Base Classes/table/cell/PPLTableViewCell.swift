@@ -13,7 +13,6 @@ let PPLTableViewCellIdentifier = "PPLTableViewCellIdentifier"
 
 class PPLTableViewCell: UITableViewCell {
 
-    static var borderWidth: CGFloat = 6
     @IBOutlet weak var rootView: ShadowBackground!
     var pplSelectionFlag = false
     weak var indicator: UIView?
@@ -94,7 +93,6 @@ class ShadowBackground: UIView {
     
     override func layoutSubviews() {
         backgroundColor = isSelected ? PPLColor.secondary : PPLColor.quaternary
-        layer.borderWidth = PPLTableViewCell.borderWidth
         layer.borderColor = UIColor.white.cgColor
         layer.cornerRadius = layer.bounds.height * 0.03
     }

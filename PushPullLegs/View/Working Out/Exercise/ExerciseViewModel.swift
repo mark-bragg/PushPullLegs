@@ -27,7 +27,7 @@ class FinishedSetDataModel {
 }
 
 protocol ExerciseViewModelDelegate: NSObject {
-    func exerciseViewModel(_ viewModel: ExerciseViewModel, started exercise: Exercise)
+    func exerciseViewModel(_ viewModel: ExerciseViewModel, started exercise: Exercise?)
 }
 
 class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
@@ -38,24 +38,54 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         set { dataManager = newValue }
         get { dataManager as! ExerciseDataManager }
     }
-    var exercise: Exercise!
+    var exercise: Exercise?
     private var finishedCellData = [FinishedSetDataModel]()
-    private var exerciseName: String!
+    private(set) var exerciseName: String?
     var defaultWeight: Double? {
         guard let name = title()
         else { return nil }
         return PPLDefaults.instance.weightForExerciseWith(name: name)
     }
     private(set) var isFirstSet = true
+    private(set) var type: String?
+    var previousExercise: Exercise? {
+        guard
+            let exerciseName,
+            let type = ExerciseType(rawValue: type ?? "")
+        else { return nil }
+        let workouts = WorkoutDataManager().workouts(ascending: false, types: [type])
+        for workout in workouts {
+            if let previous = previousExerciseWith(name: exerciseName, workout: workout) {
+                return previous
+            }
+        }
+        return nil
+    }
+    
+    private func previousExerciseWith(name: String, workout: Workout) -> Exercise? {
+        if let prevExercise = ((workout.exercises?.array as? [Exercise])?.first { $0.name == exerciseName }) {
+            if let exercise {
+                if exercise.objectID != prevExercise.objectID {
+                    return prevExercise
+                }
+            } else {
+                return prevExercise
+            }
+        }
+        return nil
+    }
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
         exerciseName = exerciseTemplate.name!
+        type = exerciseTemplate.type
         super.init()
         exerciseManager = dataManager
     }
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exercise: Exercise) {
         self.exercise = exercise
+        exerciseName = exercise.name
+        type = exercise.workout?.name
         super.init()
         exerciseManager = dataManager
         collectFinishedCellData()
@@ -63,16 +93,16 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func isFirstTimePerformingExercise() -> Bool {
         guard
-            let type = ExerciseType(rawValue: exercise.workout?.name ?? ""),
-            let currentWorkout = exercise.workout,
+            let type = ExerciseType(rawValue: exercise?.workout?.name ?? ""),
+            let currentWorkout = exercise?.workout,
             let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
             let exercises = previousWorkout.exercises?.array as? [Exercise]
         else { return false }
-        return exercises.contains(where: { $0.name == exercise.name && $0.sets != nil && $0.sets!.count > 0})
+        return exercises.contains(where: { $0.name == exercise?.name && $0.sets != nil && $0.sets!.count > 0})
     }
     
     func progressTitle() -> String {
-        if let prefix = exercise.name {
+        if let prefix = exercise?.name {
             return "\(prefix) Progress"
         }
         return "Exercise Progress"
@@ -99,11 +129,11 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func previousVolume() -> Double {
         guard
-            let type = ExerciseType(rawValue: exercise.workout?.name ?? ""),
-            let currentWorkout = exercise.workout,
+            let type = ExerciseType(rawValue: exercise?.workout?.name ?? ""),
+            let currentWorkout = exercise?.workout,
             let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
             let previousExercises = previousWorkout.exercises?.array as? [Exercise],
-            let previousExercise = previousExercises.first(where: { $0.name == exercise.name })
+            let previousExercise = previousExercises.first(where: { $0.name == exercise?.name })
         else { return 0 }
         return previousExercise.volume()
     }
@@ -167,7 +197,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func title() -> String? {
         guard let name = exerciseName else {
-            return exercise.name
+            return exercise?.name ?? ""
         }
         return name
     }

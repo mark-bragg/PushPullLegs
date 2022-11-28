@@ -46,19 +46,53 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         repositionAddButton()
     }
     
+    override func getRightBarButtonItems() -> [UIBarButtonItem] {
+        readOnly && exerciseViewModel.hasData() ? super.getRightBarButtonItems() : exercisingRightBarButtonItems()
+    }
+    
+    private func exercisingRightBarButtonItems() -> [UIBarButtonItem] {
+        var items = [UIBarButtonItem]()
+        if exerciseViewModel.hasData() {
+            items.append(UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:))))
+        }
+        if exerciseViewModel.previousExercise != nil {
+            items.append(UIBarButtonItem(title: "Previous", style: .plain, target: self, action: #selector(presentPreviousPerformance(_:))))
+        }
+        return items
+    }
+    
+    @objc func presentPreviousPerformance(_ sender: Any?) {
+        guard
+            let previousExercise = exerciseViewModel.previousExercise,
+            let tableView,
+            let headerView = self.tableView(tableView, viewForHeaderInSection: 0)
+        else { return }
+        presentModally(PreviousPerformanceViewController(exercise: previousExercise, headerView: headerView))
+    }
+    
     func setupRestTimerView() {
         guard let tableView = tableView else { return }
-        
-        // add rest timer view
+        addRestTimerView()
+        constrainRestTimerView(tableView)
+        setRestTimerHeightConstraint()
+    }
+    
+    private func addRestTimerView() {
         let rtv = RestTimerView()
         view.addSubview(rtv)
         restTimerView = rtv
-        rtv.translatesAutoresizingMaskIntoConstraints = false
-        rtv.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        rtv.topAnchor.constraint(equalTo: tableView.bottomAnchor).isActive = true
-        rtv.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        rtv.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        restTimerHeightConstraint = rtv.heightAnchor.constraint(equalToConstant: 0)
+    }
+    
+    private func constrainRestTimerView( _ tableView: PPLTableView) {
+        restTimerView?.translatesAutoresizingMaskIntoConstraints = false
+        restTimerView?.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        restTimerView?.topAnchor.constraint(equalTo: tableView.bottomAnchor).isActive = true
+        restTimerView?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        restTimerView?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    }
+    
+    private func setRestTimerHeightConstraint() {
+        restTimerHeightConstraint = restTimerView?.heightAnchor.constraint(equalToConstant: 0)
         restTimerHeightConstraint?.identifier = "rest timer height"
         restTimerHeightConstraint?.isActive = true
     }
@@ -133,14 +167,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         exerciseSetViewModel?.delegate = self
         exerciseSetViewModel?.setCollector = exerciseViewModel
         exerciseSetViewModel?.defaultWeight = exerciseViewModel.defaultWeight
-    }
-    
-    override func setupRightBarButtonItems() {
-        guard !readOnly else {
-            return super.setupRightBarButtonItems()
-        }
-        
-        navigationItem.rightBarButtonItem = exerciseViewModel.hasData() ? UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:))) : nil
     }
     
     func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController) {
@@ -287,11 +313,11 @@ class SetNavigationController: UINavigationController {
     }
 }
 
-fileprivate extension PPLTableViewCell {
+extension PPLTableViewCell {
     
-    var weightLabelTag: Int {123}
-    var durationLabelTag: Int {234}
-    var repsLabelTag: Int {345}
+    fileprivate var weightLabelTag: Int {123}
+    fileprivate var durationLabelTag: Int {234}
+    fileprivate var repsLabelTag: Int {345}
     
     func labels(width: CGFloat) -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
         guard
@@ -302,7 +328,7 @@ fileprivate extension PPLTableViewCell {
         return (weight, reps, time)
     }
     
-    func insertLabels() -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
+    fileprivate func insertLabels() -> (w: PPLNameLabel, r: PPLNameLabel, t: PPLNameLabel) {
         let weightLabel =  PPLNameLabel()
         weightLabel.tag = weightLabelTag
         let repsLabel = PPLNameLabel()
