@@ -19,14 +19,14 @@ class WorkoutLogViewModel: DatabaseViewModel {
         formatter.dateFormat = "MM/dd/yy"
         dataManager = WorkoutDataManager()
         dataManager?.deletionObserver = self
-        dbObjects = workoutManager().workouts()
+        dbObjects = workoutManager.workouts()
         if WorkoutLogViewModel.ascending {
             dbObjects.reverse()
         }
     }
     
-    private func workoutManager() -> WorkoutDataManager {
-        dataManager as! WorkoutDataManager
+    private var workoutManager: WorkoutDataManager {
+        dataManager as? WorkoutDataManager ?? WorkoutDataManager()
     }
     
     override func rowCount(section: Int) -> Int {
@@ -39,12 +39,15 @@ class WorkoutLogViewModel: DatabaseViewModel {
     
     override func title(indexPath: IndexPath) -> String? {
         guard let workout = dbObjects[indexPath.row] as? Workout else { return nil }
-        return workout.name!
+        return workout.name
     }
     
     func dateLabel(indexPath: IndexPath) -> String? {
-        guard let workout = dbObjects[indexPath.row] as? Workout else { return nil }
-        return formatter.string(from: workout.dateCreated!)
+        guard
+            let workout = dbObjects[indexPath.row] as? Workout,
+            let date = workout.dateCreated
+        else { return nil }
+        return formatter.string(from: date)
     }
     
     func tableHeaderTitles() -> [String] {
