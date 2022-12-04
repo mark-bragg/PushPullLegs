@@ -33,7 +33,7 @@ class HowToUseAppViewController: PPLTableViewController {
     }
     
     func howToUseAppViewModel() -> HowToUseAppViewModel {
-        return viewModel as! HowToUseAppViewModel
+        viewModel as? HowToUseAppViewModel ?? HowToUseAppViewModel()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -41,11 +41,11 @@ class HowToUseAppViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return howToUseAppViewModel().titleForSection(section)
+        howToUseAppViewModel().titleForSection(section)
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        40
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,12 +86,13 @@ class HowToUseAppViewController: PPLTableViewController {
     }
     
     func addReadMoreButton(_ cell: UITableViewCell, section: Int) {
-        var btn: CellExpansionButton
+        var btn: CellExpansionButton?
         if cell.contentView.subviews.contains(where: { $0.isKind(of: CellExpansionButton.self) }) {
-            btn = cell.contentView.subviews.first(where: { $0.isKind(of: CellExpansionButton.self) }) as! CellExpansionButton
+            btn = cell.contentView.subviews.first(where: { $0.isKind(of: CellExpansionButton.self) }) as? CellExpansionButton
         } else {
             btn = CellExpansionButton(type: .roundedRect)
         }
+        guard let btn else { return }
         btn.setTitleColor(.systemBlue, for: .normal)
         btn.tag = section + buttonTagConstant
         btn.isCollapsed = !howToUseAppViewModel().isSectionExpanded(section)
@@ -120,7 +121,7 @@ class HowToUseAppViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return howToUseAppViewModel().heightForRow(indexPath.row)
+        howToUseAppViewModel().heightForRow(indexPath.row)
     }
 
 }
