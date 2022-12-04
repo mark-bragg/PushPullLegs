@@ -14,12 +14,12 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     var viewModel: PPLTableViewModel?
     weak var tableView: PPLTableView?
     weak var noDataView: NoDataView?
-    weak var addButton: PPLAddButton!
+    weak var addButton: PPLAddButton?
     let addButtonSize = CGSize(width: 75, height: 75)
     weak var addButtonHelperVc: ArrowHelperViewController?
     private let tableViewTag = 1776
     var cancellables: Set<AnyCancellable> = []
-    private var topConstraint: NSLayoutConstraint!
+    private var topConstraint: NSLayoutConstraint?
     
     // MARK: view lifecycle
     override func viewWillAppear(_ animated: Bool) {
@@ -88,7 +88,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     func setTableViewY(_ y: CGFloat) {
         topConstraint = tableView?.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: y)
-        topConstraint.isActive = true
+        topConstraint?.isActive = true
     }
     
     fileprivate func addTableFooter() {
@@ -122,7 +122,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     func insertAddButtonInstructions(_ dataSource: ArrowHelperDataSource? = nil) {
-        guard let addButton = addButton else { return }
+        guard let addButton else { return }
         if addButtonHelperVc != nil {
             removeAddButtonInstructions()
         }
@@ -140,7 +140,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     func removeAddButtonInstructions() {
-        guard let addButtonHelperVc = addButtonHelperVc else { return }
+        guard let addButtonHelperVc else { return }
         addButtonHelperVc.willMove(toParent: nil)
         activateAddHelperConstraints(false)
         addButtonHelperVc.view.removeFromSuperview()
@@ -149,7 +149,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     func activateAddHelperConstraints(_ activation: Bool) {
-        guard let addButtonHelperVc = addButtonHelperVc else { return }
+        guard let addButtonHelperVc, let addButton else { return }
         addButtonHelperVc.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = activation
         addButtonHelperVc.view.bottomAnchor.constraint(equalTo: addButton.topAnchor).isActive = activation
         addButtonHelperVc.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = activation
@@ -157,9 +157,9 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard let vm = viewModel, let count = vm.sectionCount?() else { return }
+        guard let viewModel, let count = viewModel.sectionCount?() else { return }
         for i in 0..<count {
-            if vm.rowCount(section: i) > 0 {
+            if viewModel.rowCount(section: i) > 0 {
                 hideNoDataView()
                 return
             }
@@ -189,16 +189,17 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     private func attachAddButton() {
-        guard self.addButton == nil else {
+        guard addButton == nil else {
             return
         }
         let button = PPLAddButton(frame: .zero)
         button.addTarget(self, action: #selector(addAction(_:)), for: .touchUpInside)
         view.addSubview(button)
-        self.addButton = button
+        addButton = button
     }
     
     func positionAddButton() {
+        guard let addButton else { return }
         let y: CGFloat = -15
         addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
@@ -262,40 +263,38 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     func removeAddButton() {
         hideNoDataView()
-        self.addButton.removeTarget(self, action: #selector(addAction(_:)), for: .touchUpInside)
-        self.addButton.removeFromSuperview()
+        addButton?.removeTarget(self, action: #selector(addAction(_:)), for: .touchUpInside)
+        addButton?.removeFromSuperview()
     }
 }
 
 extension PPLTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        40
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        70
     }
 }
 
 extension PPLTableViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        guard let vm = viewModel, let count = vm.sectionCount?() else { return 1 }
-        return count
+        viewModel?.sectionCount?() ?? 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let vm = viewModel else { return 1 }
-        return vm.rowCount(section: section)
+        viewModel?.rowCount(section: section) ?? 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return PPLTableViewCell()
+        PPLTableViewCell()
     }
 }
 
 extension PPLTableViewController: ReloadProtocol {
     @objc func reload() {
-        if let vm = viewModel, vm.hasData() {
+        if let viewModel, viewModel.hasData() {
             if let btn = addButton, btn.superview == view {
                 removeAddButtonInstructions()
             }

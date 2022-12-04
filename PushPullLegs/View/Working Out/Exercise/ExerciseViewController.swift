@@ -108,7 +108,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     override func positionAddButton() {
-        guard let restTimerView = restTimerView else { return }
+        guard let restTimerView = restTimerView, let addButton else { return }
         let y: CGFloat = -15
         addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
