@@ -266,9 +266,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     
     fileprivate func switchView(_ cell: PPLTableViewCell) -> UISwitch {
         let switchView = UISwitch()
-        if #available(iOS 14, *) {
-            switchView.preferredStyle = .checkbox
-        }
+        switchView.preferredStyle = .checkbox
         switchView.layer.masksToBounds = true
         switchView.layer.borderWidth = 2.0
         switchView.layer.cornerRadius = 16
