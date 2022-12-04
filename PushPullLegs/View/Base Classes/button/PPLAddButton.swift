@@ -11,8 +11,8 @@ import UIKit
 class PPLAddButton: UIControl {
     
     private let plusSignLayerName = "PLUS_SIGN"
-    private weak var gradient: CAGradientLayer!
-    private weak var darkGradient: CAGradientLayer!
+    private weak var gradient: CAGradientLayer?
+    private weak var darkGradient: CAGradientLayer?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -121,8 +121,8 @@ class PPLAddButton: UIControl {
     @objc private func addTouchDown(_ sender: Any) {
         UIView.animate(withDuration: 0.25) { [weak self] in
             guard let self = self else { return }
-            self.gradient.isHidden = true
-            self.darkGradient.isHidden = false
+            self.gradient?.isHidden = true
+            self.darkGradient?.isHidden = false
             self.updatePlusSignColor(PPLColor.pressedStatePlusSign)
         }
     }
@@ -131,8 +131,8 @@ class PPLAddButton: UIControl {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             UIView.animate(withDuration: 0.25) { [weak self] in
                 guard let self = self else { return }
-                self.gradient.isHidden = false
-                self.darkGradient.isHidden = true
+                self.gradient?.isHidden = false
+                self.darkGradient?.isHidden = true
                 self.updatePlusSignColor(PPLColor.readyStatePlusSign)
             }
         }
