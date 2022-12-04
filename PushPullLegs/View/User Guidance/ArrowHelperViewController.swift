@@ -13,7 +13,7 @@ import UIKit
 }
 
 class ArrowHelperViewController: UIViewController {
-    weak var arrowView: DownwardsArrowView!
+    weak var arrowView: DownwardsArrowView?
     weak var dataSource: ArrowHelperDataSource?
     var message: String = "Tap to create new exercises!" {
         didSet {
@@ -63,11 +63,13 @@ class ArrowHelperViewController: UIViewController {
     }
     
     fileprivate func moveArrowUp() {
-        self.arrowView.frame.origin.y = self.arrowView.frame.origin.y - 30
+        guard let arrowView else { return }
+        arrowView.frame.origin.y = arrowView.frame.origin.y - 30
     }
     
     fileprivate func moveArrowDown() {
-        self.arrowView.frame.origin.y = self.arrowView.frame.origin.y + 30
+        guard let arrowView else { return }
+        arrowView.frame.origin.y = arrowView.frame.origin.y + 30
     }
     
     fileprivate func addArrow() {
@@ -82,6 +84,7 @@ class ArrowHelperViewController: UIViewController {
     }
     
     func repositionArrow() {
+        guard let arrowView else { return }
         let dims = VerticalArrowViewDimensions()
         arrowView.frame = CGRect(x: centerX_arrowView - dims.width / 2, y: 0, width: dims.width, height: dims.height)
     }
