@@ -9,7 +9,7 @@
 import UIKit
 
 class ArrowView: UIView {
-    var dimensions: ArrowViewDimensions!
+    var dimensions: ArrowViewDimensions?
     
     override func draw(_ rect: CGRect) {
         addRectangle()
@@ -18,6 +18,7 @@ class ArrowView: UIView {
     }
     
     fileprivate func addRectangle() {
+        guard let dimensions else { return }
         let rectangle = CAShapeLayer()
         rectangle.frame = dimensions.rectangleFrame
         rectangle.path = dimensions.rectanglePath
@@ -26,6 +27,7 @@ class ArrowView: UIView {
     }
     
     fileprivate func addTriangle() {
+        guard let dimensions else { return }
         let triangle = CAShapeLayer()
         triangle.frame = dimensions.triangleFrame
         triangle.path = dimensions.trianglePath
@@ -34,7 +36,7 @@ class ArrowView: UIView {
     }
     
     fileprivate func styleArrowComponent(_ component: CAShapeLayer) {
-        component.fillColor = PPLColor.pplOffWhite!.cgColor
+        component.fillColor = (PPLColor.pplOffWhite ?? UIColor.white).cgColor
         component.shadowPath = component.path
         component.shadowOffset = CGSize(width: -5, height: 5)
         component.shadowRadius = 5
