@@ -112,7 +112,7 @@
 		49E675FE244CDAB6001F5974 /* ExerciseSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E675FD244CDAB6001F5974 /* ExerciseSelectionViewModel.swift */; };
 		49E67600244CECC8001F5974 /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E675FF244CECC8001F5974 /* DBHelper.swift */; };
 		49EF4B7923F8381F0071687D /* PPLAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */; };
-		49EF4B7B23F8381F0071687D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7A23F8381F0071687D /* SceneDelegate.swift */; };
+		49EF4B7B23F8381F0071687D /* PPLSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */; };
 		49EF4B8523F838370071687D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8423F838370071687D /* Assets.xcassets */; };
 		49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8623F838370071687D /* LaunchScreen.storyboard */; };
 		49EF4B9E23F838380071687D /* PushPullLegsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B9D23F838380071687D /* PushPullLegsUITests.swift */; };
@@ -262,7 +262,7 @@
 		49E675FF244CECC8001F5974 /* DBHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
 		49EF4B7523F8381F0071687D /* PushPullLegs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushPullLegs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAppDelegate.swift; sourceTree = "<group>"; };
-		49EF4B7A23F8381F0071687D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLSceneDelegate.swift; sourceTree = "<group>"; };
 		49EF4B8423F838370071687D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49EF4B8723F838370071687D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		49EF4B8923F838370071687D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -785,7 +785,7 @@
 				496A84472400EE790082D677 /* Resources */,
 				4925AE1B25BFDD6A00232B76 /* In-app Purchases */,
 				49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */,
-				49EF4B7A23F8381F0071687D /* SceneDelegate.swift */,
+				49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */,
 				4993789D243B964200EAD55E /* ReloadProtocol.swift */,
 			);
 			path = PushPullLegs;
@@ -1205,7 +1205,7 @@
 				4973C11E244BB593009460F2 /* ExerciseViewController.swift in Sources */,
 				49EF4B7923F8381F0071687D /* PPLAppDelegate.swift in Sources */,
 				49EF4BAE23F838F60071687D /* CoreDataManager.swift in Sources */,
-				49EF4B7B23F8381F0071687D /* SceneDelegate.swift in Sources */,
+				49EF4B7B23F8381F0071687D /* PPLSceneDelegate.swift in Sources */,
 				49E2501F249F1B60001F7B70 /* PPLTableViewController.swift in Sources */,
 				492B3B362660928000929BB3 /* GraphViewModel.swift in Sources */,
 			);
