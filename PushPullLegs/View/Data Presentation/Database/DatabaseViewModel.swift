@@ -24,7 +24,7 @@ import CoreData
 class DatabaseViewModel: NSObject, PPLTableViewModel, DeletionObserver {
     
     var objectToDelete: IndexPath?
-    var dataManager: DataManager!
+    var dataManager: DataManager?
     var dbObjects = [NSManagedObject]()
     weak var deletionObserver: DeletionObserver?
     
@@ -37,7 +37,7 @@ class DatabaseViewModel: NSObject, PPLTableViewModel, DeletionObserver {
     }
     
     func delete(indexPath: IndexPath) {
-        dataManager.delete(dbObjects[indexPath.row])
+        dataManager?.delete(dbObjects[indexPath.row])
     }
     
     // MARK: DatabaseDeletionAlertModel

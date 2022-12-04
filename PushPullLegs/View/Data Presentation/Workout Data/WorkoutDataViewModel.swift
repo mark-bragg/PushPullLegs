@@ -86,13 +86,13 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
     
     override func deleteDatabaseObject() {
         super.deleteDatabaseObject()
-        guard let wkt = dataManager.fetch(workoutId) as? Workout,
+        guard let wkt = dataManager?.fetch(workoutId) as? Workout,
               let exercises = wkt.exercises?.array as? [Exercise] else { return }
         exercisesDone = exercises
     }
     
     override func refresh() {
-        guard let wkt = dataManager.fetch(workoutId) as? Workout,
+        guard let wkt = dataManager?.fetch(workoutId) as? Workout,
               let exercises = wkt.exercises?.array as? [Exercise] else { return }
         exercisesDone = exercises
     }
@@ -115,19 +115,19 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
     }
     
     override func addObjectsWithNames(_ names: [String]) {
-        guard let wkt = dataManager.fetch(workoutId) as? Workout else { return }
+        guard let wkt = dataManager?.fetch(workoutId) as? Workout else { return }
         workoutManager.addExercises(withNames: names, to: wkt)
         reload()
     }
     
     func updateNote(_ text: String) {
-        guard let wkt = dataManager.fetch(workoutId) as? Workout else { return }
+        guard let wkt = dataManager?.fetch(workoutId) as? Workout else { return }
         wkt.note = text
-        try? dataManager.backgroundContext.save()
+        try? dataManager?.backgroundContext.save()
     }
     
     func noteText() -> String {
-        guard let wkt = dataManager.fetch(workoutId) as? Workout else { return "" }
+        guard let wkt = dataManager?.fetch(workoutId) as? Workout else { return "" }
         return wkt.note ?? ""
     }
 }

@@ -18,7 +18,7 @@ class WorkoutLogViewModel: DatabaseViewModel {
         super.init()
         formatter.dateFormat = "MM/dd/yy"
         dataManager = WorkoutDataManager()
-        dataManager.deletionObserver = self
+        dataManager?.deletionObserver = self
         dbObjects = workoutManager().workouts()
         if WorkoutLogViewModel.ascending {
             dbObjects.reverse()
