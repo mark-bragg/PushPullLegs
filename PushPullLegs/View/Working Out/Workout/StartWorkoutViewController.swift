@@ -103,6 +103,7 @@ extension UIViewController {
 fileprivate extension PPLTableViewCell {
     
     func setWorkoutTitle(_ title: String) {
+        guard let rootView else { return }
         if let lbl = rootView.viewWithTag(1) as? UILabel {
             lbl.text = title
             lbl.sizeToFit()
@@ -120,7 +121,7 @@ fileprivate extension PPLTableViewCell {
     }
     
     func updateTitleText() {
-        guard let lbl = rootView.viewWithTag(1) as? UILabel else { return }
+        guard let lbl = rootView?.viewWithTag(1) as? UILabel else { return }
         lbl.textColor = PPLColor.text
     }
     

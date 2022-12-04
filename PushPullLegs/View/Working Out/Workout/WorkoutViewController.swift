@@ -112,22 +112,23 @@ class WorkoutViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        guard let rootView = cell.rootView else { return cell }
         let title = viewModel?.title(indexPath: indexPath)
-        cell.rootView.removeAllSubviews()
+        rootView.removeAllSubviews()
         if indexPath.section == 1 {
             let vc = ExerciseDataCellViewController()
             vc.exerciseName = title
             vc.workText = "Total work: \(workoutEditViewModel.detailText(indexPath: indexPath)!)"
-            vc.preferredContentSize = cell.rootView.bounds.size
-            cell.rootView.addSubview(vc.view)
+            vc.preferredContentSize = rootView.bounds.size
+            rootView.addSubview(vc.view)
             vc.progress = workoutEditViewModel.exerciseVolumeComparison(row: indexPath.row)
             cell.setSelected(true, animated: false)
         } else {
             let label = PPLNameLabel()
             label.translatesAutoresizingMaskIntoConstraints = false
-            cell.rootView.addSubview(label)
-            label.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
-            label.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
+            rootView.addSubview(label)
+            label.centerXAnchor.constraint(equalTo: rootView.centerXAnchor).isActive = true
+            label.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
             label.text = title
             label.textColor = PPLColor.text
         }

@@ -33,14 +33,14 @@ class WorkoutDataViewController: DatabaseTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        if let vm = workoutDataViewModel {
-            cell.rootView.removeAllSubviews()
+        if let vm = workoutDataViewModel, let rootView = cell.rootView {
+            rootView.removeAllSubviews()
             let vc = ExerciseDataCellViewController()
-            vc.preferredContentSize = cell.rootView.bounds.size
+            vc.preferredContentSize = rootView.bounds.size
             vc.exerciseName = vm.title(indexPath: indexPath)
             vc.workText = vm.detailText(indexPath: indexPath)!
             vc.progress = vm.exerciseVolumeComparison(row: indexPath.row)
-            cell.rootView.addSubview(vc.view)
+            rootView.addSubview(vc.view)
             if !tableView.isEditing {
                 cell.addDisclosureIndicator()
             }

@@ -335,6 +335,7 @@ extension PPLTableViewCell {
         repsLabel.tag = repsLabelTag
         let timeLabel = PPLNameLabel()
         timeLabel.tag = durationLabelTag
+        guard let rootView else { return (weightLabel, repsLabel, timeLabel) }
         for lbl in [weightLabel, repsLabel, timeLabel] {
             lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
             lbl.textColor = PPLColor.text

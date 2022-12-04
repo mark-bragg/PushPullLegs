@@ -118,11 +118,12 @@ class GraphTableViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        guard let rootView = cell.rootView else { return cell }
         cell.tag = indexPath.row
         cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
         let view = viewForRow(indexPath.row)
-        cell.rootView.addSubview(view)
-        constrain(view, toInsideOf: cell.rootView)
+        rootView.addSubview(view)
+        constrain(view, toInsideOf: rootView)
         vcForRow(indexPath.row).reload()
         if vcForRow(indexPath.row).workoutGraphViewModel.pointCount() > 0 {
             cell.addDisclosureIndicator(PPLColor.white)
@@ -207,9 +208,12 @@ class GraphTableViewController: PPLTableViewController {
     }
     
     override func presentAdLoadingView() {
-        guard let cell = tableView?.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell else { return }
-        let spinner = UIActivityIndicatorView(frame: cell.rootView.frame)
-        spinner.layer.cornerRadius = cell.rootView.layer.cornerRadius
+        guard
+            let cell = tableView?.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell,
+                let rootView = cell.rootView
+        else { return }
+        let spinner = UIActivityIndicatorView(frame: rootView.frame)
+        spinner.layer.cornerRadius = rootView.layer.cornerRadius
         spinner.style = .large
         spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         cell.contentView.addSubview(spinner)

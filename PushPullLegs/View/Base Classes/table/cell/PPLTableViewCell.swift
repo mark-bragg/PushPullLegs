@@ -13,14 +13,14 @@ let PPLTableViewCellIdentifier = "PPLTableViewCellIdentifier"
 
 class PPLTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var rootView: ShadowBackground!
+    @IBOutlet weak var rootView: ShadowBackground?
     var pplSelectionFlag = false
     weak var indicator: UIView?
     var multiSelect: Bool = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        rootView.isUserInteractionEnabled = false
+        rootView?.isUserInteractionEnabled = false
     }
     
     static func nib() -> UINib {
@@ -29,16 +29,17 @@ class PPLTableViewCell: UITableViewCell {
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         guard !multiSelect && selectionStyle != .none else { return }
-        rootView.backgroundColor = highlighted ? PPLColor.secondary : PPLColor.quaternary
+        rootView?.backgroundColor = highlighted ? PPLColor.secondary : PPLColor.quaternary
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         guard multiSelect && animated else { return }
-        rootView.isSelected = selected
-        rootView.backgroundColor = selected ? PPLColor.secondary : PPLColor.quaternary
+        rootView?.isSelected = selected
+        rootView?.backgroundColor = selected ? PPLColor.secondary : PPLColor.quaternary
     }
     
     func addDisclosureIndicator(_ color: UIColor = PPLColor.text) {
+        guard let rootView else { return }
         removeIndicator()
         let indicator = UIImage.init(systemName: "chevron.right")!
         let indicatorView = UIImageView(image: indicator.withTintColor(color, renderingMode: .alwaysOriginal))

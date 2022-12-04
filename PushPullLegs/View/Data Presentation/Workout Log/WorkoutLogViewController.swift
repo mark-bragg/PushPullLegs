@@ -160,8 +160,10 @@ fileprivate extension PPLTableViewCell {
             let nameLabel = PPLNameLabel()
             nameLabel.tag = nameTag
             addLabel(nameLabel)
-            nameLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor).isActive = true
-            nameLabel.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.5).isActive = true
+            if let rootView {
+                nameLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor).isActive = true
+                nameLabel.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.5).isActive = true
+            }
             return nameLabel
         }
     }
@@ -174,8 +176,10 @@ fileprivate extension PPLTableViewCell {
             let dateLabel = PPLNameLabel()
             dateLabel.tag = dateTag
             addLabel(dateLabel)
-            dateLabel.trailingAnchor.constraint(equalTo: rootView.trailingAnchor).isActive = true
-            dateLabel.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.5).isActive = true
+            if let rootView {
+                dateLabel.trailingAnchor.constraint(equalTo: rootView.trailingAnchor).isActive = true
+                dateLabel.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.5).isActive = true
+            }
             return dateLabel
         }
     }
@@ -184,9 +188,11 @@ fileprivate extension PPLTableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
         label.textAlignment = .center
-        rootView.addSubview(label)
-        label.topAnchor.constraint(equalTo: rootView.topAnchor).isActive = true
-        label.bottomAnchor.constraint(equalTo: rootView.bottomAnchor).isActive = true
+        if let rootView {
+            rootView.addSubview(label)
+            label.topAnchor.constraint(equalTo: rootView.topAnchor).isActive = true
+            label.bottomAnchor.constraint(equalTo: rootView.bottomAnchor).isActive = true
+        }
     }
 }
 

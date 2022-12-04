@@ -69,16 +69,17 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        guard let rootView = cell.rootView else { return cell }
+        var textLabel = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
             textLabel?.textAlignment = .center
             textLabel?.textColor = PPLColor.text
-            cell.rootView.addSubview(textLabel!)
+            rootView.addSubview(textLabel!)
             textLabel?.translatesAutoresizingMaskIntoConstraints = false
-            textLabel?.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: 10).isActive = true
-            textLabel?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: -10).isActive = true
-            textLabel?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor, constant: 0).isActive = true
+            textLabel?.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: 10).isActive = true
+            textLabel?.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: -10).isActive = true
+            textLabel?.centerYAnchor.constraint(equalTo: rootView.centerYAnchor, constant: 0).isActive = true
         }
         textLabel?.text = viewModel?.title(indexPath: indexPath)
         return cell

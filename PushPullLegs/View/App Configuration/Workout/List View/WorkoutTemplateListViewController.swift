@@ -62,14 +62,15 @@ extension CGRect {
 
 extension UIViewController {
     func label(forCell cell: PPLTableViewCell, fontSize: CGFloat = 26) -> PPLNameLabel {
-        var label = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        guard let rootView = cell.rootView else { return PPLNameLabel() }
+        var label = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if label == nil {
             label = PPLNameLabel()
-            cell.rootView.addSubview(label!)
+            rootView.addSubview(label!)
             label?.translatesAutoresizingMaskIntoConstraints = false
-            label?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor).isActive = true
-            label?.centerXAnchor.constraint(equalTo: cell.rootView.centerXAnchor).isActive = true
-            label?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: 20).isActive = true
+            label?.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
+            label?.centerXAnchor.constraint(equalTo: rootView.centerXAnchor).isActive = true
+            label?.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: 20).isActive = true
             label?.font = UIFont.systemFont(ofSize: fontSize, weight: .medium)
             label?.textAlignment = .center
             label?.textColor = PPLColor.text

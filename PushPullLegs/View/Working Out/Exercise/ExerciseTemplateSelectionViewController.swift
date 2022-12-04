@@ -45,17 +45,18 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        guard let rootView = cell.rootView else { return cell }
         cell.multiSelect = viewModel?.multiSelect ?? false
-        var textLabel = cell.rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        var textLabel = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
             textLabel?.textColor = PPLColor.text
             textLabel?.textAlignment = .center
-            cell.rootView.addSubview(textLabel!)
+            rootView.addSubview(textLabel!)
             textLabel?.translatesAutoresizingMaskIntoConstraints = false
-            textLabel?.trailingAnchor.constraint(equalTo: cell.rootView.trailingAnchor, constant: 10).isActive = true
-            textLabel?.leadingAnchor.constraint(equalTo: cell.rootView.leadingAnchor, constant: -10).isActive = true
-            textLabel?.centerYAnchor.constraint(equalTo: cell.rootView.centerYAnchor, constant: 0).isActive = true
+            textLabel?.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: 10).isActive = true
+            textLabel?.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: -10).isActive = true
+            textLabel?.centerYAnchor.constraint(equalTo: rootView.centerYAnchor, constant: 0).isActive = true
         }
         textLabel!.text = exerciseSelectionViewModel.title(indexPath: indexPath)
         return cell
