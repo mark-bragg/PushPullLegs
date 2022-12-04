@@ -41,7 +41,7 @@ class PPLTableViewCell: UITableViewCell {
     func addDisclosureIndicator(_ color: UIColor = PPLColor.text) {
         guard let rootView else { return }
         removeIndicator()
-        let indicator = UIImage.init(systemName: "chevron.right")!
+        guard let indicator = UIImage.init(systemName: "chevron.right") else { return }
         let indicatorView = UIImageView(image: indicator.withTintColor(color, renderingMode: .alwaysOriginal))
         rootView.addSubview(indicatorView)
         indicatorView.translatesAutoresizingMaskIntoConstraints = false
