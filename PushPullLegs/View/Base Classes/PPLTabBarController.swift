@@ -26,7 +26,8 @@ class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
             trendsNavigationController(),
             appConfigurationNavigationController()
         ]
-        for navigationController in viewControllers as! [PPLNavigationController] {
+        guard let viewControllers = viewControllers as? [PPLNavigationController] else { return }
+        for navigationController in viewControllers {
             navigationController.navigationBar.isTranslucent = false
         }
     }
