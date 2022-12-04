@@ -22,8 +22,10 @@ class WorkoutViewController: PPLTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         workoutEditViewModel.delegate = self
-        navigationItem.title = workoutEditViewModel.exerciseType.rawValue
-        exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: workoutEditViewModel.exerciseType, templateManagement: TemplateManagement())
+        if let type = workoutEditViewModel.exerciseType {
+            navigationItem.title = workoutEditViewModel.exerciseType?.rawValue
+            exerciseSelectionViewModel = ExerciseSelectionViewModel(withType: type, templateManagement: TemplateManagement())
+        }
         tableView?.register(UINib(nibName: "ExerciseDataCell", bundle: nil), forCellReuseIdentifier: ExerciseDataCellReuseIdentifier)
         if let exerciseInProgressName = AppState.shared.exerciseInProgress {
             for i in 0..<workoutEditViewModel.rowCount(section: section2) {
@@ -53,10 +55,10 @@ class WorkoutViewController: PPLTableViewController {
             vc.viewModel = exerciseSelectionViewModel
             vc.delegate = workoutEditViewModel
             navigationController?.pushViewController(vc, animated: true)
-        } else {
+        } else if let type = workoutEditViewModel.exerciseType {
             let vc = ExerciseTemplateCreationViewController()
             vc.showExerciseType = false
-            vc.viewModel = ExerciseTemplateCreationViewModel(withType: workoutEditViewModel.exerciseType, management: TemplateManagement())
+            vc.viewModel = ExerciseTemplateCreationViewModel(withType: type, management: TemplateManagement())
             vc.viewModel?.reloader = self
             vc.modalPresentationStyle = .pageSheet
             present(vc, animated: true, completion: nil)

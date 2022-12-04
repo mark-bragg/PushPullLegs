@@ -11,13 +11,13 @@ import CoreData
 
 class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate {
     
-    var exerciseType: ExerciseType!
-    var coreDataManager: CoreDataManagement!
+    var exerciseType: ExerciseType?
+    var coreDataManager: CoreDataManagement?
     var selectedIndex: IndexPath?
-    var workoutId: NSManagedObjectID!
+    var workoutId: NSManagedObjectID?
     var workoutManager: WorkoutDataManager {
         get {
-            dataManager as! WorkoutDataManager
+            dataManager as? WorkoutDataManager ?? WorkoutDataManager()
         }
     }
     var exercisesDone: [Exercise] {
@@ -25,7 +25,7 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
             dbObjects = newValue
         }
         get {
-            dbObjects as! [Exercise]
+            dbObjects as? [Exercise] ?? []
         }
     }
     
@@ -42,9 +42,13 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
         dataManager = WorkoutDataManager(backgroundContext: coreDataManagement.mainContext)
     }
     
-    override func rowCount(section: Int) -> Int { return exercisesDone.count }
+    override func rowCount(section: Int) -> Int {
+        exercisesDone.count
+    }
     
-    func title() -> String? { exerciseType.rawValue }
+    func title() -> String? {
+        exerciseType?.rawValue
+    }
     
     func sectionCount() -> Int { 1 }
     
@@ -66,10 +70,11 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
     
     func exerciseVolumeComparison(row: Int) -> ExerciseVolumeComparison {
         guard
+            let workoutId,
             let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
             let date = workout.dateCreated,
             let previousWorkout = workoutManager.previousWorkout(before: date, type: exerciseType),
-            let previousExercise = previousWorkout.exercises?.first(where: { ($0 as! Exercise).name == exercisesDone[row].name}) as? Exercise
+            let previousExercise = previousWorkout.exercises?.first(where: { ($0 as? Exercise)?.name == exercisesDone[row].name}) as? Exercise
         else {
             return .increase
         }
@@ -86,14 +91,20 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
     
     override func deleteDatabaseObject() {
         super.deleteDatabaseObject()
-        guard let wkt = dataManager?.fetch(workoutId) as? Workout,
-              let exercises = wkt.exercises?.array as? [Exercise] else { return }
+        guard
+            let workoutId,
+            let wkt = dataManager?.fetch(workoutId) as? Workout,
+            let exercises = wkt.exercises?.array as? [Exercise]
+        else { return }
         exercisesDone = exercises
     }
     
     override func refresh() {
-        guard let wkt = dataManager?.fetch(workoutId) as? Workout,
-              let exercises = wkt.exercises?.array as? [Exercise] else { return }
+        guard
+            let workoutId,
+            let wkt = dataManager?.fetch(workoutId) as? Workout,
+            let exercises = wkt.exercises?.array as? [Exercise]
+        else { return }
         exercisesDone = exercises
     }
     
@@ -107,27 +118,37 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
     }
     
     func reload() {
-        if let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
-            let done = workout.exercises,
-            let doneArray = done.array as? [Exercise] {
+        if let workoutId,
+           let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
+           let done = workout.exercises,
+           let doneArray = done.array as? [Exercise] {
             exercisesDone = doneArray.sorted(by: sorter)
         }
     }
     
     override func addObjectsWithNames(_ names: [String]) {
-        guard let wkt = dataManager?.fetch(workoutId) as? Workout else { return }
+        guard
+            let workoutId,
+            let wkt = dataManager?.fetch(workoutId) as? Workout
+        else { return }
         workoutManager.addExercises(withNames: names, to: wkt)
         reload()
     }
     
     func updateNote(_ text: String) {
-        guard let wkt = dataManager?.fetch(workoutId) as? Workout else { return }
+        guard
+            let workoutId,
+            let wkt = dataManager?.fetch(workoutId) as? Workout
+        else { return }
         wkt.note = text
         try? dataManager?.backgroundContext.save()
     }
     
     func noteText() -> String {
-        guard let wkt = dataManager?.fetch(workoutId) as? Workout else { return "" }
+        guard
+            let workoutId,
+            let wkt = dataManager?.fetch(workoutId) as? Workout
+        else { return "" }
         return wkt.note ?? ""
     }
 }
@@ -135,9 +156,10 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
 extension Workout {
     func volume() -> Double {
         var volume = 0.0
-        let exercises = self.exercises!.array as! [Exercise]
-        for exercise in exercises {
-            volume += exercise.volume()
+        if let exercises = exercises?.array as? [Exercise] {
+            for exercise in exercises {
+                volume += exercise.volume()
+            }
         }
         return volume
     }
@@ -145,6 +167,6 @@ extension Workout {
 
 extension WorkoutDataViewModel: ExerciseSelectionViewModelDataSource {
     func completedExercises() -> [String] {
-        exercisesDone.compactMap({ $0.name! })
+        exercisesDone.compactMap({ $0.name })
     }
 }

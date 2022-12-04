@@ -33,10 +33,12 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
             startingTime = workout.dateCreated!
         } else {
             exerciseType = type != nil ? type : computeExerciseType()
-            workoutManager.create(name: exerciseType.rawValue, keyValuePairs: ["dateCreated": startingTime])
+            workoutManager.create(name: exerciseType?.rawValue, keyValuePairs: ["dateCreated": startingTime])
             workoutId = (workoutManager.creation as? Workout)?.objectID
         }
-        exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
+        if let exerciseType {
+            exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
+        }
         reload()
     }
     
@@ -73,15 +75,18 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
     
     func finishWorkout() {
+        guard let workoutId else { return }
         let workout = workoutManager.backgroundContext.object(with: workoutId)
         workoutManager.update(workout, keyValuePairs: ["duration": Int(startingTime.timeIntervalSinceNow * -1)])
         AppState.shared.workoutInProgress = false
     }
     
     func addExercise(templates: [ExerciseTemplate]) {
-        guard templates.count > 0 else {
-            return
-        }
+        guard
+            templates.count > 0,
+            let coreDataManager,
+            let exerciseType
+        else { return }
         let templateManagement = TemplateManagement(coreDataManager: coreDataManager)
         for template in templates {
             templateManagement.addToWorkout(exercise: template)
@@ -92,6 +97,10 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
     
     override func exerciseTemplatesAdded() {
+        guard
+            let coreDataManager,
+            let exerciseType
+        else { return }
         let templateManagement = TemplateManagement(coreDataManager: coreDataManager)
         let todo = templateManagement.exerciseTemplatesForWorkout(exerciseType)
         exercisesToDo = todo.sorted(by: exerciseTemplateSorter)
@@ -105,7 +114,8 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
     
     override func reload() {
-        if let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
+        if let workoutId,
+            let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
             let done = workout.exercises,
             let doneArray = done.array as? [Exercise] {
             exercisesDone = doneArray.sorted(by: sorter)
@@ -123,7 +133,10 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
     
     func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise?) {
-        guard let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout else { return }
+        guard
+            let workoutId,
+            let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout
+        else { return }
         if let exercise {
             workoutManager.add(exercise, to: workout)
         }
@@ -147,7 +160,10 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
 
     func deleteWorkout() {
-        guard let workout = try? coreDataManager.backgroundContext.existingObject(with: workoutId) as? Workout else { return }
+        guard
+            let workoutId,
+            let workout = try? coreDataManager?.backgroundContext.existingObject(with: workoutId) as? Workout
+        else { return }
         workoutManager.delete(workout)
         AppState.shared.workoutInProgress = false
     }

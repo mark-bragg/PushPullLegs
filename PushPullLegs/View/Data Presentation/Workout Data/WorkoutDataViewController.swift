@@ -62,8 +62,8 @@ class WorkoutDataViewController: DatabaseTableViewController {
     
     override func addAction(_ sender: Any) {
         super.addAction(sender)
-        guard let vm = self.workoutDataViewModel else { return }
-        let esvm = ExerciseSelectionViewModel(withType: vm.exerciseType, templateManagement: TemplateManagement(), dataSource: workoutDataViewModel)
+        guard let workoutDataViewModel, let type = workoutDataViewModel.exerciseType else { return }
+        let esvm = ExerciseSelectionViewModel(withType: type, templateManagement: TemplateManagement(), dataSource: workoutDataViewModel)
         exerciseSelectionViewModel = esvm
         if esvm.rowCount(section: 0) > 0 {
             let vc = ExerciseTemplateSelectionViewController()
@@ -74,7 +74,7 @@ class WorkoutDataViewController: DatabaseTableViewController {
         } else {
             let vc = ExerciseTemplateCreationViewController()
             vc.showExerciseType = false
-            vc.viewModel = ExerciseTemplateCreationViewModel(withType: vm.exerciseType, management: TemplateManagement())
+            vc.viewModel = ExerciseTemplateCreationViewModel(withType: type, management: TemplateManagement())
             vc.viewModel?.reloader = self
             vc.modalPresentationStyle = .pageSheet
             present(vc, animated: true, completion: nil)
