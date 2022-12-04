@@ -14,8 +14,8 @@ import UIKit
 
 class SplashViewController: UIViewController {
     
-    weak var backgroundView: UIView!
-    weak var imageView: UIImageView!
+    weak var backgroundView: UIView?
+    weak var imageView: UIImageView?
     weak var delegate: SplashViewControllerDelegate?
     private var splashPreferences: STASplashPreferences {
         let splashPreferences = STASplashPreferences()
@@ -57,16 +57,16 @@ class SplashViewController: UIViewController {
         let bgv = UIView(frame: view.bounds)
         view.addSubview(bgv)
         backgroundView = bgv
-        backgroundView.backgroundColor = .black
+        backgroundView?.backgroundColor = .black
     }
     
     private func addImageView() {
         let imgv = UIImageView()
         view.addSubview(imgv)
         imageView = imgv
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(imageLiteralResourceName: "launch.png")
-        imageView.frame = imageViewFrame
+        imageView?.contentMode = .scaleAspectFit
+        imageView?.image = UIImage(imageLiteralResourceName: "launch.png")
+        imageView?.frame = imageViewFrame
     }
     
     private var imageViewFrame: CGRect {
@@ -91,8 +91,8 @@ class SplashViewController: UIViewController {
     
     private func disappear() {
         UIView.animate(withDuration: TimeInterval(0.67), delay: TimeInterval(0.33)) {
-            self.backgroundView.alpha = 0
-            self.imageView.frame = CGRect(x: self.view.frame.width/2, y: self.view.frame.height/2, width: 1, height: 1)
+            self.backgroundView?.alpha = 0
+            self.imageView?.frame = CGRect(x: self.view.frame.width/2, y: self.view.frame.height/2, width: 1, height: 1)
         } completion: { (b) in
             self.delegate?.splashViewControllerDidDisappear(self)
         }
