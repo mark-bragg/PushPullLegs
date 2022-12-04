@@ -12,7 +12,7 @@ import UIKit
 class DatabaseTableViewController: PPLTableViewController {
     
     var dbViewModel: DatabaseViewModel {
-        get { viewModel as! DatabaseViewModel }
+        get { viewModel as? DatabaseViewModel ?? DatabaseViewModel() }
         set { viewModel = newValue }
     }
     
@@ -37,22 +37,23 @@ class DatabaseTableViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        dbTblViewModel.objectToDelete = indexPath
+        dbTblViewModel?.objectToDelete = indexPath
         presentDeleteConfirmation(self)
     }
     
     @objc func presentDeleteConfirmation(_ sender: Any) {
+        guard let dbTblViewModel else { return }
         let alert = UIAlertController.init(title: dbTblViewModel.deletionAlertTitle(), message: dbTblViewModel.deletionAlertMessage(), preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { action in
-            self.dbTblViewModel.deleteDatabaseObject()
+            dbTblViewModel.deleteDatabaseObject()
             self.reload()
         })
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
-    private var dbTblViewModel: DatabaseViewModel {
-        viewModel as! DatabaseViewModel
+    private var dbTblViewModel: DatabaseViewModel? {
+        viewModel as? DatabaseViewModel
     }
     
     override func reload() {
