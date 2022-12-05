@@ -13,14 +13,14 @@ class ExerciseDataCellViewController: UIViewController {
     var exerciseName: String? {
         willSet {
             if titleLabel == nil { return }
-            titleLabel.text = newValue
+            titleLabel?.text = newValue
         }
     }
     
     var workText: String? {
         willSet {
             if totalWorkTextLabel == nil { return }
-            totalWorkTextLabel.text = newValue
+            totalWorkTextLabel?.text = newValue
         }
     }
     
@@ -30,18 +30,18 @@ class ExerciseDataCellViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var progressIndicatorImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var totalWorkTextLabel: UILabel!
+    @IBOutlet weak var progressIndicatorImageView: UIImageView?
+    @IBOutlet weak var titleLabel: UILabel?
+    @IBOutlet weak var totalWorkTextLabel: UILabel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        titleLabel.text = exerciseName
-        totalWorkTextLabel.text = workText
-        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        totalWorkTextLabel.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        titleLabel.textColor = PPLColor.text
-        totalWorkTextLabel.textColor = PPLColor.text
+        titleLabel?.text = exerciseName
+        totalWorkTextLabel?.text = workText
+        titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        totalWorkTextLabel?.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        titleLabel?.textColor = PPLColor.text
+        totalWorkTextLabel?.textColor = PPLColor.text
         setWorkoutProgressionImage()
     }
     
