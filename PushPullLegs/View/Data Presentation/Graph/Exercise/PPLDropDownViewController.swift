@@ -18,17 +18,17 @@ protocol PPLDropdownViewControllerDataSource: NSObject {
 
 class PPLDropDownViewController: UIViewController {
 
-    var names: [String]!
+    var names: [String]?
     weak var delegate: PPLDropdownViewControllerDelegate?
-    weak var dataSource: PPLDropdownViewControllerDataSource!
+    weak var dataSource: PPLDropdownViewControllerDataSource?
     private let rowHeight: CGFloat = 50
     private var tableHeight: CGFloat { rowsByRowHeight > maxTableHeight ? maxTableHeight : rowsByRowHeight }
     private let maxTableHeight: CGFloat = 300
-    private var rowsByRowHeight: CGFloat { rowHeight * CGFloat(names.count) }
+    private var rowsByRowHeight: CGFloat { rowHeight * CGFloat((names ?? []).count) }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        names = dataSource.names()
+        names = dataSource?.names()
         view.backgroundColor = PPLColor.secondary
         let tblv = UITableView()
         tblv.backgroundColor = PPLColor.clear
@@ -54,20 +54,23 @@ class PPLDropDownViewController: UIViewController {
 
 extension PPLDropDownViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let names else { return }
         delegate?.didSelectName(names[indexPath.item])
     }
 }
 
 extension PPLDropDownViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        names.count
+        names?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.backgroundColor = .clear
         let lbl = UILabel()
-        lbl.text = "\(names[indexPath.item])"
+        if let names {
+            lbl.text = "\(names[indexPath.item])"
+        }
         lbl.font = UIFont.systemFont(ofSize: 24)
         lbl.textAlignment = .center
         cell.contentView.addSubview(lbl)
