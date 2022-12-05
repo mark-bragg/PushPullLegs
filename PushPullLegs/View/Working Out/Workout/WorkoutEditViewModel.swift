@@ -21,17 +21,17 @@ protocol WorkoutEditViewModelDelegate: NSObject {
 class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     
     private var exercisesToDo = [ExerciseTemplate]()
-    private(set) var startingTime: Date
+    private(set) var startingTime: Date?
     weak var delegate: WorkoutEditViewModelDelegate?
     
     init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
         startingTime = Date()
         super.init(withCoreDataManagement: coreDataManagement)
-        if AppState.shared.workoutInProgress, let workout = workoutManager.previousWorkout(before: startingTime) {
-            exerciseType = ExerciseType(rawValue: workout.name!)
+        if AppState.shared.workoutInProgress, let workout = workoutManager.previousWorkout(before: startingTime), let workoutName = workout.name {
+            exerciseType = ExerciseType(rawValue: workoutName)
             workoutId = workout.objectID
-            startingTime = workout.dateCreated!
-        } else {
+            startingTime = workout.dateCreated
+        } else if let startingTime {
             exerciseType = type != nil ? type : computeExerciseType()
             workoutManager.create(name: exerciseType?.rawValue, keyValuePairs: ["dateCreated": startingTime])
             workoutId = (workoutManager.creation as? Workout)?.objectID
@@ -123,7 +123,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
             if doneArray.count > 0 {
                 var newTodos = [ExerciseTemplate]()
                 for template in exercisesToDo {
-                    if !doneArray.contains(where: { $0.name! == template.name! }) {
+                    if !doneArray.contains(where: { $0.name == template.name }) {
                         newTodos.append(template)
                     }
                 }
