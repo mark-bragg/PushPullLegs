@@ -13,7 +13,7 @@ let defaultCellIdentifier = "DefaultTableViewCell"
 
 class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentationControllerDelegate {
     
-    private weak var countdownLabel: UILabel!
+    private weak var countdownLabel: UILabel?
     private var interstitial: NSObject?
     
     override func viewDidLoad() {
@@ -40,8 +40,10 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        guard let rootView = cell.rootView else { return cell }
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
+            let rootView = cell.rootView
+        else { return PPLTableViewCell() }
         rootView.subviews.forEach { $0.removeFromSuperview() }
         rootView.gestureRecognizers?.forEach { rootView.removeGestureRecognizer($0) }
         cell.selectionStyle = .default
@@ -107,6 +109,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     @objc func showCountdownPicker() {
+        guard let countdownLabel else { return }
         let picker = CountdownPickerViewController()
         picker.modalPresentationStyle = .popover
         picker.preferredContentSize = CGSize(width: countdownLabel.frame.width, height: 250)
@@ -115,9 +118,9 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         picker.popoverPresentationController?.delegate = self
         present(picker, animated: true, completion: {
             picker.$countdownSelection.sink { [weak self] (value) in
-                guard let seconds = value, let self = self else { return }
+                guard let seconds = value, let countdownLabel = self?.countdownLabel else { return }
                 PPLDefaults.instance.setCountdown(seconds)
-                self.countdownLabel.text = "\(seconds)"
+                countdownLabel.text = "\(seconds)"
             }
             .store(in: &self.cancellables)
         })
@@ -253,7 +256,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
     }
     
     func appConfigurationViewModel() -> AppConfigurationViewModel {
-        return viewModel as! AppConfigurationViewModel
+        return viewModel as? AppConfigurationViewModel ?? AppConfigurationViewModel()
     }
     
 }
