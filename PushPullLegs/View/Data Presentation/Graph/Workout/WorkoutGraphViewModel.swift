@@ -11,7 +11,7 @@ import UIKit
 
 class WorkoutGraphViewModel: GraphViewModel {
     
-    private var workoutDataManager: WorkoutDataManager { dataManager as! WorkoutDataManager }
+    private var workoutDataManager: WorkoutDataManager? { dataManager as? WorkoutDataManager }
     private(set) var type: ExerciseType
     
     init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
@@ -22,11 +22,13 @@ class WorkoutGraphViewModel: GraphViewModel {
     
     override func reload() {
         super.reload()
-        let workouts = workoutDataManager.workouts(ascending: true, types: [type])
+        guard let workouts = workoutDataManager?.workouts(ascending: true, types: [type]) else { return }
         let format = formatter()
         for workout in workouts {
-            xValues.append(format.string(from: workout.dateCreated!))
-            yValues.append(CGFloat(workout.volume()))
+            if let date = workout.dateCreated {
+                xValues.append(format.string(from: date))
+                yValues.append(CGFloat(workout.volume()))
+            }
         }
     }
     
@@ -36,8 +38,10 @@ class WorkoutGraphViewModel: GraphViewModel {
     
     func getExerciseNames() -> [String] {
         guard let temps = TemplateManagement().exerciseTemplates(withType: type) else { return [] }
-        return temps.map {
-            $0.name!
+        return temps.filter {
+            $0.name != nil && $0.name != ""
+        }.map {
+            $0.name ?? ""
         }.filter {
             ExerciseDataManager().exists(name: $0)
         }
