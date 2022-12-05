@@ -18,10 +18,10 @@ import UIKit
 
 class WorkoutNoteViewController: UIViewController {
 
-    weak var textView: UITextView!
-    weak var toolbar: UIToolbar!
-    weak var delegate: WorkoutNoteViewControllerDelegate!
-    weak var dataSource: WorkoutNoteViewControllerDataSource!
+    weak var textView: UITextView?
+    weak var toolbar: UIToolbar?
+    weak var delegate: WorkoutNoteViewControllerDelegate?
+    weak var dataSource: WorkoutNoteViewControllerDataSource?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +39,7 @@ class WorkoutNoteViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        textView.becomeFirstResponder()
+        textView?.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -56,10 +56,10 @@ class WorkoutNoteViewController: UIViewController {
     }
     
     private func constrainToolbar() {
-        toolbar.translatesAutoresizingMaskIntoConstraints = false
-        toolbar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        toolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        toolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        toolbar?.translatesAutoresizingMaskIntoConstraints = false
+        toolbar?.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        toolbar?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        toolbar?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
     private func addToolbarItems() {
@@ -68,11 +68,11 @@ class WorkoutNoteViewController: UIViewController {
         let separator = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         cancelItem.tintColor = .white
-        toolbar.setItems([cancelItem, separator, saveItem], animated: false)
+        toolbar?.setItems([cancelItem, separator, saveItem], animated: false)
     }
     
     @objc func save() {
-        self.delegate.saveNote(textView.text)
+        delegate?.saveNote(textView?.text ?? "")
     }
     
     @objc func cancel() {
@@ -82,7 +82,7 @@ class WorkoutNoteViewController: UIViewController {
     private func addTextView() {
         let textView = UITextView()
         view.addSubview(textView)
-        textView.text = self.dataSource.noteText()
+        textView.text = dataSource?.noteText()
         textView.font = UIFont.systemFont(ofSize: 22)
         self.textView = textView
         textView.textColor = PPLColor.white
@@ -90,6 +90,7 @@ class WorkoutNoteViewController: UIViewController {
     }
     
     private func constrainTextView(_ keyboardHeight: CGFloat) {
+        guard let textView, let toolbar else { return }
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.topAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 12).isActive = true
         textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12).isActive = true
