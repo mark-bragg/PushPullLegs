@@ -39,7 +39,7 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
         cell.frame = CGRect(x: cell.frame.origin.x, y: cell.frame.origin.y, width: tableView.frame.width, height: cell.frame.height)
         cell.multiSelect = true
         cell.setSelected(workoutTemplateEditViewModel?.isSelected(indexPath) ?? false, animated: true)
-        label(forCell: cell).text = workoutTemplateEditViewModel?.title(indexPath: indexPath)
+        label(forCell: cell)?.text = workoutTemplateEditViewModel?.title(indexPath: indexPath)
         return cell
     }
     

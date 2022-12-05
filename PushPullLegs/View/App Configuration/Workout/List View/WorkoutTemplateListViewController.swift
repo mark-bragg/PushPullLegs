@@ -19,25 +19,28 @@ class WorkoutTemplateListViewController: PPLTableViewController {
         super.viewWillAppear(animated)
     }
     
-    private func workoutTemplateListViewModel() -> WorkoutTemplateListViewModel {
-        return viewModel as! WorkoutTemplateListViewModel
+    private var workoutTemplateListViewModel: WorkoutTemplateListViewModel? {
+        viewModel as? WorkoutTemplateListViewModel
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        label(forCell: cell, fontSize: 64).text = viewModel?.title(indexPath: indexPath)
+        label(forCell: cell, fontSize: 64)?.text = viewModel?.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 3.0, rect: cell.frame)
         cell.addDisclosureIndicator()
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard !tableView.isEditing else {
+        guard
+            !tableView.isEditing,
+            let workoutTemplateListViewModel
+        else {
             return
         }
-        workoutTemplateListViewModel().select(indexPath)
+        workoutTemplateListViewModel.select(indexPath)
         let vc = WorkoutTemplateEditViewController()
-        vc.viewModel = WorkoutTemplateEditViewModel(withType: workoutTemplateListViewModel().selectedType(), templateManagement: TemplateManagement())
+        vc.viewModel = WorkoutTemplateEditViewModel(withType: workoutTemplateListViewModel.selectedType(), templateManagement: TemplateManagement())
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -61,7 +64,7 @@ extension CGRect {
 }
 
 extension UIViewController {
-    func label(forCell cell: PPLTableViewCell, fontSize: CGFloat = 26) -> PPLNameLabel {
+    func label(forCell cell: PPLTableViewCell, fontSize: CGFloat = 26) -> PPLNameLabel? {
         guard let rootView = cell.rootView else { return PPLNameLabel() }
         var label = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if label == nil {
@@ -75,6 +78,6 @@ extension UIViewController {
             label?.textAlignment = .center
             label?.textColor = PPLColor.text
         }
-        return label!
+        return label
     }
 }
