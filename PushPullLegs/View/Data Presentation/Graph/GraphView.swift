@@ -28,9 +28,9 @@ class GraphView: UIControl, ObservableObject {
     private var touchPoint: CGPoint?
     @Published private(set) var index: Int?
     private var firstLoad = true
-    private weak var lineLayer: CAShapeLayer!
+    private weak var lineLayer: CAShapeLayer?
     private weak var axesLayer: CALayer?
-    private var noDataView: NoDataGraphView!
+    private var noDataView: NoDataGraphView?
     private let singlePointCircleDiameter: CGFloat = 5
     var smallDisplay = false
     var circleLineY: CGFloat = 0.0
@@ -98,14 +98,20 @@ class GraphView: UIControl, ObservableObject {
     }
     
     @objc fileprivate func drawCircle() {
-        guard linePoints.count > 0 else { return }
-        var closestPoint = linePoints.first!
+        guard
+            linePoints.count > 0,
+            var closestPoint = linePoints.first,
+            let touchPoint
+        else { return }
+        
         var index = 0
         for point in linePoints {
             if closestPoint.equalTo(point) { continue }
-            if closestPoint.x.distance(to: touchPoint!.x) > touchPoint!.x.distance(to: point.x) {
+            if closestPoint.x.distance(to: touchPoint.x) > touchPoint.x.distance(to: point.x) {
                 closestPoint = point
-                index = linePoints.firstIndex(of: point)!
+                if let idx = linePoints.firstIndex(of: point) {
+                    index = idx
+                }
             }
         }
         self.index = index
@@ -186,15 +192,16 @@ class GraphView: UIControl, ObservableObject {
     
     private func multiplePointPath(_ yValues: [CGFloat]) -> CGPath {
         let xSpacing = (frame.width * 0.875) / CGFloat(yValues.count - 1)
-        let biggestY = yValues.max()!
+        let path = UIBezierPath()
+        guard let biggestY = yValues.max() else { return path.cgPath }
         let normalizedYs = yValues.map { (y) -> CGFloat in
             CGFloat(y) / CGFloat(biggestY)
         }
-        let path = UIBezierPath()
         func x (index: Int) -> CGFloat{
             return lowestPoint().x + xSpacing * CGFloat(index)
         }
-        let yShift = convertToGraphY(normalizedYs.min()!) - lowestPoint().y
+        guard let minY = normalizedYs.min() else { return path.cgPath }
+        let yShift = convertToGraphY(minY) - lowestPoint().y
         var y = convertToGraphY(normalizedYs[0]) - yShift
         var point = CGPoint(x: lowestPoint().x, y: y)
         path.move(to: point)
@@ -226,11 +233,13 @@ class GraphView: UIControl, ObservableObject {
         if noDataView == nil {
             noDataView = NoDataGraphView()
         }
-        if subviews.contains(noDataView) {
-            return
+        if let noDataView {
+            if subviews.contains(noDataView) {
+                return
+            }
+            noDataView.frame = bounds
+            addSubview(noDataView)
         }
-        noDataView.frame = bounds
-        addSubview(noDataView)
     }
     
     fileprivate func drawAxes() {
@@ -257,7 +266,7 @@ class GraphView: UIControl, ObservableObject {
     
     func removeNoDataView() {
         if let ndv = noDataView, subviews.contains(ndv) {
-            noDataView.removeFromSuperview()
+            ndv.removeFromSuperview()
             setNeedsDisplay()
         }
     }
