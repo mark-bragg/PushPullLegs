@@ -10,9 +10,9 @@ import UIKit
 import Combine
 
 class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewControllerDelegate, PPLDropdownViewControllerDataSource, UIPopoverPresentationControllerDelegate {
-    var viewModel: GraphViewModel!
+    var viewModel: GraphViewModel?
     weak var containerView: UIView?
-    weak var graphView: GraphView!
+    weak var graphView: GraphView?
     weak var dateLabel: UILabel?
     weak var volumeLabel: UILabel?
     weak var titleLabel: UILabel?
@@ -53,7 +53,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     
     func setTitleLabel() {
         let lbl = UILabel()
-        lbl.text = viewModel.title()
+        lbl.text = viewModel?.title()
         lbl.font = titleLabelFont()
         navigationItem.titleView = lbl
     }
@@ -69,12 +69,12 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     private var windowInterfaceOrientation: UIInterfaceOrientation? {
-        return UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
+        PPLSceneDelegate.shared.window?.windowScene?.interfaceOrientation
     }
     
     func reload() {
         guard !firstLoad else { return }
-        viewModel.reload()
+        viewModel?.reload()
         reloadViews()
         view.backgroundColor = PPLColor.primary
     }
@@ -157,7 +157,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     
     private func getTitleLabel() -> UILabel {
         let lbl = label()
-        lbl.text = viewModel.title()
+        lbl.text = viewModel?.title()
         lbl.sizeToFit()
         return lbl
     }
@@ -194,7 +194,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         graph.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
         graph.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
         graphView = graph
-        graph.yValues = viewModel.volumes()
+        graph.yValues = viewModel?.volumes()
         graph.circleLineY = heightForLabelStack - (isLandscape() ? 0 : 50)
     }
     
@@ -208,19 +208,19 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     func heightForGraph() -> CGFloat {
-        return (containerView?.frame.height ?? view.frame.height) - yForGraph() - padding
+        (containerView?.frame.height ?? view.frame.height) - yForGraph() - padding
     }
     
     func bind() {
         cancellables.removeAll()
-        graphView.$index.sink { [weak self] index in
+        graphView?.$index.sink { [weak self] index in
             guard let self = self else { return }
             self.updateLabels(index)
         }.store(in: &cancellables)
     }
     
     func updateLabels(_ index: Int?) {
-        if let index = index, let date = viewModel.dates()?[index], let volume = viewModel.volumes()?[index] {
+        if let index = index, let date = viewModel?.dates()?[index], let volume = viewModel?.volumes()?[index] {
             dateLabel?.text = date
             volumeLabel?.text = "Volume: \(volume)".trimDecimalDigitsToTwo()
         } else {
@@ -236,8 +236,8 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     override func viewDidLayoutSubviews() {
-        viewModel.reload()
-        graphView.yValues = viewModel.volumes()
+        viewModel?.reload()
+        graphView?.yValues = viewModel?.volumes()
     }
     
     private func removeLabels() {
@@ -245,7 +245,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     func setupRightBarButtonItem() {
-        guard viewModel.hasEllipsis else { return }
+        guard let viewModel, viewModel.hasEllipsis else { return }
         let ellipsis = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: ellipsis, style: .plain, target: self, action: #selector(showDropdown(_:)))
     }
@@ -278,7 +278,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
 
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
+        .none
     }
 }
 
