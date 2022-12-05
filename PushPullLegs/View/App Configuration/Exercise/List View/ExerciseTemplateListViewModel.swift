@@ -1,5 +1,5 @@
 //
-//  ExerciseListViewModel.swift
+//  ExerciseTemplateListViewModel.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 4/15/20.
@@ -10,13 +10,14 @@ import Foundation
 import CoreData
 
 let sorter = { (obj1: NSManagedObject, obj2: NSManagedObject) -> Bool in
-    let name1 = obj1.value(forKey: "name") as! String
-    let name2 = obj2.value(forKey: "name") as! String
+    let name1 = obj1.value(forKey: "name") as? String ?? ""
+    let name2 = obj2.value(forKey: "name") as? String ?? ""
     return name1 < name2
 }
 
 let exerciseTemplateSorter = { (temp1: ExerciseTemplate, temp2: ExerciseTemplate) -> Bool in
-    return temp1.name! < temp2.name!
+    guard let temp1Name = temp1.name, let temp2Name = temp2.name else { return false }
+    return temp1Name < temp2Name
 }
 
 protocol ExerciseTemplateListViewModelDelegate {
@@ -50,7 +51,7 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     func title(indexPath: IndexPath) -> String? {
-        return exercisesForSection(indexPath.section)[indexPath.row].name!
+        exercisesForSection(indexPath.section)[indexPath.row].name
     }
     
     func titleForSection(_ section: Int) -> String? {
