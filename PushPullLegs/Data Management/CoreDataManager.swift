@@ -10,26 +10,26 @@ import Foundation
 import CoreData
 
 protocol CoreDataManagement {
-    var persistentContainer: NSPersistentContainer! { get }
-    var backgroundContext: NSManagedObjectContext! { get }
-    var mainContext: NSManagedObjectContext! { get }
+    var persistentContainer: NSPersistentContainer { get }
+    var backgroundContext: NSManagedObjectContext { get }
+    var mainContext: NSManagedObjectContext { get }
 }
 
 class CoreDataManager: CoreDataManagement {
     static let shared = CoreDataManager()
-    private var storeType: String!
-    lazy var persistentContainer: NSPersistentContainer! = { [unowned self] in
+    private var storeType: String?
+    lazy var persistentContainer: NSPersistentContainer = { [unowned self] in
         let persistentContainer = NSPersistentContainer(name: persistentContainerName)
         let description = persistentContainer.persistentStoreDescriptions.first
-        description?.type = storeType
+        description?.type = storeType ?? ""
         return persistentContainer
     }()
-    lazy var backgroundContext: NSManagedObjectContext! = { [unowned self] in
+    lazy var backgroundContext: NSManagedObjectContext = { [unowned self] in
         let context = persistentContainer.newBackgroundContext()
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return context
     }()
-    lazy var mainContext: NSManagedObjectContext! = { [unowned self] in
+    lazy var mainContext: NSManagedObjectContext = { [unowned self] in
         let context = persistentContainer.viewContext
         context.automaticallyMergesChangesFromParent = true
         return context
@@ -37,8 +37,8 @@ class CoreDataManager: CoreDataManagement {
     
     func setup(storeType: String = NSSQLiteStoreType, completion: (() -> Void)?) {
         self.storeType = storeType
-        loadPersistentStore { [unowned self] in
-            self.addWorkouts()
+        loadPersistentStore { [weak self] in
+            self?.addWorkouts()
             completion?()
         }
     }
@@ -79,6 +79,6 @@ class CoreDataManager: CoreDataManagement {
 
 extension Array {
     static func emptyOrNil(_ arrray: Array?) -> Bool {
-        return arrray == nil || arrray!.count == 0
+        arrray == nil || (arrray ?? []).count == 0
     }
 }
