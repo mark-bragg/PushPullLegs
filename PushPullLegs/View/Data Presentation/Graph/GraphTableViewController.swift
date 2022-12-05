@@ -10,13 +10,13 @@ import UIKit
 
 class GraphTableViewController: PPLTableViewController {
     
-    var pushVc: WorkoutGraphViewController!
-    var pullVc: WorkoutGraphViewController!
-    var legsVc: WorkoutGraphViewController!
+    var pushVc: WorkoutGraphViewController?
+    var pullVc: WorkoutGraphViewController?
+    var legsVc: WorkoutGraphViewController?
     private var helpTag = 0
     private var interstitial: NSObject?
-    private var selectedRow: Int!
-    private weak var spinner: UIActivityIndicatorView!
+    private var selectedRow: Int?
+    private weak var spinner: UIActivityIndicatorView?
     private var interstitialAd: STAStartAppAd?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,7 +75,7 @@ class GraphTableViewController: PPLTableViewController {
     }
     
     fileprivate func prepareGraphViewControllers() {
-        guard pushVc == nil || pullVc == nil || legsVc == nil else {
+        if let pushVc, let pullVc, let legsVc {
             pushVc.view.setNeedsLayout()
             pullVc.view.setNeedsLayout()
             legsVc.view.setNeedsLayout()
@@ -85,9 +85,9 @@ class GraphTableViewController: PPLTableViewController {
         pushVc = WorkoutGraphViewController(type: .push, frame: frame)
         pullVc = WorkoutGraphViewController(type: .pull, frame: frame)
         legsVc = WorkoutGraphViewController(type: .legs, frame: frame)
-        pushVc.isInteractive = false
-        pullVc.isInteractive = false
-        legsVc.isInteractive = false
+        pushVc?.isInteractive = false
+        pullVc?.isInteractive = false
+        legsVc?.isInteractive = false
     }
     
     private func constrainTableView() {
@@ -117,15 +117,17 @@ class GraphTableViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        guard let rootView = cell.rootView else { return cell }
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
+            let rootView = cell.rootView,
+            let view = viewForRow(indexPath.row)
+        else { return PPLTableViewCell() }
         cell.tag = indexPath.row
         cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
-        let view = viewForRow(indexPath.row)
         rootView.addSubview(view)
         constrain(view, toInsideOf: rootView)
-        vcForRow(indexPath.row).reload()
-        if let gVm = vcForRow(indexPath.row).workoutGraphViewModel, gVm.pointCount() > 0 {
+        vcForRow(indexPath.row)?.reload()
+        if let gVm = vcForRow(indexPath.row)?.workoutGraphViewModel, gVm.pointCount() > 0 {
             cell.addDisclosureIndicator(PPLColor.white)
         } else {
             cell.addHelpIndicator(target: self, action: #selector(help(_:)), color: .white)
@@ -152,11 +154,11 @@ class GraphTableViewController: PPLTableViewController {
         present(vc, animated: true, completion: nil)
     }
     
-    func viewForRow(_ row: Int) -> UIView {
-        vcForRow(row).view
+    func viewForRow(_ row: Int) -> UIView? {
+        vcForRow(row)?.view
     }
     
-    func vcForRow(_ row: Int) -> WorkoutGraphViewController {
+    func vcForRow(_ row: Int) -> WorkoutGraphViewController? {
         switch row {
         case 0:
             return pushVc
@@ -204,13 +206,16 @@ class GraphTableViewController: PPLTableViewController {
             spinner.removeFromSuperview()
         }
         interstitial = nil
-        showGraph(selectedRow)
+        if let selectedRow {
+            showGraph(selectedRow)
+        }
     }
     
     override func presentAdLoadingView() {
         guard
+            let selectedRow,
             let cell = tableView?.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell,
-                let rootView = cell.rootView
+            let rootView = cell.rootView
         else { return }
         let spinner = UIActivityIndicatorView(frame: rootView.frame)
         spinner.layer.cornerRadius = rootView.layer.cornerRadius
@@ -224,7 +229,10 @@ class GraphTableViewController: PPLTableViewController {
     // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
-        guard let gvm = vcForRow(selectedRow).workoutGraphViewModel, gvm.pointCount() > 0 else { return }
+        guard
+            let selectedRow,
+            let gvm = vcForRow(selectedRow)?.workoutGraphViewModel, gvm.pointCount() > 0
+        else { return }
         if PPLDefaults.instance.wasGraphInterstitialShownToday() {
             showGraph(selectedRow)
         } else {
