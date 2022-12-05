@@ -16,16 +16,16 @@ protocol ExercisingViewController: UIViewController {
 
 class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate, SetNavigationControllerDelegate {
 
-    weak var weightCollector: WeightCollectionViewController!
-    weak var exerciseTimer: ExerciseTimerViewController!
-    weak var repsCollector: RepsCollectionViewController!
+    weak var weightCollector: WeightCollectionViewController?
+    weak var exerciseTimer: ExerciseTimerViewController?
+    weak var repsCollector: RepsCollectionViewController?
     var exerciseSetViewModel: ExerciseSetViewModel?
     var readOnly = false
     weak var restTimerView: RestTimerView?
     private let timerHeight: CGFloat = 150.0
-    weak var setNavController: SetNavigationController!
+    weak var setNavController: SetNavigationController?
     private var isLeftBarItemSetToDone = false
-    private var exerciseViewModel: ExerciseViewModel { viewModel as! ExerciseViewModel }
+    private var exerciseViewModel: ExerciseViewModel? { viewModel as? ExerciseViewModel }
     private var isTimerViewHidden = true
     private var restTimerHeightConstraint: NSLayoutConstraint?
     
@@ -47,11 +47,13 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     override func getRightBarButtonItems() -> [UIBarButtonItem] {
-        readOnly && exerciseViewModel.hasData() ? super.getRightBarButtonItems() : exercisingRightBarButtonItems()
+        guard let exerciseViewModel else { return [] }
+        return readOnly && exerciseViewModel.hasData() ? super.getRightBarButtonItems() : exercisingRightBarButtonItems()
     }
     
     private func exercisingRightBarButtonItems() -> [UIBarButtonItem] {
         var items = [UIBarButtonItem]()
+        guard let exerciseViewModel else { return items }
         if exerciseViewModel.hasData() {
             items.append(UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:))))
         }
@@ -63,6 +65,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     @objc func presentPreviousPerformance(_ sender: Any?) {
         guard
+            let exerciseViewModel,
             let previousExercise = exerciseViewModel.previousExercise,
             let tableView,
             let headerView = self.tableView(tableView, viewForHeaderInSection: 0)
@@ -129,7 +132,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     override func insertAddButtonInstructions(_ dataSource: ArrowHelperDataSource? = nil) {
         guard !readOnly else { return }
         super.insertAddButtonInstructions(self)
-        addButtonHelperVc!.message = "Tap to start the next set!"
+        addButtonHelperVc?.message = "Tap to start the next set!"
     }
     
     override func addAction(_ sender: Any) {
@@ -166,7 +169,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         exerciseSetViewModel = ExerciseSetViewModel()
         exerciseSetViewModel?.delegate = self
         exerciseSetViewModel?.setCollector = exerciseViewModel
-        exerciseSetViewModel?.defaultWeight = exerciseViewModel.defaultWeight
+        exerciseSetViewModel?.defaultWeight = exerciseViewModel?.defaultWeight
     }
     
     func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController) {
@@ -181,15 +184,15 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel) {
         let et = ExerciseTimerViewController()
         et.exerciseSetViewModel = self.exerciseSetViewModel
-        self.setNavController.pushViewController(et, animated: true)
-        self.exerciseTimer = et
+        setNavController?.pushViewController(et, animated: true)
+        exerciseTimer = et
     }
     
     func exerciseSetViewModelStoppedTimer(_ viewModel: ExerciseSetViewModel) {
         let rc = RepsCollectionViewController()
         rc.exerciseSetViewModel = self.exerciseSetViewModel
-        self.setNavController.pushViewController(rc, animated: true)
-        self.repsCollector = rc
+        setNavController?.pushViewController(rc, animated: true)
+        repsCollector = rc
     }
     
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
@@ -200,14 +203,14 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
                 rtv.restartTimer()
             }
         })
-        if exerciseViewModel.hasData() {
+        if let exerciseViewModel, exerciseViewModel.hasData() {
             AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel.title() : nil
             presentProgressNotification()
         }
     }
     
     func presentProgressNotification() {
-        guard exerciseViewModel.isFirstTimePerformingExercise() && !readOnly else { return }
+        guard let exerciseViewModel, exerciseViewModel.isFirstTimePerformingExercise() && !readOnly else { return }
         let content = UNMutableNotificationContent()
         content.title = exerciseViewModel.progressTitle()
         content.body = exerciseViewModel.progressMessage()
@@ -222,12 +225,12 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel) {
         dismiss(animated: true) {
-            if let _ = self.restTimerView, self.exerciseViewModel.hasData(), !self.exerciseViewModel.isFirstSet {
+            if let _ = self.restTimerView, let exerciseViewModel = self.exerciseViewModel, exerciseViewModel.hasData(), !exerciseViewModel.isFirstSet {
                 self.showRestTimerView()
             }
         }
         resetState()
-        if exerciseViewModel.rowCount() == 0 {
+        if let exerciseViewModel, exerciseViewModel.rowCount() == 0 {
             insertAddButtonInstructions()
         }
     }
@@ -239,11 +242,11 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        if let _ = presentationController.presentedViewController as? SetNavigationController {
-            if exerciseSetViewModel!.completedExerciseSet {
+        if let _ = presentationController.presentedViewController as? SetNavigationController, let exerciseSetViewModel {
+            if exerciseSetViewModel.completedExerciseSet {
 
             } else {
-                exerciseSetViewModel?.cancel()
+                exerciseSetViewModel.cancel()
             }
         }
         reload()
@@ -259,6 +262,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let exerciseViewModel else { return nil }
         var titles = [String]()
         for i in 0...2 {
             titles.append(exerciseViewModel.headerLabelText(i))
@@ -268,7 +272,10 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
+            let exerciseViewModel
+        else { return PPLTableViewCell() }
         let labels = cell.labels(width: tableView.frame.width / 3)
         labels.w.text = "\(exerciseViewModel.weightForIndexPath(indexPath))"
         labels.r.text = "\(exerciseViewModel.repsForIndexPath(indexPath))"

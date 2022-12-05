@@ -30,7 +30,7 @@ class DBExerciseViewController: ExerciseViewController {
     override func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel) {
         let dvc = DurationCollectionViewController()
         dvc.exerciseSetViewModel = exerciseSetViewModel
-        setNavController.pushViewController(dvc, animated: true)
+        setNavController?.pushViewController(dvc, animated: true)
     }
     
     override func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
