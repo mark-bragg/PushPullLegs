@@ -25,8 +25,8 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
         tableView?.allowsSelection = false
     }
     
-    private func exerciseTemplateListViewModel() -> ExerciseTemplateListViewModel {
-        return viewModel as! ExerciseTemplateListViewModel
+    private var exerciseTemplateListViewModel: ExerciseTemplateListViewModel? {
+        viewModel as? ExerciseTemplateListViewModel
     }
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
@@ -52,15 +52,15 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     
     func sectionHeaderTitle(_ section: Int) -> String? {
         guard let viewModel = viewModel, viewModel.rowCount(section: section) > 0 else { return nil }
-        let title = exerciseTemplateListViewModel().titleForSection(section)
-        return title
+        return exerciseTemplateListViewModel?.titleForSection(section)
     }
     
     override func addAction(_ sender: Any) {
         super.addAction(sender)
+        guard let exerciseTemplateListViewModel else { return }
         let vc = ExerciseTemplateCreationViewController()
         vc.showExerciseType = true
-        vc.viewModel = ExerciseTemplateCreationViewModel(management: exerciseTemplateListViewModel().templateManagement)
+        vc.viewModel = ExerciseTemplateCreationViewModel(management: exerciseTemplateListViewModel.templateManagement)
         vc.presentationController?.delegate = self
         vc.viewModel?.reloader = self
         vc.modalPresentationStyle = .pageSheet
@@ -68,8 +68,10 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        guard let rootView = cell.rootView else { return cell }
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
+            let rootView = cell.rootView
+        else { return PPLTableViewCell() }
         var textLabel = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
@@ -87,7 +89,7 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            exerciseTemplateListViewModel().deleteExercise(indexPath: indexPath)
+            exerciseTemplateListViewModel?.deleteExercise(indexPath: indexPath)
             reload()
         }
     }
@@ -111,7 +113,7 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     }
     
     override func reload() {
-        exerciseTemplateListViewModel().reload()
+        exerciseTemplateListViewModel?.reload()
         tableView?.reloadData()
         super.reload()
     }
