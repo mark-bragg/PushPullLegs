@@ -11,7 +11,7 @@ import Combine
 
 class WorkoutGraphViewController: GraphViewController {
 
-    var workoutGraphViewModel: WorkoutGraphViewModel { viewModel as! WorkoutGraphViewModel }
+    var workoutGraphViewModel: WorkoutGraphViewModel? { viewModel as? WorkoutGraphViewModel }
     private var frame: CGRect?
     private var isNavigatingToExercise = false
     
@@ -41,12 +41,13 @@ class WorkoutGraphViewController: GraphViewController {
     }
     
     override func names() -> [String] {
-        workoutGraphViewModel.getExerciseNames()
+        workoutGraphViewModel?.getExerciseNames() ?? []
     }
     
     override func didSelectName(_ name: String) {
         dismiss(animated: true) {
-            let vc = ExerciseGraphViewController(name: name, otherNames: self.workoutGraphViewModel.getExerciseNames().filter({$0 != name}), type: self.workoutGraphViewModel.type)
+            guard let vm = self.workoutGraphViewModel else { return }
+            let vc = ExerciseGraphViewController(name: name, otherNames: vm.getExerciseNames().filter({$0 != name}), type: vm.type)
             self.isNavigatingToExercise = true
             self.navigationController?.pushViewController(vc, animated: true)
         }

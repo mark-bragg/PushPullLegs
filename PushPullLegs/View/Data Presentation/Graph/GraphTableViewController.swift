@@ -125,7 +125,7 @@ class GraphTableViewController: PPLTableViewController {
         rootView.addSubview(view)
         constrain(view, toInsideOf: rootView)
         vcForRow(indexPath.row).reload()
-        if vcForRow(indexPath.row).workoutGraphViewModel.pointCount() > 0 {
+        if let gVm = vcForRow(indexPath.row).workoutGraphViewModel, gVm.pointCount() > 0 {
             cell.addDisclosureIndicator(PPLColor.white)
         } else {
             cell.addHelpIndicator(target: self, action: #selector(help(_:)), color: .white)
@@ -224,7 +224,7 @@ class GraphTableViewController: PPLTableViewController {
     // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
-        guard vcForRow(selectedRow).workoutGraphViewModel.pointCount() > 0 else { return }
+        guard let gvm = vcForRow(selectedRow).workoutGraphViewModel, gvm.pointCount() > 0 else { return }
         if PPLDefaults.instance.wasGraphInterstitialShownToday() {
             showGraph(selectedRow)
         } else {
