@@ -10,7 +10,7 @@ import Foundation
 
 class WorkoutTemplateListViewModel: NSObject, PPLTableViewModel {
     private let templateManagement: TemplateManagement
-    private var workouts: [WorkoutTemplate]!
+    private var workouts: [WorkoutTemplate]?
     private var selected: Int!
     private var exerciseType: ExerciseType!
     
@@ -20,7 +20,7 @@ class WorkoutTemplateListViewModel: NSObject, PPLTableViewModel {
     }
     
     func title(indexPath: IndexPath) -> String? {
-        workouts[indexPath.row].name
+        workouts?[indexPath.row].name
     }
     
     func title() -> String? {
@@ -28,10 +28,11 @@ class WorkoutTemplateListViewModel: NSObject, PPLTableViewModel {
     }
     
     func rowCount(section: Int) -> Int {
-        workouts.count
+        (workouts ?? []).count
     }
     
     func select(_ indexPath: IndexPath) {
+        guard let workouts else { return }
         selected = indexPath.row
         exerciseType = workouts[selected].name.map { ExerciseType(rawValue: $0)! }
     }
