@@ -10,7 +10,7 @@ import UIKit
 
 class CountdownPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
-    weak var picker: UIPickerView!
+    weak var picker: UIPickerView?
     @Published private(set) var countdownSelection: Int?
     
     override func viewDidLoad() {
