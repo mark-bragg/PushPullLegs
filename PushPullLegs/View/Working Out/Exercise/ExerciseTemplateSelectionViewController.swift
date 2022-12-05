@@ -15,7 +15,7 @@ protocol ExerciseTemplateSelectionDelegate: NSObject {
 class ExerciseTemplateSelectionViewController: PPLTableViewController {
     weak var delegate: ExerciseTemplateSelectionDelegate?
     var selectedIndices = [Int]()
-    var exerciseSelectionViewModel: ExerciseSelectionViewModel { viewModel as! ExerciseSelectionViewModel }
+    var exerciseSelectionViewModel: ExerciseSelectionViewModel? { viewModel as? ExerciseSelectionViewModel }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -28,12 +28,13 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     @objc override func pop() {
         super.pop()
-        guard exerciseSelectionViewModel.selectedExercises().count > 0 else { return }
+        guard let exerciseSelectionViewModel, exerciseSelectionViewModel.selectedExercises().count > 0 else { return }
         exerciseSelectionViewModel.commitChanges()
         delegate?.exerciseTemplatesAdded()
     }
     
     @objc func addExercise() {
+        guard let exerciseSelectionViewModel else { return }
         let vc = ExerciseTemplateCreationViewController()
         vc.showExerciseType = false
         vc.viewModel = ExerciseTemplateCreationViewModel(withType: exerciseSelectionViewModel.exerciseType, management: TemplateManagement())
@@ -44,26 +45,33 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell else {
+            return PPLTableViewCell()
+        }
         guard let rootView = cell.rootView else { return cell }
         cell.multiSelect = viewModel?.multiSelect ?? false
         var textLabel = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
-            textLabel = PPLNameLabel()
-            textLabel?.textColor = PPLColor.text
-            textLabel?.textAlignment = .center
-            rootView.addSubview(textLabel!)
-            textLabel?.translatesAutoresizingMaskIntoConstraints = false
-            textLabel?.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: 10).isActive = true
-            textLabel?.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: -10).isActive = true
-            textLabel?.centerYAnchor.constraint(equalTo: rootView.centerYAnchor, constant: 0).isActive = true
+            textLabel = newTextLabel(rootView)
         }
-        textLabel!.text = exerciseSelectionViewModel.title(indexPath: indexPath)
+        textLabel?.text = exerciseSelectionViewModel?.title(indexPath: indexPath)
         return cell
     }
     
+    private func newTextLabel(_ rootView: ShadowBackground) -> PPLNameLabel {
+        let textLabel = PPLNameLabel()
+        textLabel.textColor = PPLColor.text
+        textLabel.textAlignment = .center
+        rootView.addSubview(textLabel)
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        textLabel.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: 10).isActive = true
+        textLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: -10).isActive = true
+        textLabel.centerYAnchor.constraint(equalTo: rootView.centerYAnchor, constant: 0).isActive = true
+        return textLabel
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
+        if let cell = tableView.cellForRow(at: indexPath), let exerciseSelectionViewModel {
             // TODO: refactor to new method in ExerciseSelectionViewModel: func toggle()
             if exerciseSelectionViewModel.isSelected(row: indexPath.row) {
                 exerciseSelectionViewModel.deselected(row: indexPath.row)
@@ -80,7 +88,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     override func reload() {
-        exerciseSelectionViewModel.reload()
+        exerciseSelectionViewModel?.reload()
         tableView?.reloadData()
     }
     
