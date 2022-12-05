@@ -149,7 +149,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController, P
 
 extension ExerciseTimerViewController {
     func handleAds() {
-        bannerContainerView.constraints.first(where: { $0.identifier == "height" })!.constant = bannerContainerHeight(size: STA_MRecAdSize_300x250)
+        bannerContainerView.constraints.first(where: { $0.identifier == "height" })?.constant = bannerContainerHeight(size: STA_MRecAdSize_300x250)
         addBannerView(size: STA_MRecAdSize_300x250)
     }
     

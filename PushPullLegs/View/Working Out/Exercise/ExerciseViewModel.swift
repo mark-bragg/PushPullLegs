@@ -36,7 +36,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     weak var delegate: ExerciseViewModelDelegate?
     private(set) var exerciseManager: ExerciseDataManager {
         set { dataManager = newValue }
-        get { dataManager as! ExerciseDataManager }
+        get { dataManager as? ExerciseDataManager ?? ExerciseDataManager() }
     }
     var exercise: Exercise?
     private var finishedCellData = [FinishedSetDataModel]()
@@ -76,7 +76,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     }
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
-        exerciseName = exerciseTemplate.name!
+        exerciseName = exerciseTemplate.name
         type = exerciseTemplate.type
         super.init()
         exerciseManager = dataManager
@@ -98,7 +98,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
             let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
             let exercises = previousWorkout.exercises?.array as? [Exercise]
         else { return false }
-        return exercises.contains(where: { $0.name == exercise?.name && $0.sets != nil && $0.sets!.count > 0})
+        return exercises.contains(where: { $0.name == exercise?.name && $0.sets != nil && $0.sets!.count > 0 })
     }
     
     func progressTitle() -> String {
@@ -259,6 +259,6 @@ extension ExerciseSet {
 
 extension Double {
     func truncateDigitsAfterDecimal(afterDecimalDigits: Int) -> Double {
-       return Double(String(format: "%.\(afterDecimalDigits)f", self))!
+       Double(String(format: "%.\(afterDecimalDigits)f", self)) ?? 0
     }
 }
