@@ -15,7 +15,7 @@ class RestTimerView: UIView {
         }
     }
     private var timerLabel = UILabel()
-    private var stopWatch: PPLStopWatch!
+    private var stopWatch: PPLStopWatch?
     private var topLine: UIView {
         if let v = viewWithTag(topLineTag) {
             return v
@@ -46,7 +46,7 @@ class RestTimerView: UIView {
                 self.text = String.format(seconds: seconds ?? 0)
             }
         })
-        stopWatch.start()
+        stopWatch?.start()
     }
     
     override func layoutSubviews() {
