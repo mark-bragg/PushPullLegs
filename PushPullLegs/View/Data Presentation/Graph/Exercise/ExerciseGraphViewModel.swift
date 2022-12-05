@@ -13,7 +13,7 @@ class ExerciseGraphViewModel: GraphViewModel {
     
     private var name: String
     private(set) var otherNames: [String]
-    private var exerciseDataManager: ExerciseDataManager { dataManager as! ExerciseDataManager }
+    private var exerciseDataManager: ExerciseDataManager { dataManager as? ExerciseDataManager ?? ExerciseDataManager() }
     private(set) var type: ExerciseType
     
     init(name: String, otherNames: [String], type: ExerciseType) {
@@ -36,8 +36,10 @@ class ExerciseGraphViewModel: GraphViewModel {
         }
         let format = formatter()
         for exercise in exercises {
-            xValues.append(format.string(from: exercise.workout!.dateCreated!))
-            yValues.append(CGFloat(exercise.volume()))
+            if let date = exercise.workout?.dateCreated {
+                xValues.append(format.string(from: date))
+                yValues.append(CGFloat(exercise.volume()))
+            }
         }
     }
     
