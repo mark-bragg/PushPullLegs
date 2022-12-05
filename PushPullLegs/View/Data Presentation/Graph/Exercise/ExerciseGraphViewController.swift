@@ -10,7 +10,7 @@ import UIKit
 
 class ExerciseGraphViewController: GraphViewController {
 
-    var exerciseGraphViewModel: ExerciseGraphViewModel { viewModel as! ExerciseGraphViewModel }
+    var exerciseGraphViewModel: ExerciseGraphViewModel? { viewModel as? ExerciseGraphViewModel }
     
     init(name: String, otherNames: [String], type: ExerciseType, frame: CGRect? = nil) {
         super.init(nibName: nil, bundle: nil)
@@ -22,19 +22,22 @@ class ExerciseGraphViewController: GraphViewController {
     }
 
     override func names() -> [String] {
-        return exerciseGraphViewModel.otherNames
+        exerciseGraphViewModel?.otherNames ?? []
     }
     
     override func didSelectName(_ name: String) {
-        dismiss(animated: true) { [unowned self] in
+        dismiss(animated: true) { [weak self] in
+            guard
+                let exerciseGraphViewModel = self?.exerciseGraphViewModel
+            else { return }
             let oldName = exerciseGraphViewModel.title()
             let oldOtherNames = exerciseGraphViewModel.otherNames
             var newOtherNames = oldOtherNames.filter({$0 != name})
             newOtherNames.append(oldName)
             let newVm = ExerciseGraphViewModel(name: name, otherNames: newOtherNames, type: exerciseGraphViewModel.type)
-            viewModel = newVm
-            reloadViews()
-            setTitleLabel()
+            self?.viewModel = newVm
+            self?.reloadViews()
+            self?.setTitleLabel()
         }
     }
     
