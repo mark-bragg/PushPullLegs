@@ -33,17 +33,17 @@ struct ExerciseStateError: Error { }
 class ExerciseSetViewModel: NSObject {
     
     weak var delegate: ExerciseSetViewModelDelegate?
-    weak var setCollector: ExerciseSetCollector!
+    weak var setCollector: ExerciseSetCollector?
     var completedExerciseSet: Bool {
         return state == .finished
     }
-    private var totalTime: Int!
-    private var weight: Double!
+    private var totalTime: Int?
+    private var weight: Double?
     private var state: ExerciseSetState
     var stopWatch: PPLStopWatch?
     private var countdown = PPLDefaults.instance.countdown()
     private var countdownCanceled = false
-    @Published private(set) var setBegan: Bool!
+    @Published private(set) var setBegan: Bool?
     private var cancellables = [AnyCancellable]()
     var defaultWeight: Double?
     
@@ -117,7 +117,7 @@ class ExerciseSetViewModel: NSObject {
             multiplier *= -1
             let time = calculateCurrentTime(s, multiplier)
             setBegan = countdown == s
-            if time <= 3 && !setBegan && PPLDefaults.instance.areTimerSoundsEnabled() {
+            if let setBegan, time <= 3 && !setBegan && PPLDefaults.instance.areTimerSoundsEnabled() {
                 SoundManager.shared.playCountdownSound()
             }
         } else if PPLDefaults.instance.areTimerSoundsEnabled() {
@@ -135,7 +135,11 @@ class ExerciseSetViewModel: NSObject {
     }
     
     func finishSetWithReps(_ reps: Double) {
-        guard setCollector != nil else { return }
+        guard
+            let setCollector,
+            let totalTime,
+            let weight
+        else { return }
         do {
             try setState(.finished)
         } catch {
