@@ -32,13 +32,15 @@ class WorkoutDataViewController: DatabaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell else {
+            return PPLTableViewCell()
+        }
         if let vm = workoutDataViewModel, let rootView = cell.rootView {
             rootView.removeAllSubviews()
             let vc = ExerciseDataCellViewController()
             vc.preferredContentSize = rootView.bounds.size
             vc.exerciseName = vm.title(indexPath: indexPath)
-            vc.workText = vm.detailText(indexPath: indexPath)!
+            vc.workText = vm.detailText(indexPath: indexPath)
             vc.progress = vm.exerciseVolumeComparison(row: indexPath.row)
             rootView.addSubview(vc.view)
             if !tableView.isEditing {
@@ -56,7 +58,7 @@ class WorkoutDataViewController: DatabaseTableViewController {
         guard let vm = workoutDataViewModel else { return }
         vm.selectedIndex = indexPath
         guard let vc = ExerciseViewControllerFactory.getExerciseViewController(vm.getSelected(), isDB: true) else { return }
-        (vc.viewModel as! ExerciseViewModel).deletionObserver = vm
+        (vc.viewModel as? ExerciseViewModel)?.deletionObserver = vm
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -100,7 +102,7 @@ class WorkoutDataViewController: DatabaseTableViewController {
 extension WorkoutDataViewController: ExerciseTemplateSelectionDelegate {
     func exerciseTemplatesAdded() {
         guard let esvm = exerciseSelectionViewModel else { return }
-        let selectedNames = esvm.selectedExercises().compactMap({ $0.name! })
+        let selectedNames = esvm.selectedExercises().compactMap({ $0.name })
         addNewExercises(selectedNames)
         reload()
     }
