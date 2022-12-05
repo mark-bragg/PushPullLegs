@@ -44,13 +44,14 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
             exercise = exercise ?? exerciseManager.creation as? UnilateralExercise
             delegate?.exerciseViewModel(self, started: exercise)
         }
+        guard let exercise = exercise as? UnilateralExercise else { return }
         if currentSide == .left {
-            exerciseManager.insertLeftSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise as! UnilateralExercise) { [weak self] (exerciseSet) in
+            exerciseManager.insertLeftSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
                 guard let self = self, let name = self.title() else { return }
                 self.handleFinishedSet(exerciseSet, name)
             }
         } else {
-            exerciseManager.insertRightSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise as! UnilateralExercise) { [weak self] (exerciseSet) in
+            exerciseManager.insertRightSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
                 guard let self = self, let name = self.title() else { return }
                 self.handleFinishedSet(exerciseSet, name)
             }
