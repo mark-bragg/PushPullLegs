@@ -19,7 +19,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     @IBOutlet weak var saveButton: PPLButton!
     @IBOutlet weak var parentStackView: UIStackView!
     @IBOutlet weak var lateralTypeParentView: UIView!
-    weak var lateralTypeSegmentedControl: UISegmentedControl!
+    weak var lateralTypeSegmentedControl: UISegmentedControl?
     private var cancellables: Set<AnyCancellable> = []
     var showExerciseType: Bool = false
     var viewModel: ExerciseTemplateCreationViewModel?
@@ -103,7 +103,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
          UITextField.textDidEndEditingNotification
         ].forEach({ notif in
             NotificationCenter.default.publisher(for: notif, object: textField)
-            .map( { (($0.object as! UITextField).text ?? "") } )
+            .map( { (($0.object as? UITextField)?.text ?? "") } )
             .map({ (text) -> String in
                 return ExerciseNameSanitizer().sanitize(text)
             })
@@ -193,8 +193,9 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     fileprivate func hideExerciseType() {
+        guard let constraint = parentStackView.constraints.first(where: { $0.identifier == "height" }) else { return }
         typeSelectionStackView.superview?.removeFromSuperview()
-        parentStackView.removeConstraint(parentStackView.constraints.first(where: { $0.identifier == "height" })!)
+        parentStackView.removeConstraint(constraint)
         parentStackView
             .heightAnchor
             .constraint(equalToConstant: 200)
