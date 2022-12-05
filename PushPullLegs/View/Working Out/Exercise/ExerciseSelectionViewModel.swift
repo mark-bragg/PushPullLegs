@@ -70,14 +70,16 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     func reload() {
         if let completedExercises = dataSource?.completedExercises(), let alreadyAddedExercises = templateManagement.exerciseTemplates(withType: exerciseType) {
+            
             exercises = alreadyAddedExercises
-                .filter({ !completedExercises.contains($0.name!) })
+                .filter { $0.name != nil }
+                .filter { !completedExercises.contains($0.name!) }
                 .sorted(by: exerciseTemplateSorter)
         } else {
             let alreadyAddedExercises = templateManagement.exerciseTemplatesForWorkout(exerciseType)
             if let exercisesToBeAdded = templateManagement.exerciseTemplates(withType: exerciseType) {
                 exercises = exercisesToBeAdded
-                    .filter({ !alreadyAddedExercises.contains($0) })
+                    .filter { !alreadyAddedExercises.contains($0) }
                     .sorted(by: exerciseTemplateSorter)
             }
         }
