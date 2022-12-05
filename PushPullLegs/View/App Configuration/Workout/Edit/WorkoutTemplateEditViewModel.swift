@@ -23,7 +23,7 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
     private var unselectedExercises = [ExerciseTemplate]()
     private var selectedIndices = [Int]()
     let templateManagement: TemplateManagement
-    private let exerciseType: ExerciseType!
+    let exerciseType: ExerciseType?
     var multiSelect: Bool = true
     
     init(withType type: ExerciseType, templateManagement mgmt: TemplateManagement) {
@@ -41,6 +41,7 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
     }
     
     func title() -> String? {
+        guard let exerciseType else { return nil }
         return "\(exerciseType.rawValue) Exercises"
     }
     
@@ -99,12 +100,8 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
         refresh()
     }
     
-    func type() -> ExerciseType {
-        return exerciseType
-    }
-    
     func reload() {
-        if let templates = templateManagement.exerciseTemplates(withType: exerciseType) {
+        if let exerciseType, let templates = templateManagement.exerciseTemplates(withType: exerciseType) {
             unselectedExercises = templates.sorted(by: sorter)
             selectedExercises = []
             selectExercises()
@@ -113,7 +110,10 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
     }
     
     private func selectExercises() {
-        guard let names = templateManagement.workoutTemplate(type: exerciseType).exerciseNames else { return }
+        guard
+            let exerciseType,
+            let names = templateManagement.workoutTemplate(type: exerciseType).exerciseNames
+        else { return }
         for name in names {
             if let temp = templateManagement.exerciseTemplate(name: name), !selectedExercises.contains(temp) {
                 selectedExercises.append(temp)
