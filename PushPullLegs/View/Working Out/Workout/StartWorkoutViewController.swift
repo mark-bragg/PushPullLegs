@@ -17,7 +17,7 @@ class StartWorkoutViewController: PPLTableViewController {
     private var exerciseType: ExerciseType?
     private var didNavigateToWorkout: Bool = false
     weak var delegate: WorkoutSelectionDelegate?
-    var splashVC: SplashViewController!
+    var splashVC: SplashViewController?
     private static var isFirstAppearence = true
     
     override func viewDidLoad() {
@@ -51,8 +51,10 @@ class StartWorkoutViewController: PPLTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
-        cell.setWorkoutTitle(startWorkoutViewModel().title(indexPath: indexPath)!)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell else {
+            return PPLTableViewCell()
+        }
+        cell.setWorkoutTitle(startWorkoutViewModel()?.title(indexPath: indexPath))
         cell.updateTitleText()
         cell.addDisclosureIndicator()
         return cell
@@ -63,7 +65,7 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        exerciseType = (tableView.cellForRow(at: indexPath) as! PPLTableViewCell).exerciseType()
+        exerciseType = (tableView.cellForRow(at: indexPath) as? PPLTableViewCell)?.exerciseType()
         if let del = delegate, let type = exerciseType {
             del.workoutSelectedWithType(type)
         } else {
@@ -81,11 +83,11 @@ class StartWorkoutViewController: PPLTableViewController {
         }.store(in: &cancellables)
         AppState.shared.workoutInProgress = true
         vc.hidesBottomBarWhenPushed = true
-        navigationController!.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
-    func startWorkoutViewModel() -> StartWorkoutViewModel {
-        return viewModel as! StartWorkoutViewModel
+    func startWorkoutViewModel() -> StartWorkoutViewModel? {
+        viewModel as? StartWorkoutViewModel
     }
     
     override func bannerAdUnitID() -> String {
@@ -102,7 +104,7 @@ extension UIViewController {
 
 fileprivate extension PPLTableViewCell {
     
-    func setWorkoutTitle(_ title: String) {
+    func setWorkoutTitle(_ title: String?) {
         guard let rootView else { return }
         if let lbl = rootView.viewWithTag(1) as? UILabel {
             lbl.text = title
@@ -125,12 +127,13 @@ fileprivate extension PPLTableViewCell {
         lbl.textColor = PPLColor.text
     }
     
-    func exerciseType() -> ExerciseType {
-        return ExerciseType(rawValue: title())!
+    func exerciseType() -> ExerciseType? {
+        guard let title = title() else { return nil }
+        return ExerciseType(rawValue: title)
     }
     
-    func title() -> String {
-        return (viewWithTag(1) as! UILabel).text!
+    func title() -> String? {
+        (viewWithTag(1) as? UILabel)?.text
     }
     
 }

@@ -67,6 +67,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
     
     func timerText() -> String {
+        guard let startingTime else { return "" }
         let interval = Int(startingTime.timeIntervalSinceNow * -1)
         let hours = interval / 3600
         let minutes = (interval % 3600) / 60
@@ -75,7 +76,10 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
     
     func finishWorkout() {
-        guard let workoutId else { return }
+        guard
+            let workoutId,
+            let startingTime
+        else { return }
         let workout = workoutManager.backgroundContext.object(with: workoutId)
         workoutManager.update(workout, keyValuePairs: ["duration": Int(startingTime.timeIntervalSinceNow * -1)])
         AppState.shared.workoutInProgress = false
