@@ -134,10 +134,6 @@ class WorkoutLogViewController: DatabaseTableViewController {
     override func insertAddButtonInstructions(_ dataSource: ArrowHelperDataSource? = nil) {
         // no op
     }
-    
-    override func bannerAdUnitID() -> String {
-        BannerAdUnitID.workoutLogVC
-    }
 }
 
 class PPLNameLabel: UILabel {

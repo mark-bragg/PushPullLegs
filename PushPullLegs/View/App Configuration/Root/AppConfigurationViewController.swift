@@ -251,10 +251,6 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         return switchView
     }
     
-    override func bannerAdUnitID() -> String {
-        BannerAdUnitID.appConfigurationVC
-    }
-    
     func appConfigurationViewModel() -> AppConfigurationViewModel {
         return viewModel as? AppConfigurationViewModel ?? AppConfigurationViewModel()
     }

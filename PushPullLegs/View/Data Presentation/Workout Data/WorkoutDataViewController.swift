@@ -83,10 +83,6 @@ class WorkoutDataViewController: DatabaseTableViewController {
         }
     }
     
-    override func bannerAdUnitID() -> String {
-        BannerAdUnitID.workoutDataVC
-    }
-    
     override func saveNote(_ text: String) {
         super.saveNote(text)
         guard let vm = workoutDataViewModel else { return }

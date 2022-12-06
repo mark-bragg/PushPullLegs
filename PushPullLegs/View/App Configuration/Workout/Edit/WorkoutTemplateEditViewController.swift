@@ -67,8 +67,4 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
         super.reload()
     }
     
-    override func bannerAdUnitID() -> String {
-        BannerAdUnitID.workoutTemplateEditVC
-    }
-    
 }

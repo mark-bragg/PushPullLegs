@@ -16,7 +16,6 @@ fileprivate let bannerHolderTag = 6583
     @objc func addBannerView(size: STABannerSize)
     @objc func bannerContainerHeight(size: STABannerSize) -> CGFloat
     @objc func refreshBanner()
-    @objc func bannerAdUnitID() -> String
     @objc func removeBanner()
 }
 
@@ -83,10 +82,6 @@ extension UIViewController: BannerAdController, STABannerDelegateProtocol {
     
     @objc func refreshBanner() {
         addBannerView()
-    }
-    
-    func bannerAdUnitID() -> String {
-        ""
     }
     
     @objc func removeBanner() {

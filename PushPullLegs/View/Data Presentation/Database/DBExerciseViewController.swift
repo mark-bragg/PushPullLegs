@@ -41,8 +41,4 @@ class DBExerciseViewController: ExerciseViewController {
     override func setupRestTimerView() {
         // no op
     }
-    
-    override func bannerAdUnitID() -> String {
-        BannerAdUnitID.exerciseReadOnlyVC
-    }
 }

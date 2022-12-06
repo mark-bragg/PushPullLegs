@@ -283,10 +283,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         return cell
     }
     
-    override func bannerAdUnitID() -> String {
-        BannerAdUnitID.exerciseVC
-    }
-    
 }
 
 extension ExerciseViewController: ArrowHelperDataSource {

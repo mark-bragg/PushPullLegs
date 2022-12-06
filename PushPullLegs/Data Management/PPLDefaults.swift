@@ -89,7 +89,7 @@ class PPLDefaults: NSObject {
     
     func setupUserDetails() {
         if let details = UserDefaults(suiteName: user_details_suite_name) {
-            userDetails? = details
+            userDetails = details
             setupLaunchCount()
         } else {
             UserDefaults.standard.addSuite(named: user_details_suite_name)

@@ -166,10 +166,6 @@ class WorkoutViewController: PPLTableViewController {
         return workoutEditViewModel.rowCount(section: section) > 0 ? super.tableView(tableView, heightForHeaderInSection: section) : 0
     }
     
-    override func bannerAdUnitID() -> String {
-        BannerAdUnitID.workoutVC
-    }
-    
     override func noteText() -> String {
         workoutEditViewModel?.noteText() ?? ""
     }

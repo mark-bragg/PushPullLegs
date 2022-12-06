@@ -106,10 +106,6 @@ class GraphTableViewController: PPLTableViewController {
         return lbl
     }
     
-    @objc override func bannerAdUnitID() -> String {
-        BannerAdUnitID.graphTableVC
-    }
-    
     // MARK: UITableViewDataSource
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

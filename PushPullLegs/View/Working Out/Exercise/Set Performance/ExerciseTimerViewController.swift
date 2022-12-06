@@ -157,10 +157,6 @@ extension ExerciseTimerViewController {
         bannerContainerView
     }
     
-    override func bannerAdUnitID() -> String {
-        BannerAdUnitID.exerciseTimerVC
-    }
-    
     override func bannerWidth() -> CGFloat {
         bannerContainerView.frame.width
     }

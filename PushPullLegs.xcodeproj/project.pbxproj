@@ -68,7 +68,6 @@
 		4973C11E244BB593009460F2 /* ExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C11D244BB592009460F2 /* ExerciseViewController.swift */; };
 		4973C122244BCBB4009460F2 /* WorkoutEditViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C121244BCBB4009460F2 /* WorkoutEditViewModelTests.swift */; };
 		4973C124244BCC26009460F2 /* WorkoutEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C123244BCC26009460F2 /* WorkoutEditViewModel.swift */; };
-		4980D99A25A267090054EA5F /* AdUnitIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4980D99925A267090054EA5F /* AdUnitIDs.swift */; };
 		4980D9AC25A42A4D0054EA5F /* InterstitialAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4980D9AB25A42A4D0054EA5F /* InterstitialAdController.swift */; };
 		498266B5261E81EE0070A4FA /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498266B4261E81EE0070A4FA /* StringExtensionsTests.swift */; };
 		498266B9261E82C90070A4FA /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */; };
@@ -217,7 +216,6 @@
 		4973C11D244BB592009460F2 /* ExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewController.swift; sourceTree = "<group>"; };
 		4973C121244BCBB4009460F2 /* WorkoutEditViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEditViewModelTests.swift; sourceTree = "<group>"; };
 		4973C123244BCC26009460F2 /* WorkoutEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEditViewModel.swift; sourceTree = "<group>"; };
-		4980D99925A267090054EA5F /* AdUnitIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdUnitIDs.swift; sourceTree = "<group>"; };
 		4980D9AB25A42A4D0054EA5F /* InterstitialAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdController.swift; sourceTree = "<group>"; };
 		498266B4261E81EE0070A4FA /* StringExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
 		4989BA5424B94344001C17B3 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
@@ -415,7 +413,6 @@
 				491DD62A248C565C0001F9F8 /* PPLStopWatch.swift */,
 				4989BA5424B94344001C17B3 /* AppColors.swift */,
 				49F6083E254DFF1700407D0A /* AppImages.swift */,
-				4980D99925A267090054EA5F /* AdUnitIDs.swift */,
 				494B3E212718ED0D0085058C /* PushPullLegs-Bridging-Header.h */,
 			);
 			path = "Utility Closet";
@@ -1173,7 +1170,6 @@
 				49359B8D24D60001005FF7A8 /* PPLButton.swift in Sources */,
 				490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */,
 				492B643A26D1A4AD0004171D /* SplashViewController.swift in Sources */,
-				4980D99A25A267090054EA5F /* AdUnitIDs.swift in Sources */,
 				4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */,
 				49F8EF292447754900B6BD45 /* ExerciseTemplateListViewController.swift in Sources */,
 				4925AE1D25BFDE1100232B76 /* StoreObserver.swift in Sources */,
