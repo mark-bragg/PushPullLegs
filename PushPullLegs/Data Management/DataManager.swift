@@ -12,7 +12,10 @@ import CoreData
 class DataManager {
     var creation: Any?
     let backgroundContext: NSManagedObjectContext
-    var entityName: EntityName!
+    var entityName: EntityName?
+    var entityNameString: String? {
+        entityName?.rawValue
+    }
     weak var deletionObserver: DeletionObserver?
     init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
         self.backgroundContext = backgroundContext
@@ -35,7 +38,8 @@ class DataManager {
     }
     
     func exists(name: String) -> Bool {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString())
+        guard let entityNameString else { return false }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = PPLPredicate.nameIsEqualTo(name)
         do {
             let result = try backgroundContext.fetch(request)
@@ -47,8 +51,9 @@ class DataManager {
     }
     
     func create(name: String?, keyValuePairs pairs: [String: Any] = [:]) {
+        guard let entityNameString else { return }
         backgroundContext.performAndWait {
-            let object = NSEntityDescription.insertNewObject(forEntityName: entityNameString(), into: backgroundContext)
+            let object = NSEntityDescription.insertNewObject(forEntityName: entityNameString, into: backgroundContext)
             if let name = name {
                 object.setValue(name, forKey: DBAttributeKey.name)
             }
@@ -93,9 +98,5 @@ class DataManager {
                 print(error)
             }
         }
-    }
-    
-    func entityNameString() -> String {
-        return entityName.rawValue
     }
 }

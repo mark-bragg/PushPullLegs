@@ -155,7 +155,8 @@ fileprivate extension DataManager {
     }
     
     func getTemplate(name: String) -> NSManagedObject? {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityNameString())
+        guard let entityNameString else { return nil }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = PPLPredicate.nameIsEqualTo(name)
         guard let template = try? self.backgroundContext.fetch(request).first as? NSManagedObject else {
             // TODO: handle error
@@ -165,7 +166,8 @@ fileprivate extension DataManager {
     }
     
     func getTemplates(names: [String]) -> [ExerciseTemplate]? {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityNameString())
+        guard let entityNameString else { return nil }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         var predicates = [NSPredicate]()
         for name in names {
             predicates.append(PPLPredicate.nameIsEqualTo(name))
@@ -179,7 +181,8 @@ fileprivate extension DataManager {
     }
     
     func exerciseTemplates(withType type: ExerciseType) -> [ExerciseTemplate]? {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityNameString())
+        guard let entityNameString else { return nil }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = PPLPredicate.typeIsEqualTo(type)
         guard let templates = try? self.backgroundContext.fetch(request) as? [ExerciseTemplate] else {
             // TODO: handle error
@@ -189,7 +192,8 @@ fileprivate extension DataManager {
     }
     
     func getAllTemplates() -> [NSManagedObject]? {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: self.entityNameString())
+        guard let entityNameString else { return nil }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         guard let templates = try? self.backgroundContext.fetch(request) as? [NSManagedObject] else {
             // TODO: handle error
             return nil

@@ -81,7 +81,8 @@ class ExerciseDataManager: DataManager {
     }
     
     func exercises(name: String) throws -> [Exercise] {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName.rawValue)
+        guard let entityNameString else { return [] }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = NSPredicate(format: "name = %@", argumentArray: [name])
         guard let exercises = try? backgroundContext.fetch(request) as? [Exercise] else { return [] }
         do {
@@ -98,7 +99,8 @@ class ExerciseDataManager: DataManager {
     }
     
     func latestPreviousExercise(name: String) -> Exercise? {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName.rawValue)
+        guard let entityNameString else { return nil }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = NSPredicate(format: "name = %@", argumentArray: [name])
         request.sortDescriptors = [NSSortDescriptor.dateCreated]
         return (try? backgroundContext.fetch(request) as? [Exercise])?.first
