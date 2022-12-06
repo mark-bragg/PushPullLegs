@@ -58,19 +58,19 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
     func testType_push() {
         addWorkoutTemplate()
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.type() == .push)
+        XCTAssert(sut.exerciseType == .push)
     }
     
     func testType_pull() {
         addWorkoutTemplate(type: .legs)
         sut = WorkoutTemplateEditViewModel(withType: .legs, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.type() == .legs)
+        XCTAssert(sut.exerciseType == .legs)
     }
     
     func testType_legs() {
         addWorkoutTemplate(type: .pull)
         sut = WorkoutTemplateEditViewModel(withType: .pull, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.type() == .pull)
+        XCTAssert(sut.exerciseType == .pull)
     }
     
     func testRowCount_exercisesAddedAndNotAdded_section0() {

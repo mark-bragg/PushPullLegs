@@ -233,8 +233,11 @@ class TemplateManagementTests: XCTestCase {
         addWorkoutTemplate(type: .push)
         let temps = dbHelper.fetchWorkoutTemplates()
         XCTAssert(temps.count == 1)
-        let temp = sut.workoutTemplate(type: ExerciseType.push)
-        XCTAssert(temp.name == ExerciseType.push.rawValue)
+        if let temp = sut.workoutTemplate(type: ExerciseType.push) {
+            XCTAssert(temp.name == ExerciseType.push.rawValue)
+        } else {
+            XCTFail("missing workout template for type push")
+        }
     }
 
     func testGetSpecificWorkoutTemplate_specificTemplateGeted() {
@@ -242,9 +245,12 @@ class TemplateManagementTests: XCTestCase {
         addWorkoutTemplate(type: .pull)
         addWorkoutTemplate(type: .legs)
         let temps = dbHelper.fetchWorkoutTemplates()
-        let tempToTest = sut.workoutTemplate(type: ExerciseType.pull)
-        XCTAssert(temps.contains(where: { objectsAreEqual($0, tempToTest) }))
-        XCTAssert(tempToTest.name == ExerciseType.pull.rawValue)
+        if let tempToTest = sut.workoutTemplate(type: ExerciseType.pull) {
+            XCTAssert(temps.contains(where: { objectsAreEqual($0, tempToTest) }))
+            XCTAssert(tempToTest.name == ExerciseType.pull.rawValue)
+        } else {
+            XCTFail("missing workout template type pull")
+        }
     }
     
     func testGetAllWorkoutTemplates_allTemplatesGeted() {

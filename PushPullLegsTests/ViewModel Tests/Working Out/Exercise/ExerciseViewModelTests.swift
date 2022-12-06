@@ -176,7 +176,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
 //        XCTAssert(sut.headerLabelText(2) == "Time")
 //    }
     
-    func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise) {
+    func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise?) {
         exerciseCompletionExpectation?.fulfill()
     }
 

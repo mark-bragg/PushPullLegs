@@ -12,11 +12,11 @@ import CoreData
 
 
 class CoreDataTestStack: CoreDataManagement {
-    var persistentContainer: NSPersistentContainer!
+    var persistentContainer: NSPersistentContainer
     
-    var backgroundContext: NSManagedObjectContext!
+    var backgroundContext: NSManagedObjectContext
     
-    var mainContext: NSManagedObjectContext!
+    var mainContext: NSManagedObjectContext
     
     init() {
         let persistentContainer = NSPersistentContainer(name: "PushPullLegs")
