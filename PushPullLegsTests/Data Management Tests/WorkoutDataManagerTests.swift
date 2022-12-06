@@ -315,10 +315,11 @@ class WorkoutDataManagerTests : XCTestCase {
     
     func testGetPreviousWorkout_twoWorkouts_firstWorkoutReturned() {
         let date = Date()
+        let laterDate = date.addingTimeInterval(60 * 60 * 24)
         sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: date))
-        sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: date.addingTimeInterval(60 * 60 * 24)))
+        sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: laterDate))
         XCTAssert(sut.workouts().count == 2)
-        guard let previousWorkout = sut.previousWorkout() else {
+        guard let previousWorkout = sut.previousWorkout(before: laterDate, type: .push) else {
             XCTFail()
             return
         }
@@ -328,12 +329,14 @@ class WorkoutDataManagerTests : XCTestCase {
     
     func testGetPreviousWorkout_tenWorkouts_ninthWorkoutReturned() {
         var date = Date()
-        for _ in 0...9 {
+        for i in 0...9 {
             sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: date))
-            date.addTimeInterval(60 * 60 * 24)
+            if i < 9 {
+                date.addTimeInterval(60 * 60 * 24)
+            }
         }
         XCTAssert(sut.workouts().count == 10)
-        guard let previousWorkout = sut.previousWorkout() else {
+        guard let previousWorkout = sut.previousWorkout(before: date, type: .push) else {
             XCTFail()
             return
         }
@@ -342,12 +345,15 @@ class WorkoutDataManagerTests : XCTestCase {
     }
     
     func testGetPreviousWorkout_noWorkoutsExist_nilReturned() {
-        XCTAssert(sut.previousWorkout() == nil)
+        XCTAssert(sut.previousWorkout(before: Date(), type: .push) == nil)
+        XCTAssert(sut.previousWorkout(before: Date(), type: .pull) == nil)
+        XCTAssert(sut.previousWorkout(before: Date(), type: .legs) == nil)
     }
     
     func testGetPreviousWorkout_oneWorkoutExists_nilReturned() {
-        sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: Date()))
-        XCTAssert(sut.previousWorkout() == nil)
+        let date = Date()
+        sut.add(dbHelper.createExercise("exercise"), to: dbHelper.createWorkout(name: .push, date: date))
+        XCTAssert(sut.previousWorkout(before: date, type: .push) == nil)
     }
     
     func testGetPreviousWorkout_eachOfTenWorkouts_correctWorkoutsReturned_nilReturnedFirst() {
@@ -359,7 +365,7 @@ class WorkoutDataManagerTests : XCTestCase {
         XCTAssert(sut.workouts().count == 10)
         let workouts = dbHelper.fetchWorkouts().sorted(by: { $0.dateCreated! < $1.dateCreated! })
         for i in 0..<dates.count {
-            if let previousWorkout = sut.previousWorkout(before: dates[i]) {
+            if let previousWorkout = sut.previousWorkout(before: dates[i], type: .push) {
                 XCTAssert(previousWorkout.objectID == workouts[i-1].objectID, "\npreviousWorkout: \(previousWorkout)\nworkouts[i-1]: \(workouts[i-1])")
             } else {
                 XCTAssert(i == 0)

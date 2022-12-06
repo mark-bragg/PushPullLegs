@@ -74,7 +74,7 @@ class WorkoutDataManager: DataManager {
         return nil
     }
     
-    func previousWorkout(before date: Date? = nil, type: ExerciseType? = nil) -> Workout? {
+    func previousWorkout(before date: Date?, type: ExerciseType?) -> Workout? {
         guard let entityNameString, let type else { return nil }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.sortDescriptors = [WorkoutSortDescriptor.dateCreated]

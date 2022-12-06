@@ -27,7 +27,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
         startingTime = Date()
         super.init(withCoreDataManagement: coreDataManagement)
-        if AppState.shared.workoutInProgress, let workout = workoutManager.previousWorkout(before: startingTime), let workoutName = workout.name {
+        if AppState.shared.workoutInProgress, let workout = workoutManager.previousWorkout(before: startingTime, type: type), let workoutName = workout.name {
             exerciseType = ExerciseType(rawValue: workoutName)
             workoutId = workout.objectID
             startingTime = workout.dateCreated
