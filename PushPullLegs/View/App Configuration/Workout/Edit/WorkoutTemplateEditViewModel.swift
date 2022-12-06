@@ -112,7 +112,8 @@ class WorkoutTemplateEditViewModel: NSObject, PPLTableViewModel, ReloadProtocol 
     private func selectExercises() {
         guard
             let exerciseType,
-            let names = templateManagement.workoutTemplate(type: exerciseType).exerciseNames
+            let workoutTemplate = templateManagement.workoutTemplate(type: exerciseType),
+            let names = workoutTemplate.exerciseNames
         else { return }
         for name in names {
             if let temp = templateManagement.exerciseTemplate(name: name), !selectedExercises.contains(temp) {

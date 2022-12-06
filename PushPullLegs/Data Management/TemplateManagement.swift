@@ -56,15 +56,20 @@ class TemplateManagement {
     }
     
     func saveWorkoutTemplate(exercises: [ExerciseTemplate]) throws {
-        let type = ExerciseType(rawValue: exercises[0].type!)!
-        let names =  exercises.map({ (temp) -> String in
-            return temp.name!
-        })
-        workoutWriter().update(workoutTemplate(type: type), keyValuePairs: [DBAttributeKey.exerciseNames: names])
+        guard
+            let exerciseType = exercises.first?.type,
+            let type = ExerciseType(rawValue: exerciseType)
+        else { return }
+        let names = exercises
+            .filter { $0.name != nil }
+            .map { $0.name! }
+        if let template = workoutTemplate(type: type) {
+            workoutWriter().update(template, keyValuePairs: [DBAttributeKey.exerciseNames: names])
+        }
     }
     
-    func workoutTemplate(type: ExerciseType) -> WorkoutTemplate {
-        workoutReader().getTemplate(name: type.rawValue) as! WorkoutTemplate
+    func workoutTemplate(type: ExerciseType) -> WorkoutTemplate? {
+        workoutReader().getTemplate(name: type.rawValue) as? WorkoutTemplate
     }
     
     func workoutTemplates() -> [WorkoutTemplate]? {
@@ -72,17 +77,24 @@ class TemplateManagement {
     }
     
     func addToWorkout(exercise: ExerciseTemplate) {
-        let workout = workoutTemplate(type: ExerciseType(rawValue: exercise.type!) ?? .error)
+        guard
+            let typeString = exercise.type,
+            let type = ExerciseType(rawValue: typeString),
+            let workout = workoutTemplate(type: type),
+            let exerciseName = exercise.name
+        else { return }
         if workout.exerciseNames == nil {
             workout.exerciseNames = []
         }
-        workout.exerciseNames?.append(exercise.name!)
+        workout.exerciseNames?.append(exerciseName)
         try? coreDataManager.mainContext.save()
     }
     
     func removeFromWorkout(exercise: ExerciseTemplate) {
-        let workout = workoutTemplate(type: ExerciseType(rawValue: exercise.type!) ?? .error)
         guard
+            let typeString = exercise.type,
+            let type = ExerciseType(rawValue: typeString),
+            let workout = workoutTemplate(type: type),
             var exerciseNames = workout.exerciseNames
         else {
             // TODO: ERROR empty exerciseNames should not be empty
@@ -103,7 +115,10 @@ class TemplateManagement {
                 req.predicate = PPLPredicate.typeIsEqualTo(type)
                 if let exerciseTemplates = try? coreDataManager.mainContext.fetch(req) as? [ExerciseTemplate] {
                     return exerciseTemplates.filter { (temp) -> Bool in
-                        names.contains { temp.name! == $0 }
+                        names.contains {
+                            guard let name = temp.name else { return false }
+                            return name == $0
+                        }
                     }
                 }
             }
