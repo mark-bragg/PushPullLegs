@@ -9,7 +9,7 @@
 import Foundation
 
 class PPLStopWatch: ForegroundObserver {
-    private var startingTime: Double!
+    private var startingTime: Double?
     var timeBetweenReadings: TimeInterval = 1
     var handler: ((Int?) -> Void)?
     private var running = false
@@ -47,7 +47,7 @@ class PPLStopWatch: ForegroundObserver {
     }
     
     func currentTime() -> Int {
-        return Int(CFAbsoluteTimeGetCurrent() - self.startingTime)
+        Int(CFAbsoluteTimeGetCurrent() - (startingTime ?? 0))
     }
     
     func willEnterForeground() {
