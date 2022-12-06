@@ -27,7 +27,9 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
         startingTime = Date()
         super.init(withCoreDataManagement: coreDataManagement)
-        if AppState.shared.workoutInProgress, let workout = workoutManager.previousWorkout(before: startingTime, type: type), let workoutName = workout.name {
+        if let wipType = AppState.shared.workoutInProgress,
+            let workout = workoutManager.previousWorkout(before: startingTime, type: wipType),
+            let workoutName = workout.name {
             exerciseType = ExerciseType(rawValue: workoutName)
             workoutId = workout.objectID
             startingTime = workout.dateCreated
@@ -82,7 +84,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
         else { return }
         let workout = workoutManager.backgroundContext.object(with: workoutId)
         workoutManager.update(workout, keyValuePairs: ["duration": Int(startingTime.timeIntervalSinceNow * -1)])
-        AppState.shared.workoutInProgress = false
+        AppState.shared.workoutInProgress = nil
     }
     
     func addExercise(templates: [ExerciseTemplate]) {
@@ -169,7 +171,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
             let workout = try? coreDataManager?.backgroundContext.existingObject(with: workoutId) as? Workout
         else { return }
         workoutManager.delete(workout)
-        AppState.shared.workoutInProgress = false
+        AppState.shared.workoutInProgress = nil
     }
     
     func noDataText() -> String {

@@ -19,7 +19,7 @@ import Foundation
 
 class AppState {
     static let shared = AppState()
-    @Published var workoutInProgress: Bool {
+    @Published var workoutInProgress: ExerciseType? {
         willSet {
             PPLDefaults.instance.setWorkoutInProgress(newValue)
         }
@@ -36,7 +36,7 @@ class AppState {
     }
     private let ADVERTISE = "ADVERTISE"
     private init() {
-        workoutInProgress = PPLDefaults.instance.isWorkoutInProgress()
+        workoutInProgress = PPLDefaults.instance.workoutInProgress()
         exerciseInProgress = PPLDefaults.instance.exerciseInProgress()
     }
     private static var isLaunching = true

@@ -22,7 +22,7 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
         // Override point for customization after application launch.
         // MARK: NSInMemoryStoreType for testing purposes
         wipCancellable = AppState.shared.$workoutInProgress.sink { (inProgress) in
-            application.isIdleTimerDisabled = inProgress
+            application.isIdleTimerDisabled = inProgress != nil
         }
         CoreDataManager.shared.setup(completion: nil)
         CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true

@@ -30,8 +30,9 @@ class StartWorkoutViewController: PPLTableViewController {
         super.viewWillAppear(animated)
         presentSplash()
         hidesBottomBarWhenPushed = false
-        if AppState.shared.workoutInProgress {
-            self.navigateToNextWorkout()
+        if let wipType = AppState.shared.workoutInProgress {
+            exerciseType = wipType
+            navigateToNextWorkout()
         }
         if let _ = delegate {
             removeBanner()
@@ -79,9 +80,9 @@ class StartWorkoutViewController: PPLTableViewController {
         let vc = WorkoutViewController()
         vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
         vc.$popped.sink { (popped) in
-            PPLDefaults.instance.setWorkoutInProgress(false)
+            PPLDefaults.instance.setWorkoutInProgress(nil)
         }.store(in: &cancellables)
-        AppState.shared.workoutInProgress = true
+        AppState.shared.workoutInProgress = exerciseType
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
