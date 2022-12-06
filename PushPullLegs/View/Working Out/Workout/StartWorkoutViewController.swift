@@ -45,8 +45,8 @@ class StartWorkoutViewController: PPLTableViewController {
         StartWorkoutViewController.isFirstAppearence = false
         let splashVC = SplashViewController()
         splashVC.delegate = self
-        PPLSceneDelegate.shared.window?.addSubview(splashVC.view)
-        splashVC.view.frame = PPLSceneDelegate.shared.window?.bounds ?? .zero
+        PPLSceneDelegate.shared?.window?.addSubview(splashVC.view)
+        splashVC.view.frame = PPLSceneDelegate.shared?.window?.bounds ?? .zero
         self.splashVC = splashVC
     }
 

@@ -18,7 +18,7 @@ class PPLStopWatch: ForegroundObserver {
     
     init(withHandler handler: ((Int?) -> Void)? = nil) {
         self.handler = handler
-        PPLSceneDelegate.shared.foregroundObserver = self
+        PPLSceneDelegate.shared?.foregroundObserver = self
     }
     
     func start() {

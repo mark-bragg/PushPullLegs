@@ -15,7 +15,7 @@ import UIKit
 class PPLSceneDelegate: UIResponder, UIWindowSceneDelegate, AdsRemovedResponder {
 
     var window: UIWindow?
-    static var shared: PPLSceneDelegate!
+    static var shared: PPLSceneDelegate?
     weak var foregroundObserver: ForegroundObserver?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -31,7 +31,8 @@ class PPLSceneDelegate: UIResponder, UIWindowSceneDelegate, AdsRemovedResponder 
     }
     
     func adsRemoved() {
-        for subvc in window!.rootViewController!.children {
+        guard let children = window?.rootViewController?.children else { return }
+        for subvc in children {
             guard let nvc = subvc as? UINavigationController else { break }
             if let responder = nvc.children.first as? AdsRemovedResponder {
                 responder.adsRemoved()

@@ -69,7 +69,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     private var windowInterfaceOrientation: UIInterfaceOrientation? {
-        PPLSceneDelegate.shared.window?.windowScene?.interfaceOrientation
+        PPLSceneDelegate.shared?.window?.windowScene?.interfaceOrientation
     }
     
     func reload() {

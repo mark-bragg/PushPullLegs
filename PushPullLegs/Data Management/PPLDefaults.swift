@@ -113,7 +113,7 @@ class PPLDefaults: NSObject {
     
     func disableAds() {
         userDetails?.setValue(false, forKey: kIsAdsEnabled)
-        PPLSceneDelegate.shared.adsRemoved()
+        PPLSceneDelegate.shared?.adsRemoved()
     }
     
     func wasGraphInterstitialShownToday() -> Bool {
