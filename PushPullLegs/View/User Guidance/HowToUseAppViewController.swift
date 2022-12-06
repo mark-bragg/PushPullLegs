@@ -22,6 +22,7 @@ class HowToUseAppViewController: PPLTableViewController {
         super.viewWillAppear(animated)
         guard firstLoad else { return }
         firstLoad = false
+        tableView?.showsVerticalScrollIndicator = true
     }
     
     override func addBannerView(size: STABannerSize) {
@@ -57,7 +58,8 @@ class HowToUseAppViewController: PPLTableViewController {
         tv.text = howToUseAppViewModel().title(indexPath: indexPath)
         tv.isScrollEnabled = false
         tv.isEditable = false
-        tv.font = tv.font?.withSize(20)
+        tv.font = UIFont.systemFont(ofSize: 20)
+        
         howToUseAppViewModel().setHeight(heightForSection(indexPath.section, tv), forRow: indexPath.row)
         cell.contentView.addSubview(tv)
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -65,59 +67,15 @@ class HowToUseAppViewController: PPLTableViewController {
         tv.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
         tv.widthAnchor.constraint(equalTo: cell.contentView.widthAnchor, constant: -32).isActive = true
         tv.heightAnchor.constraint(equalToConstant: howToUseAppViewModel().heightForRow(indexPath.row)).isActive = true
-        if let btn = buttonForCell(cell) {
-            cell.contentView.bringSubviewToFront(btn)
-        } else {
-            
-        }
-        addReadMoreButton(cell, section: indexPath.section)
         return cell
     }
     
     func buttonForCell(_ cell: UITableViewCell) -> UIView? {
-        return cell.contentView.subviews.first(where: { $0.isKind(of: CellExpansionButton.self) })
+        cell.contentView.subviews.first(where: { $0.isKind(of: CellExpansionButton.self) })
     }
     
     private func heightForSection(_ section: Int, _ tv: UITextView) -> CGFloat {
-        if howToUseAppViewModel().isSectionExpanded(section) {
-            return tv.sizeThatFits(CGSize(width: (tableView?.frame.size.width ?? 32) - 32, height: CGFloat.greatestFiniteMagnitude)).height
-        }
-        return 75
-    }
-    
-    func addReadMoreButton(_ cell: UITableViewCell, section: Int) {
-        var btn: CellExpansionButton?
-        if cell.contentView.subviews.contains(where: { $0.isKind(of: CellExpansionButton.self) }) {
-            btn = cell.contentView.subviews.first(where: { $0.isKind(of: CellExpansionButton.self) }) as? CellExpansionButton
-        } else {
-            btn = CellExpansionButton(type: .roundedRect)
-        }
-        guard let btn else { return }
-        btn.setTitleColor(.systemBlue, for: .normal)
-        btn.tag = section + buttonTagConstant
-        btn.isCollapsed = !howToUseAppViewModel().isSectionExpanded(section)
-        btn.sizeToFit()
-        cell.contentView.addSubview(btn)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
-        btn.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor).isActive = true
-        if btn.target(forAction: #selector(expandCollapseCell(_:)), withSender: btn) == nil {
-            btn.addTarget(self, action: #selector(expandCollapseCell), for: .touchUpInside)
-        }
-    }
-    
-    @objc func expandCollapseCell(_ button: CellExpansionButton) {
-        let section = button.tag - buttonTagConstant
-        let rowToScrollTo = button.isCollapsed ? section : 0
-        if button.isCollapsed {
-            howToUseAppViewModel().collapseEverythingExcept(section)
-        } else {
-            howToUseAppViewModel().collapseSection(section)
-        }
-        tableView?.reloadData()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.tableView?.scrollToRow(at: IndexPath(row: 0, section: rowToScrollTo), at: .top, animated: true)
-        }
+        tv.sizeThatFits(CGSize(width: (tableView?.frame.size.width ?? 32) - 32, height: CGFloat.greatestFiniteMagnitude)).height
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
