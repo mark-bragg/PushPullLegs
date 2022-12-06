@@ -30,96 +30,94 @@ class PPLDefaults: NSObject {
         super.init()
         setupUserDetails()
         if !isInstalled() {
-            userDetails.set(true, forKey: self.kIsAdsEnabled)
+            userDetails?.set(true, forKey: kIsAdsEnabled)
         }
     }
     static let instance = PPLDefaults()
-    private var userDetails: UserDefaults!
+    private var userDetails: UserDefaults?
     private var cancellables = [AnyCancellable]()
     
     private func isInstalled() -> Bool {
-        let isInstalled = userDetails.bool(forKey: kIsInstalled)
+        let isInstalled = userDetails?.bool(forKey: kIsInstalled) ?? false
         if !isInstalled {
-            userDetails.set(false, forKey: kUserDetailsKilogramsPounds)
-            userDetails.set(true, forKey: kIsInstalled)
+            userDetails?.set(false, forKey: kUserDetailsKilogramsPounds)
+            userDetails?.set(true, forKey: kIsInstalled)
         }
         return isInstalled
     }
     
     func isKilograms() -> Bool {
-        if isInstalled() {
-            return userDetails.bool(forKey: kUserDetailsKilogramsPounds)
-        }
-        return false
+        guard let isKg = userDetails?.bool(forKey: kUserDetailsKilogramsPounds) else { return false }
+        return isInstalled() ? isKg : false
     }
     
     @objc func setImperialMetric(_ type: MeasurementType) {
-        let oldValue = userDetails.bool(forKey: kUserDetailsKilogramsPounds)
+        guard let oldValue = userDetails?.bool(forKey: kUserDetailsKilogramsPounds) else { return }
         if oldValue && type == .imperial {
-            userDetails.set(false, forKey: kUserDetailsKilogramsPounds)
+            userDetails?.set(false, forKey: kUserDetailsKilogramsPounds)
         } else  if !oldValue && type == .metric {
-            userDetails.set(true, forKey: kUserDetailsKilogramsPounds)
+            userDetails?.set(true, forKey: kUserDetailsKilogramsPounds)
         }
     }
     
     func countdown() -> Int {
-        return userDetails.integer(forKey: kCountdownInt)
+        userDetails?.integer(forKey: kCountdownInt) ?? 0
     }
     
     func setCountdown(_ value: Int) {
-        userDetails.set(value, forKey: kCountdownInt)
+        userDetails?.set(value, forKey: kCountdownInt)
     }
     
     func isWorkoutInProgress() -> Bool {
-        return userDetails.bool(forKey: kWorkoutInProgress)
+        userDetails?.bool(forKey: kWorkoutInProgress) ?? false
     }
     
     func setWorkoutInProgress(_ value: Bool) {
-        userDetails.set(value, forKey: kWorkoutInProgress)
+        userDetails?.set(value, forKey: kWorkoutInProgress)
     }
     
     func exerciseInProgress() -> String? {
-        guard let name = userDetails.string(forKey: kExerciseInProgress) else {
+        guard let name = userDetails?.string(forKey: kExerciseInProgress) else {
             return nil
         }
         return name
     }
     
     func setExerciseInProgress(_ value: String?) {
-        userDetails.set(value, forKey: kExerciseInProgress)
+        userDetails?.set(value, forKey: kExerciseInProgress)
     }
     
     func setupUserDetails() {
         if let details = UserDefaults(suiteName: user_details_suite_name) {
-            userDetails = details
+            userDetails? = details
             setupLaunchCount()
         } else {
             UserDefaults.standard.addSuite(named: user_details_suite_name)
-            userDetails.set(5, forKey: kCountdownInt)
-            userDetails.set(1, forKey: kLaunchCount)
+            userDetails?.set(5, forKey: kCountdownInt)
+            userDetails?.set(1, forKey: kLaunchCount)
             setupUserDetails()
         }
     }
     
     private func setupLaunchCount() {
-        if let launchCount = userDetails.value(forKey:kLaunchCount) as? Int {
-            userDetails.set(launchCount + 1, forKey: kLaunchCount)
+        if let launchCount = userDetails?.value(forKey:kLaunchCount) as? Int {
+            userDetails?.set(launchCount + 1, forKey: kLaunchCount)
         } else {
-            userDetails.set(1, forKey: kLaunchCount)
+            userDetails?.set(1, forKey: kLaunchCount)
         }
     }
     
     func isAdvertisingEnabled() -> Bool {
-        userDetails.bool(forKey: kIsAdsEnabled)
+        userDetails?.bool(forKey: kIsAdsEnabled) ?? false
     }
     
     func disableAds() {
-        userDetails.setValue(false, forKey: kIsAdsEnabled)
+        userDetails?.setValue(false, forKey: kIsAdsEnabled)
         PPLSceneDelegate.shared.adsRemoved()
     }
     
     func wasGraphInterstitialShownToday() -> Bool {
-        guard let date = userDetails.dictionary(forKey: kGraphInterstitalDate)?["date"] as? Date else { return false }
+        guard let date = userDetails?.dictionary(forKey: kGraphInterstitalDate)?["date"] as? Date else { return false }
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yy"
         let dateString = formatter.string(from: date)
@@ -130,19 +128,19 @@ class PPLDefaults: NSObject {
     func graphInterstitialWasJustShown() {
         var dict = [String: Date]()
         dict["date"] = Date()
-        userDetails.setValue(dict, forKey: kGraphInterstitalDate)
+        userDetails?.setValue(dict, forKey: kGraphInterstitalDate)
     }
     
     func setTimerSoundsEnabled(_ enabled: Bool) {
-        userDetails.setValue(enabled, forKey: kTimerSoundsEnabled)
+        userDetails?.setValue(enabled, forKey: kTimerSoundsEnabled)
     }
     
     func areTimerSoundsEnabled() -> Bool {
-        userDetails.bool(forKey: kTimerSoundsEnabled)
+        userDetails?.bool(forKey: kTimerSoundsEnabled) ?? false
     }
     
     func launchCount() -> Int {
-        guard let count = userDetails.value(forKey: kLaunchCount) as? Int else {
+        guard let count = userDetails?.value(forKey: kLaunchCount) as? Int else {
             return 0
         }
         return count
@@ -157,16 +155,16 @@ protocol WeightDefaults {
 
 extension PPLDefaults: WeightDefaults {
     func weightForExerciseWith(name: String) -> Double? {
-        userDetails.value(forKey: name) as? Double
+        userDetails?.value(forKey: name) as? Double
     }
     
     func setWeight(_ weight: Double, forExerciseWithName name: String) {
-        userDetails.set(weight, forKey: name)
+        userDetails?.set(weight, forKey: name)
     }
     
     func deleteDefaultWeightForExerciseWith(name: String?) {
         guard let name = name else { return }
-        userDetails.removeObject(forKey: name)
+        userDetails?.removeObject(forKey: name)
     }
 }
 
@@ -177,11 +175,11 @@ protocol ColorDefaults {
 
 extension PPLDefaults: ColorDefaults {
     func setDefaultColor(_ colorName: String) {
-        userDetails.set(colorName, forKey: kDefaultColor)
+        userDetails?.set(colorName, forKey: kDefaultColor)
         DefaultColorUpdate.notifyObservers()
     }
     
     func getDefaultColor() -> String {
-        (userDetails.value(forKey: kDefaultColor) as? String) ?? "black"
+        (userDetails?.value(forKey: kDefaultColor) as? String) ?? "black"
     }
 }
