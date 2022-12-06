@@ -13,7 +13,8 @@ let interstitialAdID = "ca-app-pub-8150464109183976/1732105336"
 extension String {
     
     func cleanupPeriods() -> String {
-        guard self.contains(where: { CharacterSet.decimalDigits.contains(Unicode.Scalar.init($0.asciiValue!)) }) else { return "" }
+        guard filter({ $0.asciiValue != nil })
+            .contains(where: { CharacterSet.decimalDigits.contains(Unicode.Scalar.init($0.asciiValue!)) }) else { return "" }
         guard let firstIndex = self.firstIndex(where: { $0 == "." }), firstIndex != self.lastIndex(where: { $0 == "." }) else { return self }
         let range = Range<String.Index>(uncheckedBounds: (lower: self.index(after: firstIndex), upper: self.endIndex))
         let correctedText = self.replacingOccurrences(of: ".", with: "", options: [], range: range)
