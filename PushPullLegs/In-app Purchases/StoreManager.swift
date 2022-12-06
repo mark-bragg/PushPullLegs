@@ -27,8 +27,8 @@ protocol StoreManagerDelegate: NSObjectProtocol {
 class StoreManager: NSObject, SKProductsRequestDelegate {
     
     static let shared = StoreManager()
-    private var request: SKProductsRequest!
-    private var availableTransactions: Set<IAPTransaction>!
+    private var request: SKProductsRequest?
+    private var availableTransactions: Set<IAPTransaction>?
     private let certificate = "AppleIncRootCertificate"
     private var adDisabler: (() -> Void)?
     private var failedPurchaseHandler: (() -> Void)?
@@ -43,8 +43,8 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
         guard PPLDefaults.instance.isAdvertisingEnabled() else { return }
         preparingToDisableAds = true
         request = SKProductsRequest(productIdentifiers: [IAPProductId.kDisableAds.rawValue])
-        request.delegate = self
-        request.start()
+        request?.delegate = self
+        request?.start()
     }
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
@@ -58,18 +58,25 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
     
     private func prepareTransaction(_ product: SKProduct) {
         availableTransactions = Set()
-        availableTransactions.insert(IAPTransaction(product))
+        availableTransactions?.insert(IAPTransaction(product))
     }
     
     func startDisableAdsTransaction() {
         isPurchasing = true
-        guard let transaction = availableTransactions.first(where: { $0.product.productIdentifier == IAPProductId.kDisableAds.rawValue }) else { return }
+        guard
+            let transaction = availableTransactions?
+                .first(where: { $0.product.productIdentifier == IAPProductId.kDisableAds.rawValue })
+        else { return }
         transaction.begin()
     }
     
     func handlePurchased(_ transaction: SKPaymentTransaction) {
-        guard isPurchasing, let purchase = availableTransactions.first(where: { $0.product.productIdentifier == transaction.payment.productIdentifier }) else { return }
-        availableTransactions.remove(purchase)
+        guard
+            isPurchasing,
+            let purchase = availableTransactions?
+                .first(where: { $0.product.productIdentifier == transaction.payment.productIdentifier })
+        else { return }
+        availableTransactions?.remove(purchase)
         SKPaymentQueue.default().finishTransaction(transaction)
         if purchase.product.productIdentifier == IAPProductId.kDisableAds.rawValue {
             PPLDefaults.instance.disableAds()
