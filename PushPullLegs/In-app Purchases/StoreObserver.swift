@@ -12,7 +12,6 @@ import StoreKit
 class StoreObserver: NSObject, SKPaymentTransactionObserver {
 
     static let shared = StoreObserver()
-    @Published private(set) var restored: Bool!
     
     var isAuthorizedForPayments: Bool {
         SKPaymentQueue.canMakePayments()
