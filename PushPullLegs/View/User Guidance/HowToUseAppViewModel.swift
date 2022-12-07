@@ -59,8 +59,8 @@ class HowToUseAppViewModel: NSObject, PPLTableViewModel {
         return "How to Use the App"
     }
     
-    func setHeight(_ height: CGFloat, forRow row: Int) {
-        rowHeights[row] = height
+    func setHeight(_ height: CGFloat, forSection section: Int) {
+        rowHeights[section] = height
     }
     
     func heightForRow(_ row: Int) -> CGFloat {

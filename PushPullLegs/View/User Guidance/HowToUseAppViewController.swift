@@ -12,6 +12,7 @@ class HowToUseAppViewController: PPLTableViewController {
 
     private let buttonTagConstant = 123
     private var firstLoad = true
+    private let reuseId = "reuseId"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,7 @@ class HowToUseAppViewController: PPLTableViewController {
         guard firstLoad else { return }
         firstLoad = false
         tableView?.showsVerticalScrollIndicator = true
+        tableView?.register(UITableViewCell.self, forCellReuseIdentifier: reuseId)
     }
     
     override func addBannerView(size: STABannerSize) {
@@ -33,16 +35,16 @@ class HowToUseAppViewController: PPLTableViewController {
         0
     }
     
-    func howToUseAppViewModel() -> HowToUseAppViewModel {
-        viewModel as? HowToUseAppViewModel ?? HowToUseAppViewModel()
+    var howToUseAppViewModel: HowToUseAppViewModel? {
+        viewModel as? HowToUseAppViewModel
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        howToUseAppViewModel().sectionCount()
+        howToUseAppViewModel?.sectionCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        howToUseAppViewModel().titleForSection(section)
+        howToUseAppViewModel?.titleForSection(section)
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -50,45 +52,40 @@ class HowToUseAppViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath)
         cell.contentView.backgroundColor = PPLColor.primary
-        let tv = UITextView()
-        tv.backgroundColor = .clear
-        tv.textColor = .white
-        tv.text = howToUseAppViewModel().title(indexPath: indexPath)
-        tv.isScrollEnabled = false
-        tv.isEditable = false
-        tv.font = UIFont.systemFont(ofSize: 20)
-        
-        howToUseAppViewModel().setHeight(heightForSection(indexPath.section, tv), forRow: indexPath.row)
-        cell.contentView.addSubview(tv)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
-        tv.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
-        tv.widthAnchor.constraint(equalTo: cell.contentView.widthAnchor, constant: -32).isActive = true
-        tv.heightAnchor.constraint(equalToConstant: howToUseAppViewModel().heightForRow(indexPath.row)).isActive = true
+        addTextView(to: cell, at: indexPath)
         return cell
     }
     
-    func buttonForCell(_ cell: UITableViewCell) -> UIView? {
-        cell.contentView.subviews.first(where: { $0.isKind(of: CellExpansionButton.self) })
+    private func addTextView(to cell: UITableViewCell, at indexPath: IndexPath) {
+        let tv = cell.contentView.subviews.first { $0.isKind(of: UITextView.self) } as? UITextView ?? getNewTextView(at: indexPath)
+        tv.text = howToUseAppViewModel?.title(indexPath: indexPath)
+        howToUseAppViewModel?.setHeight(heightForTextView(tv), forSection: indexPath.section)
+        tv.frame = CGRect(x: 16, y: 0, width: cell.contentView.frame.width - 16, height: heightForRow(at: indexPath))
+        cell.contentView.addSubview(tv)
     }
     
-    private func heightForSection(_ section: Int, _ tv: UITextView) -> CGFloat {
+    private func getNewTextView(at indexPath: IndexPath) -> UITextView {
+        let tv = UITextView()
+        tv.backgroundColor = .clear
+        tv.textColor = .white
+        tv.isScrollEnabled = false
+        tv.isEditable = false
+        tv.font = UIFont.systemFont(ofSize: 20)
+        return tv
+    }
+    
+    private func heightForTextView(_ tv: UITextView) -> CGFloat {
         tv.sizeThatFits(CGSize(width: (tableView?.frame.size.width ?? 32) - 32, height: CGFloat.greatestFiniteMagnitude)).height
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        howToUseAppViewModel().heightForRow(indexPath.row)
+        heightForRow(at: indexPath)
+    }
+    
+    private func heightForRow(at indexPath: IndexPath) -> CGFloat {
+        howToUseAppViewModel?.heightForRow(indexPath.section) ?? 0
     }
 
-}
-
-class CellExpansionButton: UIButton {
-    var indexPath: IndexPath?
-    var isCollapsed = true {
-        willSet {
-            setTitle(newValue ? "Continue Reading" : "Finished", for: .normal)
-        }
-    }
 }
