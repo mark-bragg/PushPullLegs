@@ -139,10 +139,9 @@ extension StartWorkoutViewController: SplashViewControllerDelegate {
     func splashViewControllerDidDisappear(_ splash: SplashViewController) {
         splash.view.removeFromSuperview()
         splashVC = nil
-        StoreManager.shared.delegate = self
         let launchCount = PPLDefaults.instance.launchCount()
         if launchCount == 1 || (launchCount < 100 && launchCount % 10 == 0) {
-            StoreManager.shared.prepareToDisableAds()
+            StoreManager.shared.prepareToDisableAds(self)
         }
     }
 }

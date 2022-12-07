@@ -39,8 +39,9 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
     
     // MARK: purchase
     
-    func prepareToDisableAds() {
+    func prepareToDisableAds(_ delegate: StoreManagerDelegate) {
         guard PPLDefaults.instance.isAdvertisingEnabled() else { return }
+        self.delegate = delegate
         preparingToDisableAds = true
         request = SKProductsRequest(productIdentifiers: [IAPProductId.kDisableAds.rawValue])
         request?.delegate = self

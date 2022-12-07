@@ -182,7 +182,7 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
                 self.removeSpinner()
             }))
             alert.addAction(UIAlertAction(title: "Continue", style: .default, handler: { action in
-                StoreManager.shared.startDisableAdsTransaction()
+                StoreManager.shared.prepareToDisableAds(self)
             }))
             self.present(alert, animated: true, completion: nil)
         } else if rowId == .restorePurchases {
@@ -271,5 +271,11 @@ extension UISegmentedControl {
         segment.selectedSegmentTintColor = PPLColor.primary
         segment.backgroundColor = .pplGray
         return segment
+    }
+}
+
+extension AppConfigurationViewController: StoreManagerDelegate {
+    func storeManagerPreparedDisableAdsSuccessfully(_ manager: StoreManager) {
+        StoreManager.shared.startDisableAdsTransaction()
     }
 }
