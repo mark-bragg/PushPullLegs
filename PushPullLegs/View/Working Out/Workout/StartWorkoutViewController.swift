@@ -140,7 +140,7 @@ extension StartWorkoutViewController: SplashViewControllerDelegate {
         splash.view.removeFromSuperview()
         splashVC = nil
         let launchCount = PPLDefaults.instance.launchCount()
-        if launchCount == 1 || (launchCount < 100 && launchCount % 10 == 0) {
+        if launchCount == 5 || (launchCount < 105 && launchCount % 13 == 0) {
             StoreManager.shared.prepareToDisableAds(self)
         }
     }

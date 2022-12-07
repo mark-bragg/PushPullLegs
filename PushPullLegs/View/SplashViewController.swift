@@ -14,6 +14,7 @@ import UIKit
 
 class SplashViewController: UIViewController {
     
+    private var didDisappear = false
     weak var backgroundView: UIView?
     weak var imageView: UIImageView?
     weak var delegate: SplashViewControllerDelegate?
@@ -27,6 +28,7 @@ class SplashViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        didDisappear = false
         addBackgroundView()
         addImageView()
         view.frame = view.superview?.bounds ?? .zero
@@ -90,6 +92,8 @@ class SplashViewController: UIViewController {
     }
     
     private func disappear() {
+        guard !didDisappear else { return }
+        didDisappear = true
         UIView.animate(withDuration: TimeInterval(0.67), delay: TimeInterval(0.33)) {
             self.backgroundView?.alpha = 0
             self.imageView?.frame = CGRect(x: self.view.frame.width/2, y: self.view.frame.height/2, width: 1, height: 1)

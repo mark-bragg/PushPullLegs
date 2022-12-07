@@ -75,7 +75,7 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
         guard
             isPurchasing,
             let purchase = availableTransactions?
-                .first(where: { $0.product.productIdentifier == transaction.payment.productIdentifier })
+                .first(where: { $0.product.productIdentifier == transaction.payment.productIdentifier } )
         else { return }
         availableTransactions?.remove(purchase)
         SKPaymentQueue.default().finishTransaction(transaction)
