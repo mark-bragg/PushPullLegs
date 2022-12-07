@@ -173,7 +173,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     func addGraphView() {
-        let graph = GraphView(frame: CGRect(x: padding, y: yForGraph(), width: widthForGraphView(), height: heightForGraph()))
+        let graph = GraphView(frame: CGRect(x: padding, y: 0, width: widthForGraphView(), height: heightForGraph()))
         graph.smallDisplay = !isInteractive
         containerView?.addSubview(graph)
         if isInteractive {
@@ -198,17 +198,12 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         graph.circleLineY = heightForLabelStack - (isLandscape() ? 0 : 50)
     }
     
-    func yForGraph() -> CGFloat {
-        guard let labelStack = labelStack else { return 0 }
-        return labelStack.frame.origin.y + labelStack.frame.height
-    }
-    
     private func widthForGraphView() -> CGFloat {
         (containerView?.frame.width ?? view.frame.width) - padding * 2
     }
     
     func heightForGraph() -> CGFloat {
-        (containerView?.frame.height ?? view.frame.height) - yForGraph() - padding
+        (containerView?.frame.height ?? view.frame.height) - padding
     }
     
     func bind() {

@@ -216,7 +216,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     func convertToGraphY(_ oldY: CGFloat) -> CGFloat {
-        return CGFloat(frame.height) - CGFloat(oldY) * CGFloat(frame.height)
+        (CGFloat(frame.height) - CGFloat(oldY) * CGFloat(frame.height * 0.9))
     }
     
     private func origin() -> CGPoint {
