@@ -269,12 +269,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
 }
 
-extension ExerciseViewController: ArrowHelperDataSource {
-    func arrowCenterX() -> CGFloat {
-        view.frame.width - 15 - addButtonSize.width/2
-    }
-}
-
 protocol SetNavigationControllerDelegate {
     func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController)
 }
