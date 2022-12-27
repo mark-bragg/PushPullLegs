@@ -22,6 +22,11 @@ class ExerciseTemplateListViewController: PPLTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView?.allowsSelection = false
+        setupRightBarButtonItems()
+    }
+    
+    override func getRightBarButtonItems() -> [UIBarButtonItem] {
+        [addButtonItem()]
     }
     
     private var exerciseTemplateListViewModel: ExerciseTemplateListViewModel? {

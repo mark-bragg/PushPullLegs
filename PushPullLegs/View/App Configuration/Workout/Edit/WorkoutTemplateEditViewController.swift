@@ -15,6 +15,11 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupRightBarButtonItems()
+    }
+    
+    override func getRightBarButtonItems() -> [UIBarButtonItem] {
+        [addButtonItem()]
     }
     
     override func addAction() {
