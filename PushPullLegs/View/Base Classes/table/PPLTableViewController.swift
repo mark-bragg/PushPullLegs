@@ -14,8 +14,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     var viewModel: PPLTableViewModel?
     weak var tableView: PPLTableView?
     weak var noDataView: NoDataView?
-    let addButtonSize = CGSize(width: 75, height: 75)
-    weak var addButtonHelperVc: ArrowHelperViewController?
     private let tableViewTag = 1776
     var cancellables: Set<AnyCancellable> = []
     private var topConstraint: NSLayoutConstraint?
@@ -190,10 +188,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         let headerViewContainer = HeaderViewContainer(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: headerHeight))
         headerViewContainer.headerView = headerView
         return headerViewContainer
-    }
-    
-    func removeAddButton() {
-        hideNoDataView()
     }
     
     func setupRightBarButtonItems() {
