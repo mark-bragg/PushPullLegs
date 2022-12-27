@@ -109,6 +109,7 @@
 		49E675FC244CDA83001F5974 /* ExerciseSelectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E675FB244CDA83001F5974 /* ExerciseSelectionViewModelTests.swift */; };
 		49E675FE244CDAB6001F5974 /* ExerciseSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E675FD244CDAB6001F5974 /* ExerciseSelectionViewModel.swift */; };
 		49E67600244CECC8001F5974 /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E675FF244CECC8001F5974 /* DBHelper.swift */; };
+		49E8932F295B759900B99345 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8932E295B759900B99345 /* AccessibilityIdentifiers.swift */; };
 		49EF4B7923F8381F0071687D /* PPLAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */; };
 		49EF4B7B23F8381F0071687D /* PPLSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */; };
 		49EF4B8523F838370071687D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8423F838370071687D /* Assets.xcassets */; };
@@ -256,6 +257,7 @@
 		49E675FB244CDA83001F5974 /* ExerciseSelectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSelectionViewModelTests.swift; sourceTree = "<group>"; };
 		49E675FD244CDAB6001F5974 /* ExerciseSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSelectionViewModel.swift; sourceTree = "<group>"; };
 		49E675FF244CECC8001F5974 /* DBHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
+		49E8932E295B759900B99345 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
 		49EF4B7523F8381F0071687D /* PushPullLegs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushPullLegs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAppDelegate.swift; sourceTree = "<group>"; };
 		49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLSceneDelegate.swift; sourceTree = "<group>"; };
@@ -414,6 +416,7 @@
 				4989BA5424B94344001C17B3 /* AppColors.swift */,
 				49F6083E254DFF1700407D0A /* AppImages.swift */,
 				494B3E212718ED0D0085058C /* PushPullLegs-Bridging-Header.h */,
+				49E8932E295B759900B99345 /* AccessibilityIdentifiers.swift */,
 			);
 			path = "Utility Closet";
 			sourceTree = "<group>";
@@ -1184,6 +1187,7 @@
 				49F60844254E009700407D0A /* ArrowViewDimensions.swift in Sources */,
 				49C8D24124A99E0000B361C7 /* PPLDefaults.swift in Sources */,
 				4980D9AC25A42A4D0054EA5F /* InterstitialAdController.swift in Sources */,
+				49E8932F295B759900B99345 /* AccessibilityIdentifiers.swift in Sources */,
 				49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */,
 				491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */,
 				492B645F26D4B7220004171D /* UnilateralExerciseViewController.swift in Sources */,

@@ -33,7 +33,7 @@ class WorkoutLogViewController: DatabaseTableViewController {
         reload()
     }
     
-    override func addAction(_ sender: Any) {
+    override func addAction() {
         presentAddWorkoutSelection()
     }
     

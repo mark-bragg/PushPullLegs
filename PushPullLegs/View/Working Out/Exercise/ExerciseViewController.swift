@@ -14,7 +14,7 @@ protocol ExercisingViewController: UIViewController {
     var exerciseSetViewModel: ExerciseSetViewModel? { get set }
 }
 
-class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, UIAdaptivePresentationControllerDelegate, SetNavigationControllerDelegate {
+class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelDelegate, ExercisingViewController, SetNavigationControllerDelegate {
 
     weak var weightCollector: WeightCollectionViewController?
     weak var exerciseTimer: ExerciseTimerViewController?
@@ -52,16 +52,29 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     private func exercisingRightBarButtonItems() -> [UIBarButtonItem] {
         var items = [UIBarButtonItem]()
         guard let exerciseViewModel else { return items }
+        items.append(addButtonItem())
         if exerciseViewModel.hasData() {
-            items.append(UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:))))
+            items.append(editItem())
         }
         if exerciseViewModel.previousExercise != nil {
-            items.append(UIBarButtonItem(title: "Previous", style: .plain, target: self, action: #selector(presentPreviousPerformance(_:))))
+            items.append(previousItem())
         }
         return items
     }
     
-    @objc func presentPreviousPerformance(_ sender: Any?) {
+    private func editItem() -> UIBarButtonItem {
+        let item = UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit))
+        item.accessibilityIdentifier = .edit
+        return item
+    }
+    
+    private func previousItem() -> UIBarButtonItem {
+        let item = UIBarButtonItem(title: "Previous", style: .plain, target: self, action: #selector(presentPreviousPerformance))
+        item.accessibilityIdentifier = item.title
+        return item
+    }
+    
+    @objc func presentPreviousPerformance() {
         guard
             let exerciseViewModel,
             let previousExercise = exerciseViewModel.previousExercise,
@@ -110,8 +123,8 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         return .done
     }
     
-    override func addAction(_ sender: Any) {
-        super.addAction(sender)
+    override func addAction() {
+        super.addAction()
         prepareExerciseSetViewModel()
         let wc = WeightCollectionViewController()
         let setNavController = SetNavigationController(rootViewController: wc)
@@ -211,6 +224,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         vc.presentationController?.delegate = self
     }
     
+    // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         if let _ = presentationController.presentedViewController as? SetNavigationController, let exerciseSetViewModel {
             if exerciseSetViewModel.completedExerciseSet {

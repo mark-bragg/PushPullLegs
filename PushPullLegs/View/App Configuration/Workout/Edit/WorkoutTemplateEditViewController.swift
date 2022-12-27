@@ -17,8 +17,8 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
         super.viewWillAppear(animated)
     }
     
-    override func addAction(_ sender: Any) {
-        super.addAction(sender)
+    override func addAction() {
+        super.addAction()
         let vc = ExerciseTemplateCreationViewController()
         if let type = workoutTemplateEditViewModel?.exerciseType, let tempMgmt = workoutTemplateEditViewModel?.templateManagement {
             let vm = ExerciseTemplateCreationViewModel(withType: type, management: tempMgmt)

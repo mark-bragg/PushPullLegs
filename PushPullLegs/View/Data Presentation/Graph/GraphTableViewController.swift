@@ -242,8 +242,9 @@ class GraphTableViewController: PPLTableViewController {
     
 }
 
-extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
-    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+// MARK: - UIAdaptivePresentationControllerDelegate
+extension GraphTableViewController {
+    override func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
         popoverPresentationController.permittedArrowDirections = .right
         guard let cell = tableView?.cellForRow(at: IndexPath(row: helpTag, section: 0)) as? PPLTableViewCell else {
             return
@@ -251,7 +252,7 @@ extension GraphTableViewController: UIPopoverPresentationControllerDelegate {
         popoverPresentationController.sourceView = cell.indicator
     }
 
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+    override func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
 }

@@ -12,13 +12,13 @@ class UnilateralExerciseViewController: ExerciseViewController {
     
     private var isPresentingPrevious = false
     
-    override func addAction(_ sender: Any) {
-        unilateralAddActionResponse(sender) {
-            super.addAction(sender)
+    override func addAction() {
+        unilateralAddActionResponse {
+            super.addAction()
         }
     }
     
-    override func presentPreviousPerformance(_ sender: Any?) {
+    override func presentPreviousPerformance() {
         isPresentingPrevious = true
         guard
             let previousExercise = (viewModel as? ExerciseViewModel)?.previousExercise,
@@ -64,7 +64,7 @@ extension ExerciseViewController {
         section == 0 ? HandSide.left.rawValue : HandSide.right.rawValue
     }
     
-    func unilateralAddActionResponse(_ sender: Any, completion: @escaping () -> Void) {
+    func unilateralAddActionResponse(completion: @escaping () -> Void) {
         let alert = UIAlertController(title: "Which side are you lifting?", message: nil, preferredStyle: .actionSheet)
         alert.addAction(alertAction(.left, completion: completion))
         alert.addAction(alertAction(.right, completion: completion))

@@ -24,9 +24,9 @@ class DBUnilateralExerciseViewController: DBExerciseViewController {
         return vm.rowCount(section: section) > 0 ? super.tableView(tableView, heightForHeaderInSection: section) : 0
     }
     
-    override func addAction(_ sender: Any) {
-        unilateralAddActionResponse(sender) {
-            super.addAction(sender)
+    override func addAction() {
+        unilateralAddActionResponse {
+            super.addAction()
         }
     }
 }
