@@ -11,7 +11,7 @@ import Combine
 
 let defaultCellIdentifier = "DefaultTableViewCell"
 
-class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentationControllerDelegate {
+class AppConfigurationViewController: PPLTableViewController {
     
     private weak var countdownLabel: UILabel?
     private var interstitial: NSObject?
@@ -226,11 +226,11 @@ class AppConfigurationViewController: PPLTableViewController, UIPopoverPresentat
         return 0
     }
     
-    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+    override func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
         popoverPresentationController.permittedArrowDirections = []
     }
     
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+    override func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
     

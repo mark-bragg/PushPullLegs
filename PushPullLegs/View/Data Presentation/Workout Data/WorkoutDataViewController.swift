@@ -22,8 +22,14 @@ class WorkoutDataViewController: DatabaseTableViewController {
     
     override func getRightBarButtonItems() -> [UIBarButtonItem] {
         var items = super.getRightBarButtonItems()
-        items.append(UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(presentNoteViewController)))
+        items.append(noteButtonItem())
         return items
+    }
+    
+    private func noteButtonItem() -> UIBarButtonItem {
+        let item = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(presentNoteViewController))
+        item.accessibilityIdentifier = .note
+        return item
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -62,8 +68,8 @@ class WorkoutDataViewController: DatabaseTableViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    override func addAction(_ sender: Any) {
-        super.addAction(sender)
+    override func addAction() {
+        super.addAction()
         guard let workoutDataViewModel, let type = workoutDataViewModel.exerciseType else { return }
         let esvm = ExerciseSelectionViewModel(withType: type, templateManagement: TemplateManagement(), dataSource: workoutDataViewModel)
         exerciseSelectionViewModel = esvm

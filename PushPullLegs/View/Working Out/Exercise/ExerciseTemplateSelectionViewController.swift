@@ -93,7 +93,8 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
 }
 
-extension ExerciseTemplateSelectionViewController: UIAdaptivePresentationControllerDelegate {
+// MARK: - UIAdaptivePresentationControllerDelegate
+extension ExerciseTemplateSelectionViewController {
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         
     }

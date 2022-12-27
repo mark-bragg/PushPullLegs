@@ -15,12 +15,12 @@ class DBExerciseViewController: ExerciseViewController {
         super.viewWillAppear(animated)
     }
     
-    @objc override func edit(_ sender: Any?) {
+    @objc override func edit() {
         let isEditing = !(tableView?.isEditing ?? true)
         tableView?.setEditing(isEditing, animated: false)
         if isEditing {
             navigationItem.rightBarButtonItems = nil
-            navigationItem.rightBarButtonItem = dbViewModel.hasData() ? UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:))) : nil
+            navigationItem.rightBarButtonItem = dbViewModel.hasData() ? UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit)) : nil
         } else {
             setupRightBarButtonItems()
         }

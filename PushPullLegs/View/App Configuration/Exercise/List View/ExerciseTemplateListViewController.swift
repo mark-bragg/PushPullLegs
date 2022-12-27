@@ -12,7 +12,7 @@ fileprivate let PushTag = 1
 fileprivate let PullTag = 2
 fileprivate let LegsTag = 3
 
-class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePresentationControllerDelegate {
+class ExerciseTemplateListViewController: PPLTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,8 +21,12 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupAddButton()
         tableView?.allowsSelection = false
+        setupRightBarButtonItems()
+    }
+    
+    override func getRightBarButtonItems() -> [UIBarButtonItem] {
+        [addButtonItem()]
     }
     
     private var exerciseTemplateListViewModel: ExerciseTemplateListViewModel? {
@@ -55,8 +59,8 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
         return exerciseTemplateListViewModel?.titleForSection(section)
     }
     
-    override func addAction(_ sender: Any) {
-        super.addAction(sender)
+    override func addAction() {
+        super.addAction()
         guard let exerciseTemplateListViewModel else { return }
         let vc = ExerciseTemplateCreationViewController()
         vc.showExerciseType = true

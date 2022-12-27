@@ -14,7 +14,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     var viewModel: PPLTableViewModel?
     weak var tableView: PPLTableView?
     weak var noDataView: NoDataView?
-    weak var addButton: PPLAddButton?
     let addButtonSize = CGSize(width: 75, height: 75)
     weak var addButtonHelperVc: ArrowHelperViewController?
     private let tableViewTag = 1776
@@ -35,10 +34,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         if let ndv = noDataView {
             ndv.removeFromSuperview()
             noDataView = nil
-        }
-        if let btn = addButton {
-            btn.removeFromSuperview()
-            addButton = nil
         }
         removeBanner()
         setupViews()
@@ -116,43 +111,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if addButton != nil, let vm = viewModel, !vm.hasData() {
-            insertAddButtonInstructions()
-        }
-    }
-    
-    func insertAddButtonInstructions(_ dataSource: ArrowHelperDataSource? = nil) {
-        guard let addButton else { return }
-        if addButtonHelperVc != nil {
-            removeAddButtonInstructions()
-        }
-        let addButtonHelperVc = ArrowHelperViewController()
-        addButtonHelperVc.dataSource = dataSource
-        addButtonHelperVc.bottomY = addButton.frame.origin.y
-        addButtonHelperVc.centerX_arrowView = addButton.center.x
-        addChild(addButtonHelperVc)
-        self.addButtonHelperVc = addButtonHelperVc
-        if addButtonHelperVc.view.superview == nil {
-            view.addSubview(addButtonHelperVc.view)
-            activateAddHelperConstraints(true)
-        }
-        addButtonHelperVc.didMove(toParent: self)
-    }
-    
-    func removeAddButtonInstructions() {
-        guard let addButtonHelperVc else { return }
-        addButtonHelperVc.willMove(toParent: nil)
-        activateAddHelperConstraints(false)
-        addButtonHelperVc.view.removeFromSuperview()
-        addButtonHelperVc.removeFromParent()
-        self.addButtonHelperVc = nil
-    }
-    
-    func activateAddHelperConstraints(_ activation: Bool) {
-        guard let addButtonHelperVc, let addButton else { return }
-        addButtonHelperVc.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = activation
-        addButtonHelperVc.view.bottomAnchor.constraint(equalTo: addButton.topAnchor).isActive = activation
-        addButtonHelperVc.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = activation
     }
     
     override func viewDidLayoutSubviews() {
@@ -167,7 +125,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         showNoDataView()
     }
     
-    @objc func addAction(_ sender: Any) {
+    @objc func addAction() {
         // no-op
     }
     
@@ -180,33 +138,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         if let nvc = navigationController {
             hidesBottomBarWhenPushed = nvc.viewControllers[0] != self
         }
-    }
-    
-    func setupAddButton() {
-        attachAddButton()
-        positionAddButton()
-        showNoDataView()
-    }
-    
-    private func attachAddButton() {
-        guard addButton == nil else {
-            return
-        }
-        let button = PPLAddButton(frame: .zero)
-        button.addTarget(self, action: #selector(addAction(_:)), for: .touchUpInside)
-        view.addSubview(button)
-        addButton = button
-    }
-    
-    func positionAddButton() {
-        guard let addButton else { return }
-        let y: CGFloat = -15
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
-        addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
-        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: y).isActive = true
-        addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: y).isActive = true
-        view.bringSubviewToFront(addButton)
     }
     
     fileprivate func addBackNavigationGesture() {
@@ -263,8 +194,100 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     func removeAddButton() {
         hideNoDataView()
-        addButton?.removeTarget(self, action: #selector(addAction(_:)), for: .touchUpInside)
-        addButton?.removeFromSuperview()
+    }
+    
+    func setupRightBarButtonItems() {
+        navigationItem.rightBarButtonItem = nil
+        let rightButtons = getRightBarButtonItems()
+        if rightButtons.count > 2 {
+            if let add = rightButtons.first(where: { $0.accessibilityIdentifier == .add }) {
+                setupDropdownItems()
+                navigationItem.rightBarButtonItems = [add, dropdownBarButtonItem()]
+            }
+        } else {
+            navigationItem.rightBarButtonItems = rightButtons
+        }
+    }
+    
+    private func setupDropdownItems() {
+        let items = getRightBarButtonItems().filter { $0.accessibilityIdentifier != .add }
+        dropdownItems = []
+        for item in items {
+            if let target = item.target, let action = item.action, let name = item.accessibilityIdentifier {
+                dropdownItems.append(PPLDropdownItem(target: target, action: action, name: name))
+            }
+        }
+    }
+    
+    private var dropdownItems: [PPLDropdownItem] = []
+    
+    func dropdownBarButtonItem() -> UIBarButtonItem {
+        let ellipsisImage = UIImage(systemName: "ellipsis", variableValue: 1, configuration: UIImage.SymbolConfiguration(weight: .regular))?.withTintColor(.tintColor, renderingMode: .alwaysOriginal)
+        let dropdown = UIBarButtonItem(image: ellipsisImage, style: .plain, target: self, action: #selector(showDropdown(_:)))
+        return dropdown
+    }
+    
+    @objc func showDropdown(_ sender: Any) {
+        let vc = PPLDropDownViewController()
+        vc.dataSource = self
+        vc.delegate = self
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
+        vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.clear
+        vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.clear
+        present(vc, animated: true, completion: nil)
+    }
+    
+    func getRightBarButtonItems() -> [UIBarButtonItem] {
+        return []
+    }
+    
+    func addButtonItem() -> UIBarButtonItem {
+        let btn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction))
+        btn.accessibilityIdentifier = "Add"
+        return btn
+    }
+}
+
+class PPLDropdownItem {
+    let target: AnyObject
+    let action: Selector
+    let name: String
+    
+    init(target: AnyObject, action: Selector, name: String) {
+        self.target = target
+        self.action = action
+        self.name = name
+    }
+}
+
+extension PPLTableViewController: UIPopoverPresentationControllerDelegate {
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        popoverPresentationController.permittedArrowDirections = .up
+        guard let item = navigationItem.rightBarButtonItems?.first(where: { $0.accessibilityIdentifier != .add }) else {
+            return
+        }
+        popoverPresentationController.barButtonItem = item
+    }
+
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        .none
+    }
+}
+
+extension PPLTableViewController: PPLDropdownViewControllerDelegate, PPLDropdownViewControllerDataSource {
+    func names() -> [String] {
+        getRightBarButtonItems()
+            .filter { $0.accessibilityIdentifier != .add }
+            .map { $0.accessibilityIdentifier ?? "" }
+    }
+    
+    func didSelectName(_ name: String) {
+        dismiss(animated: true) {
+            if let selectedItem = self.dropdownItems.first(where: { $0.name == name }) {
+                let _ = selectedItem.target.perform(selectedItem.action)
+            }
+        }
     }
 }
 
@@ -295,14 +318,10 @@ extension PPLTableViewController: UITableViewDataSource {
 extension PPLTableViewController: ReloadProtocol {
     @objc func reload() {
         if let viewModel, viewModel.hasData() {
-            if let btn = addButton, btn.superview == view {
-                removeAddButtonInstructions()
-            }
             hideNoDataView()
             tableView?.reloadData()
             view.backgroundColor = PPLColor.primary
         } else {
-            insertAddButtonInstructions()
             showNoDataView()
         }
     }

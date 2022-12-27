@@ -38,10 +38,9 @@ class WorkoutViewController: PPLTableViewController {
             navigateToExercise()
         }
         workoutEditViewModel.reload()
-        setupAddButton()
         reload()
+        setupRightBarButtonItems()
         navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel?.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
-        navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(presentNoteViewController)), animated: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -49,8 +48,16 @@ class WorkoutViewController: PPLTableViewController {
         firstLoad = false
     }
     
-    override func addAction(_ sender: Any) {
-        super.addAction(sender)
+    override func getRightBarButtonItems() -> [UIBarButtonItem] {
+        [addButtonItem(), noteButtonItem()]
+    }
+    
+    private func noteButtonItem() -> UIBarButtonItem {
+        UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(presentNoteViewController))
+    }
+    
+    override func addAction() {
+        super.addAction()
         if let esvm = exerciseSelectionViewModel, esvm.rowCount(section: 0) > 0 {
             let vc = ExerciseTemplateSelectionViewController()
             vc.viewModel = exerciseSelectionViewModel

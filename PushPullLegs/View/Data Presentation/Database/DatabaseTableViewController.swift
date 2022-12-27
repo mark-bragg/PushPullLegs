@@ -21,19 +21,16 @@ class DatabaseTableViewController: PPLTableViewController {
         setupRightBarButtonItems()
     }
     
-    @objc func edit(_ sender: Any?) {
+    @objc func edit() {
         let isEditing = !(tableView?.isEditing ?? false)
         tableView?.setEditing(isEditing, animated: false)
         if isEditing, let viewModel = viewModel {
             navigationItem.rightBarButtonItems = nil
-            navigationItem.rightBarButtonItem = viewModel.hasData() ? UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit(_:))) : nil
+            navigationItem.rightBarButtonItem = viewModel.hasData() ? UIBarButtonItem(barButtonSystemItem: isEditing ? .done : .edit, target: self, action: #selector(edit)) : nil
         } else {
             setupRightBarButtonItems()
         }
         tableView?.reloadData()
-        if let btn = addButton {
-            btn.isHidden = isEditing
-        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -59,19 +56,15 @@ class DatabaseTableViewController: PPLTableViewController {
     override func reload() {
         super.reload()
         if let tblv = tableView, tblv.isEditing, let vm = viewModel, !vm.hasData() {
-            edit(self)
+            edit()
         }
     }
     
-    func setupRightBarButtonItems() {
-        navigationItem.rightBarButtonItem = nil
-        navigationItem.rightBarButtonItems = getRightBarButtonItems()
-    }
-    
-    func getRightBarButtonItems() -> [UIBarButtonItem] {
-        let addBtnItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction(_:)))
+    override func getRightBarButtonItems() -> [UIBarButtonItem] {
+        let addBtnItem = addButtonItem()
         if let vm = viewModel, vm.hasData() {
-            let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit(_:)))
+            let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
+            editBtnItem.accessibilityIdentifier = .edit
             return [addBtnItem, editBtnItem]
         } else {
             return [addBtnItem]
