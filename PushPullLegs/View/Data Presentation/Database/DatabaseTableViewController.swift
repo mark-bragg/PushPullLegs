@@ -60,12 +60,12 @@ class DatabaseTableViewController: PPLTableViewController {
         }
     }
     
-    func setupRightBarButtonItems() {
+    override func setupRightBarButtonItems() {
         navigationItem.rightBarButtonItem = nil
         navigationItem.rightBarButtonItems = getRightBarButtonItems()
     }
     
-    func getRightBarButtonItems() -> [UIBarButtonItem] {
+    override func getRightBarButtonItems() -> [UIBarButtonItem] {
         let addBtnItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction(_:)))
         if let vm = viewModel, vm.hasData() {
             let editBtnItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit(_:)))

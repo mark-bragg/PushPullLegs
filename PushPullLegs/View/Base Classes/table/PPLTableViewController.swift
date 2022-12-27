@@ -195,6 +195,14 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     func removeAddButton() {
         hideNoDataView()
     }
+    
+    func setupRightBarButtonItems() {
+        // no op
+    }
+    
+    func getRightBarButtonItems() -> [UIBarButtonItem] {
+        return []
+    }
 }
 
 extension PPLTableViewController: UITableViewDelegate {
