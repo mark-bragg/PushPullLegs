@@ -38,7 +38,6 @@ class WorkoutViewController: PPLTableViewController {
             navigateToExercise()
         }
         workoutEditViewModel.reload()
-        setupAddButton()
         reload()
         navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: viewModel?.rowCount(section: 1) == 0 ? .cancel : .done, target: self, action: #selector(pop)), animated: false)
         navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(presentNoteViewController)), animated: false)

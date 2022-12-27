@@ -31,9 +31,6 @@ class DatabaseTableViewController: PPLTableViewController {
             setupRightBarButtonItems()
         }
         tableView?.reloadData()
-        if let btn = addButton {
-            btn.isHidden = isEditing
-        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

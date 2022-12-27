@@ -130,10 +130,6 @@ class WorkoutLogViewController: DatabaseTableViewController {
         tableView?.reloadData()
         self.tableView?.endUpdates()
     }
-    
-    override func insertAddButtonInstructions(_ dataSource: ArrowHelperDataSource? = nil) {
-        // no op
-    }
 }
 
 class PPLNameLabel: UILabel {

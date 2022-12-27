@@ -21,7 +21,6 @@ class ExerciseTemplateListViewController: PPLTableViewController, UIAdaptivePres
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupAddButton()
         tableView?.allowsSelection = false
     }
     

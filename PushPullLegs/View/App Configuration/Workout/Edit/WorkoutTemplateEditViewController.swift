@@ -15,7 +15,6 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupAddButton()
     }
     
     override func addAction(_ sender: Any) {

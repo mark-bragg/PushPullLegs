@@ -31,8 +31,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if !readOnly && addButton == nil {
-            setupAddButton()
+        if !readOnly {
             if ((viewModel?.hasData()) != nil) {
                 hideNoDataView()
             }
@@ -43,7 +42,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setupRestTimerView()
-        repositionAddButton()
     }
     
     override func getRightBarButtonItems() -> [UIBarButtonItem] {
@@ -103,23 +101,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     private func showRestTimerView() {
         updateRestTimerViewTableViewConstraints(40)
     }
-    
-    private func repositionAddButton() {
-        guard let addButton = addButton else { return }
-        addButton.removeConstraints(addButton.constraints)
-        positionAddButton()
-    }
-    
-    override func positionAddButton() {
-        guard let restTimerView = restTimerView, let addButton else { return }
-        let y: CGFloat = -15
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        addButton.widthAnchor.constraint(equalToConstant: addButtonSize.width).isActive = true
-        addButton.heightAnchor.constraint(equalToConstant: addButtonSize.height).isActive = true
-        addButton.bottomAnchor.constraint(equalTo: restTimerView.topAnchor, constant: y).isActive = true
-        addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: y).isActive = true
-        view.bringSubviewToFront(addButton)
-    }
 
     private func backNavigationBarButtonItem() -> UIBarButtonItem.SystemItem {
         if viewModel?.rowCount(section: 1) == 0 {
@@ -127,12 +108,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         }
         isLeftBarItemSetToDone = true
         return .done
-    }
-    
-    override func insertAddButtonInstructions(_ dataSource: ArrowHelperDataSource? = nil) {
-        guard !readOnly else { return }
-        super.insertAddButtonInstructions(self)
-        addButtonHelperVc?.message = "Tap to start the next set!"
     }
     
     override func addAction(_ sender: Any) {
@@ -148,7 +123,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         if let _ = restTimerView {
             hideRestTimerView()
         }
-        removeAddButtonInstructions()
     }
     
     private func hideRestTimerView() {
@@ -162,7 +136,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         else { return }
         bottom.constant = -constant
         restTimerHeightConstraint.constant = constant
-        repositionAddButton()
     }
     
     private func prepareExerciseSetViewModel() {
@@ -230,9 +203,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
             }
         }
         resetState()
-        if let exerciseViewModel, exerciseViewModel.rowCount() == 0 {
-            insertAddButtonInstructions()
-        }
     }
     
     func presentModally(_ vc: UIViewController) {
