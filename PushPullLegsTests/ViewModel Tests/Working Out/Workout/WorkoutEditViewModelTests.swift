@@ -563,7 +563,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         for i in 0...4 {
             dbHelper.addExercise("ex\(i)", to: workout)
         }
-        AppState.shared.workoutInProgress = true
+        AppState.shared.workoutInProgress = .push
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
         XCTAssert(dbHelper.fetchWorkouts().count == 1, "workout count\nexpected: 1\nactual: \(dbHelper.fetchWorkouts().count)")
         XCTAssert(dbHelper.fetchWorkouts().first!.objectID == workout.objectID)
@@ -574,11 +574,11 @@ class WorkoutEditViewModelTests: XCTestCase {
         for i in 0...4 {
             dbHelper.addExercise("ex\(i)", to: workout)
         }
-        AppState.shared.workoutInProgress = true
+        AppState.shared.workoutInProgress = .push
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
         sut.deleteWorkout()
         XCTAssert(dbHelper.fetchWorkouts().count == 0)
-        XCTAssert(AppState.shared.workoutInProgress == false)
+        XCTAssertNil(AppState.shared.workoutInProgress)
     }
     
     func testInit_WIP_deleteWorkout_workoutFinished_appStateWIPisFalse() {
@@ -586,11 +586,11 @@ class WorkoutEditViewModelTests: XCTestCase {
         for i in 0...4 {
             dbHelper.addExercise("ex\(i)", to: workout)
         }
-        AppState.shared.workoutInProgress = true
+        AppState.shared.workoutInProgress = .push
         sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
         sut.finishWorkout()
         XCTAssert(dbHelper.fetchWorkouts().count == 1)
-        XCTAssert(AppState.shared.workoutInProgress == false)
+        XCTAssertNil(AppState.shared.workoutInProgress)
     }
     
     func testNoDataText() {
