@@ -57,6 +57,8 @@ class WorkoutGraphViewController: GraphViewController {
         dismiss(animated: true) {
             guard let vm = self.workoutGraphViewModel else { return }
             let vc = ExerciseGraphViewController(name: item.name, otherNames: vm.getExerciseNames().filter({$0 != item.name}), type: vm.type)
+            vc.viewModel?.startDate = vm.startDate
+            vc.viewModel?.endDate = vm.endDate
             self.isNavigatingToExercise = true
             self.navigationController?.pushViewController(vc, animated: true)
         }
