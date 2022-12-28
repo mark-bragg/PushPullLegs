@@ -14,6 +14,19 @@ class GraphViewModel: NSObject, ReloadProtocol {
     var xValues = [String]()
     var dataManager: DataManager?
     var hasEllipsis: Bool = false
+    lazy var formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM-dd-yyyy"
+        return formatter
+    }()
+    var startDate: Date?
+    var endDate: Date?
+    var earliestPossibleDate: Date? {
+        nil
+    }
+    var lastPossibleDate: Date? {
+        nil
+    }
     
     init(dataManager: DataManager) {
         super.init()
@@ -44,9 +57,9 @@ class GraphViewModel: NSObject, ReloadProtocol {
         xValues.removeAll()
     }
     
-    func formatter() -> DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/YY"
-        return formatter
+    func refreshWithDates(_ startDate: Date, _ endDate: Date) {
+        self.startDate = startDate
+        self.endDate = endDate
+        reload()
     }
 }

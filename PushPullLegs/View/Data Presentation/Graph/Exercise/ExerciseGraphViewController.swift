@@ -22,15 +22,16 @@ class ExerciseGraphViewController: GraphViewController {
     }
 
     override func dropdownItems() -> [PPLDropdownItem] {
+        var items = [PPLDropdownItem]()
         if let exerciseItems = exerciseGraphViewModel?.otherNames.map({ name in
             PPLDropdownItem(target: nil, action: nil, name: name)
         }) {
-            return
-            [
-                PPLDropdownNavigationItem(items: exerciseItems, name: "Exercises")
-            ]
+            items.append(PPLDropdownNavigationItem(items: exerciseItems, name: "Exercises"))
         }
-        return []
+        if let dateItem = dateNavigationItem() {
+            items.append(dateItem)
+        }
+        return items
     }
     
     override func didSelectItem(_ item: PPLDropdownItem) {

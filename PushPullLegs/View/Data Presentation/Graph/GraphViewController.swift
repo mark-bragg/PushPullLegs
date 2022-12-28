@@ -23,6 +23,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     var needConstraints = true
     var isInteractive = true
     private var heightForLabelStack: CGFloat { (isLandscape() ? 25 : 75) * ((volumeLabel != nil && dateLabel != nil) ? 2 : 1) }
+    weak var dropdown: PPLDropDownContainerViewController?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -246,8 +247,6 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     @objc func showDropdown(_ sender: Any) {
-//        showDateSelector()
-//        return
         let vc = PPLDropDownContainerViewController()
         vc.dataSource = self
         vc.delegate = self
@@ -256,6 +255,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.clear
         vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.clear
         present(vc, animated: true, completion: nil)
+        dropdown = vc
     }
     
     func dropdownItems() -> [PPLDropdownItem] {
@@ -264,6 +264,18 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     
     func didSelectItem(_ item: PPLDropdownItem) {
         // no op
+    }
+    
+    func didSelectDates(_ startDate: Date, _ endDate: Date) {
+        viewModel?.refreshWithDates(startDate, endDate)
+        reloadViews()
+    }
+    
+    func dateNavigationItem() -> PPLDropdownDateNavigationItem? {
+        if let date1 = viewModel?.startDate, let date2 = viewModel?.endDate, let minDate = viewModel?.earliestPossibleDate, let maxDate = viewModel?.lastPossibleDate {
+            return PPLDropdownDateNavigationItem(firstDate: date1, secondDate: date2, minDate: minDate, maxDate: maxDate)
+        }
+        return nil
     }
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {

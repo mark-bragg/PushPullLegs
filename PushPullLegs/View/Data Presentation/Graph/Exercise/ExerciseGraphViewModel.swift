@@ -15,6 +15,18 @@ class ExerciseGraphViewModel: GraphViewModel {
     private(set) var otherNames: [String]
     private var exerciseDataManager: ExerciseDataManager { dataManager as? ExerciseDataManager ?? ExerciseDataManager() }
     private(set) var type: ExerciseType
+    override var earliestPossibleDate: Date? {
+        WorkoutDataManager().workouts(ascending: true, types: [type])
+            .filter { $0.dateCreated != nil }
+            .map { $0.dateCreated! }
+            .first
+    }
+    override var lastPossibleDate: Date? {
+        WorkoutDataManager().workouts(ascending: true, types: [type])
+            .filter { $0.dateCreated != nil }
+            .map { $0.dateCreated! }
+            .last
+    }
     
     init(name: String, otherNames: [String], type: ExerciseType) {
         self.name = name
@@ -26,20 +38,26 @@ class ExerciseGraphViewModel: GraphViewModel {
     
     override func reload() {
         super.reload()
+        // TODO: turn this into performReload() to avoid the super call and extract the start/end date setter
         var exercises: [Exercise]
         do {
-            exercises = try exerciseDataManager.exercises(name: name)
+            exercises = try exerciseDataManager.exercises(name: name, initialDate: startDate, finalDate: endDate)
         } catch NilReferenceError.nilWorkout {
             exercises = WorkoutDataManager().exercises(type: type, name: name)
         } catch {
             exercises = []
         }
-        let format = formatter()
         for exercise in exercises {
             if let date = exercise.workout?.dateCreated {
-                xValues.append(format.string(from: date))
+                xValues.append(formatter.string(from: date))
                 yValues.append(CGFloat(exercise.volume()))
             }
+        }
+        if startDate == nil {
+            startDate = earliestPossibleDate
+        }
+        if endDate == nil {
+            endDate = lastPossibleDate
         }
     }
     

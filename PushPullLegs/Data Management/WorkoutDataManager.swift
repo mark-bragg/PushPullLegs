@@ -118,6 +118,28 @@ class WorkoutDataManager: DataManager {
         return []
     }
     
+    func workouts(ascending: Bool = false, types: [ExerciseType] = [.push, .pull, .legs], initialDate: Date? = nil, finalDate: Date? = nil) -> [Workout] {
+        guard let entityNameString else { return [] }
+        let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
+        req.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
+        var predicates = [NSPredicate]()
+        for type in types.map({ return $0.rawValue }) {
+            predicates.append(PPLPredicate.nameIsEqualTo(type))
+        }
+        req.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        if let initialDate, let finalDate, let reqPred = req.predicate {
+            let datePredicate = NSPredicate(format: "dateCreated >= %@ and dateCreated <= %@", argumentArray: [initialDate, finalDate])
+            req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, reqPred])
+        }
+        if let wkts = try? backgroundContext.fetch(req) as? [Workout] {
+            if ascending {
+                return wkts.reversed()
+            }
+            return wkts
+        }
+        return []
+    }
+    
     func exercises(type: ExerciseType, name: String) -> [Exercise] {
         guard let entityNameString else { return [] }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)

@@ -8,8 +8,12 @@
 
 import UIKit
 
-protocol PPLDropdownViewControllerDelegate: NSObject {
+@objc
+protocol PPLDropdownViewControllerDelegate: NSObjectProtocol {
     func didSelectItem(_ item: PPLDropdownItem)
+    
+    @objc optional
+    func didSelectDates(_ startDate: Date, _ endDate: Date)
 }
 
 protocol PPLDropdownViewControllerDataSource: NSObject {
@@ -34,6 +38,34 @@ class PPLDropdownNavigationItem: PPLDropdownItem {
     init(items: [PPLDropdownItem], name: String) {
         self.items = items
         super.init(target: nil, action: nil, name: name)
+    }
+}
+
+class PPLDropdownDateNavigationItem: PPLDropdownNavigationItem {
+    var firstDate: Date
+    var secondDate: Date
+    var minDate: Date
+    var maxDate: Date
+    
+    init(firstDate: Date, secondDate: Date, minDate: Date, maxDate: Date) {
+        self.firstDate = firstDate
+        self.secondDate = secondDate
+        self.minDate = minDate
+        self.maxDate = maxDate
+        super.init(items: [PPLDropdownDateItem(minDate: minDate, maxDate: maxDate, currentDate: firstDate), PPLDropdownDateItem(minDate: firstDate, maxDate: secondDate, currentDate: secondDate)], name: "Select Dates")
+    }
+}
+
+class PPLDropdownDateItem: PPLDropdownItem {
+    let minDate: Date
+    let maxDate: Date
+    let currentDate: Date
+    
+    init(minDate: Date, maxDate: Date, currentDate: Date) {
+        self.minDate = minDate
+        self.maxDate = maxDate
+        self.currentDate = currentDate
+        super.init(target: nil, action: nil, name: "")
     }
 }
 
@@ -108,6 +140,10 @@ extension PPLDropDownContainerViewController: PPLDropdownViewControllerDelegate 
         newMenu.items = items
         navigator?.pushViewController(newMenu, animated: true)
     }
+    
+    func didSelectDates(_ startDate: Date, _ endDate: Date) {
+        delegate?.didSelectDates?(startDate, endDate)
+    }
 }
 
 private class PPLDropDownViewController: UIViewController {
@@ -117,6 +153,8 @@ private class PPLDropDownViewController: UIViewController {
     weak var dataSource: PPLDropdownViewControllerDataSource?
     var tableHeight: CGFloat { rowsByRowHeight > maxTableHeight ? maxTableHeight : rowsByRowHeight }
     var rowsByRowHeight: CGFloat { rowHeight * CGFloat((items ?? []).count) }
+    weak var startDatePicker: UIDatePicker?
+    weak var endDatePicker: UIDatePicker?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -167,9 +205,20 @@ extension PPLDropDownViewController: UITableViewDataSource {
         cell.backgroundColor = .clear
         let lbl = UILabel()
         if let item = items?[indexPath.row] {
-            lbl.text = "\(item.name)"
-            if item.isKind(of: PPLDropdownNavigationItem.self) {
-                cell.accessoryType = .disclosureIndicator
+            if let item = item as? PPLDropdownDateItem {
+                let picker = newDatePicker(item.minDate, item.maxDate, item.currentDate)
+                if indexPath.row == 0 {
+                    startDatePicker = picker
+                } else {
+                    endDatePicker = picker
+                }
+                cell.contentView.addSubview(picker)
+                constrain(picker, toInsideOf: cell.contentView)
+            } else {
+                lbl.text = "\(item.name)"
+                if item.isKind(of: PPLDropdownNavigationItem.self) {
+                    cell.accessoryType = .disclosureIndicator
+                }
             }
         }
         lbl.font = UIFont.systemFont(ofSize: 24)
@@ -178,5 +227,22 @@ extension PPLDropDownViewController: UITableViewDataSource {
         constrain(lbl, toInsideOf: cell.contentView)
         lbl.backgroundColor = .clear
         return cell
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let startDatePicker, let endDatePicker {
+            delegate?.didSelectDates?(startDatePicker.date, endDatePicker.date)
+        }
+    }
+    
+    private func newDatePicker(_ minDate: Date, _ maxDate: Date, _ currentDate: Date) -> UIDatePicker {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .compact
+        picker.minimumDate = minDate
+        picker.maximumDate = maxDate
+        picker.date = currentDate
+        return picker
     }
 }
