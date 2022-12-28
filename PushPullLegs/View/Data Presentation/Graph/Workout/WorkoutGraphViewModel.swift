@@ -13,6 +13,18 @@ class WorkoutGraphViewModel: GraphViewModel {
     
     private var workoutDataManager: WorkoutDataManager? { dataManager as? WorkoutDataManager }
     private(set) var type: ExerciseType
+    override var earliestPossibleDate: Date? {
+        workoutDataManager?.workouts(ascending: true, types: [type])
+            .filter { $0.dateCreated != nil }
+            .map { $0.dateCreated! }
+            .first
+    }
+    override var lastPossibleDate: Date? {
+        workoutDataManager?.workouts(ascending: true, types: [type])
+            .filter { $0.dateCreated != nil }
+            .map { $0.dateCreated! }
+            .last
+    }
     
     init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
         self.type = type
@@ -22,13 +34,18 @@ class WorkoutGraphViewModel: GraphViewModel {
     
     override func reload() {
         super.reload()
-        guard let workouts = workoutDataManager?.workouts(ascending: true, types: [type]) else { return }
-        let format = formatter()
+        guard let workouts = workoutDataManager?.workouts(ascending: true, types: [type], initialDate: startDate, finalDate: endDate) else { return }
         for workout in workouts {
             if let date = workout.dateCreated {
-                xValues.append(format.string(from: date))
+                xValues.append(formatter.string(from: date))
                 yValues.append(CGFloat(workout.volume()))
             }
+        }
+        if startDate == nil {
+            startDate = earliestPossibleDate
+        }
+        if endDate == nil {
+            endDate = lastPossibleDate
         }
     }
     

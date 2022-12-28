@@ -80,10 +80,13 @@ class ExerciseDataManager: DataManager {
         }
     }
     
-    func exercises(name: String) throws -> [Exercise] {
+    func exercises(name: String, initialDate: Date? = nil, finalDate: Date? = nil) throws -> [Exercise] {
         guard let entityNameString else { return [] }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = NSPredicate(format: "name = %@", argumentArray: [name])
+        if let initialDate, let finalDate, let reqPred = request.predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [reqPred, NSPredicate(format: "workout.dateCreated >= %@ and workout.dateCreated <= %@", argumentArray: [initialDate, finalDate])])
+        }
         guard let exercises = try? backgroundContext.fetch(request) as? [Exercise] else { return [] }
         do {
             let sorted = try exercises.sorted { (e1, e2) -> Bool in

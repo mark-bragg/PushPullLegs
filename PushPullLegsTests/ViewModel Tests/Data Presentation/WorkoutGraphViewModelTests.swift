@@ -52,7 +52,7 @@ class WorkoutGraphViewModelTests: XCTestCase {
         let count = 100
         var dates = [String]()
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/YY"
+        formatter.dateFormat = "MM-dd-yyyy"
         var date = Date()
         for _ in 0..<count {
             let _ = dbHelper.createWorkout(name: .push, date:date)

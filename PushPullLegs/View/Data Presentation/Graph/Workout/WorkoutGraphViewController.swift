@@ -40,14 +40,25 @@ class WorkoutGraphViewController: GraphViewController {
         }
     }
     
-    override func names() -> [String] {
-        workoutGraphViewModel?.getExerciseNames() ?? []
+    override func dropdownItems() -> [PPLDropdownItem] {
+        var items = [PPLDropdownItem]()
+        if let exerciseItems = workoutGraphViewModel?.getExerciseNames().map({ name in
+            PPLDropdownItem(target: nil, action: nil, name: name)
+        }) {
+            items.append(PPLDropdownNavigationItem(items: exerciseItems, name: "Exercises"))
+        }
+        if let dateItem = dateNavigationItem() {
+            items.append(dateItem)
+        }
+        return items
     }
     
-    override func didSelectName(_ name: String) {
+    override func didSelectItem(_ item: PPLDropdownItem) {
         dismiss(animated: true) {
             guard let vm = self.workoutGraphViewModel else { return }
-            let vc = ExerciseGraphViewController(name: name, otherNames: vm.getExerciseNames().filter({$0 != name}), type: vm.type)
+            let vc = ExerciseGraphViewController(name: item.name, otherNames: vm.getExerciseNames().filter({$0 != item.name}), type: vm.type)
+            vc.viewModel?.startDate = vm.startDate
+            vc.viewModel?.endDate = vm.endDate
             self.isNavigatingToExercise = true
             self.navigationController?.pushViewController(vc, animated: true)
         }

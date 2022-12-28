@@ -23,6 +23,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     var needConstraints = true
     var isInteractive = true
     private var heightForLabelStack: CGFloat { (isLandscape() ? 25 : 75) * ((volumeLabel != nil && dateLabel != nil) ? 2 : 1) }
+    weak var dropdown: PPLDropDownViewController?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -254,14 +255,27 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.clear
         vc.popoverPresentationController?.presentedView?.backgroundColor = PPLColor.clear
         present(vc, animated: true, completion: nil)
+        dropdown = vc
     }
     
-    func names() -> [String] {
+    func dropdownItems() -> [PPLDropdownItem] {
         []
     }
     
-    func didSelectName(_ name: String) {
+    func didSelectItem(_ item: PPLDropdownItem) {
         // no op
+    }
+    
+    func didSelectDates(_ startDate: Date, _ endDate: Date) {
+        viewModel?.refreshWithDates(startDate, endDate)
+        reloadViews()
+    }
+    
+    func dateNavigationItem() -> PPLDropdownDateNavigationItem? {
+        if let date1 = viewModel?.startDate, let date2 = viewModel?.endDate, let minDate = viewModel?.earliestPossibleDate, let maxDate = viewModel?.lastPossibleDate {
+            return PPLDropdownDateNavigationItem(firstDate: date1, secondDate: date2, minDate: minDate, maxDate: maxDate)
+        }
+        return nil
     }
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
@@ -274,6 +288,15 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
 
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
+    }
+    
+    func showDateSelector() {
+        let picker = UIDatePicker()
+        let vc = UIViewController()
+        vc.view.addSubview(picker)
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
+        present(vc, animated: true)
     }
 }
 
