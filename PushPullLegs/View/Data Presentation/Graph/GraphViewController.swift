@@ -23,7 +23,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     var needConstraints = true
     var isInteractive = true
     private var heightForLabelStack: CGFloat { (isLandscape() ? 25 : 75) * ((volumeLabel != nil && dateLabel != nil) ? 2 : 1) }
-    weak var dropdown: PPLDropDownContainerViewController?
+    weak var dropdown: PPLDropDownViewController?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -247,7 +247,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     @objc func showDropdown(_ sender: Any) {
-        let vc = PPLDropDownContainerViewController()
+        let vc = PPLDropDownViewController()
         vc.dataSource = self
         vc.delegate = self
         vc.modalPresentationStyle = .popover

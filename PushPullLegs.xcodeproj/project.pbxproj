@@ -109,6 +109,11 @@
 		49E675FE244CDAB6001F5974 /* ExerciseSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E675FD244CDAB6001F5974 /* ExerciseSelectionViewModel.swift */; };
 		49E67600244CECC8001F5974 /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E675FF244CECC8001F5974 /* DBHelper.swift */; };
 		49E8932F295B759900B99345 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8932E295B759900B99345 /* AccessibilityIdentifiers.swift */; };
+		49E89332295CCE1300B99345 /* PPLDropdownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E89331295CCE1300B99345 /* PPLDropdownMenu.swift */; };
+		49E89335295CCE9100B99345 /* PPLDropdownItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E89334295CCE9100B99345 /* PPLDropdownItem.swift */; };
+		49E89337295CCEB500B99345 /* PPLDropdownNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E89336295CCEB500B99345 /* PPLDropdownNavigationItem.swift */; };
+		49E8933A295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E89339295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift */; };
+		49E8933C295CCF4000B99345 /* PPLDropdownDateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8933B295CCF4000B99345 /* PPLDropdownDateItem.swift */; };
 		49EF4B7923F8381F0071687D /* PPLAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */; };
 		49EF4B7B23F8381F0071687D /* PPLSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */; };
 		49EF4B8523F838370071687D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8423F838370071687D /* Assets.xcassets */; };
@@ -256,6 +261,11 @@
 		49E675FD244CDAB6001F5974 /* ExerciseSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSelectionViewModel.swift; sourceTree = "<group>"; };
 		49E675FF244CECC8001F5974 /* DBHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
 		49E8932E295B759900B99345 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
+		49E89331295CCE1300B99345 /* PPLDropdownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropdownMenu.swift; sourceTree = "<group>"; };
+		49E89334295CCE9100B99345 /* PPLDropdownItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropdownItem.swift; sourceTree = "<group>"; };
+		49E89336295CCEB500B99345 /* PPLDropdownNavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropdownNavigationItem.swift; sourceTree = "<group>"; };
+		49E89339295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropdownDateNavigationItem.swift; sourceTree = "<group>"; };
+		49E8933B295CCF4000B99345 /* PPLDropdownDateItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropdownDateItem.swift; sourceTree = "<group>"; };
 		49EF4B7523F8381F0071687D /* PushPullLegs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushPullLegs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAppDelegate.swift; sourceTree = "<group>"; };
 		49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLSceneDelegate.swift; sourceTree = "<group>"; };
@@ -441,7 +451,6 @@
 		492B3B482660B0C100929BB3 /* Exercise */ = {
 			isa = PBXGroup;
 			children = (
-				492B3B3A26609F2700929BB3 /* PPLDropDownViewController.swift */,
 				492B3B3026608FE500929BB3 /* ExerciseGraphViewModel.swift */,
 				492B3B492660B17600929BB3 /* ExerciseGraphViewController.swift */,
 			);
@@ -747,6 +756,35 @@
 			path = Exercise;
 			sourceTree = "<group>";
 		};
+		49E89330295CCD2700B99345 /* Dropdown */ = {
+			isa = PBXGroup;
+			children = (
+				49E89333295CCE8200B99345 /* Items */,
+				492B3B3A26609F2700929BB3 /* PPLDropDownViewController.swift */,
+				49E89331295CCE1300B99345 /* PPLDropdownMenu.swift */,
+			);
+			path = Dropdown;
+			sourceTree = "<group>";
+		};
+		49E89333295CCE8200B99345 /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				49E89338295CCEC600B99345 /* Navigational */,
+				49E89334295CCE9100B99345 /* PPLDropdownItem.swift */,
+				49E8933B295CCF4000B99345 /* PPLDropdownDateItem.swift */,
+			);
+			path = Items;
+			sourceTree = "<group>";
+		};
+		49E89338295CCEC600B99345 /* Navigational */ = {
+			isa = PBXGroup;
+			children = (
+				49E89336295CCEB500B99345 /* PPLDropdownNavigationItem.swift */,
+				49E89339295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift */,
+			);
+			path = Navigational;
+			sourceTree = "<group>";
+		};
 		49EF4B6C23F8381F0071687D = {
 			isa = PBXGroup;
 			children = (
@@ -819,6 +857,7 @@
 		49EF4BC523F839A30071687D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				49E89330295CCD2700B99345 /* Dropdown */,
 				49AB68CE24FB0EAD0057D5F7 /* User Guidance */,
 				49AB68C924E8BD770057D5F7 /* Shapes */,
 				4989BA5C24BB93FD001C17B3 /* Base Classes */,
@@ -1123,6 +1162,7 @@
 				49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */,
 				49F60854254E08EC00407D0A /* CoreDataHelpers.swift in Sources */,
 				496BE36924E63F5C00A4E08B /* NoDataView.swift in Sources */,
+				49E8933C295CCF4000B99345 /* PPLDropdownDateItem.swift in Sources */,
 				49C1EA62260AF98B00330CBF /* DatabaseTableViewController.swift in Sources */,
 				490AEAD22423AA5D005C1112 /* WorkoutTemplateListViewController.swift in Sources */,
 				4945337A244FCC1900FA1665 /* PPLTabBarController.swift in Sources */,
@@ -1143,6 +1183,7 @@
 				493C2C712455E5D2005308AF /* WeightCollectionViewController.swift in Sources */,
 				490D88EA2452B5FD005FFEA3 /* ExerciseTimerViewController.swift in Sources */,
 				49028D26243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift in Sources */,
+				49E8933A295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift in Sources */,
 				49F8EF30244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift in Sources */,
 				49ABAC9D25F44E3500517F6F /* SoundManager.swift in Sources */,
 				49A08D82293469F000870DDA /* PreviousUnilateralPerformanceViewController.swift in Sources */,
@@ -1167,6 +1208,7 @@
 				4973C11C244BB068009460F2 /* WorkoutViewController.swift in Sources */,
 				49CD44072619520A00C8A6C8 /* DurationCollectionViewController.swift in Sources */,
 				49359B8D24D60001005FF7A8 /* PPLButton.swift in Sources */,
+				49E89332295CCE1300B99345 /* PPLDropdownMenu.swift in Sources */,
 				490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */,
 				492B643A26D1A4AD0004171D /* SplashViewController.swift in Sources */,
 				4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */,
@@ -1184,6 +1226,8 @@
 				49C8D24124A99E0000B361C7 /* PPLDefaults.swift in Sources */,
 				4980D9AC25A42A4D0054EA5F /* InterstitialAdController.swift in Sources */,
 				49E8932F295B759900B99345 /* AccessibilityIdentifiers.swift in Sources */,
+				49E89337295CCEB500B99345 /* PPLDropdownNavigationItem.swift in Sources */,
+				49E89335295CCE9100B99345 /* PPLDropdownItem.swift in Sources */,
 				49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */,
 				491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */,
 				492B645F26D4B7220004171D /* UnilateralExerciseViewController.swift in Sources */,

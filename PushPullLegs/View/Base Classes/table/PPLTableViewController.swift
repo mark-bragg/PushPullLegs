@@ -213,7 +213,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     @objc func showDropdown(_ sender: Any) {
-        let vc = PPLDropDownContainerViewController()
+        let vc = PPLDropDownViewController()
         vc.dataSource = self
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.delegate = self
