@@ -9,26 +9,120 @@
 import UIKit
 
 protocol PPLDropdownViewControllerDelegate: NSObject {
-    func didSelectName(_ name: String)
+    func didSelectItem(_ item: PPLDropdownItem)
 }
 
 protocol PPLDropdownViewControllerDataSource: NSObject {
-    func names() -> [String]
+    func dropdownItems() -> [PPLDropdownItem]
 }
 
-class PPLDropDownViewController: UIViewController {
+class PPLDropdownItem: NSObject {
+    let target: AnyObject?
+    let action: Selector?
+    let name: String
+    
+    init(target: AnyObject?, action: Selector?, name: String) {
+        self.target = target
+        self.action = action
+        self.name = name
+    }
+}
 
-    var names: [String]?
+class PPLDropdownNavigationItem: PPLDropdownItem {
+    var items: [PPLDropdownItem]
+    
+    init(items: [PPLDropdownItem], name: String) {
+        self.items = items
+        super.init(target: nil, action: nil, name: name)
+    }
+}
+
+private let maxTableHeight: CGFloat = 300
+private let rowHeight: CGFloat = 50
+
+class PPLDropDownContainerViewController: UIViewController {
+    var items: [PPLDropdownItem]? { presentedDropdown?.items ?? dataSource?.dropdownItems() }
     weak var delegate: PPLDropdownViewControllerDelegate?
     weak var dataSource: PPLDropdownViewControllerDataSource?
-    private let rowHeight: CGFloat = 50
-    private var tableHeight: CGFloat { rowsByRowHeight > maxTableHeight ? maxTableHeight : rowsByRowHeight }
-    private let maxTableHeight: CGFloat = 300
-    private var rowsByRowHeight: CGFloat { rowHeight * CGFloat((names ?? []).count) }
+    weak var navigator: PPLNavigationController?
+    private var presentedDropdown: PPLDropDownViewController? {
+        navigator?.viewControllers.first as? PPLDropDownViewController
+    }
+    var rowsByRowHeight: CGFloat { rowHeight * CGFloat((items ?? []).count) }
+    private var preferredHeight: CGFloat { rowsByRowHeight }
+    
+    func calculateHeight(_ items: [PPLDropdownItem]?) -> CGFloat {
+        rowHeight * CGFloat((items ?? []).count)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        names = dataSource?.names()
+        addNavigator()
+        populateRootMenu()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let height = preferredHeight
+        preferredContentSize = CGSize(width: 200, height: height)
+        navigator?.isNavigationBarHidden = true
+    }
+    
+    private func addNavigator() {
+        let nav = PPLNavigationController(rootViewController: PPLDropDownViewController())
+        addChild(nav)
+        nav.view.frame = view.bounds
+        view.addSubview(nav.view)
+        nav.didMove(toParent: self)
+        nav.delegate = self
+        navigator = nav
+    }
+    
+    private func populateRootMenu() {
+        presentedDropdown?.delegate = self
+        presentedDropdown?.dataSource = dataSource
+    }
+}
+
+extension PPLDropDownContainerViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        view.setNeedsLayout()
+        if let dropdown = viewController as? PPLDropDownViewController {
+            preferredContentSize = CGSize(width: 200, height: calculateHeight(dropdown.items))
+        }
+    }
+}
+
+extension PPLDropDownContainerViewController: PPLDropdownViewControllerDelegate {
+    func didSelectItem(_ item: PPLDropdownItem) {
+        if let item = item as? PPLDropdownNavigationItem {
+            addNewDropdownMenu(item.items)
+        } else if let delegate {
+            delegate.didSelectItem(item)
+        }
+    }
+    
+    private func addNewDropdownMenu(_ items: [PPLDropdownItem]) {
+        let newMenu = PPLDropDownViewController()
+        newMenu.delegate = self
+        newMenu.items = items
+        navigator?.pushViewController(newMenu, animated: true)
+    }
+}
+
+private class PPLDropDownViewController: UIViewController {
+
+    var items: [PPLDropdownItem]?
+    weak var delegate: PPLDropdownViewControllerDelegate?
+    weak var dataSource: PPLDropdownViewControllerDataSource?
+    var tableHeight: CGFloat { rowsByRowHeight > maxTableHeight ? maxTableHeight : rowsByRowHeight }
+    var rowsByRowHeight: CGFloat { rowHeight * CGFloat((items ?? []).count) }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if let dataSource {
+            items = dataSource.dropdownItems()
+        }
         view.backgroundColor = PPLColor.secondary
         let tblv = UITableView()
         tblv.backgroundColor = PPLColor.clear
@@ -37,7 +131,6 @@ class PPLDropDownViewController: UIViewController {
         constrainTableView(tblv)
         tblv.rowHeight = rowHeight
         tblv.isScrollEnabled = tableHeight == maxTableHeight
-        preferredContentSize = CGSize(width: 200, height: tableHeight)
         tblv.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
@@ -54,22 +147,30 @@ class PPLDropDownViewController: UIViewController {
 
 extension PPLDropDownViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let names else { return }
-        delegate?.didSelectName(names[indexPath.item])
+        guard let items else { return }
+        let item = items[indexPath.row]
+        if let delegate {
+            delegate.didSelectItem(item)
+        } else if let action = item.action {
+            let _ = item.target?.perform(action)
+        }
     }
 }
 
 extension PPLDropDownViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        names?.count ?? 0
+        items?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.backgroundColor = .clear
         let lbl = UILabel()
-        if let names {
-            lbl.text = "\(names[indexPath.item])"
+        if let item = items?[indexPath.row] {
+            lbl.text = "\(item.name)"
+            if item.isKind(of: PPLDropdownNavigationItem.self) {
+                cell.accessoryType = .disclosureIndicator
+            }
         }
         lbl.font = UIFont.systemFont(ofSize: 24)
         lbl.textAlignment = .center

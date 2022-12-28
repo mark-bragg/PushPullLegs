@@ -246,7 +246,9 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     @objc func showDropdown(_ sender: Any) {
-        let vc = PPLDropDownViewController()
+//        showDateSelector()
+//        return
+        let vc = PPLDropDownContainerViewController()
         vc.dataSource = self
         vc.delegate = self
         vc.modalPresentationStyle = .popover
@@ -256,11 +258,11 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         present(vc, animated: true, completion: nil)
     }
     
-    func names() -> [String] {
+    func dropdownItems() -> [PPLDropdownItem] {
         []
     }
     
-    func didSelectName(_ name: String) {
+    func didSelectItem(_ item: PPLDropdownItem) {
         // no op
     }
     
@@ -274,6 +276,15 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
 
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
+    }
+    
+    func showDateSelector() {
+        let picker = UIDatePicker()
+        let vc = UIViewController()
+        vc.view.addSubview(picker)
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
+        present(vc, animated: true)
     }
 }
 

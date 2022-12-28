@@ -190,30 +190,21 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         return headerViewContainer
     }
     
+    func removeAddButton() {
+        hideNoDataView()
+    }
+    
     func setupRightBarButtonItems() {
         navigationItem.rightBarButtonItem = nil
         let rightButtons = getRightBarButtonItems()
         if rightButtons.count > 2 {
             if let add = rightButtons.first(where: { $0.accessibilityIdentifier == .add }) {
-                setupDropdownItems()
                 navigationItem.rightBarButtonItems = [add, dropdownBarButtonItem()]
             }
         } else {
             navigationItem.rightBarButtonItems = rightButtons
         }
     }
-    
-    private func setupDropdownItems() {
-        let items = getRightBarButtonItems().filter { $0.accessibilityIdentifier != .add }
-        dropdownItems = []
-        for item in items {
-            if let target = item.target, let action = item.action, let name = item.accessibilityIdentifier {
-                dropdownItems.append(PPLDropdownItem(target: target, action: action, name: name))
-            }
-        }
-    }
-    
-    private var dropdownItems: [PPLDropdownItem] = []
     
     func dropdownBarButtonItem() -> UIBarButtonItem {
         let ellipsisImage = UIImage(systemName: "ellipsis", variableValue: 1, configuration: UIImage.SymbolConfiguration(weight: .regular))?.withTintColor(.tintColor, renderingMode: .alwaysOriginal)
@@ -222,9 +213,8 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     @objc func showDropdown(_ sender: Any) {
-        let vc = PPLDropDownViewController()
+        let vc = PPLDropDownContainerViewController()
         vc.dataSource = self
-        vc.delegate = self
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.delegate = self
         vc.popoverPresentationController?.containerView?.backgroundColor = PPLColor.clear
@@ -243,18 +233,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
 }
 
-class PPLDropdownItem {
-    let target: AnyObject
-    let action: Selector
-    let name: String
-    
-    init(target: AnyObject, action: Selector, name: String) {
-        self.target = target
-        self.action = action
-        self.name = name
-    }
-}
-
 extension PPLTableViewController: UIPopoverPresentationControllerDelegate {
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
         popoverPresentationController.permittedArrowDirections = .up
@@ -269,19 +247,16 @@ extension PPLTableViewController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-extension PPLTableViewController: PPLDropdownViewControllerDelegate, PPLDropdownViewControllerDataSource {
-    func names() -> [String] {
-        getRightBarButtonItems()
-            .filter { $0.accessibilityIdentifier != .add }
-            .map { $0.accessibilityIdentifier ?? "" }
-    }
-    
-    func didSelectName(_ name: String) {
-        dismiss(animated: true) {
-            if let selectedItem = self.dropdownItems.first(where: { $0.name == name }) {
-                let _ = selectedItem.target.perform(selectedItem.action)
+extension PPLTableViewController: PPLDropdownViewControllerDataSource {
+    func dropdownItems() -> [PPLDropdownItem] {
+        let items = getRightBarButtonItems().filter { $0.accessibilityIdentifier != .add }
+        var dropdownItems = [PPLDropdownItem]()
+        for item in items {
+            if let target = item.target, let action = item.action, let name = item.accessibilityIdentifier {
+                dropdownItems.append(PPLDropdownItem(target: target, action: action, name: name))
             }
         }
+        return dropdownItems
     }
 }
 

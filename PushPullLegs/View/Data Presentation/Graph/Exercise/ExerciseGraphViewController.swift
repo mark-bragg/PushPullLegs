@@ -21,20 +21,28 @@ class ExerciseGraphViewController: GraphViewController {
         super.init(coder: coder)
     }
 
-    override func names() -> [String] {
-        exerciseGraphViewModel?.otherNames ?? []
+    override func dropdownItems() -> [PPLDropdownItem] {
+        if let exerciseItems = exerciseGraphViewModel?.otherNames.map({ name in
+            PPLDropdownItem(target: nil, action: nil, name: name)
+        }) {
+            return
+            [
+                PPLDropdownNavigationItem(items: exerciseItems, name: "Exercises")
+            ]
+        }
+        return []
     }
     
-    override func didSelectName(_ name: String) {
+    override func didSelectItem(_ item: PPLDropdownItem) {
         dismiss(animated: true) { [weak self] in
             guard
                 let exerciseGraphViewModel = self?.exerciseGraphViewModel
             else { return }
             let oldName = exerciseGraphViewModel.title()
             let oldOtherNames = exerciseGraphViewModel.otherNames
-            var newOtherNames = oldOtherNames.filter({$0 != name})
+            var newOtherNames = oldOtherNames.filter({$0 != item.name})
             newOtherNames.append(oldName)
-            let newVm = ExerciseGraphViewModel(name: name, otherNames: newOtherNames, type: exerciseGraphViewModel.type)
+            let newVm = ExerciseGraphViewModel(name: item.name, otherNames: newOtherNames, type: exerciseGraphViewModel.type)
             self?.viewModel = newVm
             self?.reloadViews()
             self?.setTitleLabel()
