@@ -17,6 +17,6 @@ class PPLDropdownDateNavigationItem: PPLDropdownNavigationItem {
         self.secondDate = secondDate
         self.minDate = minDate
         self.maxDate = maxDate
-        super.init(items: [PPLDropdownDateItem(minDate: minDate, maxDate: maxDate, currentDate: firstDate), PPLDropdownDateItem(minDate: firstDate, maxDate: secondDate, currentDate: secondDate)], name: "Select Dates")
+        super.init(items: [PPLDropdownDateItem(minDate: minDate, maxDate: maxDate, currentDate: firstDate), PPLDropdownDateItem(minDate: minDate, maxDate: maxDate, currentDate: secondDate)], name: "Select Dates")
     }
 }
