@@ -41,14 +41,14 @@ class AppConfigurationViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
-            let rootView = cell.rootView
-        else { return PPLTableViewCell() }
-        rootView.subviews.forEach { $0.removeFromSuperview() }
-        rootView.gestureRecognizers?.forEach { rootView.removeGestureRecognizer($0) }
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier)
+        else { return UITableViewCell() }
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        cell.contentView.gestureRecognizers?.forEach { cell.contentView.removeGestureRecognizer($0) }
         cell.selectionStyle = .default
+        cell.accessoryType = .none
         if indexPath.row < 3 {
-            cell.addDisclosureIndicator()
+            cell.accessoryType = .disclosureIndicator
         } else if indexPath.row < 7 {
             cell.selectionStyle = .none
             if indexPath.row == 3 {
@@ -62,7 +62,7 @@ class AppConfigurationViewController: PPLTableViewController {
             
         }
         
-        var textLabel = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        var textLabel = cell.contentView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil && indexPath.row != 3 {
             textLabel = textLabelForCell(cell)
         }
@@ -72,18 +72,18 @@ class AppConfigurationViewController: PPLTableViewController {
         return cell
     }
     
-    func configureImperialMetricSegmenedControl(cell: PPLTableViewCell) {
-        guard let rootView = cell.rootView else { return }
-        if let _ = rootView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
-        rootView.isUserInteractionEnabled = true
+    func configureImperialMetricSegmenedControl(cell: UITableViewCell) {
+        let contentView = cell.contentView
+        if let _ = contentView.subviews.first(where: { $0.isKind(of: UISwitch.self) }) as? UISwitch { return }
+        contentView.isUserInteractionEnabled = true
         let segment = UISegmentedControl.PPLSegmentedControl(titles: ["Imperial", "Metric"], target: self, selector: #selector(toggleKilogramsPoundsValue(_:)))
         segment.selectedSegmentIndex = PPLDefaults.instance.isKilograms() ? 1 : 0
-        rootView.addSubview(segment)
+        contentView.addSubview(segment)
         segment.translatesAutoresizingMaskIntoConstraints = false
-        segment.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
-        segment.centerXAnchor.constraint(equalTo: rootView.centerXAnchor).isActive = true
-        segment.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.9).isActive = true
-        segment.heightAnchor.constraint(equalTo: rootView.heightAnchor, multiplier: 0.75).isActive = true
+        segment.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        segment.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        segment.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.9).isActive = true
+        segment.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.75).isActive = true
     }
 
     @objc func toggleKilogramsPoundsValue(_ control: UISegmentedControl) {
@@ -92,19 +92,19 @@ class AppConfigurationViewController: PPLTableViewController {
         tableView?.reloadData()
     }
     
-    func configureCustomCountdownCell(cell: PPLTableViewCell) {
-        guard let rootView = cell.rootView else { return }
-        if let _ = rootView.viewWithTag(2929) { return }
-        rootView.isUserInteractionEnabled = true
+    func configureCustomCountdownCell(cell: UITableViewCell) {
+        let contentView = cell.contentView
+        if let _ = contentView.viewWithTag(2929) { return }
+        contentView.isUserInteractionEnabled = true
         let countdownLabel = labelForCountdown()
-        rootView.addSubview(countdownLabel)
+        contentView.addSubview(countdownLabel)
         countdownLabel.tag = 2929
         countdownLabel.translatesAutoresizingMaskIntoConstraints = false
-        countdownLabel.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -18).isActive = true
-        countdownLabel.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
+        countdownLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -18).isActive = true
+        countdownLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         countdownLabel.widthAnchor.constraint(equalToConstant: 75).isActive = true
         countdownLabel.heightAnchor.constraint(equalToConstant: countdownLabel.frame.height).isActive = true
-        rootView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCountdownPicker)))
+        contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCountdownPicker)))
         self.countdownLabel = countdownLabel
     }
     
@@ -126,8 +126,8 @@ class AppConfigurationViewController: PPLTableViewController {
         })
     }
     
-    func configureTimerSoundsCell(cell: PPLTableViewCell) {
-        cell.rootView?.isUserInteractionEnabled = true
+    func configureTimerSoundsCell(cell: UITableViewCell) {
+        cell.contentView.isUserInteractionEnabled = true
         let cellSwitch = switchView(cell)
         cellSwitch.isOn = PPLDefaults.instance.areTimerSoundsEnabled()
         cellSwitch.addTarget(self, action: #selector(setTimerSoundsEnabled(_:)), for: .valueChanged)
@@ -137,20 +137,20 @@ class AppConfigurationViewController: PPLTableViewController {
         PPLDefaults.instance.setTimerSoundsEnabled(sender.isOn)
     }
     
-    fileprivate func textLabelForCell(_ cell: PPLTableViewCell) -> PPLNameLabel {
+    fileprivate func textLabelForCell(_ cell: UITableViewCell) -> PPLNameLabel {
         let lbl = PPLNameLabel()
         lbl.numberOfLines = 2
-        cell.rootView?.addSubview(lbl)
+        cell.contentView.addSubview(lbl)
         constrain(lbl, cell)
         return lbl
     }
     
-    fileprivate func constrain(_ lbl: PPLNameLabel, _ cell: PPLTableViewCell) {
-        guard let rootView = cell.rootView else { return }
+    fileprivate func constrain(_ lbl: PPLNameLabel, _ cell: UITableViewCell) {
+        let contentView = cell.contentView
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
-        lbl.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: 20).isActive = true
-        lbl.trailingAnchor.constraint(equalTo: nameLabelTrailingAnchor(rootView), constant: 5).isActive = true
+        lbl.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        lbl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        lbl.trailingAnchor.constraint(equalTo: nameLabelTrailingAnchor(contentView), constant: 5).isActive = true
     }
     
     fileprivate func nameLabelTrailingAnchor(_ view: UIView) -> NSLayoutXAxisAnchor {
@@ -198,9 +198,9 @@ class AppConfigurationViewController: PPLTableViewController {
     }
     
     func showSpinner(_ indexPath: IndexPath) {
-        guard let cell = tableView?.cellForRow(at: indexPath) as? PPLTableViewCell, let rootView = cell.rootView else { return }
-        let spinner = UIActivityIndicatorView(frame: rootView.frame)
-        spinner.layer.cornerRadius = rootView.layer.cornerRadius
+        guard let cell = tableView?.cellForRow(at: indexPath) as? UITableViewCell else { return }
+        let spinner = UIActivityIndicatorView(frame: cell.contentView.frame)
+        spinner.layer.cornerRadius = cell.contentView.layer.cornerRadius
         spinner.style = .large
         spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         cell.contentView.addSubview(spinner)
@@ -234,9 +234,9 @@ class AppConfigurationViewController: PPLTableViewController {
         return .none
     }
     
-    fileprivate func switchView(_ cell: PPLTableViewCell) -> UISwitch {
+    fileprivate func switchView(_ cell: UITableViewCell) -> UISwitch {
         let switchView = UISwitch()
-        guard let rootView = cell.rootView else { return switchView }
+        let contentView = cell.contentView
         switchView.preferredStyle = .checkbox
         switchView.layer.masksToBounds = true
         switchView.layer.borderWidth = 2.0
@@ -244,10 +244,10 @@ class AppConfigurationViewController: PPLTableViewController {
         switchView.layer.borderColor = PPLColor.darkGray.cgColor
         switchView.tintColor = PPLColor.black
         switchView.backgroundColor = .gray
-        rootView.addSubview(switchView)
+        contentView.addSubview(switchView)
         switchView.translatesAutoresizingMaskIntoConstraints = false
-        switchView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -20).isActive = true
-        switchView.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
+        switchView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        switchView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         return switchView
     }
     

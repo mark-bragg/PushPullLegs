@@ -65,6 +65,7 @@ class GraphTableViewController: PPLTableViewController {
         }
         let height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0) - bannerContainerHeight()
         let tbv = PPLTableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height))
+//        tbv.register(PPLGraphTableViewCell.nib(), forCellReuseIdentifier: <#T##String#>)
         tbv.backgroundColor = PPLColor.clear
         view.addSubview(tbv)
         tbv.dataSource = self
@@ -85,9 +86,10 @@ class GraphTableViewController: PPLTableViewController {
         pushVc = WorkoutGraphViewController(type: .push, frame: frame)
         pullVc = WorkoutGraphViewController(type: .pull, frame: frame)
         legsVc = WorkoutGraphViewController(type: .legs, frame: frame)
-        pushVc?.isInteractive = false
-        pullVc?.isInteractive = false
-        legsVc?.isInteractive = false
+        for vc in [pushVc, pullVc, legsVc] {
+            vc?.isInteractive = false
+            vc?.view.backgroundColor = .clear
+        }
     }
     
     private func constrainTableView() {
@@ -114,19 +116,18 @@ class GraphTableViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
-            let rootView = cell.rootView,
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier),
             let view = viewForRow(indexPath.row)
-        else { return PPLTableViewCell() }
+        else { return UITableViewCell() }
         cell.tag = indexPath.row
         cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
-        rootView.addSubview(view)
-        constrain(view, toInsideOf: rootView)
+        cell.contentView.addSubview(view)
+        constrain(view, toInsideOf: cell.contentView)
         vcForRow(indexPath.row)?.reload()
         if let gVm = vcForRow(indexPath.row)?.workoutGraphViewModel, gVm.pointCount() > 0 {
-            cell.addDisclosureIndicator(PPLColor.white)
+            cell.accessoryType = .disclosureIndicator
         } else {
-            cell.addHelpIndicator(target: self, action: #selector(help(_:)), color: .white)
+            cell.addHelpIndicator(target: self, action: #selector(help(_:)))
             cell.selectionStyle = .none
         }
         return cell
@@ -210,11 +211,10 @@ class GraphTableViewController: PPLTableViewController {
     override func presentAdLoadingView() {
         guard
             let selectedRow,
-            let cell = tableView?.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell,
-            let rootView = cell.rootView
+            let cell = tableView?.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? UITableViewCell
         else { return }
-        let spinner = UIActivityIndicatorView(frame: rootView.frame)
-        spinner.layer.cornerRadius = rootView.layer.cornerRadius
+        let spinner = UIActivityIndicatorView(frame: cell.contentView.frame)
+        spinner.layer.cornerRadius = cell.contentView.layer.cornerRadius
         spinner.style = .large
         spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         cell.contentView.addSubview(spinner)
@@ -246,10 +246,10 @@ class GraphTableViewController: PPLTableViewController {
 extension GraphTableViewController {
     override func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
         popoverPresentationController.permittedArrowDirections = .right
-        guard let cell = tableView?.cellForRow(at: IndexPath(row: helpTag, section: 0)) as? PPLTableViewCell else {
+        guard let cell = tableView?.cellForRow(at: IndexPath(row: helpTag, section: 0)) as? UITableViewCell else {
             return
         }
-        popoverPresentationController.sourceView = cell.indicator
+        popoverPresentationController.sourceView = cell.accessoryView
     }
 
     override func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
@@ -265,5 +265,12 @@ extension UIViewController {
         subview.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
         subview.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insets.left).isActive = true
         subview.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insets.right).isActive = true
+    }
+}
+
+extension UITableViewCell {
+    func addHelpIndicator(target: AnyObject, action: Selector) {
+        accessoryType = .detailButton
+        accessoryView?.addGestureRecognizer(UITapGestureRecognizer(target: target, action: action))
     }
 }

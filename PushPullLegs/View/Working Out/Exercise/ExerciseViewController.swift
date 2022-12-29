@@ -257,9 +257,9 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier),
             let exerciseViewModel
-        else { return PPLTableViewCell() }
+        else { return UITableViewCell() }
         let labels = cell.labels(width: tableView.frame.width / 3)
         labels.w.text = "\(exerciseViewModel.weightForIndexPath(indexPath))"
         labels.r.text = "\(exerciseViewModel.repsForIndexPath(indexPath))"
@@ -294,7 +294,7 @@ class SetNavigationController: UINavigationController {
     }
 }
 
-extension PPLTableViewCell {
+extension UITableViewCell {
     
     fileprivate var weightLabelTag: Int {123}
     fileprivate var durationLabelTag: Int {234}
@@ -316,18 +316,17 @@ extension PPLTableViewCell {
         repsLabel.tag = repsLabelTag
         let timeLabel = PPLNameLabel()
         timeLabel.tag = durationLabelTag
-        guard let rootView else { return (weightLabel, repsLabel, timeLabel) }
         for lbl in [weightLabel, repsLabel, timeLabel] {
             lbl.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
             lbl.textColor = PPLColor.text
             lbl.textAlignment = .center
-            rootView.addSubview(lbl)
+            contentView.addSubview(lbl)
             lbl.translatesAutoresizingMaskIntoConstraints = false
-            lbl.topAnchor.constraint(equalTo: rootView.topAnchor).isActive = true
-            lbl.bottomAnchor.constraint(equalTo: rootView.bottomAnchor).isActive = true
-            lbl.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 1/3).isActive = true
+            lbl.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+            lbl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+            lbl.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1/3).isActive = true
         }
-        weightLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor).isActive = true
+        weightLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         repsLabel.leadingAnchor.constraint(equalTo: weightLabel.trailingAnchor).isActive = true
         timeLabel.leadingAnchor.constraint(equalTo: repsLabel.trailingAnchor).isActive = true
         return (weightLabel, repsLabel, timeLabel)

@@ -16,6 +16,7 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupRightBarButtonItems()
+        tableView?.allowsMultipleSelection = true
     }
     
     override func getRightBarButtonItems() -> [UIBarButtonItem] {
@@ -39,9 +40,9 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier) else { return UITableViewCell() }
         cell.frame = CGRect(x: cell.frame.origin.x, y: cell.frame.origin.y, width: tableView.frame.width, height: cell.frame.height)
-        cell.multiSelect = true
+//        cell.multiSelect = true
         cell.setSelected(workoutTemplateEditViewModel?.isSelected(indexPath) ?? false, animated: true)
         label(forCell: cell)?.text = workoutTemplateEditViewModel?.title(indexPath: indexPath)
         return cell
@@ -55,7 +56,7 @@ class WorkoutTemplateEditViewController: PPLTableViewController {
             workoutTemplateEditViewModel?.selected(indexPath: indexPath)
             isSelected = true
         }
-        if let cell = tableView.cellForRow(at: indexPath) as? PPLTableViewCell {
+        if let cell = tableView.cellForRow(at: indexPath) {
             cell.setSelected(isSelected, animated: true)
         }
         reload()

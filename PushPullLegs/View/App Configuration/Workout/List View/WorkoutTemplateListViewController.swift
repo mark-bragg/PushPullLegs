@@ -24,10 +24,10 @@ class WorkoutTemplateListViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as! PPLTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier) else { return UITableViewCell() }
         label(forCell: cell, fontSize: 64)?.text = viewModel?.title(indexPath: indexPath)
         cell.frame = CGRect.update(height: tableView.frame.height / 3.0, rect: cell.frame)
-        cell.addDisclosureIndicator()
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
@@ -60,16 +60,15 @@ extension CGRect {
 }
 
 extension UIViewController {
-    func label(forCell cell: PPLTableViewCell, fontSize: CGFloat = 26) -> PPLNameLabel? {
-        guard let rootView = cell.rootView else { return PPLNameLabel() }
-        var label = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+    func label(forCell cell: UITableViewCell, fontSize: CGFloat = 26) -> PPLNameLabel? {
+        var label = cell.contentView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if label == nil {
             label = PPLNameLabel()
-            rootView.addSubview(label!)
+            cell.contentView.addSubview(label!)
             label?.translatesAutoresizingMaskIntoConstraints = false
-            label?.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
-            label?.centerXAnchor.constraint(equalTo: rootView.centerXAnchor).isActive = true
-            label?.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: 20).isActive = true
+            label?.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor).isActive = true
+            label?.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor).isActive = true
+            label?.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 20).isActive = true
             label?.font = UIFont.systemFont(ofSize: fontSize, weight: .medium)
             label?.textAlignment = .center
             label?.textColor = PPLColor.text

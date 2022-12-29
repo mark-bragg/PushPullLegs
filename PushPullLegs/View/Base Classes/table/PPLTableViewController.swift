@@ -280,7 +280,7 @@ extension PPLTableViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        PPLTableViewCell()
+        UITableViewCell()
     }
 }
 

@@ -52,12 +52,12 @@ class StartWorkoutViewController: PPLTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell else {
-            return PPLTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier) else {
+            return UITableViewCell()
         }
         cell.setWorkoutTitle(startWorkoutViewModel()?.title(indexPath: indexPath))
         cell.updateTitleText()
-        cell.addDisclosureIndicator()
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
@@ -66,7 +66,7 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        exerciseType = (tableView.cellForRow(at: indexPath) as? PPLTableViewCell)?.exerciseType()
+        exerciseType = tableView.cellForRow(at: indexPath)?.exerciseType()
         if let del = delegate, let type = exerciseType {
             del.workoutSelectedWithType(type)
         } else {
@@ -99,11 +99,10 @@ extension UIViewController {
     }
 }
 
-fileprivate extension PPLTableViewCell {
+fileprivate extension UITableViewCell {
     
     func setWorkoutTitle(_ title: String?) {
-        guard let rootView else { return }
-        if let lbl = rootView.viewWithTag(1) as? UILabel {
+        if let lbl = contentView.viewWithTag(1) as? UILabel {
             lbl.text = title
             lbl.sizeToFit()
             return
@@ -113,14 +112,14 @@ fileprivate extension PPLTableViewCell {
         lbl.tag = 1
         lbl.text = title
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        rootView.addSubview(lbl)
-        lbl.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
-        lbl.centerXAnchor.constraint(equalTo: rootView.centerXAnchor).isActive = true
+        contentView.addSubview(lbl)
+        lbl.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        lbl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         lbl.sizeToFit()
     }
     
     func updateTitleText() {
-        guard let lbl = rootView?.viewWithTag(1) as? UILabel else { return }
+        guard let lbl = contentView.viewWithTag(1) as? UILabel else { return }
         lbl.textColor = PPLColor.text
     }
     

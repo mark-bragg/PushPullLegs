@@ -66,7 +66,6 @@ class PreviousPerformanceViewController: PPLTableViewController {
         tbv.separatorStyle = .none
         tbv.dataSource = self
         tbv.delegate = self
-        tbv.register(PPLTableViewCell.nib(), forCellReuseIdentifier: defaultCellIdentifier)
         view.addSubview(tbv)
         tableView = tbv
     }
@@ -88,7 +87,7 @@ class PreviousPerformanceViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: defaultCellIdentifier) as? PPLTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier) else { return UITableViewCell() }
         let set = sets[indexPath.row]
         let (w, r, d) = cell.labels(width: cell.frame.width)
         w.text = "\(set.weight)"

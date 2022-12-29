@@ -45,20 +45,18 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell else {
-            return PPLTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier) else {
+            return UITableViewCell()
         }
-        guard let rootView = cell.rootView else { return cell }
-        cell.multiSelect = viewModel?.multiSelect ?? false
-        var textLabel = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+        var textLabel = cell.contentView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
-            textLabel = newTextLabel(rootView)
+            textLabel = newTextLabel(cell.contentView)
         }
         textLabel?.text = exerciseSelectionViewModel?.title(indexPath: indexPath)
         return cell
     }
     
-    private func newTextLabel(_ rootView: ShadowBackground) -> PPLNameLabel {
+    private func newTextLabel(_ rootView: UIView) -> PPLNameLabel {
         let textLabel = PPLNameLabel()
         textLabel.textColor = PPLColor.text
         textLabel.textAlignment = .center

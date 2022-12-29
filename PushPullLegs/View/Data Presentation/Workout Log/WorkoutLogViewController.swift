@@ -100,15 +100,15 @@ class WorkoutLogViewController: DatabaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell else {
-            return PPLTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier) else {
+            return UITableViewCell()
         }
         cell.nameLabel.text = viewModel?.title(indexPath: indexPath)
         cell.dateLabel.text = workoutLogViewModel?.dateLabel(indexPath: indexPath)
         cell.nameLabel.textColor = PPLColor.text
         cell.dateLabel.textColor = PPLColor.text
         if !tableView.isEditing {
-            cell.addDisclosureIndicator()
+            cell.accessoryType = .disclosureIndicator
         }
         return cell
     }
@@ -147,7 +147,7 @@ class PPLNameLabel: UILabel {
     }
 }
 
-fileprivate extension PPLTableViewCell {
+fileprivate extension UITableViewCell {
     private var nameTag: Int {529}
     private var dateTag: Int {232}
     
@@ -159,10 +159,8 @@ fileprivate extension PPLTableViewCell {
             let nameLabel = PPLNameLabel()
             nameLabel.tag = nameTag
             addLabel(nameLabel)
-            if let rootView {
-                nameLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor).isActive = true
-                nameLabel.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.5).isActive = true
-            }
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+            nameLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5).isActive = true
             return nameLabel
         }
     }
@@ -175,10 +173,8 @@ fileprivate extension PPLTableViewCell {
             let dateLabel = PPLNameLabel()
             dateLabel.tag = dateTag
             addLabel(dateLabel)
-            if let rootView {
-                dateLabel.trailingAnchor.constraint(equalTo: rootView.trailingAnchor).isActive = true
-                dateLabel.widthAnchor.constraint(equalTo: rootView.widthAnchor, multiplier: 0.5).isActive = true
-            }
+            dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+            dateLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5).isActive = true
             return dateLabel
         }
     }
@@ -187,11 +183,9 @@ fileprivate extension PPLTableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
         label.textAlignment = .center
-        if let rootView {
-            rootView.addSubview(label)
-            label.topAnchor.constraint(equalTo: rootView.topAnchor).isActive = true
-            label.bottomAnchor.constraint(equalTo: rootView.bottomAnchor).isActive = true
-        }
+        contentView.addSubview(label)
+        label.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
 }
 

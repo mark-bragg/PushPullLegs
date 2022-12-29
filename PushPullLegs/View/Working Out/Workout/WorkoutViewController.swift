@@ -122,31 +122,31 @@ class WorkoutViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
-            let rootView = cell.rootView
-        else { return PPLTableViewCell() }
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier)
+        else { return UITableViewCell() }
+        let contentView = cell.contentView
         let title = viewModel?.title(indexPath: indexPath)
-        rootView.removeAllSubviews()
+        contentView.removeAllSubviews()
         if indexPath.section == 1 {
             let vc = ExerciseDataCellViewController()
             vc.exerciseName = title
             if let work = workoutEditViewModel?.detailText(indexPath: indexPath) {
                 vc.workText = "Total work: \(work)"
             }
-            vc.preferredContentSize = rootView.bounds.size
-            rootView.addSubview(vc.view)
+            vc.preferredContentSize = contentView.bounds.size
+            contentView.addSubview(vc.view)
             vc.progress = workoutEditViewModel?.exerciseVolumeComparison(row: indexPath.row)
             cell.setSelected(true, animated: false)
         } else {
             let label = PPLNameLabel()
             label.translatesAutoresizingMaskIntoConstraints = false
-            rootView.addSubview(label)
-            label.centerXAnchor.constraint(equalTo: rootView.centerXAnchor).isActive = true
-            label.centerYAnchor.constraint(equalTo: rootView.centerYAnchor).isActive = true
+            contentView.addSubview(label)
+            label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
             label.text = title
             label.textColor = PPLColor.text
         }
-        cell.addDisclosureIndicator()
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
