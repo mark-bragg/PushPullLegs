@@ -63,7 +63,7 @@ class PreviousPerformanceViewController: PPLTableViewController {
         guard tableView == nil else { return }
         let tbvFrame = CGRect(x: 0, y: titleViewHeight, width: view.frame.width, height: view.frame.height - titleViewHeight)
         let tbv = PPLTableView(frame: tbvFrame, style: .plain)
-        tbv.separatorStyle = .none
+        tbv.allowsSelection = false
         tbv.dataSource = self
         tbv.delegate = self
         view.addSubview(tbv)

@@ -174,13 +174,11 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         if headerHeight == 0 {
             return HeaderViewContainer(frame: .zero)
         }
-        let headerView = UIView(frame: CGRect(x: 0, y: 1, width: view.frame.width, height: headerHeight - 2))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
         var i = 0
-        let widthDenominator = CGFloat(titles.count)
-        let labelWidth = headerView.frame.width / widthDenominator
-        headerView.backgroundColor = .tertiary
+        let labelWidth = headerLabelWidth(headerView.frame.width, CGFloat(titles.count))
         for title in titles {
-            let label = UILabel.headerLabel(title)
+            let label = UILabel.headerLabel(title, titles.count > 1)
             label.frame = CGRect(x: CGFloat(i) * labelWidth, y: 0, width: labelWidth, height: headerHeight)
             headerView.addSubview(label)
             i += 1
@@ -189,6 +187,10 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         headerViewContainer.headerView = headerView
         return headerViewContainer
     }
+    
+    func headerLabelWidth(_ headerWidth: CGFloat, _ numberOfTitles: CGFloat) -> CGFloat {
+        headerWidth / numberOfTitles
+   }
     
     func removeAddButton() {
         hideNoDataView()
@@ -298,17 +300,17 @@ extension PPLTableViewController: ReloadProtocol {
 
 extension UIViewController {
     func titleLabelFont() -> UIFont {
-        UIFont.systemFont(ofSize: 32, weight: .heavy)
+        UIFont.systemFont(ofSize: 20, weight: .bold)
     }
 }
 
 extension UILabel {
-    static func headerLabel(_ text: String) -> UILabel {
+    static func headerLabel(_ text: String, _ centered: Bool = true) -> UILabel {
         let label = UILabel()
         label.text = text
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        label.textColor = .white
+        label.textAlignment = centered ? .center : .natural
+        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = .secondaryLabel
         return label
     }
 }

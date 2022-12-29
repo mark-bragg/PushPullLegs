@@ -164,8 +164,8 @@ class WorkoutViewController: PPLTableViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        tableHeaderViewContainer(titles: [section == 0 ? "TODO" : "DONE"], section: section)
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        section == 0 ? "TODO" : "DONE"
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HeaderViewContainer: UIView {
+class HeaderViewContainer: UITableViewHeaderFooterView {
     weak var headerView: UIView? {
         willSet {
             guard let newValue else { return }
@@ -120,6 +120,14 @@ class WorkoutLogViewController: DatabaseTableViewController {
         
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    override func headerLabelWidth(_ headerWidth: CGFloat, _ numberOfTitles: CGFloat) -> CGFloat {
+        guard let tableView, let visibleIndexPath = tableView.indexPathsForVisibleRows?.first else {
+            return super.headerLabelWidth(headerWidth, numberOfTitles)
+        }
+        let cell = self.tableView(tableView, cellForRowAt: visibleIndexPath)
+        return (cell.contentView.frame.width / numberOfTitles)
     }
     
     override func reload() {
