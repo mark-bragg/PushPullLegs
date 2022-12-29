@@ -82,6 +82,10 @@ extension PPLDropDownViewController: PPLDropdownViewControllerDelegate {
             addNewDropdownMenu(item.items)
         } else if let delegate {
             delegate.didSelectItem(item)
+        } else if let action = item.action {
+            presentationController?.presentedViewController.dismiss(animated: true) {
+                let _ = item.target?.perform(action)
+            }
         }
     }
     
