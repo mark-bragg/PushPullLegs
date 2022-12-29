@@ -69,16 +69,11 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath), let exerciseSelectionViewModel {
-            // TODO: refactor to new method in ExerciseSelectionViewModel: func toggle()
-            if exerciseSelectionViewModel.isSelected(row: indexPath.row) {
-                exerciseSelectionViewModel.deselected(row: indexPath.row)
-                cell.setSelected(false, animated: true)
-            } else {
-                exerciseSelectionViewModel.selected(row: indexPath.row)
-                cell.setSelected(true, animated: true)
-            }
-        }
+        exerciseSelectionViewModel?.selected(row: indexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        exerciseSelectionViewModel?.deselected(row: indexPath.row)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
