@@ -22,6 +22,7 @@ class WorkoutNoteViewController: UIViewController {
     weak var toolbar: UIToolbar?
     weak var delegate: WorkoutNoteViewControllerDelegate?
     weak var dataSource: WorkoutNoteViewControllerDataSource?
+    private var padding: CGFloat = 12
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +35,7 @@ class WorkoutNoteViewController: UIViewController {
         addToolbar()
         addToolbarItems()
         addTextView()
-        view.backgroundColor = PPLColor.secondary
+        view.backgroundColor = PPLColor.primary
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,17 +50,9 @@ class WorkoutNoteViewController: UIViewController {
     
     private func addToolbar() {
         let toolbar = UIToolbar()
-        toolbar.backgroundColor = PPLColor.secondary
         view.addSubview(toolbar)
+        toolbar.sizeToFit()
         self.toolbar = toolbar
-        constrainToolbar()
-    }
-    
-    private func constrainToolbar() {
-        toolbar?.translatesAutoresizingMaskIntoConstraints = false
-        toolbar?.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        toolbar?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        toolbar?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
     private func addToolbarItems() {
@@ -68,7 +61,7 @@ class WorkoutNoteViewController: UIViewController {
         let separator = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         cancelItem.tintColor = .white
-        toolbar?.setItems([cancelItem, separator, saveItem], animated: false)
+        toolbar?.setItems([cancelItem, separator, saveItem], animated: true)
     }
     
     @objc func save() {
@@ -85,22 +78,19 @@ class WorkoutNoteViewController: UIViewController {
         textView.text = dataSource?.noteText()
         textView.font = UIFont.systemFont(ofSize: 22)
         self.textView = textView
-        textView.textColor = PPLColor.white
-        textView.backgroundColor = PPLColor.primary
     }
     
-    private func constrainTextView(_ keyboardHeight: CGFloat) {
+    private func setTextViewFrame(_ keyboardHeight: CGFloat) {
         guard let textView, let toolbar else { return }
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.topAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 12).isActive = true
-        textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12).isActive = true
-        textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
-        textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -keyboardHeight).isActive = true
+        let y = toolbar.frame.height + padding
+        let width = view.frame.width - (2 * padding)
+        let height = view.frame.height - y - keyboardHeight
+        textView.frame = CGRect(x: padding, y: y, width: width, height: height)
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            constrainTextView(keyboardFrame.cgRectValue.height)
+            setTextViewFrame(keyboardFrame.cgRectValue.height)
         }
     }
 
