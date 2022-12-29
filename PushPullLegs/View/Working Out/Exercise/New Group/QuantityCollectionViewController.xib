@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -25,19 +24,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="J9I-pQ-jtB">
-                    <rect key="frame" x="0.0" y="44" width="414" height="308"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="308"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Weight" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpg-sK-wes" userLabel="Label">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="93.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="93.333333333333329"/>
                             <fontDescription key="fontDescription" type="system" pointSize="35"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZSV-Bg-Y5r">
-                            <rect key="frame" x="0.0" y="107.5" width="414" height="93"/>
+                            <rect key="frame" x="0.0" y="107.33333333333334" width="414" height="93.333333333333343"/>
                             <subviews>
                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sg3-FI-cWM">
-                                    <rect key="frame" x="82" y="18" width="250" height="57.5"/>
+                                    <rect key="frame" x="82" y="17.999999999999996" width="250" height="57.666666666666657"/>
                                     <color key="backgroundColor" name="cell_background_blue"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="250" id="QSg-HZ-cEG"/>
@@ -45,9 +44,6 @@
                                     <color key="textColor" name="text_green"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                     <textInputTraits key="textInputTraits"/>
-                                    <connections>
-                                        <action selector="editingChanged:" destination="-1" eventType="editingChanged" id="RNq-Ae-Gcm"/>
-                                    </connections>
                                 </textField>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -57,10 +53,10 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QCq-7f-6Uv">
-                            <rect key="frame" x="0.0" y="214.5" width="414" height="93.5"/>
+                            <rect key="frame" x="0.0" y="214.66666666666666" width="414" height="93.333333333333343"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n5t-pM-Rhr" customClass="PPLButton" customModule="PushPullLegs" customModuleProvider="target">
-                                    <rect key="frame" x="82" y="32" width="250" height="30"/>
+                                    <rect key="frame" x="82" y="31.666666666666686" width="250" height="30"/>
                                     <color key="backgroundColor" name="cell_background_blue"/>
                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <state key="normal" title="Button"/>

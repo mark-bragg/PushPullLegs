@@ -51,7 +51,7 @@ class PPLButton : UIButton {
     }
     
     func style() {
-        contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+//        configuration = .borderedProminent()
         layer.cornerRadius = radius != 0 ? radius : frame.height/2
         layer.borderWidth = 2.0
         layer.borderColor = UIColor.white.cgColor

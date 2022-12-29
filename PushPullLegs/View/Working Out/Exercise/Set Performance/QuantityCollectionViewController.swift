@@ -29,6 +29,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, P
         super.viewWillAppear(animated)
         button.delegate = self
         textField.delegate = self
+        textField.addTarget(self, action: #selector(editingChanged(_:)), for: .editingChanged)
         textField.autocorrectionType = .no
         button.disable()
         view.backgroundColor = PPLColor.primary
@@ -41,7 +42,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, P
         super.viewWillDisappear(animated)
     }
     
-    @IBAction func editingChanged(_ sender: Any) {
+    @objc func editingChanged(_ sender: Any) {
         guard let text = textField.text, !text.isEmpty else {
             button.disable()
             return
