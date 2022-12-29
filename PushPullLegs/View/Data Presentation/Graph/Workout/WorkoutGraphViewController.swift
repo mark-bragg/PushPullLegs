@@ -65,3 +65,7 @@ class WorkoutGraphViewController: GraphViewController {
     }
 
 }
+
+class WorkoutGraphCellViewController: WorkoutGraphViewController {
+    override var backgroundColor: UIColor { .clear }
+}

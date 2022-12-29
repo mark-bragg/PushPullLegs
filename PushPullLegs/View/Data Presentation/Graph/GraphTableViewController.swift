@@ -65,7 +65,6 @@ class GraphTableViewController: PPLTableViewController {
         }
         let height = view.frame.height - (tabBarController?.tabBar.frame.height ?? 0) - bannerContainerHeight()
         let tbv = PPLTableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height))
-//        tbv.register(PPLGraphTableViewCell.nib(), forCellReuseIdentifier: <#T##String#>)
         tbv.backgroundColor = PPLColor.clear
         view.addSubview(tbv)
         tbv.dataSource = self
@@ -83,12 +82,13 @@ class GraphTableViewController: PPLTableViewController {
             return
         }
         let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: (tableView?.rowHeight ?? view.frame.height / 3) - 16)
-        pushVc = WorkoutGraphViewController(type: .push, frame: frame)
-        pullVc = WorkoutGraphViewController(type: .pull, frame: frame)
-        legsVc = WorkoutGraphViewController(type: .legs, frame: frame)
+        pushVc = WorkoutGraphCellViewController(type: .push, frame: frame)
+        pullVc = WorkoutGraphCellViewController(type: .pull, frame: frame)
+        legsVc = WorkoutGraphCellViewController(type: .legs, frame: frame)
         for vc in [pushVc, pullVc, legsVc] {
             vc?.isInteractive = false
             vc?.view.backgroundColor = .clear
+            vc?.view.subviews.forEach { $0.backgroundColor = .clear }
         }
     }
     
@@ -130,7 +130,18 @@ class GraphTableViewController: PPLTableViewController {
             cell.addHelpIndicator(target: self, action: #selector(help(_:)))
             cell.selectionStyle = .none
         }
+        if let tapView = cell.contentView.subviews.first(where: { $0.isKind(of: TapView.self) }) {
+            tapView.removeFromSuperview()
+        }
+        let tapView = TapView(tag: indexPath.row + 1, target: self, action: #selector(tapViewTapped(_:)))
+        cell.contentView.addSubview(tapView)
+        constrain(tapView, toInsideOf: cell.contentView)
         return cell
+    }
+    
+    @objc private func tapViewTapped(_ tap: UITapGestureRecognizer) {
+        guard let tableView, let row = tap.view?.tag else { return }
+        self.tableView(tableView, didSelectRowAt: IndexPath(row: row - 1, section: 0))
     }
     
     @objc func help(_ control: UIControl) {
@@ -272,5 +283,18 @@ extension UITableViewCell {
     func addHelpIndicator(target: AnyObject, action: Selector) {
         accessoryType = .detailButton
         accessoryView?.addGestureRecognizer(UITapGestureRecognizer(target: target, action: action))
+    }
+}
+
+class TapView: UIView {
+    init(tag: Int, target: AnyObject, action: Selector) {
+        super.init(frame: .zero)
+        self.tag = tag
+        addGestureRecognizer(UITapGestureRecognizer(target: target, action: action))
+        isUserInteractionEnabled = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

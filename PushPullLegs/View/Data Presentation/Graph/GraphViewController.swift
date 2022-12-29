@@ -24,13 +24,14 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     var isInteractive = true
     private var heightForLabelStack: CGFloat { (isLandscape() ? 25 : 75) * ((volumeLabel != nil && dateLabel != nil) ? 2 : 1) }
     weak var dropdown: PPLDropDownViewController?
+    var backgroundColor: UIColor { PPLColor.primary }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if isInteractive {
             letTabBarKnowGraphIsPresented(true)
         }
-        view.backgroundColor = PPLColor.primary
+        view.backgroundColor = backgroundColor
         guard firstLoad else { return }
         setTitleLabel()
         firstLoad = false
@@ -77,7 +78,11 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         guard !firstLoad else { return }
         viewModel?.reload()
         reloadViews()
-        view.backgroundColor = PPLColor.primary
+        updateBackgroundColor()
+    }
+    
+    func updateBackgroundColor() {
+        view.backgroundColor = backgroundColor
     }
     
     func reloadViews() {
@@ -92,7 +97,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     
     func addContainerView() {
         let containerView = UIView(frame: view.frame)
-        containerView.backgroundColor = PPLColor.primary
+        containerView.backgroundColor = backgroundColor
         view.addSubview(containerView)
         self.containerView = containerView
         addConstraints()
@@ -179,7 +184,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         containerView?.addSubview(graph)
         if isInteractive {
             graph.setInteractivity()
-            containerView?.backgroundColor = .primary
+            containerView?.backgroundColor = backgroundColor
         } else {
             graph.backgroundColor = .clear
         }
