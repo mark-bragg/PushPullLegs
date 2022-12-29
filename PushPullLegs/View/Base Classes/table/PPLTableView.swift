@@ -9,13 +9,15 @@
 import Foundation
 import UIKit
 
+let UITableViewCellIdentifier = "UITableViewCellIdentifier"
+
 class PPLTableView: UITableView {
     
     override func dequeueReusableCell(withIdentifier identifier: String) -> UITableViewCell? {
         var cell = super.dequeueReusableCell(withIdentifier: identifier)
         if cell == nil {
-            register(PPLTableViewCell.nib(), forCellReuseIdentifier: PPLTableViewCellIdentifier)
-            cell = super.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier)
+            register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCellIdentifier)
+            cell = super.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier)
         }
         cell?.backgroundColor = .clear
         cell?.focusStyle = .custom
@@ -26,7 +28,7 @@ class PPLTableView: UITableView {
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundColor = .clear
-        separatorStyle = .none
+        separatorStyle = .singleLine
     }
     
 }

@@ -82,12 +82,14 @@ class GraphTableViewController: PPLTableViewController {
             return
         }
         let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: (tableView?.rowHeight ?? view.frame.height / 3) - 16)
-        pushVc = WorkoutGraphViewController(type: .push, frame: frame)
-        pullVc = WorkoutGraphViewController(type: .pull, frame: frame)
-        legsVc = WorkoutGraphViewController(type: .legs, frame: frame)
-        pushVc?.isInteractive = false
-        pullVc?.isInteractive = false
-        legsVc?.isInteractive = false
+        pushVc = WorkoutGraphCellViewController(type: .push, frame: frame)
+        pullVc = WorkoutGraphCellViewController(type: .pull, frame: frame)
+        legsVc = WorkoutGraphCellViewController(type: .legs, frame: frame)
+        for vc in [pushVc, pullVc, legsVc] {
+            vc?.isInteractive = false
+            vc?.view.backgroundColor = .clear
+            vc?.view.subviews.forEach { $0.backgroundColor = .clear }
+        }
     }
     
     private func constrainTableView() {
@@ -114,22 +116,32 @@ class GraphTableViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
-            let rootView = cell.rootView,
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier),
             let view = viewForRow(indexPath.row)
-        else { return PPLTableViewCell() }
+        else { return UITableViewCell() }
         cell.tag = indexPath.row
         cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
-        rootView.addSubview(view)
-        constrain(view, toInsideOf: rootView)
+        cell.contentView.addSubview(view)
+        constrain(view, toInsideOf: cell.contentView)
         vcForRow(indexPath.row)?.reload()
         if let gVm = vcForRow(indexPath.row)?.workoutGraphViewModel, gVm.pointCount() > 0 {
-            cell.addDisclosureIndicator(PPLColor.white)
+            cell.accessoryType = .disclosureIndicator
         } else {
-            cell.addHelpIndicator(target: self, action: #selector(help(_:)), color: .white)
+            cell.addHelpIndicator(target: self, action: #selector(help(_:)))
             cell.selectionStyle = .none
         }
+        if let tapView = cell.contentView.subviews.first(where: { $0.isKind(of: TapView.self) }) {
+            tapView.removeFromSuperview()
+        }
+        let tapView = TapView(tag: indexPath.row + 1, target: self, action: #selector(tapViewTapped(_:)))
+        cell.contentView.addSubview(tapView)
+        constrain(tapView, toInsideOf: cell.contentView)
         return cell
+    }
+    
+    @objc private func tapViewTapped(_ tap: UITapGestureRecognizer) {
+        guard let tableView, let row = tap.view?.tag else { return }
+        self.tableView(tableView, didSelectRowAt: IndexPath(row: row - 1, section: 0))
     }
     
     @objc func help(_ control: UIControl) {
@@ -210,11 +222,10 @@ class GraphTableViewController: PPLTableViewController {
     override func presentAdLoadingView() {
         guard
             let selectedRow,
-            let cell = tableView?.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? PPLTableViewCell,
-            let rootView = cell.rootView
+            let cell = tableView?.cellForRow(at: IndexPath(row: selectedRow, section: 0)) as? UITableViewCell
         else { return }
-        let spinner = UIActivityIndicatorView(frame: rootView.frame)
-        spinner.layer.cornerRadius = rootView.layer.cornerRadius
+        let spinner = UIActivityIndicatorView(frame: cell.contentView.frame)
+        spinner.layer.cornerRadius = cell.contentView.layer.cornerRadius
         spinner.style = .large
         spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         cell.contentView.addSubview(spinner)
@@ -246,10 +257,10 @@ class GraphTableViewController: PPLTableViewController {
 extension GraphTableViewController {
     override func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
         popoverPresentationController.permittedArrowDirections = .right
-        guard let cell = tableView?.cellForRow(at: IndexPath(row: helpTag, section: 0)) as? PPLTableViewCell else {
+        guard let cell = tableView?.cellForRow(at: IndexPath(row: helpTag, section: 0)) as? UITableViewCell else {
             return
         }
-        popoverPresentationController.sourceView = cell.indicator
+        popoverPresentationController.sourceView = cell.accessoryView
     }
 
     override func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
@@ -265,5 +276,25 @@ extension UIViewController {
         subview.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insets.bottom).isActive = true
         subview.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insets.left).isActive = true
         subview.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insets.right).isActive = true
+    }
+}
+
+extension UITableViewCell {
+    func addHelpIndicator(target: AnyObject, action: Selector) {
+        accessoryType = .detailButton
+        accessoryView?.addGestureRecognizer(UITapGestureRecognizer(target: target, action: action))
+    }
+}
+
+class TapView: UIView {
+    init(tag: Int, target: AnyObject, action: Selector) {
+        super.init(frame: .zero)
+        self.tag = tag
+        addGestureRecognizer(UITapGestureRecognizer(target: target, action: action))
+        isUserInteractionEnabled = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

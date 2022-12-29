@@ -73,19 +73,19 @@ class ExerciseTemplateListViewController: PPLTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: PPLTableViewCellIdentifier) as? PPLTableViewCell,
-            let rootView = cell.rootView
-        else { return PPLTableViewCell() }
-        var textLabel = rootView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier)
+        else { return UITableViewCell() }
+        let contentView = cell.contentView
+        var textLabel = contentView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
         if textLabel == nil {
             textLabel = PPLNameLabel()
             textLabel?.textAlignment = .center
             textLabel?.textColor = PPLColor.text
-            rootView.addSubview(textLabel!)
+            contentView.addSubview(textLabel!)
             textLabel?.translatesAutoresizingMaskIntoConstraints = false
-            textLabel?.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: 10).isActive = true
-            textLabel?.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: -10).isActive = true
-            textLabel?.centerYAnchor.constraint(equalTo: rootView.centerYAnchor, constant: 0).isActive = true
+            textLabel?.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10).isActive = true
+            textLabel?.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: -10).isActive = true
+            textLabel?.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0).isActive = true
         }
         textLabel?.text = viewModel?.title(indexPath: indexPath)
         return cell
@@ -99,12 +99,12 @@ class ExerciseTemplateListViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? PPLTableViewCell else { return }
+        guard let cell = tableView.cellForRow(at: indexPath) else { return }
         cell.setHighlighted(true, animated: false)
     }
     
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        guard let ip = indexPath, let cell = tableView.cellForRow(at: ip) as? PPLTableViewCell else { return }
+        guard let ip = indexPath, let cell = tableView.cellForRow(at: ip) else { return }
         cell.setHighlighted(false, animated: true)
     }
     

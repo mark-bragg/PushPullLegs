@@ -72,8 +72,6 @@
 		498266B5261E81EE0070A4FA /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498266B4261E81EE0070A4FA /* StringExtensionsTests.swift */; };
 		498266B9261E82C90070A4FA /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */; };
 		4989BA5524B94344001C17B3 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4989BA5424B94344001C17B3 /* AppColors.swift */; };
-		4989BA5A24BB905F001C17B3 /* PPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */; };
-		4989BA5B24BB905F001C17B3 /* PPLTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */; };
 		4989BA6024BB94B0001C17B3 /* ExerciseDataCellViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4989BA5F24BB94B0001C17B3 /* ExerciseDataCellViewController.xib */; };
 		4989BA6224BB9A10001C17B3 /* ExerciseDataCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4989BA6124BB9A10001C17B3 /* ExerciseDataCellViewController.swift */; };
 		4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49937899243B86D400EAD55E /* WorkoutTemplateListViewModel.swift */; };
@@ -224,8 +222,6 @@
 		4980D9AB25A42A4D0054EA5F /* InterstitialAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdController.swift; sourceTree = "<group>"; };
 		498266B4261E81EE0070A4FA /* StringExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
 		4989BA5424B94344001C17B3 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
-		4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewCell.swift; sourceTree = "<group>"; };
-		4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PPLTableViewCell.xib; sourceTree = "<group>"; };
 		4989BA5F24BB94B0001C17B3 /* ExerciseDataCellViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseDataCellViewController.xib; sourceTree = "<group>"; };
 		4989BA6124BB9A10001C17B3 /* ExerciseDataCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDataCellViewController.swift; sourceTree = "<group>"; };
 		49937899243B86D400EAD55E /* WorkoutTemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewModel.swift; sourceTree = "<group>"; };
@@ -391,18 +387,8 @@
 				49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */,
 				49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */,
 				49359B8624C28C64005FF7A8 /* PPLTableView.swift */,
-				491C8D02254BC183003A7526 /* cell */,
 			);
 			path = table;
-			sourceTree = "<group>";
-		};
-		491C8D02254BC183003A7526 /* cell */ = {
-			isa = PBXGroup;
-			children = (
-				4989BA5824BB905F001C17B3 /* PPLTableViewCell.swift */,
-				4989BA5924BB905F001C17B3 /* PPLTableViewCell.xib */,
-			);
-			path = cell;
 			sourceTree = "<group>";
 		};
 		491C8D03254BC1BD003A7526 /* extensions */ = {
@@ -1055,7 +1041,6 @@
 				49ABACBC25F463C700517F6F /* start.m4a in Resources */,
 				49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */,
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
-				4989BA5B24BB905F001C17B3 /* PPLTableViewCell.xib in Resources */,
 				49A1B398265B298100FE73F5 /* tick.m4a in Resources */,
 				49CD440C261AC3C500C8A6C8 /* DurationCollectionViewController.xib in Resources */,
 				490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */,
@@ -1173,7 +1158,6 @@
 				49453378244FC8FA00FA1665 /* WorkoutLogViewController.swift in Sources */,
 				491DD62B248C565C0001F9F8 /* PPLStopWatch.swift in Sources */,
 				492B3B432660AF8F00929BB3 /* GraphViewController.swift in Sources */,
-				4989BA5A24BB905F001C17B3 /* PPLTableViewCell.swift in Sources */,
 				49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */,
 				490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */,
 				4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */,

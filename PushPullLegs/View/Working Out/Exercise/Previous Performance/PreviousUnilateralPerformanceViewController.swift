@@ -37,7 +37,7 @@ class PreviousUnilateralPerformanceViewController: PreviousPerformanceViewContro
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: defaultCellIdentifier) as? PPLTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: defaultCellIdentifier) else { return UITableViewCell() }
         let set = indexPath.section == 0 ? leftSets[indexPath.row] : rightSets[indexPath.row]
         let (w, r, d) = cell.labels(width: cell.frame.width)
         w.text = "\(set.weight)"
