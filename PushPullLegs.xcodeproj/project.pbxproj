@@ -94,7 +94,6 @@
 		49C8D24124A99E0000B361C7 /* PPLDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C8D24024A99E0000B361C7 /* PPLDefaults.swift */; };
 		49CD43E0261798F600C8A6C8 /* DBExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD43DF261798F600C8A6C8 /* DBExerciseViewController.swift */; };
 		49CD44072619520A00C8A6C8 /* DurationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */; };
-		49CD440C261AC3C500C8A6C8 /* DurationCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49CD440B261AC3C500C8A6C8 /* DurationCollectionViewController.xib */; };
 		49CEF20A2447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */; };
 		49E2501F249F1B60001F7B70 /* PPLTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */; };
 		49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */; };
@@ -242,7 +241,6 @@
 		49C8D24024A99E0000B361C7 /* PPLDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDefaults.swift; sourceTree = "<group>"; };
 		49CD43DF261798F600C8A6C8 /* DBExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBExerciseViewController.swift; sourceTree = "<group>"; };
 		49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCollectionViewController.swift; sourceTree = "<group>"; };
-		49CD440B261AC3C500C8A6C8 /* DurationCollectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DurationCollectionViewController.xib; sourceTree = "<group>"; };
 		49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModelTests.swift; sourceTree = "<group>"; };
 		49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewController.swift; sourceTree = "<group>"; };
 		49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModel.swift; sourceTree = "<group>"; };
@@ -359,7 +357,6 @@
 				49E8933D295E6CE000B99345 /* Quantity Collection */,
 				490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */,
 				49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */,
-				49CD440B261AC3C500C8A6C8 /* DurationCollectionViewController.xib */,
 			);
 			path = "Set Performance";
 			sourceTree = "<group>";
@@ -1043,7 +1040,6 @@
 				49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */,
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
 				49A1B398265B298100FE73F5 /* tick.m4a in Resources */,
-				49CD440C261AC3C500C8A6C8 /* DurationCollectionViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
