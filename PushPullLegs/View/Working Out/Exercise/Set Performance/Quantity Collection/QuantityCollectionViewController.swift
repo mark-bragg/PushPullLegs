@@ -8,13 +8,16 @@
 
 import UIKit
 
+extension UIViewController {
+    var spacer: UIView { UIView() }
+}
+
 class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, PPLButtonDelegate {
     weak var stackView: UIStackView?
     weak var label: UILabel?
     weak var textField: UITextField?
     weak var button: UIButton?
     private let height: CGFloat = 308
-    private var spacer: UIView { UIView() }
     
     private var performingTextCorrection = false
     var characterLimit = 0
@@ -50,7 +53,6 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, P
     
     func getLabel() -> UILabel {
         let lbl = UILabel()
-        lbl.text = "Enter Weight"
         lbl.font = UIFont.systemFont(ofSize: 28)
         label = lbl
         return lbl

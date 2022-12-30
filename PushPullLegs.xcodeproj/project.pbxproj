@@ -16,7 +16,6 @@
 		490D88E524528546005FFEA3 /* ExerciseSetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E424528546005FFEA3 /* ExerciseSetViewModelTests.swift */; };
 		490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */; };
 		490D88EA2452B5FD005FFEA3 /* ExerciseTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */; };
-		490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */; };
 		490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */; };
 		491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CF62547D65E003A7526 /* RestTimerView.swift */; };
 		491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */; };
@@ -165,7 +164,6 @@
 		490D88E424528546005FFEA3 /* ExerciseSetViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSetViewModelTests.swift; sourceTree = "<group>"; };
 		490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSetViewModel.swift; sourceTree = "<group>"; };
 		490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTimerViewController.swift; sourceTree = "<group>"; };
-		490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseTimerViewController.xib; sourceTree = "<group>"; };
 		490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		491C8CF62547D65E003A7526 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
 		491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseTemplateCreationViewController.xib; sourceTree = "<group>"; };
@@ -358,11 +356,8 @@
 			isa = PBXGroup;
 			children = (
 				490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */,
-				490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */,
+				49E8933D295E6CE000B99345 /* Quantity Collection */,
 				490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */,
-				490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */,
-				4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */,
-				493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */,
 				49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */,
 				49CD440B261AC3C500C8A6C8 /* DurationCollectionViewController.xib */,
 			);
@@ -768,6 +763,16 @@
 			path = Navigational;
 			sourceTree = "<group>";
 		};
+		49E8933D295E6CE000B99345 /* Quantity Collection */ = {
+			isa = PBXGroup;
+			children = (
+				490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */,
+				4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */,
+				493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */,
+			);
+			path = "Quantity Collection";
+			sourceTree = "<group>";
+		};
 		49EF4B6C23F8381F0071687D = {
 			isa = PBXGroup;
 			children = (
@@ -1039,7 +1044,6 @@
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
 				49A1B398265B298100FE73F5 /* tick.m4a in Resources */,
 				49CD440C261AC3C500C8A6C8 /* DurationCollectionViewController.xib in Resources */,
-				490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
