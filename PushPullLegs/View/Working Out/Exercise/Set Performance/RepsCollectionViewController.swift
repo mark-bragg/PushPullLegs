@@ -16,14 +16,19 @@ class RepsCollectionViewController: QuantityCollectionViewController, Exercising
         super.viewDidLoad()
         view.backgroundColor = PPLColor.primary
         navigationItem.title = "Rep Count"
-        label.text = "Enter Number of Reps"
-        button.setTitle("Save Set", for: .normal)
-        textField.keyboardType = .decimalPad
+        label?.text = "Enter Number of Reps"
+        button?.setTitle("Save Set", for: .normal)
+        textField?.keyboardType = .decimalPad
         characterLimit = 5
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        button?.isEnabled = false
+    }
+    
     override func buttonReleased(_ sender: Any) {
-        if let t = textField.text, let reps = Double(t) {
+        if let t = textField?.text, let reps = Double(t) {
             super.buttonReleased(sender)
             exerciseSetViewModel?.finishSetWithReps(reps)
         }

@@ -12,7 +12,6 @@
 		49028D26243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D25243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift */; };
 		49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D2A243DA206005EC078 /* WorkoutTemplateEditViewModel.swift */; };
 		490AEAD22423AA5D005C1112 /* WorkoutTemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490AEAD12423AA5D005C1112 /* WorkoutTemplateListViewController.swift */; };
-		490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 490D88DF2451EED8005FFEA3 /* QuantityCollectionViewController.xib */; };
 		490D88E32452832F005FFEA3 /* QuantityCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */; };
 		490D88E524528546005FFEA3 /* ExerciseSetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E424528546005FFEA3 /* ExerciseSetViewModelTests.swift */; };
 		490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */; };
@@ -162,7 +161,6 @@
 		49028D25243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateEditViewController.swift; sourceTree = "<group>"; };
 		49028D2A243DA206005EC078 /* WorkoutTemplateEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateEditViewModel.swift; sourceTree = "<group>"; };
 		490AEAD12423AA5D005C1112 /* WorkoutTemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewController.swift; sourceTree = "<group>"; };
-		490D88DF2451EED8005FFEA3 /* QuantityCollectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = QuantityCollectionViewController.xib; path = "../New Group/QuantityCollectionViewController.xib"; sourceTree = "<group>"; };
 		490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityCollectionViewController.swift; sourceTree = "<group>"; };
 		490D88E424528546005FFEA3 /* ExerciseSetViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSetViewModelTests.swift; sourceTree = "<group>"; };
 		490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSetViewModel.swift; sourceTree = "<group>"; };
@@ -361,7 +359,6 @@
 			children = (
 				490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */,
 				490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */,
-				490D88DF2451EED8005FFEA3 /* QuantityCollectionViewController.xib */,
 				490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */,
 				490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */,
 				4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */,
@@ -1037,7 +1034,6 @@
 				496BE36724DE7C7000A4E08B /* Workout.storyboard in Resources */,
 				492B642F26D13F140004171D /* launch.png in Resources */,
 				49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */,
-				490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */,
 				49ABACBC25F463C700517F6F /* start.m4a in Resources */,
 				49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */,
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
