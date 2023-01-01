@@ -18,7 +18,7 @@
 		490D88EA2452B5FD005FFEA3 /* ExerciseTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */; };
 		490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */; };
 		491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CF62547D65E003A7526 /* RestTimerView.swift */; };
-		491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */; };
+		491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController1.xib */; };
 		491C8CFB254A523E003A7526 /* StartWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFA254A523E003A7526 /* StartWorkoutViewController.swift */; };
 		491C8CFD254A67DC003A7526 /* HowToUseAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFC254A67DC003A7526 /* HowToUseAppViewController.swift */; };
 		491C8CFF254A6841003A7526 /* HowToUseAppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFE254A6841003A7526 /* HowToUseAppViewModel.swift */; };
@@ -165,7 +165,7 @@
 		490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTimerViewController.swift; sourceTree = "<group>"; };
 		490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		491C8CF62547D65E003A7526 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
-		491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseTemplateCreationViewController.xib; sourceTree = "<group>"; };
+		491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseTemplateCreationViewController1.xib; sourceTree = "<group>"; };
 		491C8CFA254A523E003A7526 /* StartWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartWorkoutViewController.swift; sourceTree = "<group>"; };
 		491C8CFC254A67DC003A7526 /* HowToUseAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToUseAppViewController.swift; sourceTree = "<group>"; };
 		491C8CFE254A6841003A7526 /* HowToUseAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToUseAppViewModel.swift; sourceTree = "<group>"; };
@@ -699,7 +699,7 @@
 			children = (
 				4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */,
 				49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */,
-				491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */,
+				491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController1.xib */,
 			);
 			path = Creation;
 			sourceTree = "<group>";
@@ -1031,7 +1031,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4957DFBE246D049C00574C89 /* ExerciseDataCell.xib in Resources */,
-				491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController.xib in Resources */,
+				491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController1.xib in Resources */,
 				4989BA6024BB94B0001C17B3 /* ExerciseDataCellViewController.xib in Resources */,
 				496BE36724DE7C7000A4E08B /* Workout.storyboard in Resources */,
 				492B642F26D13F140004171D /* launch.png in Resources */,

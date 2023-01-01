@@ -262,12 +262,14 @@ class AppConfigurationRowView: UIView {
 }
 
 extension UISegmentedControl {
-    static func PPLSegmentedControl(titles: [String], target: Any, selector: Selector) -> UISegmentedControl {
+    static func PPLSegmentedControl(titles: [String], target: Any? = nil, selector: Selector? = nil) -> UISegmentedControl {
         let segment = UISegmentedControl()
         for i in 0..<titles.count {
             segment.insertSegment(withTitle: titles[i], at: i, animated: false)
         }
-        segment.addTarget(target, action: selector, for: .valueChanged)
+        if let target, let selector {
+            segment.addTarget(target, action: selector, for: .valueChanged)
+        }
         segment.selectedSegmentTintColor = PPLColor.primary
         segment.backgroundColor = .pplGray
         return segment

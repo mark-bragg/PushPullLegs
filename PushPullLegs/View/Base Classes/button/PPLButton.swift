@@ -52,13 +52,13 @@ class PPLButton : UIButton {
     
     func style() {
 //        configuration = .borderedProminent()
-        layer.cornerRadius = radius != 0 ? radius : frame.height/2
-        layer.borderWidth = 2.0
-        layer.borderColor = UIColor.white.cgColor
-        setTitleColor(.disabledSaveWhiteColor, for: .disabled)
-        setTitleColor(.text, for: .normal)
-        titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)
-        backgroundColor = .quaternary
+//        layer.cornerRadius = radius != 0 ? radius : frame.height/2
+//        layer.borderWidth = 2.0
+//        layer.borderColor = UIColor.white.cgColor
+//        setTitleColor(.disabledSaveWhiteColor, for: .disabled)
+//        setTitleColor(.text, for: .normal)
+//        titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)
+//        backgroundColor = .quaternary
     }
     
     func enable() {

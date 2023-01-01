@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,15 +10,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExerciseTemplateCreationViewController" customModule="PushPullLegs" customModuleProvider="target">
             <connections>
-                <outlet property="lateralTypeParentView" destination="4V4-wb-tY5" id="yAR-Bn-4Gc"/>
-                <outlet property="legsButton" destination="aCv-Xk-76G" id="KN5-VT-Yah"/>
-                <outlet property="nameLabel" destination="ZsX-X2-Dr2" id="Pzb-Ug-VWG"/>
-                <outlet property="parentStackView" destination="rTb-VC-1eL" id="GFY-7m-3jT"/>
-                <outlet property="pullButton" destination="wql-CW-NlU" id="Srd-cV-xbc"/>
-                <outlet property="pushButton" destination="cvA-gm-OWJ" id="VYm-QR-TRn"/>
-                <outlet property="saveButton" destination="KFv-Lq-svP" id="Jdz-v1-oAL"/>
-                <outlet property="textField" destination="dhU-a6-qVq" id="FDU-xV-FsZ"/>
-                <outlet property="typeSelectionStackView" destination="CR5-5g-2SQ" id="yfR-Jm-LMm"/>
                 <outlet property="view" destination="RIl-fC-dHi" id="R4O-5L-Nhl"/>
             </connections>
         </placeholder>
@@ -29,7 +19,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rTb-VC-1eL">
-                    <rect key="frame" x="20" y="64" width="374" height="300"/>
+                    <rect key="frame" x="20" y="20" width="374" height="300"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New Exercise" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZsX-X2-Dr2">
                             <rect key="frame" x="0.0" y="0.0" width="374" height="69"/>
@@ -41,7 +31,7 @@
                             <rect key="frame" x="0.0" y="77" width="374" height="69"/>
                             <subviews>
                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="exercise name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dhU-a6-qVq">
-                                    <rect key="frame" x="52" y="6" width="270" height="57.5"/>
+                                    <rect key="frame" x="52" y="5.6666666666666679" width="270" height="57.666666666666657"/>
                                     <color key="backgroundColor" name="cell_background_blue"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="57.5" id="t5Y-fE-AJD"/>
@@ -64,7 +54,7 @@
                                     <rect key="frame" x="2" y="0.0" width="370" height="69"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cvA-gm-OWJ" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="115.5" height="69"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="115.33333333333333" height="69"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Button">
@@ -72,7 +62,7 @@
                                             </state>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wql-CW-NlU" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                            <rect key="frame" x="127.5" y="0.0" width="115" height="69"/>
+                                            <rect key="frame" x="127.33333333333334" y="0.0" width="115.33333333333334" height="69"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Button">
@@ -80,7 +70,7 @@
                                             </state>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aCv-Xk-76G" customClass="ExerciseTypeButton" customModule="PushPullLegs" customModuleProvider="target">
-                                            <rect key="frame" x="254.5" y="0.0" width="115.5" height="69"/>
+                                            <rect key="frame" x="254.66666666666671" y="0.0" width="115.33333333333334" height="69"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Button">
@@ -108,7 +98,7 @@
                     </constraints>
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KFv-Lq-svP" customClass="PPLButton" customModule="PushPullLegs" customModuleProvider="target">
-                    <rect key="frame" x="82" y="376" width="250" height="65"/>
+                    <rect key="frame" x="82" y="332" width="250" height="65"/>
                     <color key="backgroundColor" name="ppl_dark_grey"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="65" id="EV6-uJ-gwV"/>
