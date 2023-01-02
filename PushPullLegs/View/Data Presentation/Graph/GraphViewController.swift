@@ -22,7 +22,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     var padding: CGFloat { view.frame.width * 0.05 }
     var needConstraints = true
     var isInteractive = true
-    private var heightForLabelStack: CGFloat { (isLandscape() ? 25 : 75) * ((volumeLabel != nil && dateLabel != nil) ? 2 : 1) }
+    private var heightForLabelStack: CGFloat { (30) * ((volumeLabel != nil && dateLabel != nil) ? 2 : 1) }
     weak var dropdown: PPLDropDownViewController?
     var backgroundColor: UIColor { PPLColor.primary }
     
@@ -194,8 +194,7 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
         }
         containerView.backgroundColor = .clear
         graph.translatesAutoresizingMaskIntoConstraints = false
-        var topOffset: CGFloat = 0
-        graph.topAnchor.constraint(equalTo: topAnchor, constant: topOffset).isActive = true
+        graph.topAnchor.constraint(equalTo: topAnchor).isActive = true
         graph.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: isInteractive ? 0 : -16).isActive = true
         graph.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
         graph.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
