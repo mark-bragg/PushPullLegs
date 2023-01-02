@@ -28,7 +28,9 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     override func viewDidLayoutSubviews() {
         bind()
-        setupLateralTypeSegmentedControl()
+        if let segCon = creationView.lateralTypeSegmentedControl, segCon.allTargets.isEmpty {
+            segCon.addTarget(self, action: #selector(lateralTypeChanged(_:)), for: .valueChanged)
+        }
     }
     
     private func bind() {
@@ -138,12 +140,6 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         default:
             return nil
         }
-    }
-    
-    private func setupLateralTypeSegmentedControl() {
-        creationView.lateralTypeSegmentedControl?.addTarget(self, action: #selector(lateralTypeChanged(_:)), for: .valueChanged)
-        creationView.lateralTypeSegmentedControl?.selectedSegmentIndex = 0
-        viewModel?.lateralType = .bilateral
     }
     
     @objc private func lateralTypeChanged(_ control: UISegmentedControl) {
