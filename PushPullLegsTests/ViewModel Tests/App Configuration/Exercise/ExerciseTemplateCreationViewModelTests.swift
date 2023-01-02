@@ -37,7 +37,7 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
         sut = ExerciseTemplateCreationViewModel(management: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
         expectationCompletion = XCTestExpectation(description: "save exercise template success completion")
         expectationReload = XCTestExpectation(description: "save exercise template reload delegate")
-        sut.selectedType(.push)
+        sut.exerciseType = .push
         sut.reloader = self
         sut.lateralType = unilateral ? .unilateral : .bilateral
         sut.saveExercise(withName: "testing") {
@@ -92,7 +92,7 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
     func testIsTypeSelected_selected_trueReturned() {
         dbHelper.insertWorkoutTemplate(type: .push)
         sut = ExerciseTemplateCreationViewModel(management: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
-        sut.selectedType(.push)
+        sut.exerciseType = .push
         XCTAssert(sut.isTypeSelected() == true)
     }
 

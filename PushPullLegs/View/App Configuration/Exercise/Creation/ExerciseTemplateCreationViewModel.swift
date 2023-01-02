@@ -10,7 +10,11 @@ import Foundation
 
 class ExerciseTemplateCreationViewModel: ObservableObject {
     
-    @Published private(set) var exerciseType: ExerciseType
+    var exerciseType: ExerciseType? {
+        didSet {
+            isSaveEnabled = exerciseNameIsValid(exerciseName)
+        }
+    }
     private var management: TemplateManagement
     private var preSetType: Bool = false
     var reloader: ReloadProtocol?
@@ -33,11 +37,6 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
         }
     }
     
-    func selectedType(_ type: ExerciseType) {
-        exerciseType = type
-        isSaveEnabled = exerciseNameIsValid(exerciseName)
-    }
-    
     func isTypeSelected() -> Bool {
         return exerciseType != .error
     }
@@ -52,7 +51,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     }
     
     private func saveExerciseTemplate(_ name: String) -> Bool {
-        guard exerciseType != .error else { return false }
+        guard let exerciseType, exerciseType != .error else { return false }
         do {
             try management.addExerciseTemplate(name: name, type: exerciseType, unilateral: isUnilateral)
         } catch {

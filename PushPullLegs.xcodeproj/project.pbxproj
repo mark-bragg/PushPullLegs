@@ -12,15 +12,12 @@
 		49028D26243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D25243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift */; };
 		49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49028D2A243DA206005EC078 /* WorkoutTemplateEditViewModel.swift */; };
 		490AEAD22423AA5D005C1112 /* WorkoutTemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490AEAD12423AA5D005C1112 /* WorkoutTemplateListViewController.swift */; };
-		490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 490D88DF2451EED8005FFEA3 /* QuantityCollectionViewController.xib */; };
 		490D88E32452832F005FFEA3 /* QuantityCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */; };
 		490D88E524528546005FFEA3 /* ExerciseSetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E424528546005FFEA3 /* ExerciseSetViewModelTests.swift */; };
 		490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */; };
 		490D88EA2452B5FD005FFEA3 /* ExerciseTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */; };
-		490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */; };
 		490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */; };
 		491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CF62547D65E003A7526 /* RestTimerView.swift */; };
-		491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */; };
 		491C8CFB254A523E003A7526 /* StartWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFA254A523E003A7526 /* StartWorkoutViewController.swift */; };
 		491C8CFD254A67DC003A7526 /* HowToUseAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFC254A67DC003A7526 /* HowToUseAppViewController.swift */; };
 		491C8CFF254A6841003A7526 /* HowToUseAppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491C8CFE254A6841003A7526 /* HowToUseAppViewModel.swift */; };
@@ -88,6 +85,10 @@
 		49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACA225F45BEF00517F6F /* countdown.m4a */; };
 		49ABACBC25F463C700517F6F /* start.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACAF25F45CE700517F6F /* start.m4a */; };
 		49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF0D20259D23D2003F8C60 /* BannerAdController.swift */; };
+		49BA7A2A296355F600C14F1F /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */; };
+		49BA7A2C2963561800C14F1F /* StartExerciseLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */; };
+		49BA7A2E29635B9900C14F1F /* TimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A2D29635B9900C14F1F /* TimeLabel.swift */; };
+		49BA7A312963605400C14F1F /* DurationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A302963605400C14F1F /* DurationCollectionView.swift */; };
 		49C1EA522608179100330CBF /* IAPTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA512608179100330CBF /* IAPTransaction.swift */; };
 		49C1EA572608181F00330CBF /* AppConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */; };
 		49C1EA5D260AF84F00330CBF /* WorkoutLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA5C260AF84F00330CBF /* WorkoutLogViewModel.swift */; };
@@ -96,7 +97,6 @@
 		49C8D24124A99E0000B361C7 /* PPLDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C8D24024A99E0000B361C7 /* PPLDefaults.swift */; };
 		49CD43E0261798F600C8A6C8 /* DBExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD43DF261798F600C8A6C8 /* DBExerciseViewController.swift */; };
 		49CD44072619520A00C8A6C8 /* DurationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */; };
-		49CD440C261AC3C500C8A6C8 /* DurationCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49CD440B261AC3C500C8A6C8 /* DurationCollectionViewController.xib */; };
 		49CEF20A2447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */; };
 		49E2501F249F1B60001F7B70 /* PPLTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */; };
 		49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */; };
@@ -112,6 +112,7 @@
 		49E89337295CCEB500B99345 /* PPLDropdownNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E89336295CCEB500B99345 /* PPLDropdownNavigationItem.swift */; };
 		49E8933A295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E89339295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift */; };
 		49E8933C295CCF4000B99345 /* PPLDropdownDateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8933B295CCF4000B99345 /* PPLDropdownDateItem.swift */; };
+		49E8933F2962537800B99345 /* ExerciseTemplateCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8933E2962537800B99345 /* ExerciseTemplateCreationView.swift */; };
 		49EF4B7923F8381F0071687D /* PPLAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */; };
 		49EF4B7B23F8381F0071687D /* PPLSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */; };
 		49EF4B8523F838370071687D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49EF4B8423F838370071687D /* Assets.xcassets */; };
@@ -162,15 +163,12 @@
 		49028D25243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateEditViewController.swift; sourceTree = "<group>"; };
 		49028D2A243DA206005EC078 /* WorkoutTemplateEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateEditViewModel.swift; sourceTree = "<group>"; };
 		490AEAD12423AA5D005C1112 /* WorkoutTemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewController.swift; sourceTree = "<group>"; };
-		490D88DF2451EED8005FFEA3 /* QuantityCollectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = QuantityCollectionViewController.xib; path = "../New Group/QuantityCollectionViewController.xib"; sourceTree = "<group>"; };
 		490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityCollectionViewController.swift; sourceTree = "<group>"; };
 		490D88E424528546005FFEA3 /* ExerciseSetViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSetViewModelTests.swift; sourceTree = "<group>"; };
 		490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSetViewModel.swift; sourceTree = "<group>"; };
 		490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTimerViewController.swift; sourceTree = "<group>"; };
-		490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseTimerViewController.xib; sourceTree = "<group>"; };
 		490D88EE2453ED7B005FFEA3 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		491C8CF62547D65E003A7526 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
-		491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExerciseTemplateCreationViewController.xib; sourceTree = "<group>"; };
 		491C8CFA254A523E003A7526 /* StartWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartWorkoutViewController.swift; sourceTree = "<group>"; };
 		491C8CFC254A67DC003A7526 /* HowToUseAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToUseAppViewController.swift; sourceTree = "<group>"; };
 		491C8CFE254A6841003A7526 /* HowToUseAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToUseAppViewModel.swift; sourceTree = "<group>"; };
@@ -238,6 +236,10 @@
 		49ABACA225F45BEF00517F6F /* countdown.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = countdown.m4a; sourceTree = "<group>"; };
 		49ABACAF25F45CE700517F6F /* start.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.m4a; sourceTree = "<group>"; };
 		49AF0D20259D23D2003F8C60 /* BannerAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdController.swift; sourceTree = "<group>"; };
+		49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTimerView.swift; sourceTree = "<group>"; };
+		49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartExerciseLabel.swift; sourceTree = "<group>"; };
+		49BA7A2D29635B9900C14F1F /* TimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabel.swift; sourceTree = "<group>"; };
+		49BA7A302963605400C14F1F /* DurationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCollectionView.swift; sourceTree = "<group>"; };
 		49C1EA512608179100330CBF /* IAPTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTransaction.swift; sourceTree = "<group>"; };
 		49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurationViewModel.swift; sourceTree = "<group>"; };
 		49C1EA5C260AF84F00330CBF /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
@@ -246,7 +248,6 @@
 		49C8D24024A99E0000B361C7 /* PPLDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDefaults.swift; sourceTree = "<group>"; };
 		49CD43DF261798F600C8A6C8 /* DBExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBExerciseViewController.swift; sourceTree = "<group>"; };
 		49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCollectionViewController.swift; sourceTree = "<group>"; };
-		49CD440B261AC3C500C8A6C8 /* DurationCollectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DurationCollectionViewController.xib; sourceTree = "<group>"; };
 		49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModelTests.swift; sourceTree = "<group>"; };
 		49E2501E249F1B60001F7B70 /* PPLTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewController.swift; sourceTree = "<group>"; };
 		49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationViewModel.swift; sourceTree = "<group>"; };
@@ -262,6 +263,7 @@
 		49E89336295CCEB500B99345 /* PPLDropdownNavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropdownNavigationItem.swift; sourceTree = "<group>"; };
 		49E89339295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropdownDateNavigationItem.swift; sourceTree = "<group>"; };
 		49E8933B295CCF4000B99345 /* PPLDropdownDateItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDropdownDateItem.swift; sourceTree = "<group>"; };
+		49E8933E2962537800B99345 /* ExerciseTemplateCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateCreationView.swift; sourceTree = "<group>"; };
 		49EF4B7523F8381F0071687D /* PushPullLegs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushPullLegs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EF4B7823F8381F0071687D /* PPLAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAppDelegate.swift; sourceTree = "<group>"; };
 		49EF4B7A23F8381F0071687D /* PPLSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLSceneDelegate.swift; sourceTree = "<group>"; };
@@ -360,14 +362,8 @@
 			isa = PBXGroup;
 			children = (
 				490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */,
-				490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */,
-				490D88DF2451EED8005FFEA3 /* QuantityCollectionViewController.xib */,
-				490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */,
-				490D88E92452B5FD005FFEA3 /* ExerciseTimerViewController.xib */,
-				4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */,
-				493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */,
-				49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */,
-				49CD440B261AC3C500C8A6C8 /* DurationCollectionViewController.xib */,
+				49E8933D295E6CE000B99345 /* Quantity Collection */,
+				49BA7A28296355C400C14F1F /* Exercise Timer */,
 			);
 			path = "Set Performance";
 			sourceTree = "<group>";
@@ -675,6 +671,26 @@
 			path = Sounds;
 			sourceTree = "<group>";
 		};
+		49BA7A28296355C400C14F1F /* Exercise Timer */ = {
+			isa = PBXGroup;
+			children = (
+				490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */,
+				49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */,
+				49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */,
+			);
+			path = "Exercise Timer";
+			sourceTree = "<group>";
+		};
+		49BA7A2F29635BDF00C14F1F /* DurationCollection */ = {
+			isa = PBXGroup;
+			children = (
+				49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */,
+				49BA7A2D29635B9900C14F1F /* TimeLabel.swift */,
+				49BA7A302963605400C14F1F /* DurationCollectionView.swift */,
+			);
+			path = DurationCollection;
+			sourceTree = "<group>";
+		};
 		49C1EA5B260AF82900330CBF /* Workout Log */ = {
 			isa = PBXGroup;
 			children = (
@@ -687,6 +703,7 @@
 		49C1EA6E260F03FC00330CBF /* Workout Data */ = {
 			isa = PBXGroup;
 			children = (
+				49BA7A2F29635BDF00C14F1F /* DurationCollection */,
 				4957DFB5246B54F000574C89 /* WorkoutDataViewModel.swift */,
 				4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */,
 				49565A2C26B9FF1400F13E44 /* WorkoutNoteViewController.swift */,
@@ -710,7 +727,7 @@
 			children = (
 				4997C1DA2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift */,
 				49E30B4A243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift */,
-				491C8CF825494406003A7526 /* ExerciseTemplateCreationViewController.xib */,
+				49E8933E2962537800B99345 /* ExerciseTemplateCreationView.swift */,
 			);
 			path = Creation;
 			sourceTree = "<group>";
@@ -769,6 +786,16 @@
 				49E89339295CCEED00B99345 /* PPLDropdownDateNavigationItem.swift */,
 			);
 			path = Navigational;
+			sourceTree = "<group>";
+		};
+		49E8933D295E6CE000B99345 /* Quantity Collection */ = {
+			isa = PBXGroup;
+			children = (
+				490D88E22452832F005FFEA3 /* QuantityCollectionViewController.swift */,
+				4929DB0F2454DB0C009DCC7F /* RepsCollectionViewController.swift */,
+				493C2C702455E5D2005308AF /* WeightCollectionViewController.swift */,
+			);
+			path = "Quantity Collection";
 			sourceTree = "<group>";
 		};
 		49EF4B6C23F8381F0071687D = {
@@ -1032,18 +1059,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4957DFBE246D049C00574C89 /* ExerciseDataCell.xib in Resources */,
-				491C8CF925494406003A7526 /* ExerciseTemplateCreationViewController.xib in Resources */,
 				4989BA6024BB94B0001C17B3 /* ExerciseDataCellViewController.xib in Resources */,
 				496BE36724DE7C7000A4E08B /* Workout.storyboard in Resources */,
 				492B642F26D13F140004171D /* launch.png in Resources */,
 				49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */,
-				490D88E02451EED8005FFEA3 /* QuantityCollectionViewController.xib in Resources */,
 				49ABACBC25F463C700517F6F /* start.m4a in Resources */,
 				49EF4B8823F838370071687D /* LaunchScreen.storyboard in Resources */,
 				49EF4B8523F838370071687D /* Assets.xcassets in Resources */,
 				49A1B398265B298100FE73F5 /* tick.m4a in Resources */,
-				49CD440C261AC3C500C8A6C8 /* DurationCollectionViewController.xib in Resources */,
-				490D88EB2452B5FD005FFEA3 /* ExerciseTimerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,7 +1196,9 @@
 				49A08D82293469F000870DDA /* PreviousUnilateralPerformanceViewController.swift in Sources */,
 				4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */,
 				4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */,
+				49BA7A312963605400C14F1F /* DurationCollectionView.swift in Sources */,
 				49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */,
+				49BA7A2C2963561800C14F1F /* StartExerciseLabel.swift in Sources */,
 				492B3B3B26609F2700929BB3 /* PPLDropDownViewController.swift in Sources */,
 				49359BA024DD052F005FF7A8 /* GraphView.swift in Sources */,
 				49CD43E0261798F600C8A6C8 /* DBExerciseViewController.swift in Sources */,
@@ -1194,6 +1219,8 @@
 				49359B8D24D60001005FF7A8 /* PPLButton.swift in Sources */,
 				49E89332295CCE1300B99345 /* PPLDropdownMenu.swift in Sources */,
 				490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */,
+				49E8933F2962537800B99345 /* ExerciseTemplateCreationView.swift in Sources */,
+				49BA7A2A296355F600C14F1F /* ExerciseTimerView.swift in Sources */,
 				492B643A26D1A4AD0004171D /* SplashViewController.swift in Sources */,
 				4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */,
 				49F8EF292447754900B6BD45 /* ExerciseTemplateListViewController.swift in Sources */,
@@ -1212,6 +1239,7 @@
 				49E8932F295B759900B99345 /* AccessibilityIdentifiers.swift in Sources */,
 				49E89337295CCEB500B99345 /* PPLDropdownNavigationItem.swift in Sources */,
 				49E89335295CCE9100B99345 /* PPLDropdownItem.swift in Sources */,
+				49BA7A2E29635B9900C14F1F /* TimeLabel.swift in Sources */,
 				49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */,
 				491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */,
 				492B645F26D4B7220004171D /* UnilateralExerciseViewController.swift in Sources */,

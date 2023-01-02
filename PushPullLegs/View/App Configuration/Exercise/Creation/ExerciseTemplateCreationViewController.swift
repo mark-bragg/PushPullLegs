@@ -10,99 +10,72 @@ import UIKit
 import Combine
 
 class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDelegate {
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var pushButton: ExerciseTypeButton!
-    @IBOutlet weak var pullButton: ExerciseTypeButton!
-    @IBOutlet weak var legsButton: ExerciseTypeButton!
-    @IBOutlet weak var typeSelectionStackView: UIStackView!
-    @IBOutlet weak var saveButton: PPLButton!
-    @IBOutlet weak var parentStackView: UIStackView!
-    @IBOutlet weak var lateralTypeParentView: UIView!
-    weak var lateralTypeSegmentedControl: UISegmentedControl?
+    private var creationView: ExerciseTemplateCreationView {
+        (view as? ExerciseTemplateCreationView) ?? ExerciseTemplateCreationView()
+    }
     private var cancellables: Set<AnyCancellable> = []
     var showExerciseType: Bool = false
     var viewModel: ExerciseTemplateCreationViewModel?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = PPLColor.primary
-        if showExerciseType {
-            setupExerciseTypeButtons()
-            saveButton.setTitle("Select Type", for: .normal)
-        } else {
-            hideExerciseType()
-        }
-        setupLateralTypeSegmentedControl()
-        styleButtons()
-        bind()
+    override func loadView() {
+        view = ExerciseTemplateCreationView(showExerciseType: showExerciseType)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        textField.autocorrectionType = .no
-        textField.textAlignment = .center
-        textField.backgroundColor = PPLColor.quaternary
-        textField.becomeFirstResponder()
+        creationView.textField.becomeFirstResponder()
     }
     
-    fileprivate func bind() {
+    override func viewDidLayoutSubviews() {
+        bind()
+        setupLateralTypeSegmentedControl()
+    }
+    
+    private func bind() {
         bindButtons()
         bindViewModel()
     }
     
-    fileprivate func bindButtons() {
-        NotificationCenter.default.addObserver(self, selector: #selector(pushButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: pushButton)
-        NotificationCenter.default.addObserver(self, selector: #selector(pullButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: pullButton)
-        NotificationCenter.default.addObserver(self, selector: #selector(legsButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: legsButton)
-        NotificationCenter.default.addObserver(self, selector: #selector(touchDownSaveButton(_:)), name: PPLButton.touchDownNotificationName(), object: saveButton)
+    private func bindButtons() {
+        for btn in [creationView.pushButton, creationView.pullButton, creationView.legsButton] {
+            btn?.addTarget(self, action: #selector(typeSelected(_:)), for: .touchUpInside)
+        }
+        creationView.saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
     }
     
-    fileprivate func bindViewModel() {
+    private func bindViewModel() {
         guard let viewModel = viewModel else { return }
         bindSaveButtonToViewModel(viewModel)
         bindSanitizerToTextField(viewModel)
-        bindTypeButtonDeselectionToViewModel(viewModel)
         bindExerciseNameToTextField(viewModel)
     }
     
-    fileprivate func bindSaveButtonToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
+    private func bindSaveButtonToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
         viewModel.$isSaveEnabled.sink { [weak self] enabled in
-            guard let self = self else { return }
-            if enabled && !self.saveButton.isEnabled {
-                self.saveButton.enable()
-            } else if !enabled && self.saveButton.isEnabled {
-                self.saveButton.disable()
+            guard let btn = self?.creationView.saveButton else { return }
+            if enabled && !btn.isEnabled {
+                btn.isEnabled = true
+            } else if !enabled && btn.isEnabled {
+                btn.isEnabled = false
             }
         }
         .store(in: &cancellables)
     }
     
-    fileprivate func bindSanitizerToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
+    private func bindSanitizerToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
         viewModel.$exerciseName.sink { [weak self] name in
-            guard let self = self, let name = name else { return }
-            self.textField.text = ExerciseNameSanitizer().sanitize(name)
+            guard let textField = self?.creationView.textField, let name = name else { return }
+            textField.text = ExerciseNameSanitizer().sanitize(name)
         }
         .store(in: &cancellables)
     }
     
-    fileprivate func bindTypeButtonDeselectionToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
-        viewModel.$exerciseType.sink { [weak self] type in
-            guard let self = self else { return }
-            if self.saveButton.title(for: .normal) != "Save" {
-                self.saveButton.setTitle("Save", for: .normal)
-            }
-            self.deselectAllTypeButtons(except: type)
-        }
-        .store(in: &cancellables)
-    }
-    
-    fileprivate func bindExerciseNameToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
+    private func bindExerciseNameToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
         [UITextField.textDidChangeNotification,
          UITextField.textDidBeginEditingNotification,
          UITextField.textDidEndEditingNotification
         ].forEach({ notif in
-            NotificationCenter.default.publisher(for: notif, object: textField)
+            NotificationCenter.default.publisher(for: notif, object: creationView.textField)
             .map( { (($0.object as? UITextField)?.text ?? "") } )
             .map({ (text) -> String in
                 return ExerciseNameSanitizer().sanitize(text)
@@ -112,94 +85,69 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         })
     }
     
-    @objc fileprivate func pushButtonSelected(_ notification: Notification) {
-        viewModel?.selectedType(.push)
-    }
-    
-    @objc fileprivate func pullButtonSelected(_ notification: Notification) {
-        viewModel?.selectedType(.pull)
-    }
-    
-    @objc fileprivate func legsButtonSelected(_ notification: Notification) {
-        viewModel?.selectedType(.legs)
-    }
-    
-    @objc fileprivate func touchDownSaveButton(_ notification: Notification) {
-        save()
-    }
-    
-    fileprivate func deselectAllTypeButtons(except: ExerciseType) {
-        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs].filter({ $0 != except }) {
-            buttonForType(type)?.releaseButton()
+    @objc private func typeSelected(_ button: ExerciseTypeButton) {
+        guard let type = button.exerciseType else { return }
+        viewModel?.exerciseType = type
+        DispatchQueue.main.async {
+            self.highlightType(type)
         }
     }
     
-    fileprivate func styleButtons() {
-        for btn in [saveButton, pushButton, pullButton, legsButton] {
-            btn?.style()
+    private func highlightType(_ buttonType: ExerciseType) {
+        for type in [ExerciseType.push, .pull, .legs] {
+            let button = buttonForType(type)
+            button?.isHighlighted = button?.exerciseType == buttonType
         }
-        saveButton.disable()
     }
     
-    @IBAction func save() {
-        guard let text = textField.text else {
+    @objc func save() {
+        guard let text = creationView.textField.text, let alert = saveAlert(text) else {
             return
         }
-        let alert = UIAlertController(title: "Add to Workout?", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [weak self] (action) in
-            guard let self = self else { return }
-            self.viewModel?.saveExercise(withName: text, successCompletion: {
-                self.dismiss(animated: true, completion: nil)
-            })
-        }))
-        alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: { [weak self] (action) in
-            guard let self = self else { return }
-            self.saveButton.deselection()
-        }))
         present(alert, animated: true, completion: nil)
     }
     
-    fileprivate func setupExerciseTypeButtons() {
-        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs] {
-            let btn = buttonForType(type)
-            btn?.setTitle(type.rawValue, for: .normal)
-            btn?.exerciseType = type
+    private func saveAlert(_ exerciseName: String) -> UIAlertController? {
+        guard let type = viewModel?.exerciseType else { return nil }
+        let alert = UIAlertController(title: "Add \(exerciseName) to your \(type.rawValue) Workout?", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(saveAction(exerciseName))
+        alert.addAction(cancelAction())
+        return alert
+    }
+    
+    private func saveAction(_ exerciseName: String) -> UIAlertAction {
+        UIAlertAction(title: "Yes", style: .default) { [weak self] (action) in
+            self?.viewModel?.saveExercise(withName: exerciseName, successCompletion: {
+                self?.dismiss(animated: true, completion: nil)
+            })
         }
     }
     
-    fileprivate func buttonForType(_ type: ExerciseType) -> ExerciseTypeButton? {
+    private func cancelAction() -> UIAlertAction {
+        UIAlertAction(title: "No", style: .destructive)
+    }
+    
+    private func buttonForType(_ type: ExerciseType) -> ExerciseTypeButton? {
         switch type {
         case .push:
-            return pushButton
+            return creationView.pushButton
         case .pull:
-            return pullButton
+            return creationView.pullButton
         case .legs:
-            return legsButton
+            return creationView.legsButton
         default:
             return nil
         }
     }
     
-    fileprivate func setupLateralTypeSegmentedControl() {
-        let segmentedControl = UISegmentedControl.PPLSegmentedControl(titles: ["Bilateral", "Unilateral"], target: self, selector: #selector(lateralTypeChanged(_:)))
-        lateralTypeParentView.addSubview(segmentedControl)
-        segmentedControl.selectedSegmentIndex = 0
+    private func setupLateralTypeSegmentedControl() {
+        creationView.lateralTypeSegmentedControl?.addTarget(self, action: #selector(lateralTypeChanged(_:)), for: .valueChanged)
+        creationView.lateralTypeSegmentedControl?.selectedSegmentIndex = 0
         viewModel?.lateralType = .bilateral
-        constrain(segmentedControl, toInsideOf: lateralTypeParentView, insets: UIEdgeInsets(top: 4, left: 24, bottom: 4, right: 24))
     }
     
-    @objc fileprivate func lateralTypeChanged(_ control: UISegmentedControl) {
+    @objc private func lateralTypeChanged(_ control: UISegmentedControl) {
         viewModel?.lateralType = control.selectedSegmentIndex == 0 ? LateralType.bilateral : .unilateral
-    }
-    
-    fileprivate func hideExerciseType() {
-        guard let constraint = parentStackView.constraints.first(where: { $0.identifier == "height" }) else { return }
-        typeSelectionStackView.superview?.removeFromSuperview()
-        parentStackView.removeConstraint(constraint)
-        parentStackView
-            .heightAnchor
-            .constraint(equalToConstant: 200)
-            .isActive = true
     }
     
 }

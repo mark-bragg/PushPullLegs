@@ -1,43 +1,12 @@
 //
-//  DurationCollectionViewController.swift
+//  TimeLabel.swift
 //  PushPullLegs
 //
-//  Created by Mark Bragg on 4/3/21.
-//  Copyright © 2021 Mark Bragg. All rights reserved.
+//  Created by Mark Bragg on 1/2/23.
+//  Copyright © 2023 Mark Bragg. All rights reserved.
 //
 
 import UIKit
-
-class DurationCollectionViewController: UIViewController {
-
-    var exerciseSetViewModel: ExerciseSetViewModel?
-    var prevText = "00:00"
-    var characters = ["", "", "", ""]
-    @IBOutlet weak var timeLabel: TimeLabel!
-    @IBOutlet weak var button: PPLButton!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = PPLColor.primary
-        navigationItem.title = "Duration"
-        button.setTitle("Submit", for: .normal)
-        button.delegate = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        timeLabel.becomeFirstResponder()
-        exerciseSetViewModel?.startSet()
-    }
-
-}
-
-extension DurationCollectionViewController: PPLButtonDelegate {
-    func buttonReleased(_ sender: Any) {
-        guard let lbl = timeLabel.label, let durationText = lbl.text else { return }
-        exerciseSetViewModel?.collectDuration(durationText)
-    }
-}
 
 class TimeLabel: UIView, UIKeyInput {
     var characters = ["", "", "", ""]
@@ -134,3 +103,4 @@ class TimeLabel: UIView, UIKeyInput {
     }
     
 }
+

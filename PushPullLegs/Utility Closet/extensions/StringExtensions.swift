@@ -66,10 +66,11 @@ extension String {
         return corrected
     }
     
-    static func format(seconds: Int) -> String {
+    static func format(seconds: Int, minuteDigits: Int = 1) -> String {
         let minutes = seconds / 60
         let seconds = seconds % 60
-        return String(format: "%01d:%02d", minutes, seconds)
+        let formatString = minuteDigits == 1 ? "%01d:%02d" : "%02d:%02d"
+        return String(format: formatString, minutes, seconds)
     }
     
     static func unformat(minutesAndSeconds mAndS: String) -> Int {
