@@ -179,23 +179,23 @@ class GraphViewController: UIViewController, ReloadProtocol, PPLDropdownViewCont
     }
     
     func addGraphView() {
+        guard let containerView, let labelStack else { return }
         let graph = GraphView(frame: CGRect(x: padding, y: 0, width: widthForGraphView(), height: heightForGraph()))
         graph.smallDisplay = !isInteractive
-        containerView?.addSubview(graph)
+        containerView.addSubview(graph)
+        var topAnchor: NSLayoutYAxisAnchor
         if isInteractive {
             graph.setInteractivity()
-            containerView?.backgroundColor = backgroundColor
+            containerView.backgroundColor = backgroundColor
+            topAnchor = labelStack.bottomAnchor
         } else {
             graph.backgroundColor = .clear
+            topAnchor = containerView.topAnchor
         }
-        containerView?.backgroundColor = .clear
+        containerView.backgroundColor = .clear
         graph.translatesAutoresizingMaskIntoConstraints = false
         var topOffset: CGFloat = 0
-        if let labelStack = labelStack {
-            topOffset = (isInteractive ? 0 : labelStack.frame.height) + (isInteractive ? 0 : 8)
-        }
-        guard let containerView = containerView else { return }
-        graph.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topOffset).isActive = true
+        graph.topAnchor.constraint(equalTo: topAnchor, constant: topOffset).isActive = true
         graph.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: isInteractive ? 0 : -16).isActive = true
         graph.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
         graph.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true

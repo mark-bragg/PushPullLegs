@@ -18,11 +18,7 @@ class GraphView: UIControl, ObservableObject {
     private var circle = CAShapeLayer()
     private var circleLine = CAGradientLayer()
     private let circleRadius: CGFloat = 5.0
-    private var lineWidth: CGFloat {
-        get {
-            return smallDisplay ? 1.0 : 2.0
-        }
-    }
+    private var lineWidth: CGFloat { smallDisplay ? 1.0 : 2.0 }
     private var drawingCircle = false
     private var linePoints = [CGPoint]()
     private var touchPoint: CGPoint?
