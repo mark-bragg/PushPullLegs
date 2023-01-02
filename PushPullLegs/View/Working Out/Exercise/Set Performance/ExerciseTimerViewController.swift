@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class ExerciseTimerViewController: UIViewController, ExercisingViewController, PPLButtonDelegate {
+class ExerciseTimerViewController: UIViewController, ExercisingViewController {
     var exerciseSetViewModel: ExerciseSetViewModel?
     weak var stackView: UIStackView?
     weak var timerLabel: UILabel?

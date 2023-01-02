@@ -10,7 +10,7 @@ import Foundation
 
 class ExerciseTemplateCreationViewModel: ObservableObject {
     
-    @Published private(set) var exerciseType: ExerciseType
+    private var exerciseType: ExerciseType
     private var management: TemplateManagement
     private var preSetType: Bool = false
     var reloader: ReloadProtocol?

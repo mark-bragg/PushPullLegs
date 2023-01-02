@@ -18,30 +18,18 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     var viewModel: ExerciseTemplateCreationViewModel?
     
     override func loadView() {
-        view = ExerciseTemplateCreationView()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = PPLColor.primary
+        view = ExerciseTemplateCreationView(showExerciseType: showExerciseType)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        creationView.textField.autocorrectionType = .no
-        creationView.textField.textAlignment = .center
-        creationView.textField.backgroundColor = PPLColor.quaternary
+        if !showExerciseType {
+            hideExerciseType()
+        }
         creationView.textField.becomeFirstResponder()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if showExerciseType && creationView.pushButton == nil {
-            setupExerciseTypeButtons()
-//            creationView.saveButton.setTitle("Select Type", for: .normal)
-        } else {
-            hideExerciseType()
-        }
+    override func viewDidLayoutSubviews() {
         bind()
         setupLateralTypeSegmentedControl()
     }
@@ -52,17 +40,17 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     fileprivate func bindButtons() {
-        NotificationCenter.default.addObserver(self, selector: #selector(pushButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: creationView.pushButton)
-        NotificationCenter.default.addObserver(self, selector: #selector(pullButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: creationView.pullButton)
-        NotificationCenter.default.addObserver(self, selector: #selector(legsButtonSelected(_:)), name: PPLButton.touchDownNotificationName(), object: creationView.legsButton)
-        NotificationCenter.default.addObserver(self, selector: #selector(touchDownSaveButton(_:)), name: PPLButton.touchDownNotificationName(), object: creationView.saveButton)
+        for btn in [creationView.pushButton, creationView.pullButton, creationView.legsButton] {
+            btn?.addTarget(self, action: #selector(typeSelected(_:)), for: .touchUpInside)
+        }
+        creationView.saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
     }
     
     fileprivate func bindViewModel() {
         guard let viewModel = viewModel else { return }
         bindSaveButtonToViewModel(viewModel)
         bindSanitizerToTextField(viewModel)
-        bindTypeButtonDeselectionToViewModel(viewModel)
+//        bindTypeButtonDeselectionToViewModel(viewModel)
         bindExerciseNameToTextField(viewModel)
     }
     
@@ -86,16 +74,16 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         .store(in: &cancellables)
     }
     
-    fileprivate func bindTypeButtonDeselectionToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
-        viewModel.$exerciseType.sink { [weak self] type in
-            guard let btn = self?.creationView.saveButton else { return }
-            if btn.title(for: .normal) != "Save" {
-                btn.setTitle("Save", for: .normal)
-            }
-            self?.deselectAllTypeButtons(except: type)
-        }
-        .store(in: &cancellables)
-    }
+//    fileprivate func bindTypeButtonDeselectionToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
+//        viewModel.$exerciseType.sink { [weak self] type in
+//            guard let btn = self?.creationView.saveButton else { return }
+//            if btn.title(for: .normal) != "Save" {
+//                btn.setTitle("Save", for: .normal)
+//            }
+////            self?.highlightType(type)
+//        }
+//        .store(in: &cancellables)
+//    }
     
     fileprivate func bindExerciseNameToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
         [UITextField.textDidChangeNotification,
@@ -112,29 +100,23 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         })
     }
     
-    @objc fileprivate func pushButtonSelected(_ notification: Notification) {
-        viewModel?.selectedType(.push)
-    }
-    
-    @objc fileprivate func pullButtonSelected(_ notification: Notification) {
-        viewModel?.selectedType(.pull)
-    }
-    
-    @objc fileprivate func legsButtonSelected(_ notification: Notification) {
-        viewModel?.selectedType(.legs)
-    }
-    
-    @objc fileprivate func touchDownSaveButton(_ notification: Notification) {
-        save()
-    }
-    
-    fileprivate func deselectAllTypeButtons(except: ExerciseType) {
-        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs].filter({ $0 != except }) {
-            buttonForType(type)?.releaseButton()
+    @objc private func typeSelected(_ button: ExerciseTypeButton) {
+        guard let type = button.exerciseType else { return }
+        viewModel?.selectedType(type)
+        DispatchQueue.main.async {
+            self.highlightType(type)
         }
     }
     
-    @IBAction func save() {
+    fileprivate func highlightType(_ buttonType: ExerciseType) {
+        print("\(buttonType)")
+        for type in [ExerciseType.push, .pull, .legs] {
+            let button = buttonForType(type)
+            button?.isHighlighted = button?.exerciseType == buttonType
+        }
+    }
+    
+    @objc func save() {
         guard let text = creationView.textField.text else {
             return
         }
@@ -149,34 +131,6 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
             self?.creationView.saveButton.isEnabled = false
         }))
         present(alert, animated: true, completion: nil)
-    }
-    
-    fileprivate func setupExerciseTypeButtons() {
-        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs] {
-            let btn = buttonForType(type) ?? newButtonForType(type)
-            btn.setTitle(type.rawValue, for: .normal)
-            btn.exerciseType = type
-        }
-    }
-    
-    func newButtonForType(_ type: ExerciseType) -> ExerciseTypeButton {
-        let btn = ExerciseTypeButton()
-        btn.setTitle(type.rawValue, for: .normal)
-        btn.exerciseType = type
-        creationView.typeSelectionStackView?.addArrangedSubview(btn)
-        creationView.typeSelectionStackView?.isUserInteractionEnabled = true
-        creationView.lateralTypeParentView.isUserInteractionEnabled = true
-        switch type {
-        case .push:
-            creationView.pushButton = btn
-        case .pull:
-            creationView.pullButton = btn
-        case .legs:
-            creationView.legsButton = btn
-        case .error: break
-            // no op
-        }
-        return btn
     }
     
     fileprivate func buttonForType(_ type: ExerciseType) -> ExerciseTypeButton? {

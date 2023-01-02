@@ -12,7 +12,7 @@ extension UIViewController {
     var spacer: UIView { UIView() }
 }
 
-class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, PPLButtonDelegate {
+class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
     weak var stackView: UIStackView?
     weak var label: UILabel?
     weak var textField: UITextField?
@@ -93,7 +93,6 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate, P
     func getButton() -> UIView {
         let btn = UIButton(configuration: buttonConfig())
         btn.backgroundColor = .primary
-        btn.addTarget(self, action: #selector(buttonReleased(_:)), for: .touchUpInside)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button = btn
         return btn
