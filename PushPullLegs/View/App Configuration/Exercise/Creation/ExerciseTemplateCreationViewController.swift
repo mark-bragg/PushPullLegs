@@ -10,7 +10,7 @@ import UIKit
 import Combine
 
 class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDelegate {
-    var creationView: ExerciseTemplateCreationView {
+    private var creationView: ExerciseTemplateCreationView {
         (view as? ExerciseTemplateCreationView) ?? ExerciseTemplateCreationView()
     }
     private var cancellables: Set<AnyCancellable> = []
@@ -23,9 +23,6 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if !showExerciseType {
-            hideExerciseType()
-        }
         creationView.textField.becomeFirstResponder()
     }
     
@@ -34,27 +31,26 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         setupLateralTypeSegmentedControl()
     }
     
-    fileprivate func bind() {
+    private func bind() {
         bindButtons()
         bindViewModel()
     }
     
-    fileprivate func bindButtons() {
+    private func bindButtons() {
         for btn in [creationView.pushButton, creationView.pullButton, creationView.legsButton] {
             btn?.addTarget(self, action: #selector(typeSelected(_:)), for: .touchUpInside)
         }
         creationView.saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
     }
     
-    fileprivate func bindViewModel() {
+    private func bindViewModel() {
         guard let viewModel = viewModel else { return }
         bindSaveButtonToViewModel(viewModel)
         bindSanitizerToTextField(viewModel)
-//        bindTypeButtonDeselectionToViewModel(viewModel)
         bindExerciseNameToTextField(viewModel)
     }
     
-    fileprivate func bindSaveButtonToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
+    private func bindSaveButtonToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
         viewModel.$isSaveEnabled.sink { [weak self] enabled in
             guard let btn = self?.creationView.saveButton else { return }
             if enabled && !btn.isEnabled {
@@ -66,7 +62,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         .store(in: &cancellables)
     }
     
-    fileprivate func bindSanitizerToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
+    private func bindSanitizerToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
         viewModel.$exerciseName.sink { [weak self] name in
             guard let textField = self?.creationView.textField, let name = name else { return }
             textField.text = ExerciseNameSanitizer().sanitize(name)
@@ -74,18 +70,7 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         .store(in: &cancellables)
     }
     
-//    fileprivate func bindTypeButtonDeselectionToViewModel(_ viewModel: ExerciseTemplateCreationViewModel) {
-//        viewModel.$exerciseType.sink { [weak self] type in
-//            guard let btn = self?.creationView.saveButton else { return }
-//            if btn.title(for: .normal) != "Save" {
-//                btn.setTitle("Save", for: .normal)
-//            }
-////            self?.highlightType(type)
-//        }
-//        .store(in: &cancellables)
-//    }
-    
-    fileprivate func bindExerciseNameToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
+    private func bindExerciseNameToTextField(_ viewModel: ExerciseTemplateCreationViewModel) {
         [UITextField.textDidChangeNotification,
          UITextField.textDidBeginEditingNotification,
          UITextField.textDidEndEditingNotification
@@ -102,14 +87,13 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     @objc private func typeSelected(_ button: ExerciseTypeButton) {
         guard let type = button.exerciseType else { return }
-        viewModel?.selectedType(type)
+        viewModel?.exerciseType = type
         DispatchQueue.main.async {
             self.highlightType(type)
         }
     }
     
-    fileprivate func highlightType(_ buttonType: ExerciseType) {
-        print("\(buttonType)")
+    private func highlightType(_ buttonType: ExerciseType) {
         for type in [ExerciseType.push, .pull, .legs] {
             let button = buttonForType(type)
             button?.isHighlighted = button?.exerciseType == buttonType
@@ -117,23 +101,33 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     @objc func save() {
-        guard let text = creationView.textField.text else {
+        guard let text = creationView.textField.text, let alert = saveAlert(text) else {
             return
         }
-        let alert = UIAlertController(title: "Add to Workout?", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [weak self] (action) in
-            guard let self = self else { return }
-            self.viewModel?.saveExercise(withName: text, successCompletion: {
-                self.dismiss(animated: true, completion: nil)
-            })
-        }))
-        alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: { [weak self] (action) in
-            self?.creationView.saveButton.isEnabled = false
-        }))
         present(alert, animated: true, completion: nil)
     }
     
-    fileprivate func buttonForType(_ type: ExerciseType) -> ExerciseTypeButton? {
+    private func saveAlert(_ exerciseName: String) -> UIAlertController? {
+        guard let type = viewModel?.exerciseType else { return nil }
+        let alert = UIAlertController(title: "Add \(exerciseName) to your \(type.rawValue) Workout?", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(saveAction(exerciseName))
+        alert.addAction(cancelAction())
+        return alert
+    }
+    
+    private func saveAction(_ exerciseName: String) -> UIAlertAction {
+        UIAlertAction(title: "Yes", style: .default) { [weak self] (action) in
+            self?.viewModel?.saveExercise(withName: exerciseName, successCompletion: {
+                self?.dismiss(animated: true, completion: nil)
+            })
+        }
+    }
+    
+    private func cancelAction() -> UIAlertAction {
+        UIAlertAction(title: "No", style: .destructive)
+    }
+    
+    private func buttonForType(_ type: ExerciseType) -> ExerciseTypeButton? {
         switch type {
         case .push:
             return creationView.pushButton
@@ -146,24 +140,14 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         }
     }
     
-    fileprivate func setupLateralTypeSegmentedControl() {
+    private func setupLateralTypeSegmentedControl() {
         creationView.lateralTypeSegmentedControl?.addTarget(self, action: #selector(lateralTypeChanged(_:)), for: .valueChanged)
         creationView.lateralTypeSegmentedControl?.selectedSegmentIndex = 0
         viewModel?.lateralType = .bilateral
     }
     
-    @objc fileprivate func lateralTypeChanged(_ control: UISegmentedControl) {
+    @objc private func lateralTypeChanged(_ control: UISegmentedControl) {
         viewModel?.lateralType = control.selectedSegmentIndex == 0 ? LateralType.bilateral : .unilateral
-    }
-    
-    fileprivate func hideExerciseType() {
-        guard let constraint = creationView.parentStackView.constraints.first(where: { $0.identifier == "height" }) else { return }
-        creationView.typeSelectionStackView?.superview?.removeFromSuperview()
-        creationView.parentStackView.removeConstraint(constraint)
-        creationView.parentStackView
-            .heightAnchor
-            .constraint(equalToConstant: 200)
-            .isActive = true
     }
     
 }

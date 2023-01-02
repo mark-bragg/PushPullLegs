@@ -9,14 +9,14 @@
 import UIKit
 
 class ExerciseTemplateCreationView: UIView {
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont.systemFont(ofSize: 27)
         lbl.textAlignment = .center
         lbl.text = "New Exercise"
         return lbl
     }()
-    lazy var textFieldContainer: UIView = {
+    private lazy var textFieldContainer: UIView = {
         UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: parentStackView.frame.height / 3))
     }()
     var textField: UITextField {
@@ -29,17 +29,17 @@ class ExerciseTemplateCreationView: UIView {
         styleTextField()
         return txt
     }
-    func constrainTextField(_ txt: UITextField) {
+    private func constrainTextField(_ txt: UITextField) {
         txt.translatesAutoresizingMaskIntoConstraints = false
         txt.centerXAnchor.constraint(equalTo: textFieldContainer.centerXAnchor).isActive = true
         txt.centerYAnchor.constraint(equalTo: textFieldContainer.centerYAnchor).isActive = true
         txt.heightAnchor.constraint(equalToConstant: 58).isActive = true
         txt.widthAnchor.constraint(equalToConstant: 250).isActive = true
     }
-    lazy var typeSelectionContainerView: UIView = {
+    private lazy var typeSelectionContainerView: UIView = {
         UIView()
     }()
-    weak var typeSelectionStackView: UIStackView?
+    private weak var typeSelectionStackView: UIStackView?
     weak var pushButton: ExerciseTypeButton?
     weak var pullButton: ExerciseTypeButton?
     weak var legsButton: ExerciseTypeButton?
@@ -50,13 +50,13 @@ class ExerciseTemplateCreationView: UIView {
         btn.setTitle("Save", for: .normal)
         return btn
     }()
-    var saveButtonConfig: UIButton.Configuration {
+    private var saveButtonConfig: UIButton.Configuration {
         var config = UIButton.Configuration.borderedProminent()
         config.baseBackgroundColor = .black
         config.buttonSize = UIButton.Configuration.Size.large
         return config
     }
-    lazy var parentStackView: UIStackView = {
+    private lazy var parentStackView: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = NSLayoutConstraint.Axis.vertical
@@ -65,16 +65,16 @@ class ExerciseTemplateCreationView: UIView {
         stack.alignment = .fill
         return stack
     }()
-    let parentStackPadding: CGFloat = 20
-    var parentStackHeight: CGFloat {
+    private let parentStackPadding: CGFloat = 20
+    private var parentStackHeight: CGFloat {
         showExerciseType ? 300 : 225
     }
-    lazy var lateralTypeParentView: UIView = {
+    private lazy var lateralTypeParentView: UIView = {
         UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: parentStackView.frame.height / 3))
     }()
     weak var lateralTypeSegmentedControl: UISegmentedControl?
     private var firstLoad = true
-    var showExerciseType = true
+    private var showExerciseType = true
     
     init(showExerciseType: Bool = true) {
         self.showExerciseType = showExerciseType
@@ -96,7 +96,7 @@ class ExerciseTemplateCreationView: UIView {
         fillStack()
     }
     
-    func addParentStackView() {
+    private func addParentStackView() {
         addSubview(parentStackView)
         parentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: parentStackPadding).isActive = true
         parentStackView.topAnchor.constraint(equalTo: topAnchor, constant: parentStackPadding).isActive = true
@@ -106,13 +106,13 @@ class ExerciseTemplateCreationView: UIView {
         height.isActive = true
     }
     
-    func addSaveButton() {
+    private func addSaveButton() {
         addSubview(saveButton)
         saveButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         saveButton.topAnchor.constraint(equalTo: parentStackView.bottomAnchor, constant: parentStackPadding).isActive = true
     }
     
-    func styleTextField() {
+    private func styleTextField() {
         textField.borderStyle = .roundedRect
         textField.textAlignment = .center
         textField.font = UIFont.systemFont(ofSize: 17)
@@ -123,7 +123,7 @@ class ExerciseTemplateCreationView: UIView {
         textField.backgroundColor = PPLColor.quaternary
     }
     
-    func addTypeStackView() {
+    private func addTypeStackView() {
         let stack = UIStackView()
         typeSelectionContainerView.addSubview(stack)
         typeSelectionStackView = stack
@@ -131,7 +131,7 @@ class ExerciseTemplateCreationView: UIView {
         styleTypeStackView(stack)
     }
     
-    func constrainTypeStackview(_ stack: UIStackView) {
+    private func constrainTypeStackview(_ stack: UIStackView) {
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.leadingAnchor.constraint(equalTo: typeSelectionContainerView.leadingAnchor, constant: 2).isActive = true
         stack.trailingAnchor.constraint(equalTo: typeSelectionContainerView.trailingAnchor, constant: -2).isActive = true
@@ -139,19 +139,19 @@ class ExerciseTemplateCreationView: UIView {
         stack.topAnchor.constraint(equalTo: typeSelectionContainerView.topAnchor).isActive = true
     }
     
-    func styleTypeStackView(_ stack: UIStackView) {
+    private func styleTypeStackView(_ stack: UIStackView) {
         stack.distribution = .fillEqually
         stack.spacing = 12
         stack.alignment = .fill
     }
     
-    fileprivate func setupExerciseTypeButtons() {
+    private func setupExerciseTypeButtons() {
         for type in [ExerciseType.push, .pull, .legs] {
             setButton(newButtonForType(type))
         }
     }
     
-    func newButtonForType(_ type: ExerciseType) -> ExerciseTypeButton {
+    private func newButtonForType(_ type: ExerciseType) -> ExerciseTypeButton {
         let btn = ExerciseTypeButton()
         btn.setTitle(type.rawValue, for: .normal)
         btn.exerciseType = type
@@ -161,7 +161,7 @@ class ExerciseTemplateCreationView: UIView {
         return btn
     }
     
-    func setupLateralTypeSegmentedControl() {
+    private func setupLateralTypeSegmentedControl() {
         let segmentedControl = UISegmentedControl.PPLSegmentedControl(titles: ["Bilateral", "Unilateral"])
         lateralTypeParentView.addSubview(segmentedControl)
         lateralTypeSegmentedControl = segmentedControl
@@ -169,7 +169,7 @@ class ExerciseTemplateCreationView: UIView {
         constrainSegmentedControl(segmentedControl)
     }
     
-    func setButton(_ button: ExerciseTypeButton) {
+    private func setButton(_ button: ExerciseTypeButton) {
         switch button.exerciseType {
         case .push:
             pushButton = button
@@ -184,7 +184,7 @@ class ExerciseTemplateCreationView: UIView {
         }
     }
     
-    func constrainSegmentedControl(_ segCon: UISegmentedControl) {
+    private func constrainSegmentedControl(_ segCon: UISegmentedControl) {
         segCon.translatesAutoresizingMaskIntoConstraints = false
         segCon.leadingAnchor.constraint(equalTo: lateralTypeParentView.leadingAnchor, constant: 24).isActive = true
         segCon.trailingAnchor.constraint(equalTo: lateralTypeParentView.trailingAnchor, constant: -24).isActive = true
@@ -192,7 +192,7 @@ class ExerciseTemplateCreationView: UIView {
         segCon.bottomAnchor.constraint(equalTo: lateralTypeParentView.bottomAnchor, constant: -4).isActive = true
     }
     
-    func fillStack() {
+    private func fillStack() {
         parentStackView.addArrangedSubview(titleLabel)
         parentStackView.addArrangedSubview(textFieldContainer)
         if typeSelectionStackView == nil && showExerciseType {

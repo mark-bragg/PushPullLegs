@@ -10,13 +10,6 @@ import Foundation
 import UIKit
 
 class ExerciseTypeButton : UIButton {
-    
-    override var isHighlighted: Bool {
-        didSet {
-            print("\(exerciseType)")
-        }
-    }
-    
     var exerciseType: ExerciseType? = nil
     
     func setBackgroundColor(color: UIColor, forState: UIControl.State) {
