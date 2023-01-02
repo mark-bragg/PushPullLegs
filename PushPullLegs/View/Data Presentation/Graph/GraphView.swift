@@ -26,11 +26,14 @@ class GraphView: UIControl, ObservableObject {
     private var firstLoad = true
     private weak var lineLayer: CAShapeLayer?
     private weak var axesLayer: CALayer?
+    private weak var gradientLayer: CAGradientLayer?
     private var noDataView: NoDataGraphView?
     private let singlePointCircleDiameter: CGFloat = 5
     var smallDisplay = false
     var circleLineY: CGFloat = 0.0
     var topGraphY: CGFloat = 0.0
+    private var initialLinePoint: CGPoint?
+    private var finalLinePoint: CGPoint?
     
     func setInteractivity() {
         addTarget(self, action: #selector(touchUp(_:)), for: .touchDragExit)
@@ -86,6 +89,7 @@ class GraphView: UIControl, ObservableObject {
         }
         drawAxes()
         drawLine()
+        drawGradient()
     }
     
     func hasData() -> Bool {
@@ -118,7 +122,7 @@ class GraphView: UIControl, ObservableObject {
     }
     
     private func drawCircleLine(_ closestPoint: CGPoint) {
-        let height = (origin().y - circleLineY)
+        let height = (origin.y - circleLineY)
         circleLine.frame = CGRect(x: closestPoint.x - 1, y: circleLineY, width: 2, height: height)
         circleLine.colors = [PPLColor.primary.cgColor, PPLColor.quaternary.cgColor, PPLColor.primary.cgColor]
         let highlight = (closestPoint.y - circleLineY) / height
@@ -161,8 +165,8 @@ class GraphView: UIControl, ObservableObject {
         layer.addSublayer(lineLayer)
         self.lineLayer = lineLayer
         lineLayer.path = getPath()
-        lineLayer.lineJoin = .round
-        lineLayer.lineCap = .round
+        lineLayer.lineJoin = .bevel
+        lineLayer.lineCap = .butt
         lineLayer.strokeColor = lineStrokeColor()
         lineLayer.lineWidth = lineWidth
         lineLayer.fillColor = isSinglePoint() ? PPLColor.primary.cgColor : UIColor.clear.cgColor
@@ -200,6 +204,7 @@ class GraphView: UIControl, ObservableObject {
         let yShift = convertToGraphY(minY) - lowestPoint().y
         var y = convertToGraphY(normalizedYs[0]) - yShift
         var point = CGPoint(x: lowestPoint().x, y: y)
+        initialLinePoint = point
         path.move(to: point)
         linePoints.append(point)
         for index in 1..<yValues.count {
@@ -208,6 +213,7 @@ class GraphView: UIControl, ObservableObject {
             path.addLine(to: point)
             linePoints.append(point)
         }
+        finalLinePoint = point
         return path.cgPath
     }
     
@@ -215,12 +221,35 @@ class GraphView: UIControl, ObservableObject {
         (CGFloat(frame.height) - CGFloat(oldY) * CGFloat(frame.height * 0.9))
     }
     
-    private func origin() -> CGPoint {
+    private func drawGradient() {
+        guard let cgPath = lineLayer?.path, let initialLinePoint, let finalLinePoint else { return }
+        let grad = CAGradientLayer()
+        grad.type = .axial
+        grad.colors = [UIColor.white.cgColor, UIColor.black.cgColor]
+        grad.locations = [0, 1]
+        let path = UIBezierPath()
+        path.move(to: cgPath.currentPoint)
+        path.addLine(to: CGPoint(x: finalLinePoint.x, y: origin.y - 1))
+        path.addLine(to: CGPoint(x: initialLinePoint.x, y: origin.y - 1))
+        path.addLine(to: initialLinePoint)
+        path.append(UIBezierPath(cgPath: cgPath))
+        path.close()
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+//        mask.frame = lineLayer?.frame ?? .zero
+        grad.mask = mask
+//        grad.frame = mask.frame
+        grad.frame = lineLayer?.frame ?? .zero
+        layer.addSublayer(grad)
+        self.gradientLayer = grad
+    }
+    
+    private var origin: CGPoint {
         CGPoint(x: frame.width * 0.025, y: frame.height * 0.975)
     }
     
     private func lowestPoint() -> CGPoint {
-        CGPoint(x: origin().x + frame.width * 0.05, y: origin().y - frame.height * 0.05)
+        CGPoint(x: origin.x + frame.width * 0.05, y: origin.y - frame.height * 0.05)
     }
     
     func showNoDataView() {
@@ -245,7 +274,7 @@ class GraphView: UIControl, ObservableObject {
         let axesPath = UIBezierPath()
         layer.addSublayer(axesLayer)
         axesPath.move(to: CGPoint(x: frame.width * 0.025, y: frame.height * 0.025))
-        axesPath.addLine(to: origin())
+        axesPath.addLine(to: origin)
         axesPath.addLine(to: CGPoint(x: frame.width * 0.975, y: frame.height * 0.975))
         axesLayer.path = axesPath.cgPath
         axesLayer.strokeColor = lineStrokeColor()
