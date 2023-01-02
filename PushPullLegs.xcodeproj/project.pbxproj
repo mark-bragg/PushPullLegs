@@ -85,6 +85,8 @@
 		49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACA225F45BEF00517F6F /* countdown.m4a */; };
 		49ABACBC25F463C700517F6F /* start.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACAF25F45CE700517F6F /* start.m4a */; };
 		49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF0D20259D23D2003F8C60 /* BannerAdController.swift */; };
+		49BA7A2A296355F600C14F1F /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */; };
+		49BA7A2C2963561800C14F1F /* StartExerciseLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */; };
 		49C1EA522608179100330CBF /* IAPTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA512608179100330CBF /* IAPTransaction.swift */; };
 		49C1EA572608181F00330CBF /* AppConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */; };
 		49C1EA5D260AF84F00330CBF /* WorkoutLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA5C260AF84F00330CBF /* WorkoutLogViewModel.swift */; };
@@ -232,6 +234,8 @@
 		49ABACA225F45BEF00517F6F /* countdown.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = countdown.m4a; sourceTree = "<group>"; };
 		49ABACAF25F45CE700517F6F /* start.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.m4a; sourceTree = "<group>"; };
 		49AF0D20259D23D2003F8C60 /* BannerAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdController.swift; sourceTree = "<group>"; };
+		49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTimerView.swift; sourceTree = "<group>"; };
+		49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartExerciseLabel.swift; sourceTree = "<group>"; };
 		49C1EA512608179100330CBF /* IAPTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTransaction.swift; sourceTree = "<group>"; };
 		49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurationViewModel.swift; sourceTree = "<group>"; };
 		49C1EA5C260AF84F00330CBF /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
@@ -355,7 +359,7 @@
 			children = (
 				490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */,
 				49E8933D295E6CE000B99345 /* Quantity Collection */,
-				490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */,
+				49BA7A28296355C400C14F1F /* Exercise Timer */,
 				49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */,
 			);
 			path = "Set Performance";
@@ -662,6 +666,16 @@
 				49ABACA225F45BEF00517F6F /* countdown.m4a */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		49BA7A28296355C400C14F1F /* Exercise Timer */ = {
+			isa = PBXGroup;
+			children = (
+				490D88E82452B5FD005FFEA3 /* ExerciseTimerViewController.swift */,
+				49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */,
+				49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */,
+			);
+			path = "Exercise Timer";
 			sourceTree = "<group>";
 		};
 		49C1EA5B260AF82900330CBF /* Workout Log */ = {
@@ -1169,6 +1183,7 @@
 				4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */,
 				4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */,
 				49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */,
+				49BA7A2C2963561800C14F1F /* StartExerciseLabel.swift in Sources */,
 				492B3B3B26609F2700929BB3 /* PPLDropDownViewController.swift in Sources */,
 				49359BA024DD052F005FF7A8 /* GraphView.swift in Sources */,
 				49CD43E0261798F600C8A6C8 /* DBExerciseViewController.swift in Sources */,
@@ -1190,6 +1205,7 @@
 				49E89332295CCE1300B99345 /* PPLDropdownMenu.swift in Sources */,
 				490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */,
 				49E8933F2962537800B99345 /* ExerciseTemplateCreationView.swift in Sources */,
+				49BA7A2A296355F600C14F1F /* ExerciseTimerView.swift in Sources */,
 				492B643A26D1A4AD0004171D /* SplashViewController.swift in Sources */,
 				4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */,
 				49F8EF292447754900B6BD45 /* ExerciseTemplateListViewController.swift in Sources */,

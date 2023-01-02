@@ -94,6 +94,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
         let btn = UIButton(configuration: buttonConfig())
         btn.backgroundColor = .primary
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        btn.addTarget(self, action: #selector(buttonReleased(_:)), for: .touchUpInside)
         button = btn
         return btn
     }
@@ -134,7 +135,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
         textField.replace(uiRange, withText: correctedText)
     }
     
-    func buttonReleased(_ sender: Any) {
+    @objc func buttonReleased(_ sender: Any) {
         // no-op
     }
 }
