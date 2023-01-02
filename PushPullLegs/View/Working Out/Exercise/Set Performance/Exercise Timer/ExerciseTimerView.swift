@@ -33,7 +33,7 @@ class ExerciseTimerView: UIView {
     // MARK: timerLabel
     lazy var timerLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "0:00"
+        lbl.text = "00:00"
         styleTimerLabel(lbl)
         return lbl
     }()

@@ -17,7 +17,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
         timerView?.startLabel != nil
     }
     private var shouldShowStartText: Bool {
-        timerView?.timerLabel.text == "0:00" && !isShowingStartText
+        timerView?.timerLabel.text == "00:00" && !isShowingStartText
     }
     
     override func loadView() {
@@ -67,7 +67,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
         }).store(in: &cancellables)
         exerciseSetViewModel?.stopWatch = PPLStopWatch(withHandler: { [weak self] (seconds) in
             guard let self = self else { return }
-            self.timerUpdate(String.format(seconds: self.exerciseSetViewModel?.currentTime(seconds) ?? 0))
+            self.timerUpdate(String.format(seconds: self.exerciseSetViewModel?.currentTime(seconds) ?? 0, minuteDigits: 2))
         })
     }
     
