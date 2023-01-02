@@ -87,6 +87,8 @@
 		49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF0D20259D23D2003F8C60 /* BannerAdController.swift */; };
 		49BA7A2A296355F600C14F1F /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */; };
 		49BA7A2C2963561800C14F1F /* StartExerciseLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */; };
+		49BA7A2E29635B9900C14F1F /* TimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A2D29635B9900C14F1F /* TimeLabel.swift */; };
+		49BA7A312963605400C14F1F /* DurationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A302963605400C14F1F /* DurationCollectionView.swift */; };
 		49C1EA522608179100330CBF /* IAPTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA512608179100330CBF /* IAPTransaction.swift */; };
 		49C1EA572608181F00330CBF /* AppConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */; };
 		49C1EA5D260AF84F00330CBF /* WorkoutLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C1EA5C260AF84F00330CBF /* WorkoutLogViewModel.swift */; };
@@ -236,6 +238,8 @@
 		49AF0D20259D23D2003F8C60 /* BannerAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdController.swift; sourceTree = "<group>"; };
 		49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTimerView.swift; sourceTree = "<group>"; };
 		49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartExerciseLabel.swift; sourceTree = "<group>"; };
+		49BA7A2D29635B9900C14F1F /* TimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabel.swift; sourceTree = "<group>"; };
+		49BA7A302963605400C14F1F /* DurationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCollectionView.swift; sourceTree = "<group>"; };
 		49C1EA512608179100330CBF /* IAPTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTransaction.swift; sourceTree = "<group>"; };
 		49C1EA562608181F00330CBF /* AppConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurationViewModel.swift; sourceTree = "<group>"; };
 		49C1EA5C260AF84F00330CBF /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
@@ -360,7 +364,6 @@
 				490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */,
 				49E8933D295E6CE000B99345 /* Quantity Collection */,
 				49BA7A28296355C400C14F1F /* Exercise Timer */,
-				49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */,
 			);
 			path = "Set Performance";
 			sourceTree = "<group>";
@@ -678,6 +681,16 @@
 			path = "Exercise Timer";
 			sourceTree = "<group>";
 		};
+		49BA7A2F29635BDF00C14F1F /* DurationCollection */ = {
+			isa = PBXGroup;
+			children = (
+				49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */,
+				49BA7A2D29635B9900C14F1F /* TimeLabel.swift */,
+				49BA7A302963605400C14F1F /* DurationCollectionView.swift */,
+			);
+			path = DurationCollection;
+			sourceTree = "<group>";
+		};
 		49C1EA5B260AF82900330CBF /* Workout Log */ = {
 			isa = PBXGroup;
 			children = (
@@ -690,6 +703,7 @@
 		49C1EA6E260F03FC00330CBF /* Workout Data */ = {
 			isa = PBXGroup;
 			children = (
+				49BA7A2F29635BDF00C14F1F /* DurationCollection */,
 				4957DFB5246B54F000574C89 /* WorkoutDataViewModel.swift */,
 				4957DFB9246CF73A00574C89 /* WorkoutDataViewController.swift */,
 				49565A2C26B9FF1400F13E44 /* WorkoutNoteViewController.swift */,
@@ -1182,6 +1196,7 @@
 				49A08D82293469F000870DDA /* PreviousUnilateralPerformanceViewController.swift in Sources */,
 				4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */,
 				4957DFBA246CF73A00574C89 /* WorkoutDataViewController.swift in Sources */,
+				49BA7A312963605400C14F1F /* DurationCollectionView.swift in Sources */,
 				49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */,
 				49BA7A2C2963561800C14F1F /* StartExerciseLabel.swift in Sources */,
 				492B3B3B26609F2700929BB3 /* PPLDropDownViewController.swift in Sources */,
@@ -1224,6 +1239,7 @@
 				49E8932F295B759900B99345 /* AccessibilityIdentifiers.swift in Sources */,
 				49E89337295CCEB500B99345 /* PPLDropdownNavigationItem.swift in Sources */,
 				49E89335295CCE9100B99345 /* PPLDropdownItem.swift in Sources */,
+				49BA7A2E29635B9900C14F1F /* TimeLabel.swift in Sources */,
 				49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */,
 				491C8CF72547D65E003A7526 /* RestTimerView.swift in Sources */,
 				492B645F26D4B7220004171D /* UnilateralExerciseViewController.swift in Sources */,

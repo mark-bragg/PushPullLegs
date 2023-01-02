@@ -1,86 +1,12 @@
 //
-//  DurationCollectionViewController.swift
+//  TimeLabel.swift
 //  PushPullLegs
 //
-//  Created by Mark Bragg on 4/3/21.
-//  Copyright © 2021 Mark Bragg. All rights reserved.
+//  Created by Mark Bragg on 1/2/23.
+//  Copyright © 2023 Mark Bragg. All rights reserved.
 //
 
 import UIKit
-
-class DurationCollectionViewController: UIViewController {
-
-    var exerciseSetViewModel: ExerciseSetViewModel?
-    var prevText = "00:00"
-    var characters = ["", "", "", ""]
-    weak var stackView: UIStackView?
-    weak var timeLabel: TimeLabel?
-    weak var button: UIButton?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        addStackView()
-        constrainStackView()
-        styleStackView()
-        view.backgroundColor = PPLColor.primary
-        navigationItem.title = "Duration"
-        button?.setTitle("Submit", for: .normal)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        timeLabel?.becomeFirstResponder()
-        exerciseSetViewModel?.startSet()
-    }
-    
-    func addStackView() {
-        let stack = UIStackView(arrangedSubviews: [spacer, getTimeLabel(), getButton(), spacer])
-        view.addSubview(stack)
-        stackView = stack
-    }
-    
-    func constrainStackView() {
-        stackView?.translatesAutoresizingMaskIntoConstraints = false
-        stackView?.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        stackView?.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20).isActive = true
-        stackView?.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        stackView?.heightAnchor.constraint(equalToConstant: 300).isActive = true
-    }
-    
-    func styleStackView() {
-        stackView?.alignment = UIStackView.Alignment.center
-        stackView?.axis = NSLayoutConstraint.Axis.vertical
-        stackView?.distribution = UIStackView.Distribution.equalCentering
-        stackView?.spacing = 14
-    }
-    
-    func getTimeLabel() -> TimeLabel {
-        let timeLabel = TimeLabel(frame: CGRect(x: 0, y: 0, width: 374, height: 150))
-        self.timeLabel = timeLabel
-        return timeLabel
-    }
-    
-    func getButton() -> UIView {
-        let btn = UIButton(configuration: buttonConfig())
-        btn.backgroundColor = .primary
-        btn.addTarget(self, action: #selector(buttonReleased(_:)), for: .touchUpInside)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button = btn
-        return btn
-    }
-    
-    func buttonConfig() -> UIButton.Configuration {
-        var config = UIButton.Configuration.borderedProminent()
-        config.baseBackgroundColor = .black
-        config.buttonSize = UIButton.Configuration.Size.large
-        return config
-    }
-    
-    @objc func buttonReleased(_ sender: Any) {
-        guard let lbl = timeLabel?.label, let durationText = lbl.text else { return }
-        exerciseSetViewModel?.collectDuration(durationText)
-    }
-}
 
 class TimeLabel: UIView, UIKeyInput {
     var characters = ["", "", "", ""]
@@ -177,3 +103,4 @@ class TimeLabel: UIView, UIKeyInput {
     }
     
 }
+
