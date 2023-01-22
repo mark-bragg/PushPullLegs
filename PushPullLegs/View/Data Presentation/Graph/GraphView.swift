@@ -14,7 +14,8 @@ protocol GraphViewDelegate: NSObjectProtocol {
 }
 
 struct GraphView: View {
-    @ObservedObject var data: GraphData
+    @ObservedObject var viewModel: GraphViewModel
+    private var data: GraphData { viewModel.data }
     @Environment(\.layoutDirection) var layoutDirection
     weak var delegate: GraphViewDelegate?
     var height: CGFloat
@@ -80,10 +81,10 @@ struct GraphView: View {
             
             if isInteractive {
                 HStack {
-                    DatePicker("", selection: $data.startDate, displayedComponents: [.date])
+                    DatePicker("", selection: $viewModel.data.startDate, displayedComponents: [.date])
                         .labelsHidden()
                     Spacer()
-                    DatePicker("", selection: $data.endDate, displayedComponents: [.date])
+                    DatePicker("", selection: $viewModel.data.endDate, displayedComponents: [.date])
                         .labelsHidden()
                 }
             }

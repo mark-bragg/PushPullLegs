@@ -9,16 +9,16 @@
 import Combine
 
 class GraphData: ObservableObject {
-    @Published var name: String
+    var name: String
     private(set) var points: [GraphDataPoint] {
         didSet { updateDelineatedPoints() }
     }
-    @Published var delineatedPoints: [GraphDataPoint] = []
-    @Published var exerciseNames: [String]
-    @Published var startDate: Date {
+    var delineatedPoints: [GraphDataPoint] = []
+    var exerciseNames: [String]
+    var startDate: Date {
         didSet { updateDelineatedPoints() }
     }
-    @Published var endDate: Date {
+    var endDate: Date {
         didSet { updateDelineatedPoints() }
     }
     @Published var selectedElement: (day: Date, volume: Double)? = nil
@@ -39,17 +39,6 @@ class GraphData: ObservableObject {
             point.date >= startDate && point.date <= endDate
         }
         selectedElement = nil
-    }
-    
-    func refresh(_ newData: GraphData) {
-        name = newData.name
-        points = newData.points
-        updateDelineatedPoints()
-        exerciseNames = newData.exerciseNames
-        let endDate = points.last?.date ?? .now
-        let startDate = Calendar.current.date(byAdding: DateComponents(day: -30), to: endDate) ?? endDate
-        self.endDate = endDate
-        self.startDate = startDate
     }
 }
 

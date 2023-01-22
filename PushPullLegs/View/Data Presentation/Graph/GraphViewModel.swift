@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Combine
 
-class GraphViewModel: NSObject {
+class GraphViewModel: NSObject, ObservableObject {
     private(set) var type: ExerciseType
     private var workoutDataManager: WorkoutDataManager
     private var exerciseDataManager: ExerciseDataManager
@@ -28,12 +28,14 @@ class GraphViewModel: NSObject {
     }
     
     func setToWorkoutData() {
-        data.refresh(GraphDataManager.calculateWorkoutData(type: type))
+        data = GraphDataManager.calculateWorkoutData(type: type)
     }
     
     func updateToExerciseData(_ name: String) {
         guard let exerciseData = GraphDataManager.exercisesData(name: name) else { return }
-        data.refresh(exerciseData)
+        exerciseData.startDate = data.startDate
+        exerciseData.endDate = data.endDate
+        data = exerciseData
     }
 }
 

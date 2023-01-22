@@ -32,9 +32,9 @@ class GraphViewController: UIViewController, GraphViewDelegate {
     }
     
     private func addGraphView() {
-        guard let data = viewModel?.data else { return }
+        guard let viewModel else { return }
         let graphHostingController = UIHostingController(
-            rootView:GraphView(data: data, delegate: self, height: height ?? 240, isInteractive: height == nil)
+            rootView:GraphView(viewModel: viewModel, delegate: self, height: height ?? 240, isInteractive: height == nil)
         )
         addGraphChildViewController(graphHostingController)
     }
