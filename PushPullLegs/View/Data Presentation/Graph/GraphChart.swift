@@ -18,7 +18,7 @@ struct GraphChart: View {
                     x: .value("date", datum.date),
                     y: .value("volume", datum.normalVolume)
                 )
-                .interpolationMethod(.cardinal)
+                .interpolationMethod(.stepStart)
             }
         }
         .previewDisplayName(data.name)
