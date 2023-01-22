@@ -8,75 +8,86 @@
 
 import Foundation
 import UIKit
+import Combine
 
-class GraphViewModel: NSObject, ReloadProtocol {
-    var yValues = [CGFloat]()
-    var xValues = [String]()
-    var dataManager: DataManager?
-    var hasEllipsis: Bool = false
-    lazy var formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM-dd-yyyy"
-        return formatter
-    }()
-    var startDate: Date?
-    var endDate: Date?
-    var earliestPossibleDate: Date? {
-        nil
-    }
-    var lastPossibleDate: Date? {
-        nil
-    }
+class GraphViewModel: NSObject {
     private(set) var type: ExerciseType
+    private var workoutDataManager: WorkoutDataManager
+    private var exerciseDataManager: ExerciseDataManager
+    @Published var data: GraphData = GraphData(name: "", points: [], exerciseNames: [])
+    var hasData: Bool {
+        !data.points.isEmpty
+    }
     
-    init(dataManager: DataManager, type: ExerciseType) {
+    init(type: ExerciseType, workoutDataManager: WorkoutDataManager = WorkoutDataManager(), exerciseDataManager: ExerciseDataManager = ExerciseDataManager()) {
         self.type = type
+        self.workoutDataManager = workoutDataManager
+        self.exerciseDataManager = exerciseDataManager
         super.init()
-        self.dataManager = dataManager
-        reload()
+        setToWorkoutData()
     }
     
-    func title() -> String {
-        ""
+    func setToWorkoutData() {
+        data.refresh(GraphDataManager.calculateWorkoutData(type: type))
     }
     
-    func pointCount() -> Int {
-        xValues.count
+    func updateToExerciseData(_ name: String) {
+        guard let exerciseData = GraphDataManager.exercisesData(name: name) else { return }
+        data.refresh(exerciseData)
+    }
+}
+
+class GraphDataManager {
+    static func calculateWorkoutData(_ dm: WorkoutDataManager = WorkoutDataManager(), type: ExerciseType) -> GraphData {
+        let workouts = dm.workouts(ascending: true, types: [type])
+        var data = [GraphDataPoint]()
+        var highestVolume: Double = 0
+        let volumes = workouts.map { $0.volume() }
+        volumes.forEach { highestVolume = $0 > highestVolume ? $0 : highestVolume }
+        let normalVolumes = volumes.map { $0 / highestVolume}
+        var i = 0
+        var name: String = ""
+        for workout in workouts {
+            if let date = workout.dateCreated {
+                data.append(GraphDataPoint(date: date, volume: volumes[i], normalVolume: normalVolumes[i]))
+                i += 1
+            }
+            if name.isEmpty {
+                name = workout.name ?? ""
+            }
+        }
+        return GraphData(name: name, points: data, exerciseNames: getExerciseNames(type: type))
     }
     
-    func dates() -> [String]? {
-        guard pointCount() > 0 else { return nil }
-        return xValues
-    }
-    
-    func volumes() -> [CGFloat]? {
-        guard pointCount() > 0 else { return nil }
-        return yValues
-    }
-    
-    func reload() {
-        yValues.removeAll()
-        xValues.removeAll()
-    }
-    
-    func refreshWithDates(_ startDate: Date, _ endDate: Date) {
-        self.startDate = startDate
-        self.endDate = endDate
-        reload()
-    }
-    
-    func data() -> GraphData? {
-        nil
-    }
-    
-    func getExerciseNames() -> [String] {
+    static func getExerciseNames(_ edm: ExerciseDataManager = ExerciseDataManager(), type: ExerciseType, excluding name: String? = nil) -> [String] {
         guard let temps = TemplateManagement().exerciseTemplates(withType: type) else { return [] }
         return temps.filter {
             $0.name != nil && $0.name != ""
         }.map {
             $0.name ?? ""
         }.filter {
-            ExerciseDataManager().exists(name: $0)
+            edm.exists(name: $0) && $0 != name
         }
+    }
+    
+    static func exercisesData(_ edm: ExerciseDataManager = ExerciseDataManager(), name: String) -> GraphData? {
+        guard
+            let exercises = try? edm.exercises(name: name),
+            let workoutName = exercises.first?.workout?.name,
+            let type = ExerciseType(rawValue: workoutName)
+        else { return nil }
+        var data = [GraphDataPoint]()
+        var highestVolume: Double = 0
+        let volumes = exercises.map { $0.volume() }
+        volumes.forEach { highestVolume = $0 > highestVolume ? $0 : highestVolume }
+        let normalVolumes = volumes.map { $0 / highestVolume}
+        var i = 0
+        for exercise in exercises {
+            if let date = exercise.workout?.dateCreated {
+                data.append(GraphDataPoint(date: date, volume: volumes[i], normalVolume: normalVolumes[i]))
+                i += 1
+            }
+        }
+        return GraphData(name: name, points: data, exerciseNames: GraphDataManager.getExerciseNames(type: type, excluding: name))
     }
 }

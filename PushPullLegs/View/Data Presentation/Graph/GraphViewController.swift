@@ -10,16 +10,15 @@ import UIKit
 import Combine
 import SwiftUI
 
-class WorkoutGraphViewController2: UIViewController, GraphViewDelegate {
+class GraphViewController: UIViewController, GraphViewDelegate {
     var viewModel: GraphViewModel?
-    var data: GraphData?
     var isInteractive = true
-    private var frame: CGRect?
+    private var height: CGFloat?
     
-    init(type: ExerciseType, frame: CGRect? = nil) {
+    init(type: ExerciseType, height: CGFloat? = nil) {
         super.init(nibName: nil, bundle: nil)
-        viewModel = WorkoutGraphViewModel(dataManager: WorkoutDataManager(), type: type)
-        self.frame = frame
+        viewModel = GraphViewModel(type: type)
+        self.height = height
     }
     
     required init?(coder: NSCoder) {
@@ -28,22 +27,15 @@ class WorkoutGraphViewController2: UIViewController, GraphViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let viewModel else { return }
-        data = viewModel.data()
-        if let frame = frame {
-            view.frame = frame
-        }
         addGraphView()
         addRightBarButtonItem()
     }
     
     private func addGraphView() {
-        guard let data else { return }
+        guard let data = viewModel?.data else { return }
         let graphHostingController = UIHostingController(
-            rootView:GraphView(data: data, delegate: self, height: frame?.height ?? 240, isInteractive: frame == nil)
+            rootView:GraphView(data: data, delegate: self, height: height ?? 240, isInteractive: height == nil)
         )
-        graphHostingController.preferredContentSize = frame?.size ?? .zero
-        graphHostingController.view.frame = frame ?? .zero
         addGraphChildViewController(graphHostingController)
     }
     
@@ -60,14 +52,12 @@ class WorkoutGraphViewController2: UIViewController, GraphViewDelegate {
     
     @objc
     func refresh(_ sender: Any?) {
-        guard let newData = viewModel?.data() else { return }
-        data?.refresh(newData)
+        viewModel?.setToWorkoutData()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         coordinator.animate(alongsideTransition: { (context) in
-//            self.reload()
             self.view.setNeedsLayout()
             self.view.setNeedsDisplay()
         })
@@ -79,24 +69,7 @@ class WorkoutGraphViewController2: UIViewController, GraphViewDelegate {
     }
     
     func didSelectExercise(name: String) {
-        let names = exerciseNames().filter { $0 != name }
-        let exerciseViewModel = ExerciseGraphViewModel(name: name, otherNames: names, type: type())
-        guard let data = exerciseViewModel.data() else { return }
-        self.data?.name = data.name
-        self.data?.points = data.points
-        self.data?.exerciseNames = names
-    }
-    
-    func exerciseNames() -> [String] {
-        var names = [String]()
-        if let vm = viewModel as? WorkoutGraphViewModel {
-            names = vm.getExerciseNames()
-        }
-        return names
-    }
-    
-    func type() -> ExerciseType {
-        (viewModel as? WorkoutGraphViewModel)?.type ?? .push
+        viewModel?.updateToExerciseData(name)
     }
 }
 

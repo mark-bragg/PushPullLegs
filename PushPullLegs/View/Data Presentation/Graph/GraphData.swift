@@ -10,7 +10,7 @@ import Combine
 
 class GraphData: ObservableObject {
     @Published var name: String
-    @Published var points: [GraphDataPoint] {
+    private(set) var points: [GraphDataPoint] {
         didSet { updateDelineatedPoints() }
     }
     @Published var delineatedPoints: [GraphDataPoint] = []

@@ -10,9 +10,9 @@ import UIKit
 
 class GraphTableViewController: PPLTableViewController {
     
-    var pushVc: WorkoutGraphViewController2?
-    var pullVc: WorkoutGraphViewController2?
-    var legsVc: WorkoutGraphViewController2?
+    var pushVc: GraphViewController?
+    var pullVc: GraphViewController?
+    var legsVc: GraphViewController?
     private var helpTag = 0
     private var interstitial: NSObject?
     private var selectedRow: Int?
@@ -82,10 +82,10 @@ class GraphTableViewController: PPLTableViewController {
             legsVc.view.setNeedsLayout()
             return
         }
-        let frame = CGRect(x: 8, y: 8, width: view.frame.width - 16, height: (tableView?.rowHeight ?? view.frame.height / 3) - 16)
-        pushVc = WorkoutGraphViewController2(type: .push, frame: frame)
-        pullVc = WorkoutGraphViewController2(type: .pull, frame: frame)
-        legsVc = WorkoutGraphViewController2(type: .legs, frame: frame)
+        let height = (tableView?.rowHeight ?? view.frame.height / 3) - 16
+        pushVc = GraphViewController(type: .push, height: height)
+        pullVc = GraphViewController(type: .pull, height: height)
+        legsVc = GraphViewController(type: .legs, height: height)
         for vc in [pushVc, pullVc, legsVc] {
             vc?.isInteractive = false
             vc?.view.backgroundColor = .clear
@@ -124,8 +124,7 @@ class GraphTableViewController: PPLTableViewController {
         cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
         cell.contentView.addSubview(view)
         constrain(view, toInsideOf: cell.contentView)
-//        vcForRow(indexPath.row)?.reload()
-        if let gVm = vcForRow(indexPath.row)?.viewModel, gVm.pointCount() > 0 {
+        if let gVm = vcForRow(indexPath.row)?.viewModel, gVm.hasData {
             cell.accessoryType = .disclosureIndicator
         } else {
             cell.addHelpIndicator(target: self, action: #selector(help(_:)))
@@ -168,7 +167,7 @@ class GraphTableViewController: PPLTableViewController {
         vcForRow(row)?.view
     }
     
-    func vcForRow(_ row: Int) -> WorkoutGraphViewController2? {
+    func vcForRow(_ row: Int) -> GraphViewController? {
         switch row {
         case 0:
             return pushVc
@@ -181,7 +180,7 @@ class GraphTableViewController: PPLTableViewController {
     
     @objc private func showGraph(_ row: Int) {
         guard let nav = navigationController else { return }
-        let vc = WorkoutGraphViewController2(type: typeForRow(row))
+        let vc = GraphViewController(type: typeForRow(row))
 //        vc.isInteractive = true
         vc.hidesBottomBarWhenPushed = true
         nav.show(vc, sender: self)
@@ -239,8 +238,7 @@ class GraphTableViewController: PPLTableViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
         guard
-            let selectedRow,
-            let gvm = vcForRow(selectedRow)?.viewModel, gvm.pointCount() > 0
+            let selectedRow
         else { return }
         if PPLDefaults.instance.wasGraphInterstitialShownToday() {
             showGraph(selectedRow)
