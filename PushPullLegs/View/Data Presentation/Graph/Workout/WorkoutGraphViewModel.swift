@@ -12,7 +12,6 @@ import UIKit
 class WorkoutGraphViewModel: GraphViewModel {
     
     private var workoutDataManager: WorkoutDataManager? { dataManager as? WorkoutDataManager }
-    private(set) var type: ExerciseType
     override var earliestPossibleDate: Date? {
         workoutDataManager?.workouts(ascending: true, types: [type])
             .filter { $0.dateCreated != nil }
@@ -26,9 +25,8 @@ class WorkoutGraphViewModel: GraphViewModel {
             .last
     }
     
-    init(type: ExerciseType, dataManager: WorkoutDataManager = WorkoutDataManager()) {
-        self.type = type
-        super.init(dataManager: dataManager)
+    override init(dataManager: DataManager, type: ExerciseType) {
+        super.init(dataManager: dataManager, type: type)
         hasEllipsis = true
     }
     
@@ -53,14 +51,29 @@ class WorkoutGraphViewModel: GraphViewModel {
         type.rawValue
     }
     
-    func getExerciseNames() -> [String] {
-        guard let temps = TemplateManagement().exerciseTemplates(withType: type) else { return [] }
-        return temps.filter {
-            $0.name != nil && $0.name != ""
-        }.map {
-            $0.name ?? ""
-        }.filter {
-            ExerciseDataManager().exists(name: $0)
+    override func data() -> GraphData? {
+        normalizedWorkoutData()
+    }
+    
+    private func normalizedWorkoutData() -> GraphData? {
+        guard let workouts = workoutDataManager?.workouts(ascending: true, types: [type], initialDate: startDate, finalDate: endDate)
+        else { return nil }
+        var data = [GraphDataPoint]()
+        var highestVolume: Double = 0
+        let volumes = workouts.map { $0.volume() }
+        volumes.forEach { highestVolume = $0 > highestVolume ? $0 : highestVolume }
+        let normalVolumes = volumes.map { $0 / highestVolume}
+        var i = 0
+        var name: String = ""
+        for workout in workouts {
+            if let date = workout.dateCreated {
+                data.append(GraphDataPoint(date: date, volume: volumes[i], normalVolume: normalVolumes[i]))
+                i += 1
+            }
+            if name.isEmpty {
+                name = workout.name ?? ""
+            }
         }
+        return GraphData(name: name, points: data, exerciseNames: getExerciseNames())
     }
 }

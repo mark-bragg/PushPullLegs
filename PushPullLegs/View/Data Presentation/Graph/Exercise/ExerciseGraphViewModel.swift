@@ -14,7 +14,6 @@ class ExerciseGraphViewModel: GraphViewModel {
     private var name: String
     private(set) var otherNames: [String]
     private var exerciseDataManager: ExerciseDataManager { dataManager as? ExerciseDataManager ?? ExerciseDataManager() }
-    private(set) var type: ExerciseType
     override var earliestPossibleDate: Date? {
         WorkoutDataManager().workouts(ascending: true, types: [type])
             .filter { $0.dateCreated != nil }
@@ -31,8 +30,7 @@ class ExerciseGraphViewModel: GraphViewModel {
     init(name: String, otherNames: [String], type: ExerciseType) {
         self.name = name
         self.otherNames = otherNames
-        self.type = type
-        super.init(dataManager: ExerciseDataManager())
+        super.init(dataManager: ExerciseDataManager(), type: type)
         hasEllipsis = otherNames.count > 0
     }
     
@@ -63,5 +61,23 @@ class ExerciseGraphViewModel: GraphViewModel {
     
     override func title() -> String {
         name
+    }
+    
+    override func data() -> GraphData? {
+        guard let exercises = try? exerciseDataManager.exercises(name: name, initialDate: startDate, finalDate: endDate)
+        else { return nil }
+        var data = [GraphDataPoint]()
+        var highestVolume: Double = 0
+        let volumes = exercises.map { $0.volume() }
+        volumes.forEach { highestVolume = $0 > highestVolume ? $0 : highestVolume }
+        let normalVolumes = volumes.map { $0 / highestVolume}
+        var i = 0
+        for exercise in exercises {
+            if let date = exercise.workout?.dateCreated {
+                data.append(GraphDataPoint(date: date, volume: volumes[i], normalVolume: normalVolumes[i]))
+                i += 1
+            }
+        }
+        return GraphData(name: name, points: data, exerciseNames: getExerciseNames())
     }
 }

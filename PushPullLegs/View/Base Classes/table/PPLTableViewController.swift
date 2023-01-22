@@ -107,8 +107,9 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         return lbl
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeBanner()
     }
     
     override func viewDidLayoutSubviews() {

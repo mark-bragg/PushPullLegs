@@ -27,8 +27,10 @@ class GraphViewModel: NSObject, ReloadProtocol {
     var lastPossibleDate: Date? {
         nil
     }
+    private(set) var type: ExerciseType
     
-    init(dataManager: DataManager) {
+    init(dataManager: DataManager, type: ExerciseType) {
+        self.type = type
         super.init()
         self.dataManager = dataManager
         reload()
@@ -61,5 +63,20 @@ class GraphViewModel: NSObject, ReloadProtocol {
         self.startDate = startDate
         self.endDate = endDate
         reload()
+    }
+    
+    func data() -> GraphData? {
+        nil
+    }
+    
+    func getExerciseNames() -> [String] {
+        guard let temps = TemplateManagement().exerciseTemplates(withType: type) else { return [] }
+        return temps.filter {
+            $0.name != nil && $0.name != ""
+        }.map {
+            $0.name ?? ""
+        }.filter {
+            ExerciseDataManager().exists(name: $0)
+        }
     }
 }
