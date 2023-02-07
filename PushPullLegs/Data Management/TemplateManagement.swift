@@ -30,10 +30,10 @@ class TemplateManagement {
         coreDataManager.mainContext.performAndWait {
             let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.exerciseTemplate.rawValue)
             req.predicate = PPLPredicate.nameIsEqualTo(name)
-            if let exerciseTemplate = try? coreDataManager.backgroundContext.fetch(req).first as? ExerciseTemplate {
+            if let exerciseTemplate = try? coreDataManager.mainContext.fetch(req).first as? ExerciseTemplate {
                 removeFromWorkout(exercise: exerciseTemplate)
-                coreDataManager.backgroundContext.delete(exerciseTemplate)
-                try? coreDataManager.backgroundContext.save()
+                coreDataManager.mainContext.delete(exerciseTemplate)
+                try? coreDataManager.mainContext.save()
                 PPLDefaults.instance.deleteDefaultWeightForExerciseWith(name: name)
             }
         }
@@ -135,25 +135,25 @@ class TemplateManagement {
     }
     
     private func exerciseWriter() -> ExerciseDataManager {
-        let edm = ExerciseDataManager(backgroundContext: coreDataManager.backgroundContext)
+        let edm = ExerciseDataManager(context: coreDataManager.mainContext)
         edm.entityName = .exerciseTemplate
         return edm
     }
     
     private func exerciseReader() -> ExerciseDataManager {
-        let edm = ExerciseDataManager(backgroundContext: coreDataManager.mainContext)
+        let edm = ExerciseDataManager(context: coreDataManager.mainContext)
         edm.entityName = .exerciseTemplate
         return edm
     }
     
     private func workoutWriter() -> WorkoutDataManager {
-        let wdm = WorkoutDataManager(backgroundContext: coreDataManager.backgroundContext)
+        let wdm = WorkoutDataManager(context: coreDataManager.mainContext)
         wdm.entityName = .workoutTemplate
         return wdm
     }
     
     private func workoutReader() -> WorkoutDataManager {
-        let wdm = WorkoutDataManager(backgroundContext: coreDataManager.mainContext)
+        let wdm = WorkoutDataManager(context: coreDataManager.mainContext)
         wdm.entityName = .workoutTemplate
         return wdm
     }
@@ -173,7 +173,7 @@ fileprivate extension DataManager {
         guard let entityNameString else { return nil }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = PPLPredicate.nameIsEqualTo(name)
-        guard let template = try? self.backgroundContext.fetch(request).first as? NSManagedObject else {
+        guard let template = try? self.context.fetch(request).first as? NSManagedObject else {
             // TODO: handle error
             return nil
         }
@@ -188,7 +188,7 @@ fileprivate extension DataManager {
             predicates.append(PPLPredicate.nameIsEqualTo(name))
         }
         request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
-        guard let template = try? self.backgroundContext.fetch(request) as? [ExerciseTemplate] else {
+        guard let template = try? self.context.fetch(request) as? [ExerciseTemplate] else {
             // TODO: handle error
             return nil
         }
@@ -199,7 +199,7 @@ fileprivate extension DataManager {
         guard let entityNameString else { return nil }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = PPLPredicate.typeIsEqualTo(type)
-        guard let templates = try? self.backgroundContext.fetch(request) as? [ExerciseTemplate] else {
+        guard let templates = try? self.context.fetch(request) as? [ExerciseTemplate] else {
             // TODO: handle error
             return nil
         }
@@ -209,7 +209,7 @@ fileprivate extension DataManager {
     func getAllTemplates() -> [NSManagedObject]? {
         guard let entityNameString else { return nil }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
-        guard let templates = try? self.backgroundContext.fetch(request) as? [NSManagedObject] else {
+        guard let templates = try? self.context.fetch(request) as? [NSManagedObject] else {
             // TODO: handle error
             return nil
         }

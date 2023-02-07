@@ -44,7 +44,7 @@ class TemplateManagementTests: XCTestCase {
 
     func testCreateExerciseTemplate_templateCreated_push() {
         try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.push)
-        guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
+        guard let temps = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
             XCTFail()
             return
         }
@@ -59,7 +59,7 @@ class TemplateManagementTests: XCTestCase {
     
     func testCreateExerciseTemplate_templateCreated_pull() {
         try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.pull)
-        guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
+        guard let temps = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
             XCTFail()
             return
         }
@@ -74,8 +74,8 @@ class TemplateManagementTests: XCTestCase {
     
     func testCreateExerciseTemplate_templateCreated_legs() {
         try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.legs)
-        dbHelper.coreDataStack.backgroundContext.performAndWait {
-            guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
+        dbHelper.coreDataStack.mainContext.performAndWait {
+            guard let temps = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
                 XCTFail()
                 return
             }
@@ -130,7 +130,7 @@ class TemplateManagementTests: XCTestCase {
             temp.name != TempName
         }
         sut.deleteExerciseTemplate(name: TempName)
-        guard let temps2 = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: ExTemp)) as? [ExerciseTemplate] else {
+        guard let temps2 = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: ExTemp)) as? [ExerciseTemplate] else {
             return
         }
         XCTAssert(temps2.count == 2, "\nexpected: 2\nactual: \(temps2.count)")
@@ -185,14 +185,14 @@ class TemplateManagementTests: XCTestCase {
     // MARK: workout
     
     func testCreatePushWorkoutTemplate_templateCreated() {
-        (self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation = expectation(description: "workout template creation")
+        (self.dbHelper.coreDataStack.mainContext as! NSManagedObjectContextSpy).expectation = expectation(description: "workout template creation")
         do {
             try sut.addWorkoutTemplate(type: .push)
         } catch {
             XCTFail("error shouldn't be thrown: \(error)")
         }
-        wait(for: [(self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation!], timeout: 60)
-        guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: WrkTemp)) else {
+        wait(for: [(self.dbHelper.coreDataStack.mainContext as! NSManagedObjectContextSpy).expectation!], timeout: 60)
+        guard let temps = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: WrkTemp)) else {
             XCTFail()
             return
         }
@@ -217,7 +217,7 @@ class TemplateManagementTests: XCTestCase {
             }
             XCTAssert(error == TemplateError.duplicateWorkout, "error should be thrown: \(error)")
         }
-        guard let temps = try? dbHelper.coreDataStack.backgroundContext.fetch(NSFetchRequest(entityName: WrkTemp)) else {
+        guard let temps = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: WrkTemp)) else {
             XCTFail()
             return
         }
@@ -280,7 +280,7 @@ class TemplateManagementTests: XCTestCase {
     }
     
     func testGetAllExerciseTemplates_allTemplatesGeted() {
-        dbHelper.coreDataStack.backgroundContext.performAndWait {
+        dbHelper.coreDataStack.mainContext.performAndWait {
             for i in 1...6 {
                 addExerciseTemplate(name: "\(TempName)\(i)")
             }

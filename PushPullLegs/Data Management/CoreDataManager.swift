@@ -11,7 +11,6 @@ import CoreData
 
 protocol CoreDataManagement {
     var persistentContainer: NSPersistentContainer { get }
-    var backgroundContext: NSManagedObjectContext { get }
     var mainContext: NSManagedObjectContext { get }
 }
 
@@ -24,11 +23,6 @@ class CoreDataManager: CoreDataManagement {
         description?.type = storeType ?? ""
         return persistentContainer
     }()
-    lazy var backgroundContext: NSManagedObjectContext = { [unowned self] in
-        let context = persistentContainer.newBackgroundContext()
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return context
-    }()
     lazy var mainContext: NSManagedObjectContext = { [unowned self] in
         let context = persistentContainer.viewContext
         context.automaticallyMergesChangesFromParent = true
@@ -39,6 +33,7 @@ class CoreDataManager: CoreDataManagement {
         self.storeType = storeType
         loadPersistentStore { [weak self] in
             self?.addWorkouts()
+            self?.cleanupUncascadedObjects()
             completion?()
         }
     }
@@ -74,6 +69,30 @@ class CoreDataManager: CoreDataManagement {
         try? mgmt.addWorkoutTemplate(type: .push)
         try? mgmt.addWorkoutTemplate(type: .pull)
         try? mgmt.addWorkoutTemplate(type: .legs)
+    }
+    
+    private func cleanupUncascadedObjects() {
+        deleteExercisesWithNilWorkouts()
+        deleteSetsWithNilExercises()
+        save()
+    }
+    
+    private func deleteExercisesWithNilWorkouts() {
+        guard let exercises = try? mainContext.fetch(Exercise.fetchRequest()) else { return }
+        for exercise in exercises {
+            if exercise.workout == nil {
+                mainContext.delete(exercise)
+            }
+        }
+    }
+    
+    private func deleteSetsWithNilExercises() {
+        guard let sets = try? mainContext.fetch(ExerciseSet.fetchRequest()) else { return }
+        for set in sets {
+            if set.exercise == nil {
+                mainContext.delete(set)
+            }
+        }
     }
 }
 

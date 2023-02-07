@@ -39,37 +39,16 @@ class GraphViewModel: NSObject, ObservableObject {
     }
 }
 
+struct GraphPointDTO {
+    let volume: Double
+    let dateCreated: Date?
+}
+
 class GraphDataManager {
     static func calculateWorkoutData(_ dm: WorkoutDataManager = WorkoutDataManager(), type: ExerciseType) -> GraphData {
         let workouts = dm.workouts(ascending: true, types: [type])
-        var data = [GraphDataPoint]()
-        var highestVolume: Double = 0
-        let volumes = workouts.map { $0.volume() }
-        volumes.forEach { highestVolume = $0 > highestVolume ? $0 : highestVolume }
-        let normalVolumes = volumes.map { $0 / highestVolume}
-        var i = 0
-        var name: String = ""
-        for workout in workouts {
-            if let date = workout.dateCreated {
-                data.append(GraphDataPoint(date: date, volume: volumes[i], normalVolume: normalVolumes[i]))
-                i += 1
-            }
-            if name.isEmpty {
-                name = workout.name ?? ""
-            }
-        }
-        return GraphData(name: name, points: data, exerciseNames: getExerciseNames(type: type))
-    }
-    
-    static func getExerciseNames(_ edm: ExerciseDataManager = ExerciseDataManager(), type: ExerciseType, excluding name: String? = nil) -> [String] {
-        guard let temps = TemplateManagement().exerciseTemplates(withType: type) else { return [] }
-        return temps.filter {
-            $0.name != nil && $0.name != ""
-        }.map {
-            $0.name ?? ""
-        }.filter {
-            edm.exists(name: $0) && $0 != name
-        }
+            .map { GraphPointDTO(volume: $0.volume(), dateCreated: $0.dateCreated) }
+        return graphData(workouts, type: type)
     }
     
     static func exercisesData(_ edm: ExerciseDataManager = ExerciseDataManager(), name: String) -> GraphData? {
@@ -78,18 +57,27 @@ class GraphDataManager {
             let workoutName = exercises.first?.workout?.name,
             let type = ExerciseType(rawValue: workoutName)
         else { return nil }
+        return graphData(exercises.map({ GraphPointDTO(volume: $0.volume(), dateCreated: $0.workout?.dateCreated) }), type: type, excludedName: type.rawValue)
+    }
+    
+    private static func graphData(_ dto: [GraphPointDTO], type: ExerciseType, excludedName: String? = nil) -> GraphData {
         var data = [GraphDataPoint]()
-        var highestVolume: Double = 0
-        let volumes = exercises.map { $0.volume() }
-        volumes.forEach { highestVolume = $0 > highestVolume ? $0 : highestVolume }
-        let normalVolumes = volumes.map { $0 / highestVolume}
-        var i = 0
-        for exercise in exercises {
-            if let date = exercise.workout?.dateCreated {
-                data.append(GraphDataPoint(date: date, volume: volumes[i], normalVolume: normalVolumes[i]))
-                i += 1
+        for datum in dto {
+            if let date = datum.dateCreated {
+                data.append(GraphDataPoint(date: date, volume: datum.volume))
             }
         }
-        return GraphData(name: name, points: data, exerciseNames: GraphDataManager.getExerciseNames(type: type, excluding: name))
+        return GraphData(name: type.rawValue, points: data, exerciseNames: GraphDataManager.getExerciseNames(type: type, excluding: excludedName))
+    }
+    
+    private static func getExerciseNames(_ edm: ExerciseDataManager = ExerciseDataManager(), type: ExerciseType, excluding name: String? = nil) -> [String] {
+        guard let temps = TemplateManagement().exerciseTemplates(withType: type) else { return [] }
+        return temps.filter {
+            $0.name != nil && $0.name != ""
+        }.map {
+            $0.name ?? ""
+        }.filter {
+            edm.exists(name: $0) && $0 != name
+        }
     }
 }

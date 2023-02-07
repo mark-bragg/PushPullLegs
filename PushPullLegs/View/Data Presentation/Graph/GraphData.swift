@@ -46,5 +46,4 @@ struct GraphDataPoint: Identifiable {
     var id = UUID()
     var date: Date
     var volume: Double
-    var normalVolume: Double = 0
 }

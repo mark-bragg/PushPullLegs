@@ -39,7 +39,7 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
                 exercisesDone = exercises
             }
         }
-        dataManager = WorkoutDataManager(backgroundContext: coreDataManagement.mainContext)
+        dataManager = WorkoutDataManager(context: coreDataManagement.mainContext)
     }
     
     override func rowCount(section: Int) -> Int {
@@ -71,7 +71,7 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
     func exerciseVolumeComparison(row: Int) -> ExerciseVolumeComparison {
         guard
             let workoutId,
-            let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
+            let workout = workoutManager.context.object(with: workoutId) as? Workout,
             let date = workout.dateCreated,
             let previousWorkout = workoutManager.previousWorkout(before: date, type: exerciseType),
             let previousExercise = previousWorkout.exercises?.first(where: { ($0 as? Exercise)?.name == exercisesDone[row].name}) as? Exercise
@@ -119,7 +119,7 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
     
     func reload() {
         if let workoutId,
-           let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
+           let workout = workoutManager.context.object(with: workoutId) as? Workout,
            let done = workout.exercises,
            let doneArray = done.array as? [Exercise] {
             exercisesDone = doneArray.sorted(by: sorter)
@@ -141,7 +141,7 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
             let wkt = dataManager?.fetch(workoutId) as? Workout
         else { return }
         wkt.note = text
-        try? dataManager?.backgroundContext.save()
+        try? dataManager?.context.save()
     }
     
     func noteText() -> String {

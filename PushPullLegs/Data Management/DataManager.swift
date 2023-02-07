@@ -11,23 +11,23 @@ import CoreData
 
 class DataManager {
     var creation: Any?
-    let backgroundContext: NSManagedObjectContext
+    let context: NSManagedObjectContext
     var entityName: EntityName?
     var entityNameString: String? {
         entityName?.rawValue
     }
     weak var deletionObserver: DeletionObserver?
-    init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
-        self.backgroundContext = backgroundContext
+    init(context: NSManagedObjectContext = CoreDataManager.shared.mainContext) {
+        self.context = context
     }
     
     func delete(_ object: NSManagedObject) {
         let objectId = object.objectID
-        backgroundContext.performAndWait {
-            if let objectInContext = try? backgroundContext.existingObject(with: objectId) {
-                backgroundContext.delete(objectInContext)
+        context.performAndWait {
+            if let objectInContext = try? context.existingObject(with: objectId) {
+                context.delete(objectInContext)
                 do {
-                    try backgroundContext.save()
+                    try context.save()
                     creation = nil
                     deletionObserver?.objectDeleted(objectInContext)
                 } catch {
@@ -42,7 +42,7 @@ class DataManager {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = PPLPredicate.nameIsEqualTo(name)
         do {
-            let result = try backgroundContext.fetch(request)
+            let result = try context.fetch(request)
             return result.count > 0
         } catch {
             // TODO: handle error
@@ -52,8 +52,8 @@ class DataManager {
     
     func create(name: String?, keyValuePairs pairs: [String: Any] = [:]) {
         guard let entityNameString else { return }
-        backgroundContext.performAndWait {
-            let object = NSEntityDescription.insertNewObject(forEntityName: entityNameString, into: backgroundContext)
+        context.performAndWait {
+            let object = NSEntityDescription.insertNewObject(forEntityName: entityNameString, into: context)
             if let name = name {
                 object.setValue(name, forKey: DBAttributeKey.name)
             }
@@ -63,8 +63,8 @@ class DataManager {
                 }
             }
             do {
-                try backgroundContext.save()
-                creation = backgroundContext.registeredObject(for: object.objectID)
+                try context.save()
+                creation = context.registeredObject(for: object.objectID)
             } catch {
                 print(error)
             }
@@ -79,11 +79,11 @@ class DataManager {
     }
     
     func fetch(_ objectId: NSManagedObjectID) -> Any? {
-        return try? backgroundContext.existingObject(with: objectId)
+        return try? context.existingObject(with: objectId)
     }
     
     func update(_ object: NSManagedObject, keyValuePairs pairs: [String: Any]) {
-        backgroundContext.performAndWait {
+        context.performAndWait {
             guard pairs.count > 0 else {
                 // error
                 return
@@ -92,7 +92,7 @@ class DataManager {
                 object.setValue(value, forKey: key)
             }
             do {
-                try backgroundContext.save()
+                try context.save()
             }
             catch {
                 print(error)

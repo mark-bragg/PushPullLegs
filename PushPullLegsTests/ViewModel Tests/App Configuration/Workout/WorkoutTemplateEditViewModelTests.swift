@@ -25,9 +25,9 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
     }
     
     func addWorkoutTemplate(type: ExerciseType = .push) {
-        let temp = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.backgroundContext) as! WorkoutTemplate
+        let temp = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.mainContext) as! WorkoutTemplate
         temp.name = type.rawValue
-        try? coreDataStack.backgroundContext.save()
+        try? coreDataStack.mainContext.save()
         let temps = dbHelper.fetchWorkoutTemplates()
         count += 1
         XCTAssert(temps.count == count)

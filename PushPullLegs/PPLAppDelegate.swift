@@ -25,7 +25,7 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
             application.isIdleTimerDisabled = inProgress != nil
         }
         CoreDataManager.shared.setup(completion: nil)
-        CoreDataManager.shared.backgroundContext.retainsRegisteredObjects = true
+        CoreDataManager.shared.mainContext.retainsRegisteredObjects = true
         if PPLDefaults.instance.isAdvertisingEnabled() {
             let authorized = ATTrackingManager.trackingAuthorizationStatus == .authorized
             let sdk: STAStartAppSDK = STAStartAppSDK.sharedInstance()

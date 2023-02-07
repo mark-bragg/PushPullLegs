@@ -20,17 +20,17 @@ class WorkoutDataManagerTests : XCTestCase {
     
     override func setUp() {
         self.dbHelper.coreDataStack = CoreDataTestStack()
-        sut = WorkoutDataManager(backgroundContext: self.dbHelper.coreDataStack.backgroundContext)
+        sut = WorkoutDataManager(context: self.dbHelper.coreDataStack.mainContext)
     }
     
     func setExpectation(description: String) {
         let performAndWaitExpectation = expectation(description: description)
-        (self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation = performAndWaitExpectation
+        (self.dbHelper.coreDataStack.mainContext as! NSManagedObjectContextSpy).expectation = performAndWaitExpectation
     }
     
     func add(_ exercise: Exercise, to workout: Workout) {
         workout.addToExercises(exercise)
-        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        try? self.dbHelper.coreDataStack.mainContext.save()
     }
     
     func test_createWorkout_workoutCreated() {
@@ -44,7 +44,7 @@ class WorkoutDataManagerTests : XCTestCase {
             }
             XCTAssert(workouts.count == 1)
             XCTAssert(exercises.count == 0)
-            XCTAssert((self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).saveWasCalled)
+            XCTAssert((self.dbHelper.coreDataStack.mainContext as! NSManagedObjectContextSpy).saveWasCalled)
             guard let name = workout.name else {
                 XCTFail()
                 return
@@ -68,7 +68,7 @@ class WorkoutDataManagerTests : XCTestCase {
             }
             XCTAssert(backgroundContextWorkouts.count == 2)
             XCTAssert(backgroundContextWorkouts.contains(workout1) && backgroundContextWorkouts.contains(workout3))
-            XCTAssert((self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).saveWasCalled)
+            XCTAssert((self.dbHelper.coreDataStack.mainContext as! NSManagedObjectContextSpy).saveWasCalled)
         }
     }
     
@@ -84,7 +84,7 @@ class WorkoutDataManagerTests : XCTestCase {
             let backgroundContextWorkouts = self.dbHelper.fetchWorkoutsBackground()
             XCTAssert(backgroundContextWorkouts.count == 2)
             XCTAssert(backgroundContextWorkouts.contains(workout1) && backgroundContextWorkouts.contains(workout3))
-            XCTAssert((self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).saveWasCalled)
+            XCTAssert((self.dbHelper.coreDataStack.mainContext as! NSManagedObjectContextSpy).saveWasCalled)
         }
     }
     
@@ -232,7 +232,7 @@ class WorkoutDataManagerTests : XCTestCase {
     func testGetLastWorkoutType_onePushSaved_pushReturned() {
         let workout = dbHelper.createWorkout(name: .push)
         workout.dateCreated = Date()
-        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        try? self.dbHelper.coreDataStack.mainContext.save()
         XCTAssert(sut.getLastWorkoutType() == .push)
     }
     
@@ -241,7 +241,7 @@ class WorkoutDataManagerTests : XCTestCase {
             let workout = dbHelper.createWorkout(name: type)
             workout.dateCreated = Date()
         }
-        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        try? self.dbHelper.coreDataStack.mainContext.save()
         XCTAssert(sut.getLastWorkoutType() == .pull)
     }
     
@@ -250,7 +250,7 @@ class WorkoutDataManagerTests : XCTestCase {
             let workout = dbHelper.createWorkout(name: type)
             workout.dateCreated = Date()
         }
-        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        try? self.dbHelper.coreDataStack.mainContext.save()
         XCTAssert(sut.getLastWorkoutType() == .legs)
     }
     
@@ -259,7 +259,7 @@ class WorkoutDataManagerTests : XCTestCase {
             let workout = dbHelper.createWorkout(name: type)
             workout.dateCreated = Date()
         }
-        try? self.dbHelper.coreDataStack.backgroundContext.save()
+        try? self.dbHelper.coreDataStack.mainContext.save()
         XCTAssert(sut.getLastWorkoutType() == .push)
     }
     

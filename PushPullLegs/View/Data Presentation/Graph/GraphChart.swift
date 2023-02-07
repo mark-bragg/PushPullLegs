@@ -16,7 +16,7 @@ struct GraphChart: View {
             ForEach(data.delineatedPoints) { datum in
                 LineMark(
                     x: .value("date", datum.date),
-                    y: .value("volume", datum.normalVolume)
+                    y: .value("volume", datum.volume)
                 )
                 .interpolationMethod(.stepStart)
             }

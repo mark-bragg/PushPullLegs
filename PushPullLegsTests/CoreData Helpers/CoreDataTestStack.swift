@@ -14,8 +14,6 @@ import CoreData
 class CoreDataTestStack: CoreDataManagement {
     var persistentContainer: NSPersistentContainer
     
-    var backgroundContext: NSManagedObjectContext
-    
     var mainContext: NSManagedObjectContext
     
     init() {
@@ -36,10 +34,5 @@ class CoreDataTestStack: CoreDataManagement {
         mainContext.automaticallyMergesChangesFromParent = true
         mainContext.mergePolicy = NSErrorMergePolicy//NSMergeByPropertyObjectTrumpMergePolicy
         mainContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
-        
-        backgroundContext = NSManagedObjectContextSpy(concurrencyType: .privateQueueConcurrencyType)
-        backgroundContext.automaticallyMergesChangesFromParent = true
-        backgroundContext.mergePolicy = NSErrorMergePolicy//NSMergeByPropertyObjectTrumpMergePolicy
-        backgroundContext.parent = mainContext
     }
 }

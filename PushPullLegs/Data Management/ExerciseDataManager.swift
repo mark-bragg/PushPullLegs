@@ -9,8 +9,8 @@
 import CoreData
 
 class ExerciseDataManager: DataManager {
-    override init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
-        super.init(backgroundContext: backgroundContext)
+    override init(context: NSManagedObjectContext = CoreDataManager.shared.mainContext) {
+        super.init(context: context)
         entityName = .exercise
     }
     
@@ -22,8 +22,8 @@ class ExerciseDataManager: DataManager {
     }
     
     func insertSet(duration: Int, weight: Double, reps: Double, exercise: Exercise?, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
-        backgroundContext.performAndWait {
-            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseSet.rawValue, into: backgroundContext) as? ExerciseSet,
+        context.performAndWait {
+            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseSet.rawValue, into: context) as? ExerciseSet,
                 let exerciseInContext = fetch(exercise) as? Exercise {
                 addSet(set, toExercise: exerciseInContext, withData: (Int16(duration), weight, reps), completion: completion)
             }
@@ -39,8 +39,8 @@ class ExerciseDataManager: DataManager {
     }
     
     fileprivate func insertSetRightLeft(_ isLeft: Bool, duration: Int, weight: Double, reps: Double, exercise: UnilateralExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
-        backgroundContext.performAndWait {
-            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.unilateralExerciseSet.rawValue, into: backgroundContext) as? UnilateralExerciseSet,
+        context.performAndWait {
+            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.unilateralExerciseSet.rawValue, into: context) as? UnilateralExerciseSet,
                 let exerciseInContext = fetch(exercise) as? Exercise {
                 set.isLeftSide = isLeft
                 addSet(set, toExercise: exerciseInContext, withData: (Int16(duration), weight, reps), completion: completion)
@@ -53,7 +53,7 @@ class ExerciseDataManager: DataManager {
         set.weight = data.weight
         set.reps = data.reps
         exerciseInContext.addToSets(set)
-        try? backgroundContext.save()
+        try? context.save()
         if let completion = completion {
             completion(set)
         }
@@ -72,10 +72,10 @@ class ExerciseDataManager: DataManager {
     }
     
     func set(value: Int, forSet set: ExerciseSet, withKey key: String) {
-        backgroundContext.performAndWait {
+        context.performAndWait {
             if let set = fetch(set) as? ExerciseSet {
                 set.setValue(value, forKey: key)
-                try? backgroundContext.save()
+                try? context.save()
             }
         }
     }
@@ -87,7 +87,7 @@ class ExerciseDataManager: DataManager {
         if let initialDate, let finalDate, let reqPred = request.predicate {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [reqPred, NSPredicate(format: "workout.dateCreated >= %@ and workout.dateCreated <= %@", argumentArray: [initialDate, finalDate])])
         }
-        guard let exercises = try? backgroundContext.fetch(request) as? [Exercise] else { return [] }
+        guard let exercises = try? context.fetch(request) as? [Exercise] else { return [] }
         do {
             let sorted = try exercises.sorted { (e1, e2) -> Bool in
                 guard let workoutDate1 = e1.workout?.dateCreated, let workoutDate2 = e2.workout?.dateCreated else {
@@ -106,7 +106,7 @@ class ExerciseDataManager: DataManager {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = NSPredicate(format: "name = %@", argumentArray: [name])
         request.sortDescriptors = [NSSortDescriptor.dateCreated]
-        return (try? backgroundContext.fetch(request) as? [Exercise])?.first
+        return (try? context.fetch(request) as? [Exercise])?.first
     }
 }
 
@@ -115,8 +115,8 @@ enum NilReferenceError: Error {
 }
 
 class UnilateralExerciseDataManager: ExerciseDataManager {
-    override init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.backgroundContext) {
-        super.init(backgroundContext: backgroundContext)
+    override init(context: NSManagedObjectContext = CoreDataManager.shared.mainContext) {
+        super.init(context: context)
         entityName = .unilateralExercise
     }
     
@@ -130,7 +130,7 @@ class UnilateralExerciseDataManager: ExerciseDataManager {
         delete(s[i])
         s.remove(at: i)
         exercise.sets = NSOrderedSet(array: s)
-        try? backgroundContext.save()
+        try? context.save()
     }
 }
 

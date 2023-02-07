@@ -25,11 +25,11 @@ class ExerciseDataManagerTests: XCTestCase {
     
     func setExpectation(description: String) {
         let performAndWaitExpectation = expectation(description: description)
-        (self.dbHelper.coreDataStack.backgroundContext as! NSManagedObjectContextSpy).expectation = performAndWaitExpectation
+        (self.dbHelper.coreDataStack.mainContext as! NSManagedObjectContextSpy).expectation = performAndWaitExpectation
     }
     
     override func setUp() {
-        sut = ExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext)
+        sut = ExerciseDataManager(context: dbHelper.coreDataStack.mainContext)
     }
     
     func test_createExercise_exerciseCreated() {

@@ -38,6 +38,7 @@ class DatabaseViewModel: NSObject, PPLTableViewModel, DeletionObserver {
     
     func delete(indexPath: IndexPath) {
         dataManager?.delete(dbObjects[indexPath.row])
+        CoreDataManager.shared.save()
     }
     
     // MARK: DatabaseDeletionAlertModel

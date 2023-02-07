@@ -19,7 +19,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     override func setUp() {
         dbHelper.addExerciseTemplate(name: exerciseTemplateName, type: .push)
         let template = dbHelper.fetchExerciseTemplates()!.first!
-        sut = ExerciseViewModel(withDataManager: ExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exerciseTemplate: template)
+        sut = ExerciseViewModel(withDataManager: ExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exerciseTemplate: template)
         assertTitle()
     }
     
@@ -146,7 +146,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
         XCTAssert(sut.rowCount(section: 0) == 0)
         sut.collectSet(duration: 0, weight: 0, reps: 0)
         XCTAssert(sut.rowCount(section: 0) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 0))")
-        sut = ExerciseViewModel(withDataManager: ExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exercise: dbHelper.fetchExercises().first!)
+        sut = ExerciseViewModel(withDataManager: ExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: dbHelper.fetchExercises().first!)
         XCTAssert(dbHelper.fetchExercises().count == 1)
         XCTAssert(sut.rowCount(section: 0) == 1, "\nexpected: 1\nactual: \(sut.rowCount(section: 0))")
     }
@@ -161,7 +161,7 @@ class ExerciseViewModelTests: XCTestCase, ExerciseViewModelDelegate {
     func testInitWithExercise_titleIsCorrect() {
         let name = "testing testing 1 2"
         let exercise = dbHelper.createExercise(name, sets: nil)
-        sut = ExerciseViewModel(withDataManager: MockExerciseDataManager(backgroundContext: dbHelper.coreDataStack.backgroundContext), exercise: exercise)
+        sut = ExerciseViewModel(withDataManager: MockExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.title() == name)
     }
     
