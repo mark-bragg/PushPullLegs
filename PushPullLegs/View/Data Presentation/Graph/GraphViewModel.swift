@@ -48,7 +48,7 @@ class GraphDataManager {
     static func calculateWorkoutData(_ dm: WorkoutDataManager = WorkoutDataManager(), type: ExerciseType) -> GraphData {
         let workouts = dm.workouts(ascending: true, types: [type])
             .map { GraphPointDTO(volume: $0.volume(), dateCreated: $0.dateCreated) }
-        return graphData(workouts, type: type)
+        return graphData(workouts, type: type, name: type.rawValue)
     }
     
     static func exercisesData(_ edm: ExerciseDataManager = ExerciseDataManager(), name: String) -> GraphData? {
@@ -57,17 +57,17 @@ class GraphDataManager {
             let workoutName = exercises.first?.workout?.name,
             let type = ExerciseType(rawValue: workoutName)
         else { return nil }
-        return graphData(exercises.map({ GraphPointDTO(volume: $0.volume(), dateCreated: $0.workout?.dateCreated) }), type: type, excludedName: type.rawValue)
+        return graphData(exercises.map({ GraphPointDTO(volume: $0.volume(), dateCreated: $0.workout?.dateCreated) }), type: type, name: name, excludedName: name)
     }
     
-    private static func graphData(_ dto: [GraphPointDTO], type: ExerciseType, excludedName: String? = nil) -> GraphData {
+    private static func graphData(_ dto: [GraphPointDTO], type: ExerciseType, name: String, excludedName: String? = nil) -> GraphData {
         var data = [GraphDataPoint]()
         for datum in dto {
             if let date = datum.dateCreated {
                 data.append(GraphDataPoint(date: date, volume: datum.volume))
             }
         }
-        return GraphData(name: type.rawValue, points: data, exerciseNames: GraphDataManager.getExerciseNames(type: type, excluding: excludedName))
+        return GraphData(name: name, points: data, exerciseNames: GraphDataManager.getExerciseNames(type: type, excluding: excludedName))
     }
     
     private static func getExerciseNames(_ edm: ExerciseDataManager = ExerciseDataManager(), type: ExerciseType, excluding name: String? = nil) -> [String] {
