@@ -57,13 +57,6 @@ class CoreDataManagerTests: XCTestCase {
         handleSetupCompletion()
     }
     
-    func test_backgroundContext_concurrencyType() {
-        completion = {
-            XCTAssertEqual(self.sut.backgroundContext.concurrencyType, .privateQueueConcurrencyType)
-        }
-        handleSetupCompletion()
-    }
-    
     func test_mainContext_concurrencyType() {
         completion = {
             XCTAssertEqual(self.sut.mainContext.concurrencyType, .mainQueueConcurrencyType)

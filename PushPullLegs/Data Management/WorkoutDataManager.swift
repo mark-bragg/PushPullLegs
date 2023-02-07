@@ -10,8 +10,8 @@ import CoreData
 
 class WorkoutDataManager: DataManager {
     
-    override init(backgroundContext: NSManagedObjectContext = CoreDataManager.shared.mainContext) {
-        super.init(backgroundContext: backgroundContext)
+    override init(context: NSManagedObjectContext = CoreDataManager.shared.mainContext) {
+        super.init(context: context)
         entityName = EntityName.workout
     }
     
@@ -19,15 +19,15 @@ class WorkoutDataManager: DataManager {
         guard names.count > 0, let workoutInContext = fetch(workout) as? Workout else {
             return
         }
-        backgroundContext.performAndWait {
+        context.performAndWait {
             for name in names {
-                if let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: backgroundContext) as? Exercise {
+                if let exercise = NSEntityDescription.insertNewObject(forEntityName: "Exercise", into: context) as? Exercise {
                     exercise.name = name
                     workoutInContext.addToExercises(exercise)
                 }
             }
             do {
-                try backgroundContext.save()
+                try context.save()
             } catch {
                 print(error)
             }
@@ -40,10 +40,10 @@ class WorkoutDataManager: DataManager {
                 fatalError()
         }
         
-        backgroundContext.performAndWait {
+        context.performAndWait {
             workoutInContext.addToExercises(exerciseInContext)
             do {
-                try backgroundContext.save()
+                try context.save()
             } catch {
                 print(error)
             }
@@ -52,7 +52,7 @@ class WorkoutDataManager: DataManager {
     
     func getLastWorkoutType() -> ExerciseType? {
         var type: ExerciseType = .error
-        backgroundContext.performAndWait {
+        context.performAndWait {
             type = ExerciseType(rawValue: fetchLatestWorkout()?.name ?? "") ?? .error
         }
         return type
@@ -64,7 +64,7 @@ class WorkoutDataManager: DataManager {
         request.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
         request.fetchLimit = 1
         do {
-            let latestWorkouts = try backgroundContext.fetch(request) as? [Workout]
+            let latestWorkouts = try context.fetch(request) as? [Workout]
             if let workout = latestWorkouts?.first {
                 return workout
             }
@@ -88,7 +88,7 @@ class WorkoutDataManager: DataManager {
             request.fetchLimit = 1
         }
         do {
-            let latestWorkouts = try backgroundContext.fetch(request) as? [Workout]
+            let latestWorkouts = try context.fetch(request) as? [Workout]
             guard let workouts = latestWorkouts, workouts.count > 0 else { return nil }
             if date == nil && workouts.count == 1 {
                 return nil
@@ -109,7 +109,7 @@ class WorkoutDataManager: DataManager {
             predicates.append(PPLPredicate.nameIsEqualTo(type))
         }
         req.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
-        if let wkts = try? backgroundContext.fetch(req) as? [Workout] {
+        if let wkts = try? context.fetch(req) as? [Workout] {
             if ascending {
                 return wkts.reversed()
             }
@@ -131,7 +131,7 @@ class WorkoutDataManager: DataManager {
             let datePredicate = NSPredicate(format: "dateCreated >= %@ and dateCreated <= %@", argumentArray: [initialDate, finalDate])
             req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, reqPred])
         }
-        if let wkts = try? backgroundContext.fetch(req) as? [Workout] {
+        if let wkts = try? context.fetch(req) as? [Workout] {
             if ascending {
                 return wkts.reversed()
             }
@@ -145,7 +145,7 @@ class WorkoutDataManager: DataManager {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = NSPredicate(format: "name = %@", argumentArray: [type.rawValue])
         request.sortDescriptors = [.dateCreated]
-        guard let workouts = try? backgroundContext.fetch(request) as? [Workout] else { return [] }
+        guard let workouts = try? context.fetch(request) as? [Workout] else { return [] }
         var exercisesToReturn = [Exercise]()
         for workout in workouts {
             if let exercises = workout.exercises?.array as? [Exercise] {

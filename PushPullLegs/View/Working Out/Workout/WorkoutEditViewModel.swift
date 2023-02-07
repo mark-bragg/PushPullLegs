@@ -82,7 +82,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
             let workoutId,
             let startingTime
         else { return }
-        let workout = workoutManager.backgroundContext.object(with: workoutId)
+        let workout = workoutManager.context.object(with: workoutId)
         workoutManager.update(workout, keyValuePairs: ["duration": Int(startingTime.timeIntervalSinceNow * -1)])
         AppState.shared.workoutInProgress = nil
     }
@@ -121,7 +121,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     
     override func reload() {
         if let workoutId,
-            let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout,
+            let workout = workoutManager.context.object(with: workoutId) as? Workout,
             let done = workout.exercises,
             let doneArray = done.array as? [Exercise] {
             exercisesDone = doneArray.sorted(by: sorter)
@@ -141,7 +141,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     func exerciseViewModel(_ viewMode: ExerciseViewModel, started exercise: Exercise?) {
         guard
             let workoutId,
-            let workout = workoutManager.backgroundContext.object(with: workoutId) as? Workout
+            let workout = workoutManager.context.object(with: workoutId) as? Workout
         else { return }
         if let exercise {
             workoutManager.add(exercise, to: workout)
@@ -168,7 +168,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     func deleteWorkout() {
         guard
             let workoutId,
-            let workout = try? coreDataManager?.backgroundContext.existingObject(with: workoutId) as? Workout
+            let workout = try? coreDataManager?.mainContext.existingObject(with: workoutId) as? Workout
         else { return }
         workoutManager.delete(workout)
         AppState.shared.workoutInProgress = nil
