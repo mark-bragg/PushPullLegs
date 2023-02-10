@@ -80,6 +80,12 @@ extension UIViewController: BannerAdController, STABannerDelegateProtocol {
         perform(#selector(refreshBanner), with: self, afterDelay: 5)
     }
     
+    public func didSendImpression(forBannerAd banner: STABannerView!) {
+        DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .seconds(7))) {
+            self.refreshBanner()
+        }
+    }
+    
     @objc func refreshBanner() {
         addBannerView()
     }
