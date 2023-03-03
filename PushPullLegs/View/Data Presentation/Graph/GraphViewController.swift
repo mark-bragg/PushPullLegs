@@ -29,6 +29,7 @@ class GraphViewController: UIViewController, GraphViewDelegate {
         super.viewDidLoad()
         addGraphView()
         addRightBarButtonItem()
+        navigationItem.title = viewModel?.type.rawValue
     }
     
     private func addGraphView() {
@@ -53,6 +54,7 @@ class GraphViewController: UIViewController, GraphViewDelegate {
     @objc
     func refresh(_ sender: Any?) {
         viewModel?.setToWorkoutData()
+        navigationItem.title = viewModel?.type.rawValue
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -69,6 +71,7 @@ class GraphViewController: UIViewController, GraphViewDelegate {
     }
     
     func didSelectExercise(name: String) {
+        navigationItem.title = name
         viewModel?.updateToExerciseData(name)
     }
 }
