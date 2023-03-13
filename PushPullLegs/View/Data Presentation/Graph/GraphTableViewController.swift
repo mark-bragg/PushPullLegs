@@ -126,13 +126,13 @@ class GraphTableViewController: PPLTableViewController {
         constrain(view, toInsideOf: cell.contentView)
         if let gVm = vcForRow(indexPath.row)?.viewModel, gVm.hasData {
             
-            cell.contentView.subviews.first { $0.isKind(of: NoDataGraphView2.self) }?.removeFromSuperview()
+            cell.contentView.subviews.first { $0.isKind(of: NoDataGraphView.self) }?.removeFromSuperview()
             cell.accessoryType = .disclosureIndicator
             let tapView = TapView(tag: indexPath.row + 1, target: self, action: #selector(tapViewTapped(_:)))
             cell.contentView.addSubview(tapView)
             constrain(tapView, toInsideOf: cell.contentView)
         } else {
-            let ndv = NoDataGraphView2()
+            let ndv = NoDataGraphView()
             cell.contentView.addSubview(ndv)
             constrain(ndv, toInsideOf: cell.contentView)
             cell.selectionStyle = .none
@@ -304,51 +304,5 @@ class TapView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class NoDataView2: UIView {
-    lazy var imageView: UIImageView = {
-        let imgV = UIImageView()
-        imgV.image = UIImage(named: "AppIconBlack")
-        addSubview(imgV)
-        imgV.translatesAutoresizingMaskIntoConstraints = false
-        imgV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        imgV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        imgV.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        imgV.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        return imgV
-    }()
-    
-    lazy var label: UILabel = {
-        let lbl = UILabel()
-        lbl.numberOfLines = 2
-        lbl.sizeToFit()
-        lbl.textAlignment = .center
-        addSubview(lbl)
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        lbl.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 4).isActive = true
-        return lbl
-    }()
-    
-    var text: String = "" {
-        didSet {
-            label.text = text
-            label.sizeToFit()
-        }
-    }
-    
-    override func layoutSubviews() {
-        backgroundColor = .black
-        label.text = text
-    }
-}
-
-class NoDataGraphView2: NoDataView2 {
-    override func layoutSubviews() {
-        text =  "No data.\nYou need to workout..."
-        super.layoutSubviews()
-        backgroundColor = .clear
     }
 }

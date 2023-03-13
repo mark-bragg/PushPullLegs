@@ -9,70 +9,47 @@
 import UIKit
 
 class NoDataView: UIView {
-    var lightBackground: Bool = true
-    let labelTag = 1234
-    var text = "No Data" {
-        willSet {
-            updateLabel(newValue)
-        }
-    }
+    lazy var imageView: UIImageView = {
+        let imgV = UIImageView()
+        imgV.image = UIImage(named: "AppIconBlack")
+        addSubview(imgV)
+        imgV.translatesAutoresizingMaskIntoConstraints = false
+        imgV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        imgV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        imgV.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        imgV.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return imgV
+    }()
     
-    func updateLabel(_ text: String) {
-        guard let label = label() else {return}
-        label.text = text
-        let height = label.textRect(forBounds: bounds, limitedToNumberOfLines: 10).height
-        label.heightAnchor.constraint(lessThanOrEqualToConstant: height).isActive = true
+    lazy var label: UILabel = {
+        let lbl = UILabel()
+        lbl.numberOfLines = 2
+        lbl.sizeToFit()
+        lbl.textAlignment = .center
+        addSubview(lbl)
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        lbl.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 4).isActive = true
+        return lbl
+    }()
+    
+    var text: String = "" {
+        didSet {
+            label.text = text
+            label.sizeToFit()
+        }
     }
     
     override func layoutSubviews() {
-        if label() == nil {
-            addSubview(styledNoDataLabel(frame: bounds))
-            positionLabel()
-        }
-        backgroundColor = lightBackground ? PPLColor.primary : PPLColor.pplDarkGray
-    }
-    
-    func styledNoDataLabel(frame: CGRect) -> UILabel {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 72)
-        label.textAlignment = .center
+        backgroundColor = .black
         label.text = text
-        label.sizeToFit()
-        label.tag = labelTag
-        label.numberOfLines = 0
-        return label
-    }
-    
-    func positionLabel() {
-        guard let label = label() else {return}
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        label.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-    }
-    
-    func label() -> UILabel? {
-        return viewWithTag(labelTag) as? UILabel
     }
 }
 
 class NoDataGraphView: NoDataView {
-    var whiteBackground = false
     override func layoutSubviews() {
-        lightBackground = true
+        text =  "No data.\nYou need to workout..."
         super.layoutSubviews()
-        if whiteBackground {
-            backgroundColor = PPLColor.quaternary
-        }
-        label()?.textColor = UIColor.white
-        
-    }
-}
-
-extension UIView {
-    func addSubviews(_ views: [UIView]) {
-        for view in views {
-            addSubview(view)
-        }
+        backgroundColor = .clear
     }
 }

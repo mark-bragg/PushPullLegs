@@ -13,7 +13,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     var viewModel: PPLTableViewModel?
     weak var tableView: PPLTableView?
-    weak var noDataView: NoDataView2?
+    weak var noDataView: NoDataView?
     private let tableViewTag = 1776
     var cancellables: Set<AnyCancellable> = []
     private var topConstraint: NSLayoutConstraint?
@@ -150,10 +150,10 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     }
     
     func addNoDataView() {
-        while view.subviews.contains(where: { $0.isKind(of: NoDataView2.self) }) {
-            view.subviews.first(where: { $0.isKind(of: NoDataView2.self) })!.removeFromSuperview()
+        while view.subviews.contains(where: { $0.isKind(of: NoDataView.self) }) {
+            view.subviews.first(where: { $0.isKind(of: NoDataView.self) })!.removeFromSuperview()
         }
-        let ndv = NoDataView2(frame: view.bounds)
+        let ndv = NoDataView(frame: view.bounds)
         view.addSubview(ndv)
         ndv.isHidden = true
         if let vm = viewModel, let ndt = vm.noDataText?() {
