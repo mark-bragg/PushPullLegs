@@ -175,13 +175,13 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
     
     func noDataText() -> String {
-        return "Empty Workout"
+        "Empty Workout\nAdd your exercises!"
     }
 }
 
 extension Exercise: Comparable {
     public static func < (lhs: Exercise, rhs: Exercise) -> Bool {
-        return lhs.volume() < rhs.volume()
+        lhs.volume() < rhs.volume()
     }
     
     func volume() -> Double {

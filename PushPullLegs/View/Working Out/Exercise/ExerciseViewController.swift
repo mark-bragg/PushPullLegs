@@ -32,7 +32,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if !readOnly {
-            if ((viewModel?.hasData()) != nil) {
+            if let viewModel, viewModel.hasData() {
                 hideNoDataView()
             }
         }
@@ -238,11 +238,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     func resetState() {
         exerciseSetViewModel = nil
-    }
-    
-    override func reload() {
-        super.reload()
-        hideNoDataView()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

@@ -211,10 +211,6 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
         return "Time"
     }
     
-    func noDataText() -> String {
-        ""
-    }
-    
     func collectFinishedCellData() {
         guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
         finishedCellData.removeAll()
@@ -243,6 +239,10 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func createExercise() {
         exerciseManager.create(name: exerciseName)
+    }
+    
+    func noDataText() -> String {
+        "Start your next set!"
     }
     
 }

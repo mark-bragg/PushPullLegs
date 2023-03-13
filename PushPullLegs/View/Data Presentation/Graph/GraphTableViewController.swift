@@ -125,17 +125,23 @@ class GraphTableViewController: PPLTableViewController {
         cell.contentView.addSubview(view)
         constrain(view, toInsideOf: cell.contentView)
         if let gVm = vcForRow(indexPath.row)?.viewModel, gVm.hasData {
+            
+            cell.contentView.subviews.first { $0.isKind(of: NoDataGraphView2.self) }?.removeFromSuperview()
             cell.accessoryType = .disclosureIndicator
+            let tapView = TapView(tag: indexPath.row + 1, target: self, action: #selector(tapViewTapped(_:)))
+            cell.contentView.addSubview(tapView)
+            constrain(tapView, toInsideOf: cell.contentView)
         } else {
-            cell.addHelpIndicator(target: self, action: #selector(help(_:)))
+            let ndv = NoDataGraphView2()
+            cell.contentView.addSubview(ndv)
+            constrain(ndv, toInsideOf: cell.contentView)
             cell.selectionStyle = .none
         }
         if let tapView = cell.contentView.subviews.first(where: { $0.isKind(of: TapView.self) }) {
             tapView.removeFromSuperview()
         }
-        let tapView = TapView(tag: indexPath.row + 1, target: self, action: #selector(tapViewTapped(_:)))
-        cell.contentView.addSubview(tapView)
-        constrain(tapView, toInsideOf: cell.contentView)
+        
+        
         cell.selectionStyle = .none
         return cell
     }
@@ -236,6 +242,8 @@ class GraphTableViewController: PPLTableViewController {
     
     // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard vcForRow(indexPath.row)?.viewModel?.hasData ?? false
+        else { return }
         selectedRow = indexPath.row
         guard
             let selectedRow
@@ -296,5 +304,51 @@ class TapView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class NoDataView2: UIView {
+    lazy var imageView: UIImageView = {
+        let imgV = UIImageView()
+        imgV.image = UIImage(named: "AppIconBlack")
+        addSubview(imgV)
+        imgV.translatesAutoresizingMaskIntoConstraints = false
+        imgV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        imgV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        imgV.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        imgV.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return imgV
+    }()
+    
+    lazy var label: UILabel = {
+        let lbl = UILabel()
+        lbl.numberOfLines = 2
+        lbl.sizeToFit()
+        lbl.textAlignment = .center
+        addSubview(lbl)
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        lbl.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 4).isActive = true
+        return lbl
+    }()
+    
+    var text: String = "" {
+        didSet {
+            label.text = text
+            label.sizeToFit()
+        }
+    }
+    
+    override func layoutSubviews() {
+        backgroundColor = .black
+        label.text = text
+    }
+}
+
+class NoDataGraphView2: NoDataView2 {
+    override func layoutSubviews() {
+        text =  "No data.\nYou need to workout..."
+        super.layoutSubviews()
+        backgroundColor = .clear
     }
 }

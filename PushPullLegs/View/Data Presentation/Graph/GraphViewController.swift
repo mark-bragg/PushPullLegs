@@ -37,6 +37,7 @@ class GraphViewController: UIViewController, GraphViewDelegate {
         let graphHostingController = UIHostingController(
             rootView:GraphView(viewModel: viewModel, delegate: self, height: height ?? 240, isInteractive: height == nil)
         )
+        graphHostingController.view.isUserInteractionEnabled = isInteractive
         addGraphChildViewController(graphHostingController)
     }
     
