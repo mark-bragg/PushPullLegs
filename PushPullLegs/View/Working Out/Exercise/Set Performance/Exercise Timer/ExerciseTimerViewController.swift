@@ -105,14 +105,19 @@ extension ExerciseTimerViewController {
     }
     
     private func addBannerRefresher() {
-//        let refresher = Timer.publish(every: 15, on: .main, in: .default)
-//            .autoconnect()
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] _ in
-//                print("refreshing timer view banner ad")
-//                self?.refreshBanner()
-//            }
-//        cancellables.append(refresher)
+        Timer.publish(every: 15, on: .main, in: .default)
+            .autoconnect()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                print("refreshing timer view banner ad")
+                self?.refreshBanner()
+            }
+            .store(in: &cancellables)
+    }
+    
+    @objc
+    override func refreshBanner() {
+        addBannerView(size: STA_MRecAdSize_300x250)
     }
     
     override func bannerContainerView(_ height: CGFloat) -> UIView {
