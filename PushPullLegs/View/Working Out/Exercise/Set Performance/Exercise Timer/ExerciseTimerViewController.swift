@@ -19,6 +19,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
     private var shouldShowStartText: Bool {
         timerView?.timerLabel.text == "00:00" && !isShowingStartText
     }
+    private var didShowStartText = false
     
     override func loadView() {
         view = ExerciseTimerView()
@@ -34,6 +35,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
         bind()
         exerciseSetViewModel?.startSet()
         handleAds()
+        didShowStartText = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -55,6 +57,8 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
     
     @objc private func timerTapped() {
         timerView?.timerLabel.isUserInteractionEnabled = false
+        guard !didShowStartText
+        else { return }
         exerciseSetViewModel?.cancelCountdown()
     }
     
