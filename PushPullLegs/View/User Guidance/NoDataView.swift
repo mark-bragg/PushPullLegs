@@ -23,6 +23,7 @@ class NoDataView: UIView {
         addSubview(imgV)
         constrainImageView(imgV)
         imgV.rotate(.pi * 1/8)
+        imgV.alpha = 0.75
         return imgV
     }()
     private lazy var backgroundImage: UIImageView = {
@@ -30,6 +31,7 @@ class NoDataView: UIView {
         addSubview(imgV)
         constrainImageView(imgV)
         imgV.rotate(-.pi * 1/8)
+        imgV.alpha = 0.75
         return imgV
     }()
     var spinning: Bool { spinner != nil }
@@ -47,6 +49,8 @@ class NoDataView: UIView {
         lbl.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: labelY).isActive = true
         lbl.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -8).isActive = true
         lbl.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 8.0).isActive = true
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.minimumScaleFactor = 0.2
         return lbl
     }()
     

@@ -20,6 +20,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
         timerView?.timerLabel.text == "00:00" && !isShowingStartText
     }
     private var didShowStartText = false
+    private var disappeared = true
     
     override func loadView() {
         view = ExerciseTimerView()
@@ -28,6 +29,13 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Timer"
+        if disappeared {
+            disappeared = false
+            setupTimerLabel()
+        }
+    }
+    
+    private func setupTimerLabel() {
         addTimerLabelTap()
         timerView?.timerLabel.text = exerciseSetViewModel?.initialTimerText()
         timerView?.finishButton.setTitle("Finish Set", for: .normal)
@@ -43,6 +51,11 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
         if shouldShowStartText {
             timerView?.showStartText()
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        disappeared = true
     }
     
     override func viewDidLayoutSubviews() {
