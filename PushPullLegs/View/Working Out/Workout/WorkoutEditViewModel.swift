@@ -175,7 +175,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     }
     
     func noDataText() -> String {
-        "Empty Workout\nAdd your exercises!"
+        "Empty Workout. Add your exercises!"
     }
 }
 

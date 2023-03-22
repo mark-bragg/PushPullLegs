@@ -59,4 +59,8 @@ class WorkoutLogViewModel: DatabaseViewModel {
         dbObjects = dbObjects.filter({ $0.objectID != workout.objectID })
         reloader?.reload()
     }
+    
+    func noDataText() -> String {
+        "Workout and start logging entries!"
+    }
 }
