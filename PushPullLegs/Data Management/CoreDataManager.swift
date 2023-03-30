@@ -26,6 +26,7 @@ class CoreDataManager: CoreDataManagement {
     lazy var mainContext: NSManagedObjectContext = { [unowned self] in
         let context = persistentContainer.viewContext
         context.automaticallyMergesChangesFromParent = true
+        context.retainsRegisteredObjects = true
         return context
     }()
     
