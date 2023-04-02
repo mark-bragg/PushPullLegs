@@ -18,7 +18,7 @@ class ExerciseTimerView: UIView {
     }()
     private func constrainStackView() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -20).isActive = true
         stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 20).isActive = true
         stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
         stackView.heightAnchor.constraint(equalToConstant: 300).isActive = true
