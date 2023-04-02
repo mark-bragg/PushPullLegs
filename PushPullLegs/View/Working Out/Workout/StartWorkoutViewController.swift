@@ -160,8 +160,8 @@ extension StartWorkoutViewController: StoreManagerDelegate {
         controller.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
             StoreManager.shared.startDisableAdsTransaction()
         }))
-        controller.addAction(UIAlertAction(title: "No", style: .cancel, handler: { [unowned self] action in
-            self.presentHowToDisableAlert()
+        controller.addAction(UIAlertAction(title: "No", style: .cancel, handler: { [weak self] action in
+            self?.presentHowToDisableAlert()
         }))
         present(controller, animated: true, completion: nil)
     }

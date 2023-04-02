@@ -32,6 +32,7 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
     private let certificate = "AppleIncRootCertificate"
     private var adDisabler: (() -> Void)?
     private var failedPurchaseHandler: (() -> Void)?
+    private var successHandler: (() -> Void)?
     private var preparingToDisableAds = false
     private(set) var restoringAdsDisabled = false
     private(set) var isPurchasing = false
@@ -39,9 +40,10 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
     
     // MARK: purchase
     
-    func prepareToDisableAds(_ delegate: StoreManagerDelegate, failureHandler: (() -> Void)? = nil) {
+    func prepareToDisableAds(_ delegate: StoreManagerDelegate, failureHandler: (() -> Void)? = nil, success: (() -> Void)? = nil) {
         guard PPLDefaults.instance.isAdvertisingEnabled() else { return }
         self.failedPurchaseHandler = failureHandler
+        self.successHandler = success
         self.delegate = delegate
         preparingToDisableAds = true
         request = SKProductsRequest(productIdentifiers: [IAPProductId.kDisableAds.rawValue])
@@ -82,6 +84,7 @@ class StoreManager: NSObject, SKProductsRequestDelegate {
         SKPaymentQueue.default().finishTransaction(transaction)
         if purchase.product.productIdentifier == IAPProductId.kDisableAds.rawValue {
             PPLDefaults.instance.disableAds()
+            successHandler?()
         }
     }
     

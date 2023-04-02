@@ -184,6 +184,8 @@ class AppConfigurationViewController: PPLTableViewController {
             alert.addAction(UIAlertAction(title: "Continue", style: .default, handler: { action in
                 StoreManager.shared.prepareToDisableAds(self) { [weak self] in
                     self?.removeSpinner()
+                } success: { [weak self] in
+                    self?.removeSpinner()
                 }
             }))
             self.present(alert, animated: true, completion: nil)
