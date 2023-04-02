@@ -10,7 +10,7 @@ import Foundation
 import StoreKit
 
 enum IAPProductId: String {
-    case kDisableAds = "com.braggbuilds.ppl.disableAdvertisements"
+    case kDisableAds = "disable.ads.test.release.4.1"
 }
 
 enum ReceiptValidationError: Error {
