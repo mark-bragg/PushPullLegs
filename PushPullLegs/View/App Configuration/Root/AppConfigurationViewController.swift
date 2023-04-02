@@ -182,7 +182,9 @@ class AppConfigurationViewController: PPLTableViewController {
                 self.removeSpinner()
             }))
             alert.addAction(UIAlertAction(title: "Continue", style: .default, handler: { action in
-                StoreManager.shared.prepareToDisableAds(self)
+                StoreManager.shared.prepareToDisableAds(self) { [weak self] in
+                    self?.removeSpinner()
+                }
             }))
             self.present(alert, animated: true, completion: nil)
         } else if rowId == .restorePurchases {
@@ -197,21 +199,20 @@ class AppConfigurationViewController: PPLTableViewController {
         }
     }
     
+    weak var spinner: UIActivityIndicatorView?
     func showSpinner(_ indexPath: IndexPath) {
-        guard let cell = tableView?.cellForRow(at: indexPath) as? UITableViewCell else { return }
-        let spinner = UIActivityIndicatorView(frame: cell.contentView.frame)
-        spinner.layer.cornerRadius = cell.contentView.layer.cornerRadius
+        guard let tabbar = tabBarController
+        else { return }
+        let spinner = UIActivityIndicatorView(frame: tabbar.view.bounds)
         spinner.style = .large
         spinner.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
-        cell.contentView.addSubview(spinner)
+        tabbar.view.addSubview(spinner)
         spinner.startAnimating()
-        spinner.tag = spinnerTag
+        self.spinner = spinner
     }
     
     private func removeSpinner() {
-        guard let spinner = view.viewWithTag(spinnerTag) else { return }
-        spinner.removeFromSuperview()
-        view.isUserInteractionEnabled = true
+        spinner?.removeFromSuperview()
     }
     
     private func navigateToAbout() {
