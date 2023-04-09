@@ -138,20 +138,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		49C2FDE929E26042003C1DEB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49C2FDE429E26042003C1DEB /* PPLWorkout.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49C2FDCA29E26012003C1DEB;
-			remoteInfo = PPLWorkout;
-		};
-		49C2FDEB29E26042003C1DEB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49C2FDE429E26042003C1DEB /* PPLWorkout.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49C2FDD429E26013003C1DEB;
-			remoteInfo = PPLWorkoutTests;
-		};
 		49EF4B8F23F838380071687D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 49EF4B6D23F8381F0071687D /* Project object */;
@@ -255,7 +241,6 @@
 		49C1EA5C260AF84F00330CBF /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
 		49C1EA61260AF98B00330CBF /* DatabaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTableViewController.swift; sourceTree = "<group>"; };
 		49C1EA69260B06AA00330CBF /* DatabaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseViewModel.swift; sourceTree = "<group>"; };
-		49C2FDE429E26042003C1DEB /* PPLWorkout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PPLWorkout.xcodeproj; path = ../../programming/frameworks/PPLWorkout/PPLWorkout.xcodeproj; sourceTree = "<group>"; };
 		49C8D24024A99E0000B361C7 /* PPLDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLDefaults.swift; sourceTree = "<group>"; };
 		49CD43DF261798F600C8A6C8 /* DBExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBExerciseViewController.swift; sourceTree = "<group>"; };
 		49CD44062619520A00C8A6C8 /* DurationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCollectionViewController.swift; sourceTree = "<group>"; };
@@ -715,15 +700,6 @@
 			path = Database;
 			sourceTree = "<group>";
 		};
-		49C2FDE529E26042003C1DEB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				49C2FDEA29E26042003C1DEB /* PPLWorkout.framework */,
-				49C2FDEC29E26042003C1DEB /* PPLWorkoutTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		49CEF2082447B66A003E55D4 /* Creation */ = {
 			isa = PBXGroup;
 			children = (
@@ -825,7 +801,6 @@
 		49EF4B7723F8381F0071687D /* PushPullLegs */ = {
 			isa = PBXGroup;
 			children = (
-				49C2FDE429E26042003C1DEB /* PPLWorkout.xcodeproj */,
 				49ABAC9225F44DA300517F6F /* Audio */,
 				49EF4BC523F839A30071687D /* View */,
 				49EF4BC623F839B50071687D /* Data Management */,
@@ -1049,12 +1024,6 @@
 			mainGroup = 49EF4B6C23F8381F0071687D;
 			productRefGroup = 49EF4B7623F8381F0071687D /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 49C2FDE529E26042003C1DEB /* Products */;
-					ProjectRef = 49C2FDE429E26042003C1DEB /* PPLWorkout.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				49EF4B7423F8381F0071687D /* PushPullLegs */,
@@ -1063,23 +1032,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		49C2FDEA29E26042003C1DEB /* PPLWorkout.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = PPLWorkout.framework;
-			remoteRef = 49C2FDE929E26042003C1DEB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		49C2FDEC29E26042003C1DEB /* PPLWorkoutTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = PPLWorkoutTests.xctest;
-			remoteRef = 49C2FDEB29E26042003C1DEB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		49EF4B7323F8381F0071687D /* Resources */ = {
@@ -1504,7 +1456,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBlack;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -1574,7 +1526,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBlack;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
