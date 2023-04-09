@@ -40,11 +40,6 @@ class PPLAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCent
         }
         
         SKPaymentQueue.default().add(StoreObserver.shared)
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (b, e) in
-            if b {
-                UNUserNotificationCenter.current().delegate = self
-            }
-        }
         return true
     }
     
