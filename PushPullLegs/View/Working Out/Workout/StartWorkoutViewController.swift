@@ -95,7 +95,7 @@ class StartWorkoutViewController: PPLTableViewController {
 
 extension UIViewController {
     func rotateBackToPortrait() {
-        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        PPLSceneDelegate.shared?.window?.windowScene?.requestGeometryUpdate(UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: .portrait))
     }
 }
 
