@@ -46,12 +46,12 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
         }
         guard let exercise = exercise as? UnilateralExercise else { return }
         if currentSide == .left {
-            exerciseManager.insertLeftSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
+            exerciseManager.insertLeftSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
                 guard let self = self, let name = self.title() else { return }
                 self.handleFinishedSet(exerciseSet, name)
             }
         } else {
-            exerciseManager.insertRightSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
+            exerciseManager.insertRightSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
                 guard let self = self, let name = self.title() else { return }
                 self.handleFinishedSet(exerciseSet, name)
             }

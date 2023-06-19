@@ -191,7 +191,7 @@ extension Exercise: Comparable {
         for set in sets {
             volume += set.volume()
         }
-        return volume.truncateDigitsAfterDecimal(afterDecimalDigits: 2)
+        return volume.truncateIfNecessary()
     }
     
 }

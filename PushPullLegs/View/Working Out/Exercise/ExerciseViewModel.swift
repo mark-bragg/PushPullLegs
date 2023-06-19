@@ -20,7 +20,7 @@ class FinishedSetDataModel {
         reps = exerciseSet.reps
         weight = exerciseSet.weight
         if PPLDefaults.instance.isKilograms() {
-            weight = (weight * 0.453592).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
+            weight = (weight * 0.453592).truncateIfNecessary()
         }
         volume = exerciseSet.volume()
     }
@@ -144,7 +144,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
             exercise = exercise ?? exerciseManager.creation as? Exercise
             delegate?.exerciseViewModel(self, started: exercise)
         }
-        exerciseManager.insertSet(duration: duration, weight: weight.truncateDigitsAfterDecimal(afterDecimalDigits: 2), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
+        exerciseManager.insertSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
             guard let self = self, let name = self.title() else { return }
             self.handleFinishedSet(exerciseSet, name)
         }
@@ -249,16 +249,21 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
 
 extension ExerciseSet {
     func volume() -> Double {
-        if PPLDefaults.instance.isKilograms() {
-            let convertedWeight = weight * 2.20462
-            return ((convertedWeight * Double(reps) * Double(duration)) / 60.0).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
-        }
-        return ((weight * Double(reps) * Double(duration)) / 60.0).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
+        let weight = weight * (PPLDefaults.instance.isKilograms() ? 2.20462 : 1)
+        return weight * reps * averageRepDuration()
+    }
+    
+    func averageRepDuration() -> Double {
+        Double(duration) / reps
     }
 }
 
 extension Double {
-    func truncateDigitsAfterDecimal(afterDecimalDigits: Int) -> Double {
-       Double(String(format: "%.\(afterDecimalDigits)f", self)) ?? 0
+    func truncateIfNecessary() -> Double {
+        let digitCount = "\(Int(self))".count
+        guard digitCount < 4
+        else { return self }
+        let decimalCount = digitCount < 3 ? 2 : 1
+        return Double(String(format: "%.\(decimalCount)f", self)) ?? 0
     }
 }
