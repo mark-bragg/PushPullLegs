@@ -176,14 +176,14 @@ extension StartWorkoutViewController: StoreManagerDelegate {
 }
 
 class StartWorkoutViewModel: NSObject, PPLTableViewModel {
-    private let workoutNames = ["Push", "Pull", "Legs", "Arms"]
+    private var workoutNames: [ExerciseType] { ExerciseType.allCases }
     
     func rowCount(section: Int = 0) -> Int {
-        4
+        workoutNames.count
     }
     
     func title(indexPath: IndexPath) -> String? {
-        workoutNames[indexPath.row]
+        workoutNames[indexPath.row].rawValue
     }
     
     func title() -> String? {

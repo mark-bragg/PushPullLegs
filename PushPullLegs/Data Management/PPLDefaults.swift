@@ -148,10 +148,7 @@ class PPLDefaults: NSObject {
     }
     
     func launchCount() -> Int {
-        guard let count = userDetails?.value(forKey: kLaunchCount) as? Int else {
-            return 0
-        }
-        return count
+        userDetails?.integer(forKey: kLaunchCount) ?? 0
     }
 }
 
