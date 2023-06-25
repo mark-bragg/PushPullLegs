@@ -13,6 +13,7 @@ class GraphTableViewController: PPLTableViewController {
     var pushVc: GraphViewController?
     var pullVc: GraphViewController?
     var legsVc: GraphViewController?
+    var armsVc: GraphViewController?
     private var helpTag = 0
     private var interstitial: NSObject?
     private var selectedRow: Int?
@@ -27,7 +28,7 @@ class GraphTableViewController: PPLTableViewController {
     }
     
     override func reload() {
-        for wgvc in [pushVc, pullVc, legsVc] {
+        for wgvc in [pushVc, pullVc, legsVc, armsVc] {
             wgvc?.refresh(nil)
         }
     }
@@ -55,7 +56,7 @@ class GraphTableViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        tableView.frame.height / 3
+        tableView.frame.height / CGFloat(ExerciseType.allCases.count)
     }
     
     fileprivate func prepareTableView() {
@@ -86,6 +87,7 @@ class GraphTableViewController: PPLTableViewController {
         pushVc = GraphViewController(type: .push, height: height)
         pullVc = GraphViewController(type: .pull, height: height)
         legsVc = GraphViewController(type: .legs, height: height)
+        armsVc = GraphViewController(type: .arms, height: height)
         for vc in [pushVc, pullVc, legsVc] {
             vc?.isInteractive = false
             vc?.view.backgroundColor = .clear
@@ -112,7 +114,7 @@ class GraphTableViewController: PPLTableViewController {
     // MARK: UITableViewDataSource
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        ExerciseType.allCases.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -179,8 +181,10 @@ class GraphTableViewController: PPLTableViewController {
             return pushVc
         case 1:
             return pullVc
-        default:
+        case 2:
             return legsVc
+        default:
+            return armsVc
         }
     }
     
@@ -198,8 +202,10 @@ class GraphTableViewController: PPLTableViewController {
             return .push
         case 1:
             return .pull
-        default:
+        case 2:
             return .legs
+        default:
+            return .arms
         }
     }
     
@@ -242,12 +248,9 @@ class GraphTableViewController: PPLTableViewController {
     
     // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard vcForRow(indexPath.row)?.viewModel?.hasData ?? false
-        else { return }
+        guard vcForRow(indexPath.row)?.viewModel?.hasData ?? false else { return }
         selectedRow = indexPath.row
-        guard
-            let selectedRow
-        else { return }
+        guard let selectedRow else { return }
         if PPLDefaults.instance.wasGraphInterstitialShownToday() {
             showGraph(selectedRow)
         } else {
