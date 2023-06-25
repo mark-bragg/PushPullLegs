@@ -64,12 +64,11 @@ class CoreDataManager: CoreDataManagement {
     
     private func addWorkouts() {
         let mgmt = TemplateManagement(coreDataManager: self)
-        guard Array.emptyOrNil(mgmt.workoutTemplates()) else {
-            return
+        let templates = mgmt.workoutTemplates() ?? []
+        ExerciseType.allCases.forEach { type in
+            guard !templates.contains(where: { $0.name == type.rawValue }) else { return }
+            try? mgmt.addWorkoutTemplate(type: type)
         }
-        try? mgmt.addWorkoutTemplate(type: .push)
-        try? mgmt.addWorkoutTemplate(type: .pull)
-        try? mgmt.addWorkoutTemplate(type: .legs)
     }
     
     private func cleanupUncascadedObjects() {

@@ -250,18 +250,30 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
 extension ExerciseSet {
     func volume() -> Double {
         let weight = weight * (PPLDefaults.instance.isKilograms() ? 2.20462 : 1)
-        return weight * reps * averageRepDuration()
+        return weight * reps * log(base: 4, value: Double(duration))
     }
     
     func averageRepDuration() -> Double {
-        Double(duration) / reps
+        guard reps > 0 else { return 0 }
+        return Double(duration) / reps
     }
+}
+
+extension Double {
+    var durationLog: Double {
+        log(base: 4, value: self)
+    }
+}
+
+func log(base: Double, value: Double) -> Double {
+    guard base > 0 && value > 0 else { return 0 }
+    return log(value) / log(base)
 }
 
 extension Double {
     func truncateIfNecessary() -> Double {
         let digitCount = "\(Int(self))".count
-        guard digitCount < 4
+        guard digitCount < 3
         else { return self }
         let decimalCount = digitCount < 3 ? 2 : 1
         return Double(String(format: "%.\(decimalCount)f", self)) ?? 0

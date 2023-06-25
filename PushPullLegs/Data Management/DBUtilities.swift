@@ -18,11 +18,11 @@ enum EntityName: String {
     case exerciseTemplate = "ExerciseTemplate"
 }
 
-enum ExerciseType: String {
+enum ExerciseType: String, CaseIterable {
     case push = "Push"
     case pull = "Pull"
     case legs = "Legs"
-    case error = "EXERCISE TYPE ERROR"
+    case arms = "Arms"
 }
 
 enum TemplateError: Error {

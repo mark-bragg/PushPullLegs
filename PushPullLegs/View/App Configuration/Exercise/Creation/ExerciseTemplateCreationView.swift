@@ -43,6 +43,7 @@ class ExerciseTemplateCreationView: UIView {
     weak var pushButton: ExerciseTypeButton?
     weak var pullButton: ExerciseTypeButton?
     weak var legsButton: ExerciseTypeButton?
+    weak var armsButton: ExerciseTypeButton?
     lazy var saveButton: UIButton = {
         let btn = UIButton(configuration: saveButtonConfig)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -177,8 +178,8 @@ class ExerciseTemplateCreationView: UIView {
             pullButton = button
         case .legs:
             legsButton = button
-        case .error: break
-            // no op
+        case .arms:
+            armsButton = button
         case .none: break
             // no op
         }

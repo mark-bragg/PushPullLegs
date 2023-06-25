@@ -29,16 +29,14 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
         lateralType == .unilateral
     }
     
-    init(withType type: ExerciseType = .error, management: TemplateManagement) {
+    init(withType type: ExerciseType? = nil, management: TemplateManagement) {
         self.exerciseType = type
         self.management = management
-        if type != .error {
-            self.preSetType = true
-        }
+        self.preSetType = type != nil
     }
     
     func isTypeSelected() -> Bool {
-        return exerciseType != .error
+        exerciseType != nil
     }
     
     func saveExercise(withName name: String, successCompletion completion: () -> Void) {
@@ -51,7 +49,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     }
     
     private func saveExerciseTemplate(_ name: String) -> Bool {
-        guard let exerciseType, exerciseType != .error else { return false }
+        guard let exerciseType else { return false }
         do {
             try management.addExerciseTemplate(name: name, type: exerciseType, unilateral: isUnilateral)
         } catch {

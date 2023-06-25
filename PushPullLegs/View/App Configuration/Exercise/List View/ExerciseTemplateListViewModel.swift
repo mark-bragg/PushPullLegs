@@ -55,16 +55,7 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     func titleForSection(_ section: Int) -> String? {
-        switch section {
-        case 0:
-            return ExerciseType.push.rawValue
-        case 1:
-            return ExerciseType.pull.rawValue
-        case 2:
-            return ExerciseType.legs.rawValue
-        default:
-            return ExerciseType.error.rawValue
-        }
+        ExerciseType.allCases[section].rawValue
     }
     
     func deleteExercise(indexPath: IndexPath) {

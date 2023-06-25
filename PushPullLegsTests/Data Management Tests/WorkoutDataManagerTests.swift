@@ -226,7 +226,7 @@ class WorkoutDataManagerTests : XCTestCase {
     }
     
     func testGetLastWorkoutType_noWorkoutsSaved_nilReturned() {
-        XCTAssert(sut.getLastWorkoutType() == .error)
+        XCTAssertNil(sut.getLastWorkoutType())
     }
     
     func testGetLastWorkoutType_onePushSaved_pushReturned() {

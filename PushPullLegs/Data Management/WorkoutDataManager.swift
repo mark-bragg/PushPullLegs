@@ -51,9 +51,9 @@ class WorkoutDataManager: DataManager {
     }
     
     func getLastWorkoutType() -> ExerciseType? {
-        var type: ExerciseType = .error
+        var type: ExerciseType?
         context.performAndWait {
-            type = ExerciseType(rawValue: fetchLatestWorkout()?.name ?? "") ?? .error
+            type = ExerciseType(rawValue: fetchLatestWorkout()?.name ?? "")
         }
         return type
     }
