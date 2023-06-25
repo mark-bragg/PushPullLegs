@@ -59,7 +59,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     }
     
     private func exerciseNameIsValid(_ name: String?) -> Bool {
-        guard let name = name?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) else { return false}
+        guard let name = name?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) else { return false }
         return name != "" && management.exerciseTemplate(name: name) == nil
     }
 }

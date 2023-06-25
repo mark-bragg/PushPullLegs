@@ -8,10 +8,6 @@
 
 import UIKit
 
-fileprivate let PushTag = 1
-fileprivate let PullTag = 2
-fileprivate let LegsTag = 3
-
 class ExerciseTemplateListViewController: PPLTableViewController {
     
     override func viewDidLoad() {
@@ -38,7 +34,7 @@ class ExerciseTemplateListViewController: PPLTableViewController {
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        viewModel?.sectionCount?() ?? 0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -92,10 +88,9 @@ class ExerciseTemplateListViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            exerciseTemplateListViewModel?.deleteExercise(indexPath: indexPath)
-            reload()
-        }
+        guard editingStyle == .delete else { return }
+        exerciseTemplateListViewModel?.deleteExercise(indexPath: indexPath)
+        reload()
     }
     
     func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
@@ -109,11 +104,11 @@ class ExerciseTemplateListViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        true
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .delete
+        .delete
     }
     
     override func reload() {

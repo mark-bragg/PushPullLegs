@@ -39,8 +39,8 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     private func bindButtons() {
-        for btn in [creationView.pushButton, creationView.pullButton, creationView.legsButton] {
-            btn?.addTarget(self, action: #selector(typeSelected(_:)), for: .touchUpInside)
+        creationView.typeButtons.forEach {
+            $0?.addTarget(self, action: #selector(typeSelected(_:)), for: .touchUpInside)
         }
         creationView.saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
     }
@@ -96,8 +96,8 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     private func highlightType(_ buttonType: ExerciseType) {
-        for type in [ExerciseType.push, .pull, .legs] {
-            let button = buttonForType(type)
+        for type in ExerciseType.allCases {
+            let button = creationView.button(for: type)
             button?.isHighlighted = button?.exerciseType == buttonType
         }
     }
@@ -127,19 +127,6 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     private func cancelAction() -> UIAlertAction {
         UIAlertAction(title: "No", style: .destructive)
-    }
-    
-    private func buttonForType(_ type: ExerciseType) -> ExerciseTypeButton? {
-        switch type {
-        case .push:
-            return creationView.pushButton
-        case .pull:
-            return creationView.pullButton
-        case .legs:
-            return creationView.legsButton
-        default:
-            return nil
-        }
     }
     
     @objc private func lateralTypeChanged(_ control: UISegmentedControl) {

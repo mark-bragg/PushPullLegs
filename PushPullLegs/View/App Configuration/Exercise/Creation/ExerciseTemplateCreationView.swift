@@ -44,6 +44,9 @@ class ExerciseTemplateCreationView: UIView {
     weak var pullButton: ExerciseTypeButton?
     weak var legsButton: ExerciseTypeButton?
     weak var armsButton: ExerciseTypeButton?
+    var typeButtons: [ExerciseTypeButton?] {
+        [pushButton, pullButton, legsButton, armsButton]
+    }
     lazy var saveButton: UIButton = {
         let btn = UIButton(configuration: saveButtonConfig)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -83,6 +86,7 @@ class ExerciseTemplateCreationView: UIView {
         backgroundColor = .primary
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -134,10 +138,12 @@ class ExerciseTemplateCreationView: UIView {
     
     private func constrainTypeStackview(_ stack: UIStackView) {
         stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.leadingAnchor.constraint(equalTo: typeSelectionContainerView.leadingAnchor, constant: 2).isActive = true
-        stack.trailingAnchor.constraint(equalTo: typeSelectionContainerView.trailingAnchor, constant: -2).isActive = true
-        stack.bottomAnchor.constraint(equalTo: typeSelectionContainerView.bottomAnchor).isActive = true
-        stack.topAnchor.constraint(equalTo: typeSelectionContainerView.topAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: typeSelectionContainerView.leadingAnchor, constant: 2),
+            stack.trailingAnchor.constraint(equalTo: typeSelectionContainerView.trailingAnchor, constant: -2),
+            stack.bottomAnchor.constraint(equalTo: typeSelectionContainerView.bottomAnchor),
+            stack.topAnchor.constraint(equalTo: typeSelectionContainerView.topAnchor)
+        ])
     }
     
     private func styleTypeStackView(_ stack: UIStackView) {
@@ -147,7 +153,7 @@ class ExerciseTemplateCreationView: UIView {
     }
     
     private func setupExerciseTypeButtons() {
-        for type in [ExerciseType.push, .pull, .legs] {
+        for type in ExerciseType.allCases {
             setButton(newButtonForType(type))
         }
     }
@@ -180,9 +186,13 @@ class ExerciseTemplateCreationView: UIView {
             legsButton = button
         case .arms:
             armsButton = button
-        case .none: break
-            // no op
+        default:
+            break
         }
+    }
+    
+    func button(for type: ExerciseType) -> ExerciseTypeButton? {
+        typeButtons.first(where: { $0?.exerciseType == type }) ?? nil
     }
     
     private func constrainSegmentedControl(_ segCon: UISegmentedControl) {
