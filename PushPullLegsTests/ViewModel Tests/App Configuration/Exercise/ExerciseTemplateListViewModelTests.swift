@@ -15,7 +15,7 @@ class ExerciseTemplateListViewModelTests: XCTestCase, ExerciseTemplateListViewMo
 
     var sut: ExerciseTemplateListViewModel!
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
-    let types: [ExerciseType] = [.push, .pull, .legs]
+    var types: [ExerciseType] { ExerciseType.allCases }
     var exerciseCount: Int = 0
     var expectation: XCTestExpectation!
     
@@ -113,7 +113,7 @@ class ExerciseTemplateListViewModelTests: XCTestCase, ExerciseTemplateListViewMo
         sut = ExerciseTemplateListViewModel(withTemplateManagement: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
         var i = 0
         for type in types {
-            XCTAssert(type.rawValue == sut.titleForSection(i))
+            XCTAssertEqual(type.rawValue, sut.titleForSection(i))
             i+=1
         }
     }
@@ -131,11 +131,11 @@ class ExerciseTemplateListViewModelTests: XCTestCase, ExerciseTemplateListViewMo
         section -= 1
         sut = ExerciseTemplateListViewModel(withTemplateManagement: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
         var temps = dbHelper.fetchExerciseTemplates()!
-        XCTAssert(temps.count == exerciseCount, "\nexpected: \(exerciseCount)\nactual:\(temps.count)")
+        XCTAssertEqual(temps.count, exerciseCount)
         sut.deleteExercise(indexPath: IndexPath(row: 0, section: section))
         exerciseCount-=1
         temps = dbHelper.fetchExerciseTemplates()!
-        XCTAssert(temps.count == exerciseCount, "\nexpected: \(exerciseCount)\nactual:\(temps.count)")
+        XCTAssertEqual(temps.count, exerciseCount)
         let missingName = names.remove(at: section)
         XCTAssert(!temps.contains(where: { $0.name! == missingName }))
         for name in names {

@@ -36,7 +36,8 @@ class WorkoutTemplateListViewModelTests: XCTestCase {
         let indexPaths = [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0), IndexPath(row: 2, section: 0)]
         for index in indexPaths {
             sut.select(index)
-            XCTAssert(types.contains(sut.selectedType()))
+            guard let selection = sut.selectedType else { return XCTFail() }
+            XCTAssert(types.contains(selection))
         }
         
     }

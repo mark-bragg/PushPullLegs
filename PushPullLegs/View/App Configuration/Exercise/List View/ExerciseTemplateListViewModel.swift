@@ -27,10 +27,13 @@ protocol ExerciseTemplateListViewModelDelegate {
 class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     let templateManagement: TemplateManagement
-    private var pushExercises = [ExerciseTemplate]()
-    private var pullExercises = [ExerciseTemplate]()
-    private var legsExercises = [ExerciseTemplate]()
-    private var armsExercises = [ExerciseTemplate]()
+    private lazy var exercises: [ExerciseType: [ExerciseTemplate]] =  {
+        var exs = [ExerciseType: [ExerciseTemplate]]()
+        for type in ExerciseType.allCases {
+            exs[type] = []
+        }
+        return exs
+    }()
     var delegate: ExerciseTemplateListViewModelDelegate?
     
     init(withTemplateManagement mgmt: TemplateManagement) {
@@ -56,8 +59,7 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     func titleForSection(_ section: Int) -> String? {
-        guard let exercise = exercisesForSection(section).first else { return nil }
-        return exercise.type
+        ExerciseType.allCases[section].rawValue
     }
     
     func deleteExercise(indexPath: IndexPath) {
@@ -66,25 +68,15 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     private func exercisesForSection(_ section: Int) -> [ExerciseTemplate] {
-        switch section {
-        case 0:
-            return pushExercises
-        case 1:
-            return pullExercises
-        case 2:
-            return legsExercises
-        case 3:
-            return armsExercises
-        default:
-            return []
-        }
+        let types = ExerciseType.allCases
+        guard section < types.count else { return [] }
+        return exercises[types[section]] ?? []
     }
     
     func reload() {
-        pushExercises = templateManagement.exerciseTemplates(withType: .push)?.sorted(by: exerciseTemplateSorter) ?? []
-        pullExercises = templateManagement.exerciseTemplates(withType: .pull)?.sorted(by: exerciseTemplateSorter) ?? []
-        legsExercises = templateManagement.exerciseTemplates(withType: .legs)?.sorted(by: exerciseTemplateSorter) ?? []
-        legsExercises = templateManagement.exerciseTemplates(withType: .arms)?.sorted(by: exerciseTemplateSorter) ?? []
+        for key in exercises.keys {
+            exercises[key] = templateManagement.exerciseTemplates(withType: key)?.sorted(by: exerciseTemplateSorter) ?? []
+        }
     }
     
     func noDataText() -> String {
