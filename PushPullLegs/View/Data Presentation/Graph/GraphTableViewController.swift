@@ -77,10 +77,11 @@ class GraphTableViewController: PPLTableViewController {
     }
     
     fileprivate func prepareGraphViewControllers() {
-        if let pushVc, let pullVc, let legsVc {
+        if let pushVc, let pullVc, let legsVc, let armsVc {
             pushVc.view.setNeedsLayout()
             pullVc.view.setNeedsLayout()
             legsVc.view.setNeedsLayout()
+            armsVc.view.setNeedsLayout()
             return
         }
         let height = (tableView?.rowHeight ?? view.frame.height / 3) - 16
@@ -88,7 +89,7 @@ class GraphTableViewController: PPLTableViewController {
         pullVc = GraphViewController(type: .pull, height: height)
         legsVc = GraphViewController(type: .legs, height: height)
         armsVc = GraphViewController(type: .arms, height: height)
-        for vc in [pushVc, pullVc, legsVc] {
+        for vc in [pushVc, pullVc, legsVc, armsVc] {
             vc?.isInteractive = false
             vc?.view.backgroundColor = .clear
             vc?.view.subviews.forEach { $0.backgroundColor = .clear }

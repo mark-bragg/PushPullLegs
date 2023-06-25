@@ -100,7 +100,7 @@ class WorkoutDataManager: DataManager {
         return nil
     }
     
-    func workouts(ascending: Bool = false, types: [ExerciseType] = [.push, .pull, .legs]) -> [Workout] {
+    func workouts(ascending: Bool = false, types: [ExerciseType] = ExerciseType.allCases) -> [Workout] {
         guard let entityNameString else { return [] }
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         req.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
@@ -118,7 +118,7 @@ class WorkoutDataManager: DataManager {
         return []
     }
     
-    func workouts(ascending: Bool = false, types: [ExerciseType] = [.push, .pull, .legs], initialDate: Date? = nil, finalDate: Date? = nil) -> [Workout] {
+    func workouts(ascending: Bool = false, types: [ExerciseType] = ExerciseType.allCases, initialDate: Date? = nil, finalDate: Date? = nil) -> [Workout] {
         guard let entityNameString else { return [] }
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         req.sortDescriptors = [WorkoutSortDescriptor.dateCreated]

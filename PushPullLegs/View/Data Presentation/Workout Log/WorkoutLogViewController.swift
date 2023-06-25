@@ -137,6 +137,10 @@ class WorkoutLogViewController: DatabaseTableViewController {
         self.tableView?.beginUpdates()
         tableView?.reloadData()
         self.tableView?.endUpdates()
+        if let selectedIndex = workoutLogViewModel?.selectedIndex {
+            workoutLogViewModel?.selectedIndex = nil
+            tableView((tableView ?? UITableView()), didSelectRowAt: IndexPath(row: selectedIndex, section: 0))
+        }
     }
 }
 
