@@ -11,8 +11,7 @@ import Foundation
 class WorkoutTemplateListViewModel: NSObject, PPLTableViewModel {
     private let templateManagement: TemplateManagement
     private var workouts: [WorkoutTemplate]?
-    private var selected: Int!
-    private var exerciseType: ExerciseType!
+    private(set) var selectedType: ExerciseType?
     
     init(withTemplateManagement management: TemplateManagement) {
         templateManagement = management
@@ -32,12 +31,7 @@ class WorkoutTemplateListViewModel: NSObject, PPLTableViewModel {
     }
     
     func select(_ indexPath: IndexPath) {
-        guard let workouts else { return }
-        selected = indexPath.row
-        exerciseType = workouts[selected].name.map { ExerciseType(rawValue: $0)! }
-    }
-    
-    func selectedType() -> ExerciseType {
-        exerciseType
+        guard let workouts, indexPath.row < workouts.count else { return }
+        selectedType = workouts[indexPath.row].name.map { ExerciseType(rawValue: $0)! }
     }
 }
