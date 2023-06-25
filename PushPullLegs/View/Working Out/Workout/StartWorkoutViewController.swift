@@ -176,23 +176,18 @@ extension StartWorkoutViewController: StoreManagerDelegate {
 }
 
 class StartWorkoutViewModel: NSObject, PPLTableViewModel {
+    private let workoutNames = ["Push", "Pull", "Legs", "Arms", "Push"]
+    
     func rowCount(section: Int = 0) -> Int {
-        3
+        4
     }
     
     func title(indexPath: IndexPath) -> String? {
-        switch indexPath.row {
-        case 0:
-            return "Push"
-        case 1:
-            return "Pull"
-        default:
-            return "Legs"
-        }
+        workoutNames[indexPath.row]
     }
     
     func title() -> String? {
-        return "Start Next Workout"
+        "Start Next Workout"
     }
     
 }
