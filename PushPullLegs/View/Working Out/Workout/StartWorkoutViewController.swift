@@ -62,7 +62,7 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.frame.height / 3
+        tableView.frame.height / CGFloat(ExerciseType.allCases.count)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -176,7 +176,7 @@ extension StartWorkoutViewController: StoreManagerDelegate {
 }
 
 class StartWorkoutViewModel: NSObject, PPLTableViewModel {
-    private let workoutNames = ["Push", "Pull", "Legs", "Arms", "Push"]
+    private let workoutNames = ["Push", "Pull", "Legs", "Arms"]
     
     func rowCount(section: Int = 0) -> Int {
         4
