@@ -865,6 +865,7 @@
 		49EF4BC623F839B50071687D /* Data Management */ = {
 			isa = PBXGroup;
 			children = (
+				49FB6F3C2A50E67E006E7839 /* Migration */,
 				49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */,
 				49EF4BB123F838FE0071687D /* WorkoutDataManager.swift */,
 				49EF4BAB23F838F60071687D /* CoreDataManager.swift */,
@@ -903,6 +904,13 @@
 				49CEF2092447C527003E55D4 /* ExerciseTemplateCreationViewModelTests.swift */,
 			);
 			path = Exercise;
+			sourceTree = "<group>";
+		};
+		49FB6F3C2A50E67E006E7839 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Migration;
 			sourceTree = "<group>";
 		};
 		8D8F617318F0F23D90079219 /* Pods */ = {
