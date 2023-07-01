@@ -10,7 +10,7 @@ import Foundation
 
 class ExerciseTemplateCreationViewModel: ObservableObject {
     
-    var exerciseType: ExerciseType? {
+    var exerciseType: ExerciseTypeName? {
         didSet {
             isSaveEnabled = exerciseNameIsValid(exerciseName)
         }
@@ -29,7 +29,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
         lateralType == .unilateral
     }
     
-    init(withType type: ExerciseType? = nil, management: TemplateManagement) {
+    init(withType type: ExerciseTypeName? = nil, management: TemplateManagement) {
         self.exerciseType = type
         self.management = management
         self.preSetType = type != nil

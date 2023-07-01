@@ -21,7 +21,7 @@ extension PPLPredicate {
     static func nameIsEqualTo(_ name: String) -> PPLPredicate {
         NSPredicate(format: "name == %@", argumentArray: [name])
     }
-    static func typeIsEqualTo(_ type: ExerciseType) -> PPLPredicate {
+    static func typeIsEqualTo(_ type: ExerciseTypeName) -> PPLPredicate {
         NSPredicate(format: "type == %@", argumentArray: [type.rawValue])
     }
 }

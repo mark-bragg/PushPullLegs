@@ -9,12 +9,12 @@
 import UIKit
 
 protocol WorkoutSelectionDelegate: NSObject {
-    func workoutSelectedWithType(_ type: ExerciseType)
+    func workoutSelectedWithType(_ type: ExerciseTypeName)
 }
 
 class StartWorkoutViewController: PPLTableViewController {
 
-    private var exerciseType: ExerciseType?
+    private var exerciseType: ExerciseTypeName?
     private var didNavigateToWorkout: Bool = false
     weak var delegate: WorkoutSelectionDelegate?
     var splashVC: SplashViewController?
@@ -62,7 +62,7 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        tableView.frame.height / CGFloat(ExerciseType.allCases.count)
+        tableView.frame.height / CGFloat(ExerciseTypeName.allCases.count)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -123,9 +123,9 @@ fileprivate extension UITableViewCell {
         lbl.textColor = PPLColor.text
     }
     
-    func exerciseType() -> ExerciseType? {
+    func exerciseType() -> ExerciseTypeName? {
         guard let title = title() else { return nil }
-        return ExerciseType(rawValue: title)
+        return ExerciseTypeName(rawValue: title)
     }
     
     func title() -> String? {
@@ -176,7 +176,7 @@ extension StartWorkoutViewController: StoreManagerDelegate {
 }
 
 class StartWorkoutViewModel: NSObject, PPLTableViewModel {
-    private var workoutNames: [ExerciseType] { ExerciseType.allCases }
+    private var workoutNames: [ExerciseTypeName] { ExerciseTypeName.allCases }
     
     func rowCount(section: Int = 0) -> Int {
         workoutNames.count

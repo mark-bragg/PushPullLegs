@@ -30,12 +30,12 @@ class TemplateManagementTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func addExerciseTemplate(name: String = TempName, type: ExerciseType = .push) {
+    func addExerciseTemplate(name: String = TempName, type: ExerciseTypeName= .push) {
         dbHelper.addExerciseTemplate(name: name, type: type, addToWorkout: true)
         exerciseCount += 1
     }
     
-    func addWorkoutTemplate(type: ExerciseType = .push, exerciseNames: [String] = Names) {
+    func addWorkoutTemplate(type: ExerciseTypeName= .push, exerciseNames: [String] = Names) {
         dbHelper.addWorkoutTemplate(type: type, exerciseNames: exerciseNames)
         workoutCount += 1
     }

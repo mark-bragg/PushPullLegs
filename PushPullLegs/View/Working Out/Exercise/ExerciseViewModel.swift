@@ -51,7 +51,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     var previousExercise: Exercise? {
         guard
             let exerciseName,
-            let type = ExerciseType(rawValue: type ?? "")
+            let type = ExerciseTypeName(rawValue: type ?? "")
         else { return nil }
         let workouts = WorkoutDataManager().workouts(ascending: false, types: [type])
         for workout in workouts {
@@ -93,7 +93,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func isFirstTimePerformingExercise() -> Bool {
         guard
-            let type = ExerciseType(rawValue: exercise?.workout?.name ?? ""),
+            let type = ExerciseTypeName(rawValue: exercise?.workout?.name ?? ""),
             let currentWorkout = exercise?.workout,
             let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
             let exercises = previousWorkout.exercises?.array as? [Exercise]
@@ -129,7 +129,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func previousVolume() -> Double {
         guard
-            let type = ExerciseType(rawValue: exercise?.workout?.name ?? ""),
+            let type = ExerciseTypeName(rawValue: exercise?.workout?.name ?? ""),
             let currentWorkout = exercise?.workout,
             let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
             let previousExercises = previousWorkout.exercises?.array as? [Exercise],

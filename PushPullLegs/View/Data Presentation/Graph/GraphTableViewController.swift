@@ -56,7 +56,7 @@ class GraphTableViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        tableView.frame.height / CGFloat(ExerciseType.allCases.count)
+        tableView.frame.height / CGFloat(ExerciseTypeName.allCases.count)
     }
     
     fileprivate func prepareTableView() {
@@ -115,7 +115,7 @@ class GraphTableViewController: PPLTableViewController {
     // MARK: UITableViewDataSource
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        ExerciseType.allCases.count
+        ExerciseTypeName.allCases.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -197,7 +197,7 @@ class GraphTableViewController: PPLTableViewController {
         nav.show(vc, sender: self)
     }
     
-    func typeForRow(_ row: Int) -> ExerciseType {
+    func typeForRow(_ row: Int) -> ExerciseTypeName{
         switch row {
         case 0:
             return .push

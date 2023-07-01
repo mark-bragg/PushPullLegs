@@ -72,14 +72,14 @@ class PPLDefaults: NSObject {
         userDetails?.string(forKey: kWorkoutInProgress) != nil
     }
     
-    func workoutInProgress() -> ExerciseType? {
+    func workoutInProgress() -> ExerciseTypeName? {
         if let typeString = userDetails?.string(forKey: kWorkoutInProgress) {
-            return ExerciseType(rawValue: typeString)
+            return ExerciseTypeName(rawValue: typeString)
         }
         return nil
     }
     
-    func setWorkoutInProgress(_ value: ExerciseType?) {
+    func setWorkoutInProgress(_ value: ExerciseTypeName?) {
         let typeString = value?.rawValue
         userDetails?.set(typeString, forKey: kWorkoutInProgress)
     }

@@ -11,7 +11,7 @@ import CoreData
 
 class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateSelectionDelegate {
     
-    var exerciseType: ExerciseType?
+    var exerciseType: ExerciseTypeName?
     var coreDataManager: CoreDataManagement?
     var selectedIndex: IndexPath?
     var workoutId: NSManagedObjectID?
@@ -34,7 +34,7 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
         super.init()
         if let wkt = workout, let name = wkt.name {
             workoutId = wkt.objectID
-            exerciseType = ExerciseType(rawValue: name)
+            exerciseType = ExerciseTypeName(rawValue: name)
             if let exercises = wkt.exercises?.array as? [Exercise] {
                 exercisesDone = exercises
             }

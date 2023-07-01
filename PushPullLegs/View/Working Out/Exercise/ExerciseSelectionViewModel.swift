@@ -16,12 +16,12 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     private var exercises = [ExerciseTemplate]()
     private var selectedIndices = [Int]()
-    let exerciseType: ExerciseType
+    let exerciseType: ExerciseTypeName
     private var templateManagement: TemplateManagement
     var multiSelect: Bool = true
     weak var dataSource: ExerciseSelectionViewModelDataSource?
     
-    init(withType type: ExerciseType, templateManagement: TemplateManagement, dataSource: ExerciseSelectionViewModelDataSource? = nil) {
+    init(withType type: ExerciseTypeName, templateManagement: TemplateManagement, dataSource: ExerciseSelectionViewModelDataSource? = nil) {
         self.templateManagement = templateManagement
         exerciseType = type
         super.init()

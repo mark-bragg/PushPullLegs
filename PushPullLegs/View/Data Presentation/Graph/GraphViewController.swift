@@ -15,7 +15,7 @@ class GraphViewController: UIViewController, GraphViewDelegate {
     var isInteractive = true
     private var height: CGFloat?
     
-    init(type: ExerciseType, height: CGFloat? = nil) {
+    init(type: ExerciseTypeName, height: CGFloat? = nil) {
         super.init(nibName: nil, bundle: nil)
         viewModel = GraphViewModel(type: type)
         self.height = height

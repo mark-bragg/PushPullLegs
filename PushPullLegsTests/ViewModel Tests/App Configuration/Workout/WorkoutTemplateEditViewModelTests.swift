@@ -24,7 +24,7 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
         dbHelper = DBHelper(coreDataStack: coreDataStack)
     }
     
-    func addWorkoutTemplate(type: ExerciseType = .push) {
+    func addWorkoutTemplate(type: ExerciseTypeName= .push) {
         let temp = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.mainContext) as! WorkoutTemplate
         temp.name = type.rawValue
         try? coreDataStack.mainContext.save()

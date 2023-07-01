@@ -153,12 +153,12 @@ class ExerciseTemplateCreationView: UIView {
     }
     
     private func setupExerciseTypeButtons() {
-        for type in ExerciseType.allCases {
+        for type in ExerciseTypeName.allCases {
             setButton(newButtonForType(type))
         }
     }
     
-    private func newButtonForType(_ type: ExerciseType) -> ExerciseTypeButton {
+    private func newButtonForType(_ type: ExerciseTypeName) -> ExerciseTypeButton {
         let btn = ExerciseTypeButton()
         btn.setTitle(type.rawValue, for: .normal)
         btn.exerciseType = type
@@ -191,7 +191,7 @@ class ExerciseTemplateCreationView: UIView {
         }
     }
     
-    func button(for type: ExerciseType) -> ExerciseTypeButton? {
+    func button(for type: ExerciseTypeName) -> ExerciseTypeButton? {
         typeButtons.first(where: { $0?.exerciseType == type }) ?? nil
     }
     

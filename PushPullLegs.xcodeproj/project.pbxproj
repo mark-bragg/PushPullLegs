@@ -133,6 +133,7 @@
 		49F8EF292447754900B6BD45 /* ExerciseTemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF282447754700B6BD45 /* ExerciseTemplateListViewController.swift */; };
 		49F8EF2E2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF2D2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift */; };
 		49F8EF30244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF2F244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift */; };
+		49FB6F422A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */; };
 		6344E6784DEC24F8D43486C0 /* Pods_PushPullLegs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3861DCF756C6822B283C0AD /* Pods_PushPullLegs.framework */; };
 		D9E3EEAC50D1DA04B158C942 /* Pods_PushPullLegsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF971240BA72F40F9944AA59 /* Pods_PushPullLegsTests.framework */; };
 /* End PBXBuildFile section */
@@ -289,6 +290,7 @@
 		49F8EF2D2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateListViewModelTests.swift; sourceTree = "<group>"; };
 		49F8EF2F244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateListViewModel.swift; sourceTree = "<group>"; };
 		49FB6F3A2A50E0CD006E7839 /* PushPullLegs 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PushPullLegs 2.xcdatamodel"; sourceTree = "<group>"; };
+		49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateMigrationFromTypeToTypes.swift; sourceTree = "<group>"; };
 		7F3F290DF0486DAAA1185EAD /* Pods-PushPullLegs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs.release.xcconfig"; path = "Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs.release.xcconfig"; sourceTree = "<group>"; };
 		8E2FF6CDBFF2263E3318756D /* Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig"; path = "Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8FD10F045597D8F71850FC44 /* Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig"; path = "Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -909,6 +911,7 @@
 		49FB6F3C2A50E67E006E7839 /* Migration */ = {
 			isa = PBXGroup;
 			children = (
+				49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -1191,6 +1194,7 @@
 				49EF4BB423F8390A0071687D /* Date+Helpers.swift in Sources */,
 				49028D24243D85AC005EC078 /* AppConfigurationViewController.swift in Sources */,
 				492B645A26D4AC2F0004171D /* UnilateralExerciseViewModel.swift in Sources */,
+				49FB6F422A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift in Sources */,
 				49E3832B23FA09BF00F7A502 /* TemplateManagement.swift in Sources */,
 				49AB68D124FC63FF0057D5F7 /* CountdownPickerViewController.swift in Sources */,
 				49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */,

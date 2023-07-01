@@ -17,7 +17,7 @@ class TemplateManagement {
         self.coreDataManager = coreDataManager
     }
     
-    func addExerciseTemplate(name: String, type: ExerciseType, unilateral: Bool = false) throws {
+    func addExerciseTemplate(name: String, type: ExerciseTypeName, unilateral: Bool = false) throws {
         let er = exerciseReader()
         if er.exists(name: name) {
             throw TemplateError.duplicateExercise
@@ -44,11 +44,11 @@ class TemplateManagement {
         exerciseReader().getTemplate(name: name) as? ExerciseTemplate
     }
     
-    func exerciseTemplates(withType type: ExerciseType) -> [ExerciseTemplate]? {
+    func exerciseTemplates(withType type: ExerciseTypeName) -> [ExerciseTemplate]? {
         exerciseReader().exerciseTemplates(withType: type)
     }
     
-    func addWorkoutTemplate(type: ExerciseType) throws {
+    func addWorkoutTemplate(type: ExerciseTypeName) throws {
         if workoutReader().exists(name: type.rawValue) {
             throw TemplateError.duplicateWorkout
         }
@@ -58,7 +58,7 @@ class TemplateManagement {
     func saveWorkoutTemplate(exercises: [ExerciseTemplate]) throws {
         guard
             let exerciseType = exercises.first?.type,
-            let type = ExerciseType(rawValue: exerciseType)
+            let type = ExerciseTypeName(rawValue: exerciseType)
         else { return }
         let names = exercises
             .filter { $0.name != nil }
@@ -68,7 +68,7 @@ class TemplateManagement {
         }
     }
     
-    func workoutTemplate(type: ExerciseType) -> WorkoutTemplate? {
+    func workoutTemplate(type: ExerciseTypeName) -> WorkoutTemplate? {
         workoutReader().getTemplate(name: type.rawValue) as? WorkoutTemplate
     }
     
@@ -79,7 +79,7 @@ class TemplateManagement {
     func addToWorkout(exercise: ExerciseTemplate) {
         guard
             let typeString = exercise.type,
-            let type = ExerciseType(rawValue: typeString),
+            let type = ExerciseTypeName(rawValue: typeString),
             let workout = workoutTemplate(type: type),
             let exerciseName = exercise.name
         else { return }
@@ -93,7 +93,7 @@ class TemplateManagement {
     func removeFromWorkout(exercise: ExerciseTemplate) {
         guard
             let typeString = exercise.type,
-            let type = ExerciseType(rawValue: typeString),
+            let type = ExerciseTypeName(rawValue: typeString),
             let workout = workoutTemplate(type: type),
             var exerciseNames = workout.exerciseNames
         else {
@@ -105,7 +105,7 @@ class TemplateManagement {
         try? self.coreDataManager.mainContext.save()
     }
     
-    func exerciseTemplatesForWorkout(_ type: ExerciseType) -> [ExerciseTemplate] {
+    func exerciseTemplatesForWorkout(_ type: ExerciseTypeName) -> [ExerciseTemplate] {
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.workoutTemplate.rawValue)
         req.fetchLimit = 1
         req.predicate = PPLPredicate.nameIsEqualTo(type.rawValue)
@@ -195,7 +195,7 @@ fileprivate extension DataManager {
         return template
     }
     
-    func exerciseTemplates(withType type: ExerciseType) -> [ExerciseTemplate]? {
+    func exerciseTemplates(withType type: ExerciseTypeName) -> [ExerciseTemplate]? {
         guard let entityNameString else { return nil }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = PPLPredicate.typeIsEqualTo(type)

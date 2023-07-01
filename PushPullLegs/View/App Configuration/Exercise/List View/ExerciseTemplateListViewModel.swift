@@ -27,9 +27,9 @@ protocol ExerciseTemplateListViewModelDelegate {
 class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     let templateManagement: TemplateManagement
-    private lazy var exercises: [ExerciseType: [ExerciseTemplate]] =  {
-        var exs = [ExerciseType: [ExerciseTemplate]]()
-        for type in ExerciseType.allCases {
+    private lazy var exercises: [ExerciseTypeName: [ExerciseTemplate]] =  {
+        var exs = [ExerciseTypeName: [ExerciseTemplate]]()
+        for type in ExerciseTypeName.allCases {
             exs[type] = []
         }
         return exs
@@ -51,7 +51,7 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     func sectionCount() -> Int {
-        ExerciseType.allCases.count
+        ExerciseTypeName.allCases.count
     }
     
     func title(indexPath: IndexPath) -> String? {
@@ -59,7 +59,7 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     func titleForSection(_ section: Int) -> String? {
-        ExerciseType.allCases[section].rawValue
+        ExerciseTypeName.allCases[section].rawValue
     }
     
     func deleteExercise(indexPath: IndexPath) {
@@ -68,7 +68,7 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     private func exercisesForSection(_ section: Int) -> [ExerciseTemplate] {
-        let types = ExerciseType.allCases
+        let types = ExerciseTypeName.allCases
         guard section < types.count else { return [] }
         return exercises[types[section]] ?? []
     }

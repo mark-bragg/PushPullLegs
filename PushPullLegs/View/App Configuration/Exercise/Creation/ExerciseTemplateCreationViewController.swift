@@ -95,8 +95,8 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         }
     }
     
-    private func highlightType(_ buttonType: ExerciseType) {
-        for type in ExerciseType.allCases {
+    private func highlightType(_ buttonType: ExerciseTypeName) {
+        for type in ExerciseTypeName.allCases {
             let button = creationView.button(for: type)
             button?.isHighlighted = button?.exerciseType == buttonType
         }

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class ExerciseTypeButton : UIButton {
-    var exerciseType: ExerciseType? = nil
+    var exerciseType: ExerciseTypeName? = nil
     
     func setBackgroundColor(color: UIColor, forState: UIControl.State) {
         let size = CGSize(width: 1, height: 1)

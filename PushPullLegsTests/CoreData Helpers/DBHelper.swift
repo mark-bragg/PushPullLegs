@@ -24,7 +24,7 @@ class DBHelper {
     }
     
     // MARK: Workout
-    func insertWorkout(name: ExerciseType = .push) {
+    func insertWorkout(name: ExerciseTypeName= .push) {
         let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.mainContext) as! Workout
         workout.name = name.rawValue
         workout.dateCreated = Date()
@@ -43,7 +43,7 @@ class DBHelper {
         return workouts as! [Workout]
     }
     
-    func createWorkout(name: ExerciseType = .push, date: Date? = nil) -> Workout {
+    func createWorkout(name: ExerciseTypeName= .push, date: Date? = nil) -> Workout {
         let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.mainContext) as! Workout
         workout.name = name.rawValue
         workout.dateCreated = date
@@ -58,7 +58,7 @@ class DBHelper {
         }
     }
     
-    func insertWorkoutTemplate(type: ExerciseType = .push) {
+    func insertWorkoutTemplate(type: ExerciseTypeName= .push) {
         guard let workout = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.mainContext) as? WorkoutTemplate else {
             assert(false, "failed to add workout template")
             return
@@ -67,7 +67,7 @@ class DBHelper {
         try? coreDataStack.mainContext.save()
     }
     
-    func insertWorkoutTemplateMainContext(type: ExerciseType = .push) {
+    func insertWorkoutTemplateMainContext(type: ExerciseTypeName= .push) {
         let workout = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.mainContext) as! WorkoutTemplate
         workout.name = type.rawValue
         try? coreDataStack.mainContext.save()
@@ -79,7 +79,7 @@ class DBHelper {
         return workouts as! [WorkoutTemplate]
     }
     
-    func addWorkoutTemplate(type: ExerciseType = .push, exerciseNames: [String] = Names) {
+    func addWorkoutTemplate(type: ExerciseTypeName= .push, exerciseNames: [String] = Names) {
         let temp = NSEntityDescription.insertNewObject(forEntityName: WrkTemp, into: coreDataStack.mainContext) as! WorkoutTemplate
         temp.name = type.rawValue
         temp.exerciseNames = exerciseNames
@@ -190,7 +190,7 @@ class DBHelper {
     try? coreDataStack.mainContext.save()
     }
     
-    func addExerciseTemplate(name: String = TempName, type: ExerciseType = .push, addToWorkout: Bool = false) {
+    func addExerciseTemplate(name: String = TempName, type: ExerciseTypeName= .push, addToWorkout: Bool = false) {
         if addToWorkout {
             if let wkt = fetchWorkoutTemplates().first(where: { $0.name == type.rawValue }) {
                 var names = wkt.exerciseNames

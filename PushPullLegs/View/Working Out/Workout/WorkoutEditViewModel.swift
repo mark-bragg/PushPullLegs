@@ -24,13 +24,13 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     private(set) var startingTime: Date?
     weak var delegate: WorkoutEditViewModelDelegate?
     
-    init(withType type: ExerciseType? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
+    init(withType type: ExerciseTypeName? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
         startingTime = Date()
         super.init(withCoreDataManagement: coreDataManagement)
         if let wipType = AppState.shared.workoutInProgress,
             let workout = workoutManager.previousWorkout(before: startingTime, type: wipType),
             let workoutName = workout.name {
-            exerciseType = ExerciseType(rawValue: workoutName)
+            exerciseType = ExerciseTypeName(rawValue: workoutName)
             workoutId = workout.objectID
             startingTime = workout.dateCreated
         } else if let startingTime {
@@ -152,7 +152,7 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
         }
     }
     
-    private func computeExerciseType() -> ExerciseType {
+    private func computeExerciseType() -> ExerciseTypeName{
         switch workoutManager.getLastWorkoutType() {
         case .push:
             return .pull
