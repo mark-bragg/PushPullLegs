@@ -134,6 +134,7 @@
 		49F8EF2E2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF2D2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift */; };
 		49F8EF30244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF2F244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift */; };
 		49FB6F422A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */; };
+		49FB6F442A50EE12006E7839 /* MappingModel12.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FB6F432A50EE12006E7839 /* MappingModel12.xcmappingmodel */; };
 		6344E6784DEC24F8D43486C0 /* Pods_PushPullLegs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3861DCF756C6822B283C0AD /* Pods_PushPullLegs.framework */; };
 		D9E3EEAC50D1DA04B158C942 /* Pods_PushPullLegsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF971240BA72F40F9944AA59 /* Pods_PushPullLegsTests.framework */; };
 /* End PBXBuildFile section */
@@ -291,6 +292,7 @@
 		49F8EF2F244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateListViewModel.swift; sourceTree = "<group>"; };
 		49FB6F3A2A50E0CD006E7839 /* PushPullLegs 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PushPullLegs 2.xcdatamodel"; sourceTree = "<group>"; };
 		49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateMigrationFromTypeToTypes.swift; sourceTree = "<group>"; };
+		49FB6F432A50EE12006E7839 /* MappingModel12.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModel12.xcmappingmodel; sourceTree = "<group>"; };
 		7F3F290DF0486DAAA1185EAD /* Pods-PushPullLegs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs.release.xcconfig"; path = "Target Support Files/Pods-PushPullLegs/Pods-PushPullLegs.release.xcconfig"; sourceTree = "<group>"; };
 		8E2FF6CDBFF2263E3318756D /* Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig"; path = "Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8FD10F045597D8F71850FC44 /* Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig"; path = "Target Support Files/Pods-PushPullLegs-PushPullLegsUITests/Pods-PushPullLegs-PushPullLegsUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -912,6 +914,7 @@
 			isa = PBXGroup;
 			children = (
 				49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */,
+				49FB6F432A50EE12006E7839 /* MappingModel12.xcmappingmodel */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -1217,6 +1220,7 @@
 				491C8CFB254A523E003A7526 /* StartWorkoutViewController.swift in Sources */,
 				4989BA5524B94344001C17B3 /* AppColors.swift in Sources */,
 				49AB68CB24E8BD8E0057D5F7 /* ArrowView.swift in Sources */,
+				49FB6F442A50EE12006E7839 /* MappingModel12.xcmappingmodel in Sources */,
 				491C8CFD254A67DC003A7526 /* HowToUseAppViewController.swift in Sources */,
 				4989BA6224BB9A10001C17B3 /* ExerciseDataCellViewController.swift in Sources */,
 				4997C1DB2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift in Sources */,
