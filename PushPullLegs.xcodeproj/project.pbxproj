@@ -1705,7 +1705,7 @@
 				49FB6F3A2A50E0CD006E7839 /* PushPullLegs 2.xcdatamodel */,
 				49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */,
 			);
-			currentVersion = 49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */;
+			currentVersion = 49FB6F3A2A50E0CD006E7839 /* PushPullLegs 2.xcdatamodel */;
 			path = PushPullLegs.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
