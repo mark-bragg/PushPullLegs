@@ -35,6 +35,7 @@ enum TemplateError: Error {
     case duplicateWorkout
     case duplicateExercise
     case missingExercise
+    case failedToCreateExercise
 }
 
 extension Exercise {

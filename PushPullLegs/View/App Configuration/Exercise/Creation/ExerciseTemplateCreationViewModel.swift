@@ -10,7 +10,7 @@ import Foundation
 
 class ExerciseTemplateCreationViewModel: ObservableObject {
     
-    var exerciseType: ExerciseTypeName? {
+    var exerciseTypes: [ExerciseTypeName] {
         didSet {
             isSaveEnabled = exerciseNameIsValid(exerciseName)
         }
@@ -30,13 +30,17 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     }
     
     init(withType type: ExerciseTypeName? = nil, management: TemplateManagement) {
-        self.exerciseType = type
+        self.exerciseTypes = type != nil ? [type!] : []
         self.management = management
         self.preSetType = type != nil
     }
     
     func isTypeSelected() -> Bool {
-        exerciseType != nil
+        !exerciseTypes.isEmpty
+    }
+    
+    func isTypeSelected(_ type: ExerciseTypeName) -> Bool {
+        exerciseTypes.contains(type)
     }
     
     func saveExercise(withName name: String, successCompletion completion: () -> Void) {
@@ -49,9 +53,9 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     }
     
     private func saveExerciseTemplate(_ name: String) -> Bool {
-        guard let exerciseType else { return false }
+        guard !exerciseTypes.isEmpty else { return false }
         do {
-            try management.addExerciseTemplate(name: name, type: exerciseType, unilateral: isUnilateral)
+            try management.addExerciseTemplate(name: name, types: exerciseTypes, unilateral: isUnilateral)
         } catch {
             return false
         }
@@ -61,5 +65,29 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     private func exerciseNameIsValid(_ name: String?) -> Bool {
         guard let name = name?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) else { return false }
         return name != "" && management.exerciseTemplate(name: name) == nil
+    }
+    
+    func updateTypesWith(selection: ExerciseTypeName) {
+        if let index = exerciseTypes.firstIndex(of: selection) {
+            exerciseTypes.remove(at: index)
+        } else {
+            exerciseTypes.append(selection)
+            removeConflictingTypes(selection)
+        }
+    }
+    
+    private func removeConflictingTypes(_ newType: ExerciseTypeName) {
+        var typeToRemove: ExerciseTypeName
+        switch newType {
+        case .push:
+            typeToRemove = .pull
+        case .pull:
+            typeToRemove = .push
+        case .legs:
+            typeToRemove = .arms
+        case .arms:
+            typeToRemove = .legs
+        }
+        exerciseTypes.removeAll { $0 == typeToRemove }
     }
 }

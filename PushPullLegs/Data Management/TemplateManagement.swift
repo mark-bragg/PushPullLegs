@@ -17,13 +17,26 @@ class TemplateManagement {
         self.coreDataManager = coreDataManager
     }
     
-    func addExerciseTemplate(name: String, type: ExerciseTypeName, unilateral: Bool = false) throws {
+    func addExerciseTemplate(name: String, types: [ExerciseTypeName], unilateral: Bool = false) throws {
         let er = exerciseReader()
         if er.exists(name: name) {
             throw TemplateError.duplicateExercise
         }
         let ew = exerciseWriter()
-        ew.create(name: name, keyValuePairs: [DBAttributeKey.type: type.rawValue, DBAttributeKey.unilateral: unilateral])
+        ew.create(name: name, keyValuePairs: [DBAttributeKey.unilateral: unilateral])
+        guard let et = ew.creation as? ExerciseTemplate else {
+            throw TemplateError.failedToCreateExercise
+        }
+        for type in getExerciseTypes(types) {
+            et.addToTypes(type)
+        }
+    }
+    
+    private func getExerciseTypes(_ typeNames: [ExerciseTypeName]) -> [ExerciseType] {
+        let typeNames = typeNames.flatMap { $0.rawValue }
+        let req = ExerciseType.fetchRequest()
+        req.predicate = NSPredicate(format: "name IN %@", argumentArray: [typeNames])
+        return (try? coreDataManager.mainContext.fetch(req)) ?? []
     }
     
     func deleteExerciseTemplate(name: String) {

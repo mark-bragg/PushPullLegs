@@ -22,7 +22,7 @@ extension PPLPredicate {
         NSPredicate(format: "name == %@", argumentArray: [name])
     }
     static func typeIsEqualTo(_ type: ExerciseTypeName) -> PPLPredicate {
-        NSPredicate(format: "type == %@", argumentArray: [type.rawValue])
+        NSPredicate(format: "SUBQUERY(types, $type, $type.name == %@).@count > 0", argumentArray: [type])
     }
 }
 
@@ -32,7 +32,6 @@ extension DBAttributeKey {
     static let reps = "reps"
     static let weight = "weight"
     static let duration = "duration"
-    static let type = "type"
     static let exerciseNames = "exerciseNames"
     static let unilateral = "unilateral"
 }
