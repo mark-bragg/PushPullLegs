@@ -12,7 +12,7 @@
         <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Exercise" inverseName="sets" inverseEntity="Exercise"/>
     </entity>
     <entity name="ExerciseTemplate" representedClassName=".ExerciseTemplate" syncable="YES" codeGenerationType="class">
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
         <attribute name="unilateral" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="types" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExerciseType" inverseName="exerciseTemplates" inverseEntity="ExerciseType"/>
     </entity>
