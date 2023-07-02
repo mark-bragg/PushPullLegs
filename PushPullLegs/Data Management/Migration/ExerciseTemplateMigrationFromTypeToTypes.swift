@@ -15,21 +15,22 @@ enum MigrationErrorV2: Error {
          failedToAddNewExerciseType
 }
 
+// MARK: Note to Self -
+/// you cannot use the actual types in the code. all of the code has to be `NSManagedObject`
 class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
     override func createDestinationInstances(forSource sInstance: NSManagedObject, in mapping: NSEntityMapping, manager: NSMigrationManager) throws {
         // Create a new ExerciseTemplate instance in the destination context.
-        guard let newExerciseTemplate = NSEntityDescription.insertNewObject(forEntityName: "ExerciseTemplate", into: manager.destinationContext) as? ExerciseTemplate
-        else { throw MigrationErrorV2.failedToCreateNewExerciseTemplate }
+        let newExerciseTemplate = NSEntityDescription.insertNewObject(forEntityName: "ExerciseTemplate", into: manager.destinationContext)
 
         // Get the type string from the source ExerciseTemplate.
         guard let typeString = sInstance.value(forKey: "type") as? String
         else { throw MigrationErrorV2.failedToGetSourceInstanceType }
 
         // Check if the type already exists; create it if it doesn't.
-        var type: ExerciseType?
-        let req = ExerciseType.fetchRequest()
-        if let types = try? manager.destinationContext.fetch(req){
-            if let indexOfType = types.firstIndex(where: { $0.name == typeString }) {
+        var type: NSManagedObject?
+        let req = NSFetchRequest<NSManagedObject>(entityName: "ExerciseTemplate")
+        if let types = try? manager.destinationContext.fetch(req) {
+            if let indexOfType = types.firstIndex(where: { ($0.value(forKey: "name") as? String) ?? "" == typeString }) {
                 type = types[indexOfType]
             } else {
                 type = addNewType(typeString, manager)
@@ -40,16 +41,16 @@ class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
         guard let type else { throw MigrationErrorV2.failedToAddNewExerciseType }
 
         // Add the new Type instance to the types relationship of the new ExerciseTemplate.
-        newExerciseTemplate.addToTypes(type)
+        newExerciseTemplate.setValue(NSSet(object: type), forKey: "types")
 
         // Associate the source and destination instances.
         manager.associate(sourceInstance: sInstance, withDestinationInstance: newExerciseTemplate, for: mapping)
     }
     
-    private func addNewType(_ typeString: String, _ manager: NSMigrationManager) -> ExerciseType? {
+    private func addNewType(_ typeString: String, _ manager: NSMigrationManager) -> NSManagedObject {
         // Create a new Type instance for the type string.
-        let newType = NSEntityDescription.insertNewObject(forEntityName: "Type", into: manager.destinationContext) as? ExerciseType
-        newType?.name = typeString
+        let newType = NSEntityDescription.insertNewObject(forEntityName: "ExerciseType", into: manager.destinationContext)
+        newType.setValue(typeString, forKey: "name")
         return newType
     }
 }

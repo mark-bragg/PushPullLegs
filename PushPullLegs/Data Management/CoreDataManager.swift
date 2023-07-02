@@ -34,6 +34,7 @@ class CoreDataManager: CoreDataManagement {
         self.storeType = storeType
         loadPersistentStore { [weak self] in
             self?.addWorkouts()
+            self?.addExerciseTypes()
             self?.cleanupUncascadedObjects()
             completion?()
         }
@@ -69,6 +70,21 @@ class CoreDataManager: CoreDataManagement {
             guard !templates.contains(where: { $0.name == type.rawValue }) else { return }
             try? mgmt.addWorkoutTemplate(type: type)
         }
+    }
+    
+    private func addExerciseTypes() {
+        guard let typeObjects = try? mainContext.fetch(ExerciseType.fetchRequest()) else { return }
+        let etm = exerciseTypeManager()
+        ExerciseTypeName.allCases.forEach { type in
+            guard !typeObjects.contains(where: { $0.name == type.rawValue }) else { return }
+            etm.create(name: type.rawValue)
+        }
+    }
+    
+    private func exerciseTypeManager() -> DataManager {
+        let dm = DataManager()
+        dm.entityName = EntityName.exerciseType
+        return dm
     }
     
     private func cleanupUncascadedObjects() {
