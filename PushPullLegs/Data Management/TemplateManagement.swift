@@ -57,8 +57,8 @@ class TemplateManagement {
     
     func saveWorkoutTemplate(exercises: [ExerciseTemplate]) throws {
         guard
-            let exerciseType = exercises.first?.type,
-            let type = ExerciseTypeName(rawValue: exerciseType)
+            let exerciseType = exercises.first?.types?.anyObject() as? ExerciseType,
+            let type = ExerciseTypeName.create(exerciseType)
         else { return }
         let names = exercises
             .filter { $0.name != nil }
@@ -78,22 +78,23 @@ class TemplateManagement {
     
     func addToWorkout(exercise: ExerciseTemplate) {
         guard
-            let typeString = exercise.type,
-            let type = ExerciseTypeName(rawValue: typeString),
+            let exerciseType = exercise.types?.anyObject() as? ExerciseType,
+            let type = ExerciseTypeName.create(exerciseType),
             let workout = workoutTemplate(type: type),
             let exerciseName = exercise.name
         else { return }
         if workout.exerciseNames == nil {
             workout.exerciseNames = []
         }
+        exercise.addToTypes(exerciseType)
         workout.exerciseNames?.append(exerciseName)
         try? coreDataManager.mainContext.save()
     }
     
     func removeFromWorkout(exercise: ExerciseTemplate) {
         guard
-            let typeString = exercise.type,
-            let type = ExerciseTypeName(rawValue: typeString),
+            let exerciseType = exercise.types?.anyObject() as? ExerciseType,
+            let type = ExerciseTypeName.create(exerciseType),
             let workout = workoutTemplate(type: type),
             var exerciseNames = workout.exerciseNames
         else {

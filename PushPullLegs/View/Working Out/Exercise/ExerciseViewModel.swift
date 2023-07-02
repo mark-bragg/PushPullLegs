@@ -77,7 +77,9 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
         exerciseName = exerciseTemplate.name
-        type = exerciseTemplate.type
+        if let exerciseType = exerciseTemplate.types?.anyObject() as? ExerciseType, let rawValue = exerciseType.name {
+            type = ExerciseTypeName(rawValue: rawValue)?.rawValue
+        }
         super.init()
         exerciseManager = dataManager
     }

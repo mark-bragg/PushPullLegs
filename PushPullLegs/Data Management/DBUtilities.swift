@@ -23,6 +23,11 @@ enum ExerciseTypeName: String, CaseIterable {
     case pull = "Pull"
     case legs = "Legs"
     case arms = "Arms"
+    
+    static func create(_ type: ExerciseType) -> ExerciseTypeName? {
+        guard let name = type.name else { return nil }
+        return ExerciseTypeName(rawValue: name)
+    }
 }
 
 enum TemplateError: Error {
