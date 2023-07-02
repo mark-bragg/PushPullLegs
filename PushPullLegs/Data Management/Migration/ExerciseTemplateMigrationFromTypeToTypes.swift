@@ -9,18 +9,26 @@
 import Foundation
 import CoreData
 
+enum MigrationErrorV2: Error {
+    case failedToCreateNewExerciseTemplate,
+         failedToGetSourceInstanceType,
+         failedToAddNewExerciseType
+}
+
 class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
     override func createDestinationInstances(forSource sInstance: NSManagedObject, in mapping: NSEntityMapping, manager: NSMigrationManager) throws {
         // Create a new ExerciseTemplate instance in the destination context.
-        let newExerciseTemplate = NSEntityDescription.insertNewObject(forEntityName: "ExerciseTemplate", into: manager.destinationContext)
+        guard let newExerciseTemplate = NSEntityDescription.insertNewObject(forEntityName: "ExerciseTemplate", into: manager.destinationContext) as? ExerciseTemplate
+        else { throw MigrationErrorV2.failedToCreateNewExerciseTemplate }
 
         // Get the type string from the source ExerciseTemplate.
-        guard let typeString = sInstance.value(forKey: "type") as? String else { return }
+        guard let typeString = sInstance.value(forKey: "type") as? String
+        else { throw MigrationErrorV2.failedToGetSourceInstanceType }
 
         // Check if the type already exists; create it if it doesn't.
         var type: ExerciseType?
         let req = ExerciseType.fetchRequest()
-        if let types = try? sInstance.managedObjectContext?.fetch(req){
+        if let types = try? manager.destinationContext.fetch(req){
             if let indexOfType = types.firstIndex(where: { $0.name == typeString }) {
                 type = types[indexOfType]
             } else {
@@ -29,10 +37,10 @@ class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
         } else {
             type = addNewType(typeString, manager)
         }
-        guard let type else { return }
+        guard let type else { throw MigrationErrorV2.failedToAddNewExerciseType }
 
         // Add the new Type instance to the types relationship of the new ExerciseTemplate.
-        newExerciseTemplate.setValue(NSSet(object: type), forKey: "types")
+        newExerciseTemplate.addToTypes(type)
 
         // Associate the source and destination instances.
         manager.associate(sourceInstance: sInstance, withDestinationInstance: newExerciseTemplate, for: mapping)

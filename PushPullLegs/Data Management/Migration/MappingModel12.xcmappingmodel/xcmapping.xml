@@ -109,7 +109,7 @@
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z102"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z113">
-        <attribute name="migrationpolicyclassname" type="string">ExerciseTemplateMigrationFromTypeToTypes</attribute>
+        <attribute name="migrationpolicyclassname" type="string">PushPullLegs.ExerciseTemplateMigrationFromTypeToTypes</attribute>
         <attribute name="sourcename" type="string">ExerciseTemplate</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
         <attribute name="mappingnumber" type="int16">2</attribute>
