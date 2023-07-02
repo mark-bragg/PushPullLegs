@@ -20,7 +20,7 @@ enum MigrationErrorV2: Error {
 class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
     override func createDestinationInstances(forSource sInstance: NSManagedObject, in mapping: NSEntityMapping, manager: NSMigrationManager) throws {
         // Create a new ExerciseTemplate instance in the destination context.
-        let newExerciseTemplate = NSEntityDescription.insertNewObject(forEntityName: "ExerciseTemplate", into: manager.destinationContext)
+        let newExerciseTemplate = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseTemplate.rawValue, into: manager.destinationContext)
 
         // Get the type string from the source ExerciseTemplate.
         guard let typeString = sInstance.value(forKey: "type") as? String
@@ -28,7 +28,7 @@ class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
 
         // Check if the type already exists; create it if it doesn't.
         var type: NSManagedObject?
-        let req = NSFetchRequest<NSManagedObject>(entityName: "ExerciseTemplate")
+        let req = NSFetchRequest<NSManagedObject>(entityName: EntityName.exerciseType.rawValue)
         if let types = try? manager.destinationContext.fetch(req) {
             if let indexOfType = types.firstIndex(where: { ($0.value(forKey: "name") as? String) ?? "" == typeString }) {
                 type = types[indexOfType]
@@ -49,7 +49,7 @@ class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
     
     private func addNewType(_ typeString: String, _ manager: NSMigrationManager) -> NSManagedObject {
         // Create a new Type instance for the type string.
-        let newType = NSEntityDescription.insertNewObject(forEntityName: "ExerciseType", into: manager.destinationContext)
+        let newType = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseType.rawValue, into: manager.destinationContext)
         newType.setValue(typeString, forKey: "name")
         return newType
     }
