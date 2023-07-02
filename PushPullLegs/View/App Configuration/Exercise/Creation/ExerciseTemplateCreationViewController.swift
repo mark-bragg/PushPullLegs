@@ -89,16 +89,17 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     @objc private func typeSelected(_ button: ExerciseTypeButton) {
         guard let type = button.exerciseType else { return }
-        viewModel?.exerciseType = type
+        viewModel?.updateTypesWith(selection: type)
         DispatchQueue.main.async {
             self.highlightType(type)
         }
     }
     
     private func highlightType(_ buttonType: ExerciseTypeName) {
+        guard let viewModel else { return }
         for type in ExerciseTypeName.allCases {
             let button = creationView.button(for: type)
-            button?.isHighlighted = button?.exerciseType == buttonType
+            button?.isHighlighted = viewModel.isTypeSelected(type)
         }
     }
     
@@ -110,11 +111,21 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     }
     
     private func saveAlert(_ exerciseName: String) -> UIAlertController? {
-        guard let type = viewModel?.exerciseType else { return nil }
-        let alert = UIAlertController(title: "Add \(exerciseName) to your \(type.rawValue) Workout?", message: nil, preferredStyle: .actionSheet)
+        guard let types = viewModel?.exerciseTypes, !types.isEmpty else { return nil }
+        let alert = UIAlertController(title: saveAlertTitle(exerciseName, types), message: nil, preferredStyle: .actionSheet)
         alert.addAction(saveAction(exerciseName))
         alert.addAction(cancelAction())
         return alert
+    }
+    
+    private func saveAlertTitle(_ exerciseName: String, _ types: [ExerciseTypeName]) -> String {
+        var title = "Add \(exerciseName) to "
+        if types.count == 2 {
+            title += "your \(types[0].rawValue) and \(types[1].rawValue) workouts?"
+        } else {
+            title += "your \(types[0].rawValue) Workout?"
+        }
+        return title
     }
     
     private func saveAction(_ exerciseName: String) -> UIAlertAction {
