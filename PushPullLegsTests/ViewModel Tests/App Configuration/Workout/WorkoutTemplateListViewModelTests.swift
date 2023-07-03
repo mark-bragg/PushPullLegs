@@ -13,7 +13,7 @@ import CoreData
 class WorkoutTemplateListViewModelTests: XCTestCase {
 
     var sut: WorkoutTemplateListViewModel!
-    let types: [ExerciseType] = [.push, .pull, .legs]
+    let types = [ExerciseTypeName.push, .pull, .legs]
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
     
     override func setUp() {
@@ -23,13 +23,13 @@ class WorkoutTemplateListViewModelTests: XCTestCase {
 
     func testWorkoutTitleForRow_row0row1row2_pushPullLegsReturned() {
         let titles = [sut.title(indexPath: IndexPath(row: 0, section: 0)), sut.title(indexPath: IndexPath(row: 1, section: 0)), sut.title(indexPath: IndexPath(row: 2, section: 0))]
-        XCTAssert(titles.contains(ExerciseType.push.rawValue))
-        XCTAssert(titles.contains(ExerciseType.pull.rawValue))
-        XCTAssert(titles.contains(ExerciseType.legs.rawValue))
+        XCTAssert(titles.contains(ExerciseTypeName.push.rawValue))
+        XCTAssert(titles.contains(ExerciseTypeName.pull.rawValue))
+        XCTAssert(titles.contains(ExerciseTypeName.legs.rawValue))
     }
     
     func testRowCount() {
-        XCTAssert(sut.rowCount(section: 0) == 3)
+        XCTAssert(sut.rowCount(section: 0) == 4)
     }
     
     func testSelect() {

@@ -32,7 +32,7 @@ class ExerciseSelectionViewModelTests: XCTestCase {
     }
     
     func testRowCount_fiveExercisesToAdd_fiveExercisesAdded_fiveReturned() {
-        let push = dbHelper.fetchWorkoutTemplates().first(where: {$0.name == ExerciseType.push.rawValue})!
+        let push = dbHelper.fetchWorkoutTemplates().first(where: {$0.name == ExerciseTypeName.push.rawValue})!
         for i in 0...4 {
             dbHelper.addExerciseTemplate(name: "ex \(i)", type: .push)
             dbHelper.addExerciseTemplate("ex \(100 + i)", to: push, addToWorkout: true)
@@ -110,7 +110,7 @@ class ExerciseSelectionViewModelTests: XCTestCase {
         }
         sut = ExerciseSelectionViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
         XCTAssert(sut.rowCount(section: 0) == 5)
-        dbHelper.addExerciseTemplate("to add to workout", to: dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseType.push.rawValue })!, addToWorkout: true)
+        dbHelper.addExerciseTemplate("to add to workout", to: dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseTypeName.push.rawValue })!, addToWorkout: true)
         sut.reload()
         XCTAssert(sut.rowCount(section: 0) == 5, "\nexpected: 5\nactual: \(sut.rowCount(section: 0))")
     }
@@ -125,7 +125,7 @@ class ExerciseSelectionViewModelTests: XCTestCase {
         sut.selected(row: 1)
         sut.selected(row: 3)
         sut.commitChanges()
-        let template = dbHelper.fetchWorkoutTemplates().first(where: { $0.name! == ExerciseType.push.rawValue })
+        let template = dbHelper.fetchWorkoutTemplates().first(where: { $0.name! == ExerciseTypeName.push.rawValue })
         XCTAssert((template?.exerciseNames?.contains(names[1]))!)
         XCTAssert((template?.exerciseNames?.contains(names[3]))!)
     }

@@ -14,7 +14,7 @@
     <entity name="ExerciseTemplate" representedClassName=".ExerciseTemplate" syncable="YES" codeGenerationType="class">
         <attribute name="name" attributeType="String"/>
         <attribute name="unilateral" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <relationship name="types" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExerciseType" inverseName="exerciseTemplates" inverseEntity="ExerciseType"/>
+        <relationship name="types" toMany="YES" deletionRule="Nullify" destinationEntity="ExerciseType" inverseName="exerciseTemplates" inverseEntity="ExerciseType"/>
     </entity>
     <entity name="ExerciseType" representedClassName="ExerciseType" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>

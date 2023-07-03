@@ -15,12 +15,12 @@ class WorkoutEditViewModelTests: XCTestCase {
     var sut: WorkoutEditViewModel!
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
     
-    fileprivate func assertNoSavedWorkoutsTypeInjectedIsReturned(_ type: ExerciseType) {
+    fileprivate func assertNoSavedWorkoutsTypeInjectedIsReturned(_ type: ExerciseTypeName) {
         sut = WorkoutEditViewModel(withType: type,  coreDataManagement: dbHelper.coreDataStack )
         XCTAssert(sut.exerciseType == type)
     }
     
-    fileprivate func assertPreviousWorkouts(withTypes previousWorkoutTypes: [ExerciseType], injectionType: ExerciseType) {
+    fileprivate func assertPreviousWorkouts(withTypes previousWorkoutTypes: [ExerciseTypeName], injectionType: ExerciseTypeName) {
         for type in previousWorkoutTypes {
             dbHelper.insertWorkout(name: type)
         }
@@ -28,95 +28,79 @@ class WorkoutEditViewModelTests: XCTestCase {
         XCTAssert(sut.exerciseType == injectionType)
     }
     
-    fileprivate func assertPreviousWorkoutsNoInjection(_ previousWorkoutTypes: [ExerciseType], expectedType: ExerciseType) {
+    fileprivate func assertPreviousWorkoutsNoInjection(_ previousWorkoutTypes: [ExerciseTypeName], expectedType: ExerciseTypeName) {
         for type in previousWorkoutTypes {
             dbHelper.insertWorkout(name: type)
         }
-        sut = WorkoutEditViewModel(withType: nil,  coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(coreDataManagement: dbHelper.coreDataStack )
         XCTAssert(sut.exerciseType == expectedType)
     }
     
-    func testGetExerciseType_noPreviousWorkouts_noTypeInjected_pushReturned() {
-        sut = WorkoutEditViewModel(withType: nil,  coreDataManagement: dbHelper.coreDataStack )
-        XCTAssert(sut.exerciseType == ExerciseType.push)
-    }
-    
-    func testGetExerciseType_noPreviousWorkouts_pushTypeInjected_pushReturned() {
+    func testGetExerciseTypeName_noPreviousWorkouts_pushTypeInjected_pushReturned() {
         assertNoSavedWorkoutsTypeInjectedIsReturned(.push)
     }
     
-    func testGetExerciseType_noPreviousWorkouts_pullTypeInjected_pullReturned() {
+    func testGetExerciseTypeName_noPreviousWorkouts_pullTypeInjected_pullReturned() {
         assertNoSavedWorkoutsTypeInjectedIsReturned(.pull)
     }
     
-    func testGetExerciseType_noPreviousWorkouts_legsTypeInjected_legsReturned() {
+    func testGetExerciseTypeName_noPreviousWorkouts_legsTypeInjected_legsReturned() {
         assertNoSavedWorkoutsTypeInjectedIsReturned(.legs)
     }
     
-    func testGetExerciseType_previousWorkoutsPush_noTypeInjected_pullReturned() {
-        assertPreviousWorkoutsNoInjection([.push], expectedType: .pull)
-    }
-    
-    func testGetExerciseType_previousWorkoutsPush_pushTypeInjected_pushReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPush_pushTypeInjected_pushReturned() {
         assertPreviousWorkouts(withTypes: [.push], injectionType: .push)
     }
     
-    func testGetExerciseType_previousWorkoutsPush_pullTypeInjected_pullReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPush_pullTypeInjected_pullReturned() {
         assertPreviousWorkouts(withTypes: [.push], injectionType: .pull)
     }
     
-    func testGetExerciseType_previousWorkoutsPush_legsTypeInjected_legsReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPush_legsTypeInjected_legsReturned() {
         assertPreviousWorkouts(withTypes: [.push], injectionType: .legs)
     }
     
-    func testGetExerciseType_previousWorkoutsPushPull_noTypeInjected_legsReturned() {
-        assertPreviousWorkoutsNoInjection([.push, .pull], expectedType: .legs)
-    }
-    
-    func testGetExerciseType_previousWorkoutsPushPull_legsTypeInjected_legsReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPushPull_legsTypeInjected_legsReturned() {
         assertPreviousWorkouts(withTypes: [.push, .pull], injectionType: .legs)
     }
     
-    func testGetExerciseType_previousWorkoutsPushPull_pullTypeInjected_pullReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPushPull_pullTypeInjected_pullReturned() {
         assertPreviousWorkouts(withTypes: [.push, .pull], injectionType: .pull)
     }
     
-    func testGetExerciseType_previousWorkoutsPushPull_pushTypeInjected_pushReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPushPull_pushTypeInjected_pushReturned() {
         assertPreviousWorkouts(withTypes: [.push, .pull], injectionType: .push)
     }
     
-    func testGetExerciseType_previousWorkoutsPushPullLegs_noTypeInjected_pushReturned() {
-        assertPreviousWorkoutsNoInjection([.push, .pull, .legs], expectedType: .push)
-    }
-    
-    func testGetExerciseType_previousWorkoutsPushPullLegs_legsTypeInjected_legsReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPushPullLegs_legsTypeInjected_legsReturned() {
         assertPreviousWorkouts(withTypes: [.push, .pull, .legs], injectionType: .legs)
     }
     
-    func testGetExerciseType_previousWorkoutsPushPullLegs_pullTypeInjected_pullReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPushPullLegs_pullTypeInjected_pullReturned() {
         assertPreviousWorkouts(withTypes: [.push, .pull, .legs], injectionType: .pull)
     }
     
-    func testGetExerciseType_previousWorkoutsPushPullLegs_pushTypeInjected_pushReturned() {
+    func testGetExerciseTypeName_previousWorkoutsPushPullLegs_pushTypeInjected_pushReturned() {
         assertPreviousWorkouts(withTypes: [.push, .pull, .legs], injectionType: .push)
     }
     
     func testSectionCount() {
-        sut = WorkoutEditViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(coreDataManagement: dbHelper.coreDataStack )
         XCTAssert(sut.sectionCount() == 2)
     }
     
     func testRowsForSection_zeroExercises_zeroRowsForBothSections() {
-        sut = WorkoutEditViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack )
+        sut = WorkoutEditViewModel(coreDataManagement: dbHelper.coreDataStack )
         XCTAssert(sut.rowCount(section: 0) == 0, "\nexpected: 0\nactual: \(sut.rowCount(section: 0))")
         XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testRowsForSection_zeroExercisesDone_oneExerciseToDo_oneRowForSectionZero_zeroRowsForSectionOne() {
+        AppState.shared.workoutInProgress = nil
         dbHelper.insertWorkoutTemplateMainContext()
         let workoutTemplate = dbHelper.fetchWorkoutTemplates().first!
         dbHelper.addExerciseTemplate("exercise to do", to: workoutTemplate, addToWorkout: true)
-        sut = WorkoutEditViewModel(withType: nil,coreDataManagement: dbHelper.coreDataStack)
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
         assertEqual(sut.rowCount(section: 0), 1)
         XCTAssert(sut.rowCount(section: 1) == 0)
     }
@@ -126,13 +110,13 @@ class WorkoutEditViewModelTests: XCTestCase {
         for i in 0...9 {
             dbHelper.addExerciseTemplate("exercise to do #\(i)", to: dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         }
-        sut = WorkoutEditViewModel(withType: nil,coreDataManagement: dbHelper.coreDataStack)
-        assertEqual(sut.rowCount(section: 0), 10)
-        XCTAssert(sut.rowCount(section: 1) == 0)
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
+        XCTAssertEqual(sut.rowCount(section: 0), 10)
+        XCTAssertEqual(sut.rowCount(section: 1), 0)
     }
     
     func testRowsForSection_oneExerciseDone_zeroExercisesToDo_zeroRowsForSectionZero_oneRowForSectionOne() {
-        sut = WorkoutEditViewModel(withType: nil, coreDataManagement: dbHelper.coreDataStack)
+        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
         dbHelper.addExercise("exercise done", to: dbHelper.fetchWorkouts().first!)
         sut.exerciseTemplatesAdded()
         XCTAssert(sut.rowCount(section: 0) == 0)
@@ -209,7 +193,7 @@ class WorkoutEditViewModelTests: XCTestCase {
         }
         XCTAssert(Int(workout.dateCreated!.timeIntervalSinceNow) < 5)
         XCTAssert(workout.duration == 15)
-        XCTAssert(workout.name == ExerciseType.push.rawValue)
+        XCTAssert(workout.name == ExerciseTypeName.push.rawValue)
     }
     
     func testAddExercise_exerciseTemplateAdded() {
@@ -565,9 +549,9 @@ class WorkoutEditViewModelTests: XCTestCase {
             dbHelper.addExercise("ex\(i)", to: workout)
         }
         AppState.shared.workoutInProgress = .push
-        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
-        XCTAssert(dbHelper.fetchWorkouts().count == 1, "workout count\nexpected: 1\nactual: \(dbHelper.fetchWorkouts().count)")
-        XCTAssert(dbHelper.fetchWorkouts().first!.objectID == workout.objectID)
+        sut = WorkoutEditViewModel(coreDataManagement: dbHelper.coreDataStack)
+        XCTAssertEqual(dbHelper.fetchWorkouts().count, 1)
+        XCTAssertEqual(dbHelper.fetchWorkouts().first!.objectID, workout.objectID)
     }
     
     func testInit_WIP_deleteWorkout_workoutDeleted_appStateWIPisFalse() {
@@ -576,9 +560,9 @@ class WorkoutEditViewModelTests: XCTestCase {
             dbHelper.addExercise("ex\(i)", to: workout)
         }
         AppState.shared.workoutInProgress = .push
-        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
+        sut = WorkoutEditViewModel(coreDataManagement: dbHelper.coreDataStack)
         sut.deleteWorkout()
-        XCTAssert(dbHelper.fetchWorkouts().count == 0)
+        XCTAssertEqual(dbHelper.fetchWorkouts().count, 0)
         XCTAssertNil(AppState.shared.workoutInProgress)
     }
     
@@ -588,18 +572,11 @@ class WorkoutEditViewModelTests: XCTestCase {
             dbHelper.addExercise("ex\(i)", to: workout)
         }
         AppState.shared.workoutInProgress = .push
-        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack)
+        sut = WorkoutEditViewModel(coreDataManagement: dbHelper.coreDataStack)
         sut.finishWorkout()
-        XCTAssert(dbHelper.fetchWorkouts().count == 1)
+        XCTAssertEqual(dbHelper.fetchWorkouts().count, 1)
         XCTAssertNil(AppState.shared.workoutInProgress)
     }
-    
-//    func testNoDataText() {
-//        sut = WorkoutEditViewModel(withType: .push, coreDataManagement: dbHelper.coreDataStack )
-//        let text = sut.noDataText()
-//        XCTAssert(text == "Empty Workout")
-//    }
-    
 }
 
 func assertEqual(_ v1: Int, _ v2: Int) {

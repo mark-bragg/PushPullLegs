@@ -30,12 +30,12 @@ class TemplateManagementTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func addExerciseTemplate(name: String = TempName, type: ExerciseTypeName= .push) {
+    func addExerciseTemplate(name: String = TempName, type: ExerciseTypeName = .push) {
         dbHelper.addExerciseTemplate(name: name, type: type, addToWorkout: true)
         exerciseCount += 1
     }
     
-    func addWorkoutTemplate(type: ExerciseTypeName= .push, exerciseNames: [String] = Names) {
+    func addWorkoutTemplate(type: ExerciseTypeName = .push, exerciseNames: [String] = Names) {
         dbHelper.addWorkoutTemplate(type: type, exerciseNames: exerciseNames)
         workoutCount += 1
     }
@@ -43,56 +43,59 @@ class TemplateManagementTests: XCTestCase {
     // MARK: exercise
 
     func testCreateExerciseTemplate_templateCreated_push() {
-        try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.push)
+        try? sut.addExerciseTemplate(name: TempName, types: [ExerciseTypeName.push])
         guard let temps = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
             XCTFail()
             return
         }
         XCTAssertEqual(temps.count, 1)
-        guard let temp = temps.first as? ExerciseTemplate else {
+        guard let temp = temps.first as? ExerciseTemplate,
+              let types = temp.types,
+              let expectedtype = dbHelper.getOrAddExerciseType(.push)
+        else {
             XCTFail()
             return
         }
         XCTAssertEqual(temp.name, TempName)
-        XCTAssertEqual(temp.type, ExerciseType.push.rawValue)
+        XCTAssert(types.contains(expectedtype))
     }
     
     func testCreateExerciseTemplate_templateCreated_pull() {
-        try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.pull)
+        try? sut.addExerciseTemplate(name: TempName, types: [.pull])
         guard let temps = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
             XCTFail()
             return
         }
         XCTAssertEqual(temps.count, 1)
-        guard let temp = temps.first as? ExerciseTemplate else {
-            XCTFail()
-            return
-        }
+        guard let temp = temps.first as? ExerciseTemplate,
+              let types = temp.types,
+              let expectedType = dbHelper.getOrAddExerciseType(.pull)
+        else { return XCTFail() }
         XCTAssertEqual(temp.name, TempName)
-        XCTAssertEqual(temp.type, ExerciseType.pull.rawValue)
+        XCTAssert(types.contains(expectedType))
     }
     
     func testCreateExerciseTemplate_templateCreated_legs() {
-        try? sut.addExerciseTemplate(name: TempName, type: ExerciseType.legs)
+        try? sut.addExerciseTemplate(name: TempName, types: [.legs])
         dbHelper.coreDataStack.mainContext.performAndWait {
             guard let temps = try? dbHelper.coreDataStack.mainContext.fetch(NSFetchRequest(entityName: ExTemp)) else {
                 XCTFail()
                 return
             }
             XCTAssertEqual(temps.count, 1)
-            guard let temp = temps.first as? ExerciseTemplate else {
-                XCTFail()
-                return
-            }
+            guard let temp = temps.first as? ExerciseTemplate,
+                  let types = temp.types?.allObjects as? [ExerciseType],
+                  let expectedType = dbHelper.getOrAddExerciseType(.legs)
+            else { return XCTFail() }
             XCTAssertEqual(temp.name, TempName)
-            XCTAssertEqual(temp.type, ExerciseType.legs.rawValue)
+            XCTAssert(types.contains(expectedType))
         }
     }
     
     func testDeleteExerciseTemplate_templateDeleted() {
         dbHelper.addWorkoutTemplate(type: .push, exerciseNames: [TempName])
         guard
-            let push = dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseType.push.rawValue }),
+            let push = dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseTypeName.push.rawValue }),
             let temps = dbHelper.fetchExerciseTemplates() else
         {
             XCTFail()
@@ -102,7 +105,7 @@ class TemplateManagementTests: XCTestCase {
         XCTAssertEqual(temps.count, 1)
         sut.deleteExerciseTemplate(name: TempName)
         guard
-            let push2 = dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseType.push.rawValue }),
+            let push2 = dbHelper.fetchWorkoutTemplates().first(where: { $0.name == ExerciseTypeName.push.rawValue }),
             let temps2 = dbHelper.fetchExerciseTemplates() else
         {
             return
@@ -168,9 +171,9 @@ class TemplateManagementTests: XCTestCase {
     }
     
     func testCreateDuplicateExerciseTemplates_errorThrown() {
-        addExerciseTemplate(name: TempName, type: ExerciseType.legs)
+        addExerciseTemplate(name: TempName, type: ExerciseTypeName.legs)
         do {
-            try sut.addExerciseTemplate(name: TempName, type: ExerciseType.legs)
+            try sut.addExerciseTemplate(name: TempName, types: [.legs])
         } catch {
             guard let error = error as? TemplateError else {
                 XCTFail("incorrect error thrown with duplicate exercise templates")
@@ -201,7 +204,7 @@ class TemplateManagementTests: XCTestCase {
             XCTFail()
             return
         }
-        XCTAssertEqual(temp.name, ExerciseType.push.rawValue)
+        XCTAssertEqual(temp.name, ExerciseTypeName.push.rawValue)
     }
     
     func testCreateLegsWorkoutTemplate_templateCreated() {
@@ -226,11 +229,11 @@ class TemplateManagementTests: XCTestCase {
             XCTFail()
             return
         }
-        XCTAssertEqual(temp.name, ExerciseType.legs.rawValue)
+        XCTAssertEqual(temp.name, ExerciseTypeName.legs.rawValue)
     }
 
     func testGetWorkoutTemplate_templateGeted() {
-        guard let randomType = ExerciseType.allCases.randomElement() else { return XCTFail() }
+        guard let randomType = ExerciseTypeName.allCases.randomElement() else { return XCTFail() }
         addWorkoutTemplate(type: randomType)
         let temps = dbHelper.fetchWorkoutTemplates()
         XCTAssertEqual(temps.count, 1)
@@ -247,7 +250,7 @@ class TemplateManagementTests: XCTestCase {
         addWorkoutTemplate(type: .legs)
         addWorkoutTemplate(type: .arms)
         let temps = dbHelper.fetchWorkoutTemplates()
-        guard let randomType = ExerciseType.allCases.randomElement() else { return XCTFail() }
+        guard let randomType = ExerciseTypeName.allCases.randomElement() else { return XCTFail() }
         if let tempToTest = sut.workoutTemplate(type: randomType) {
             XCTAssert(temps.contains(where: { objectsAreEqual($0, tempToTest) }))
             XCTAssertEqual(tempToTest.name, randomType.rawValue)
@@ -262,12 +265,12 @@ class TemplateManagementTests: XCTestCase {
         addWorkoutTemplate(type: .legs)
         addWorkoutTemplate(type: .arms)
         let temps = dbHelper.fetchWorkoutTemplates()
-        XCTAssertEqual(temps.count, ExerciseType.allCases.count)
+        XCTAssertEqual(temps.count, ExerciseTypeName.allCases.count)
         guard let tempsToTest = sut.workoutTemplates() else {
             XCTFail()
             return
         }
-        XCTAssertEqual(tempsToTest.count, ExerciseType.allCases.count)
+        XCTAssertEqual(tempsToTest.count, ExerciseTypeName.allCases.count)
         for temp in temps {
             XCTAssert(tempsToTest.contains(where: { objectsAreEqual($0, temp) }))
         }
@@ -306,7 +309,7 @@ class TemplateManagementTests: XCTestCase {
         guard let temps = dbHelper.fetchExerciseTemplates() else { return XCTFail() }
         XCTAssertEqual(temps.count, 0)
         var tempsToTest = [ExerciseTemplate]()
-        for type in [ExerciseType.push, .pull, .legs] {
+        for type in [ExerciseTypeName.push, .pull, .legs] {
             guard let tempsToAdd = sut.exerciseTemplates(withType: type) else {
                 XCTFail()
                 return

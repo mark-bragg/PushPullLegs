@@ -27,13 +27,7 @@ protocol ExerciseTemplateListViewModelDelegate {
 class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     let templateManagement: TemplateManagement
-    private lazy var exercises: [ExerciseTypeName: [ExerciseTemplate]] =  {
-        var exs = [ExerciseTypeName: [ExerciseTemplate]]()
-        for type in ExerciseTypeName.allCases {
-            exs[type] = []
-        }
-        return exs
-    }()
+    private lazy var exercises = [ExerciseTemplate]()
     var delegate: ExerciseTemplateListViewModelDelegate?
     
     init(withTemplateManagement mgmt: TemplateManagement) {
@@ -43,7 +37,7 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     func rowCount(section: Int) -> Int {
-        exercisesForSection(section).count
+        exercises.count
     }
     
     func title() -> String? {
@@ -51,11 +45,11 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     func sectionCount() -> Int {
-        ExerciseTypeName.allCases.count
+        1
     }
     
     func title(indexPath: IndexPath) -> String? {
-        exercisesForSection(indexPath.section)[indexPath.row].name
+        exercises[indexPath.row].name
     }
     
     func titleForSection(_ section: Int) -> String? {
@@ -67,16 +61,8 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
         templateManagement.deleteExerciseTemplate(name: name)
     }
     
-    private func exercisesForSection(_ section: Int) -> [ExerciseTemplate] {
-        let types = ExerciseTypeName.allCases
-        guard section < types.count else { return [] }
-        return exercises[types[section]] ?? []
-    }
-    
     func reload() {
-        for key in exercises.keys {
-            exercises[key] = templateManagement.exerciseTemplates(withType: key)?.sorted(by: exerciseTemplateSorter) ?? []
-        }
+        exercises = templateManagement.exerciseTemplates()?.sorted(by: exerciseTemplateSorter) ?? []
     }
     
     func noDataText() -> String {
