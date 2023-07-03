@@ -30,12 +30,13 @@ class TemplateManagement {
         for type in getExerciseTypes(types) {
             et.addToTypes(type)
         }
+        try? coreDataManager.mainContext.save()
     }
     
     private func getExerciseTypes(_ typeNames: [ExerciseTypeName]) -> [ExerciseType] {
-        let typeNames = typeNames.flatMap { $0.rawValue }
+        let typeNameStrings = typeNames.map { $0.rawValue }
         let req = ExerciseType.fetchRequest()
-        req.predicate = NSPredicate(format: "name IN %@", argumentArray: [typeNames])
+        req.predicate = NSPredicate(format: "name IN %@", argumentArray: [typeNameStrings])
         return (try? coreDataManager.mainContext.fetch(req)) ?? []
     }
     
@@ -59,6 +60,10 @@ class TemplateManagement {
     
     func exerciseTemplates(withType type: ExerciseTypeName) -> [ExerciseTemplate]? {
         exerciseReader().exerciseTemplates(withType: type)
+    }
+    
+    func exerciseTemplates() -> [ExerciseTemplate]? {
+        exerciseReader().exerciseTemplates()
     }
     
     func addWorkoutTemplate(type: ExerciseTypeName) throws {
@@ -120,33 +125,15 @@ class TemplateManagement {
     }
     
     func exerciseTemplatesForWorkout(_ type: ExerciseTypeName) -> [ExerciseTemplate] {
-        let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.workoutTemplate.rawValue)
-        req.fetchLimit = 1
-        req.predicate = PPLPredicate.nameIsEqualTo(type.rawValue)
-        if let workoutTemplate = try? coreDataManager.mainContext.fetch(req).first as? WorkoutTemplate {
-            if let names = workoutTemplate.exerciseNames {
-                let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.exerciseTemplate.rawValue)
-                req.predicate = PPLPredicate.typeIsEqualTo(type)
-                if let exerciseTemplates = try? coreDataManager.mainContext.fetch(req) as? [ExerciseTemplate] {
-                    return exerciseTemplates.filter { (temp) -> Bool in
-                        names.contains {
-                            guard let name = temp.name else { return false }
-                            return name == $0
-                        }
-                    }
-                }
-            }
-        }
-        guard
-            let workoutTemplate = workoutReader().getTemplate(name: type.rawValue) as? WorkoutTemplate,
-            let names = workoutTemplate.exerciseNames,
-            let exerciseTemplates = exerciseReader().getTemplates(names: names)
-        else
-        {
-            return []
-        }
-        return exerciseTemplates
-    }
+        guard let workoutTemp = workoutTemplate(type: type),
+              let exerciseNames = workoutTemp.exerciseNames
+        else { return [] }
+        let req = NSFetchRequest<NSFetchRequestResult>(entityName: EntityName.exerciseTemplate.rawValue)
+        let typeIsInPred = PPLPredicate.typeIsEqualTo(type)
+        let nameIsInPred = PPLPredicate.nameIsIn(exerciseNames)
+        req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [typeIsInPred, nameIsInPred])
+        return (try? coreDataManager.mainContext.fetch(req) as? [ExerciseTemplate]) ?? []
+     }
     
     private func exerciseWriter() -> ExerciseDataManager {
         let edm = ExerciseDataManager(context: coreDataManager.mainContext)
@@ -209,10 +196,12 @@ fileprivate extension DataManager {
         return template
     }
     
-    func exerciseTemplates(withType type: ExerciseTypeName) -> [ExerciseTemplate]? {
+    func exerciseTemplates(withType type: ExerciseTypeName? = nil) -> [ExerciseTemplate]? {
         guard let entityNameString else { return nil }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
-        request.predicate = PPLPredicate.typeIsEqualTo(type)
+        if let type {
+            request.predicate = PPLPredicate.typeIsEqualTo(type)
+        }
         guard let templates = try? self.context.fetch(request) as? [ExerciseTemplate] else {
             // TODO: handle error
             return nil

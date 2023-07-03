@@ -28,6 +28,7 @@ class StartWorkoutViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        #if !DEBUG
         presentSplash()
         hidesBottomBarWhenPushed = false
         if let wipType = AppState.shared.workoutInProgress {
@@ -39,6 +40,7 @@ class StartWorkoutViewController: PPLTableViewController {
             setTableViewY(0)
         }
         tableView?.isScrollEnabled = false
+        #endif
     }
     
     func presentSplash() {
@@ -66,19 +68,18 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        exerciseType = tableView.cellForRow(at: indexPath)?.exerciseType()
-        if let del = delegate, let type = exerciseType {
-            del.workoutSelectedWithType(type)
+        guard let exerciseType = tableView.cellForRow(at: indexPath)?.exerciseType() else { return }
+        if let del = delegate {
+            del.workoutSelectedWithType(exerciseType)
         } else {
-            navigateToNextWorkout()
-            exerciseType = nil
+            navigateToNextWorkout(exerciseType)
         }
     }
     
-    func navigateToNextWorkout() {
+    func navigateToNextWorkout(_ type: ExerciseTypeName) {
         didNavigateToWorkout = true
         let vc = WorkoutViewController()
-        vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
+        vc.viewModel = WorkoutEditViewModel(withType: type)
         vc.$popped.sink { (popped) in
             PPLDefaults.instance.setWorkoutInProgress(nil)
         }.store(in: &cancellables)

@@ -10,7 +10,7 @@ import Foundation
 
 class ExerciseTemplateCreationViewModel: ObservableObject {
     
-    var exerciseTypes: [ExerciseTypeName] {
+    private(set) var exerciseTypes: [ExerciseTypeName] {
         didSet {
             isSaveEnabled = exerciseNameIsValid(exerciseName)
         }

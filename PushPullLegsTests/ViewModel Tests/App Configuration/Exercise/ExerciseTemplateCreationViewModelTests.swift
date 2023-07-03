@@ -33,22 +33,26 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
     }
     
     func assertNewExerciseTemplateWithTypeSelected(unilateral: Bool) {
+        dbHelper.addExerciseTypes()
         dbHelper.insertWorkoutTemplate(type: .push)
         sut = ExerciseTemplateCreationViewModel(management: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
         expectationCompletion = XCTestExpectation(description: "save exercise template success completion")
         expectationReload = XCTestExpectation(description: "save exercise template reload delegate")
-        sut.exerciseType = .push
+        sut.updateTypesWith(selection: .push)
         sut.reloader = self
         sut.lateralType = unilateral ? .unilateral : .bilateral
         sut.saveExercise(withName: "testing") {
             expectationCompletion?.fulfill()
         }
         wait(for: [expectationCompletion!, expectationReload!], timeout: 60)
-        let temps = dbHelper.fetchExerciseTemplates()!
-        XCTAssert(temps.count == 1)
-        XCTAssert(temps.first!.name == "testing")
-        XCTAssert(temps.first!.type == ExerciseType.push.rawValue)
-        XCTAssert(temps.first!.unilateral == unilateral)
+        guard let temps = dbHelper.fetchExerciseTemplates(),
+              let first = temps.first,
+              let types = first.types?.allObjects as? [ExerciseType]
+        else { return XCTFail() }
+        XCTAssertEqual(temps.count, 1)
+        XCTAssertEqual(first.name, "testing")
+        XCTAssert(types.contains(where: { $0.name == ExerciseTypeName.push.rawValue }))
+        XCTAssertEqual(first.unilateral, unilateral)
         guard let wktTemp = dbHelper.fetchWorkoutTemplates().first else {
             XCTFail()
             return
@@ -59,6 +63,7 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
     }
     
     func testSave_typeInjected_reloadDelegateCalled_exerciseSavedAndAddedToWorkout() {
+        dbHelper.addExerciseTypes()
         dbHelper.insertWorkoutTemplate(type: .push)
         sut = ExerciseTemplateCreationViewModel(withType: .push, management: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
         expectationCompletion = XCTestExpectation(description: "save exercise template success completion")
@@ -68,10 +73,16 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
             expectationCompletion?.fulfill()
         }
         wait(for: [expectationCompletion!, expectationReload!], timeout: 60)
-        let temps = dbHelper.fetchExerciseTemplates()!
+        guard let temps = dbHelper.fetchExerciseTemplates(),
+              let first = temps.first,
+              let types = first.types
+        else { return XCTFail() }
         XCTAssert(temps.count == 1)
-        XCTAssert(temps.first!.name == "testing")
-        XCTAssert(temps.first!.type == ExerciseType.push.rawValue)
+        XCTAssert(first.name == "testing")
+        XCTAssert(types.contains(where: { type in
+            guard let type = type as? ExerciseType else { return false }
+            return type.name == ExerciseTypeName.push.rawValue
+        }))
         guard let wktTemp = dbHelper.fetchWorkoutTemplates().first else {
             XCTFail()
             return
@@ -92,8 +103,10 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
     func testIsTypeSelected_selected_trueReturned() {
         dbHelper.insertWorkoutTemplate(type: .push)
         sut = ExerciseTemplateCreationViewModel(management: TemplateManagement(coreDataManager: dbHelper.coreDataStack))
-        sut.exerciseType = .push
+        sut.updateTypesWith(selection: .push)
         XCTAssert(sut.isTypeSelected() == true)
     }
+    
+    
 
 }

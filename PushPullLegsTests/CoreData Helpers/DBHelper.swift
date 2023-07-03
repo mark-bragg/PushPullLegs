@@ -21,10 +21,11 @@ class DBHelper {
     
     init(coreDataStack: CoreDataTestStack) {
         self.coreDataStack = coreDataStack
+        addExerciseTypes()
     }
     
     // MARK: Workout
-    func insertWorkout(name: ExerciseTypeName= .push) {
+    func insertWorkout(name: ExerciseTypeName = .push) {
         let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.mainContext) as! Workout
         workout.name = name.rawValue
         workout.dateCreated = Date()
@@ -43,7 +44,7 @@ class DBHelper {
         return workouts as! [Workout]
     }
     
-    func createWorkout(name: ExerciseTypeName= .push, date: Date? = nil) -> Workout {
+    func createWorkout(name: ExerciseTypeName = .push, date: Date? = nil) -> Workout {
         let workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: coreDataStack.mainContext) as! Workout
         workout.name = name.rawValue
         workout.dateCreated = date
@@ -53,12 +54,12 @@ class DBHelper {
     
     // MARK: WorkoutTemplate
     func addWorkoutTemplates() {
-        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs] {
+        for type in ExerciseTypeName.allCases {
             insertWorkoutTemplateMainContext(type: type)
         }
     }
     
-    func insertWorkoutTemplate(type: ExerciseTypeName= .push) {
+    func insertWorkoutTemplate(type: ExerciseTypeName = .push) {
         guard let workout = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.mainContext) as? WorkoutTemplate else {
             assert(false, "failed to add workout template")
             return
@@ -67,7 +68,7 @@ class DBHelper {
         try? coreDataStack.mainContext.save()
     }
     
-    func insertWorkoutTemplateMainContext(type: ExerciseTypeName= .push) {
+    func insertWorkoutTemplateMainContext(type: ExerciseTypeName = .push) {
         let workout = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.mainContext) as! WorkoutTemplate
         workout.name = type.rawValue
         try? coreDataStack.mainContext.save()
@@ -79,7 +80,7 @@ class DBHelper {
         return workouts as! [WorkoutTemplate]
     }
     
-    func addWorkoutTemplate(type: ExerciseTypeName= .push, exerciseNames: [String] = Names) {
+    func addWorkoutTemplate(type: ExerciseTypeName = .push, exerciseNames: [String] = Names) {
         let temp = NSEntityDescription.insertNewObject(forEntityName: WrkTemp, into: coreDataStack.mainContext) as! WorkoutTemplate
         temp.name = type.rawValue
         temp.exerciseNames = exerciseNames
@@ -177,9 +178,12 @@ class DBHelper {
     // MARK: ExerciseTemplate
     
     func addExerciseTemplate(_ name: String, to workout: WorkoutTemplate, addToWorkout: Bool = false) {
-        let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.mainContext) as! ExerciseTemplate
+        guard let temp = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseTemplate.rawValue, into: coreDataStack.mainContext) as? ExerciseTemplate,
+              let typeName = ExerciseTypeName(rawValue: workout.name ?? ""),
+              let type = getOrAddExerciseType(typeName)
+        else { return }
         temp.name = name
-        temp.type = workout.name
+        temp.addToTypes(type)
         if addToWorkout {
             let wkt = coreDataStack.mainContext.object(with: workout.objectID) as! WorkoutTemplate
             if wkt.exerciseNames == nil {
@@ -187,10 +191,11 @@ class DBHelper {
             }
             wkt.exerciseNames?.append(temp.name!)
         }
-    try? coreDataStack.mainContext.save()
+        try? coreDataStack.mainContext.save()
     }
     
-    func addExerciseTemplate(name: String = TempName, type: ExerciseTypeName= .push, addToWorkout: Bool = false) {
+    func addExerciseTemplate(name: String = TempName, type: ExerciseTypeName = .push, addToWorkout: Bool = false) {
+        guard let dbType = getOrAddExerciseType(type) else { return }
         if addToWorkout {
             if let wkt = fetchWorkoutTemplates().first(where: { $0.name == type.rawValue }) {
                 var names = wkt.exerciseNames
@@ -202,16 +207,43 @@ class DBHelper {
                 wkt.exerciseNames = names
                 let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.mainContext) as! ExerciseTemplate
                 temp.name = name
-                temp.type = type.rawValue
+                temp.addToTypes(dbType)
             } else {
                 addWorkoutTemplate(type: type, exerciseNames: [name])
             }
         } else {
             let temp = NSEntityDescription.insertNewObject(forEntityName: ExTemp, into: coreDataStack.mainContext) as! ExerciseTemplate
             temp.name = name
-            temp.type = type.rawValue
+            temp.addToTypes(dbType)
         }
         try? coreDataStack.mainContext.save()
+    }
+    
+    func addExerciseTypes() {
+        if let typeObjects = try? coreDataStack.mainContext.fetch(ExerciseType.fetchRequest()) {
+            ExerciseTypeName.allCases.forEach { type in
+                guard !typeObjects.contains(where: { $0.name == type.rawValue }) else { return }
+                getOrAddExerciseType(type)
+            }
+        } else {
+            ExerciseTypeName.allCases.forEach { type in
+                getOrAddExerciseType(type)
+            }
+        }
+    }
+    
+    @discardableResult
+    func getOrAddExerciseType(_ typeName: ExerciseTypeName) -> ExerciseType? {
+        let req = ExerciseType.fetchRequest()
+        req.predicate = NSPredicate.nameIsEqualTo(typeName.rawValue)
+        if let alreadyExistingType = try? coreDataStack.mainContext.fetch(req).first {
+            return alreadyExistingType
+        }
+        guard let type = NSEntityDescription.insertNewObject(forEntityName: EntityName.exerciseType.rawValue, into: coreDataStack.mainContext) as? ExerciseType
+        else { return nil }
+        type.name = typeName.rawValue
+        try? coreDataStack.mainContext.save()
+        return type
     }
     
     func fetchExerciseTemplates() -> [ExerciseTemplate]? {

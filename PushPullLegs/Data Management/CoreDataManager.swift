@@ -73,11 +73,16 @@ class CoreDataManager: CoreDataManagement {
     }
     
     private func addExerciseTypes() {
-        guard let typeObjects = try? mainContext.fetch(ExerciseType.fetchRequest()) else { return }
         let etm = exerciseTypeManager()
-        ExerciseTypeName.allCases.forEach { type in
-            guard !typeObjects.contains(where: { $0.name == type.rawValue }) else { return }
-            etm.create(name: type.rawValue)
+        if let typeObjects = try? mainContext.fetch(ExerciseType.fetchRequest()) {
+            ExerciseTypeName.allCases.forEach { type in
+                guard !typeObjects.contains(where: { $0.name == type.rawValue }) else { return }
+                etm.create(name: type.rawValue)
+            }
+        } else {
+            ExerciseTypeName.allCases.forEach { type in
+                etm.create(name: type.rawValue)
+            }
         }
     }
     

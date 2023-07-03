@@ -21,8 +21,11 @@ extension PPLPredicate {
     static func nameIsEqualTo(_ name: String) -> PPLPredicate {
         NSPredicate(format: "name == %@", argumentArray: [name])
     }
+    static func nameIsIn(_ names: [String]) -> PPLPredicate {
+        NSPredicate(format: "name IN %@", argumentArray: [names])
+    }
     static func typeIsEqualTo(_ type: ExerciseTypeName) -> PPLPredicate {
-        NSPredicate(format: "SUBQUERY(types, $type, $type.name == %@).@count > 0", argumentArray: [type])
+        NSPredicate(format: "SUBQUERY(types, $type, $type.name == %@).@count > 0", argumentArray: [type.rawValue])
     }
 }
 

@@ -24,24 +24,27 @@ class WorkoutEditViewModel: WorkoutDataViewModel, ExerciseViewModelDelegate {
     private(set) var startingTime: Date?
     weak var delegate: WorkoutEditViewModelDelegate?
     
-    init(withType type: ExerciseTypeName? = nil, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
-        startingTime = Date()
+    init(withType type: ExerciseTypeName, coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
+        let startingTime = Date.now
         super.init(withCoreDataManagement: coreDataManagement)
-        if let wipType = AppState.shared.workoutInProgress,
-            let workout = workoutManager.previousWorkout(before: startingTime, type: wipType),
-            let workoutName = workout.name {
-            exerciseType = ExerciseTypeName(rawValue: workoutName)
-            workoutId = workout.objectID
-            startingTime = workout.dateCreated
-        } else if let startingTime {
-            exerciseType = type != nil ? type : computeExerciseType()
-            workoutManager.create(name: exerciseType?.rawValue, keyValuePairs: ["dateCreated": startingTime])
-            workoutId = (workoutManager.creation as? Workout)?.objectID
-        }
-        if let exerciseType {
-            exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(exerciseType).sorted(by: exerciseTemplateSorter)
-        }
-        reload()
+        self.exerciseType = type
+        self.startingTime = startingTime
+        self.workoutManager.create(name: exerciseType?.rawValue, keyValuePairs: ["dateCreated": startingTime])
+        self.workoutId = (workoutManager.creation as? Workout)?.objectID
+        self.exercisesToDo = TemplateManagement(coreDataManager: coreDataManagement).exerciseTemplatesForWorkout(type).sorted(by: exerciseTemplateSorter)
+        self.reload()
+    }
+    
+    init(coreDataManagement: CoreDataManagement = CoreDataManager.shared) {
+        super.init(withCoreDataManagement: coreDataManagement)
+        let startingTime = Date.now
+        guard let wipType = AppState.shared.workoutInProgress,
+              let workout = workoutManager.previousWorkout(before: startingTime, type: wipType),
+              let workoutName = workout.name
+        else { return }
+        exerciseType = ExerciseTypeName(rawValue: workoutName)
+        workoutId = workout.objectID
+        self.startingTime = workout.dateCreated
     }
     
     override func sectionCount() -> Int {

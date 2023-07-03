@@ -30,7 +30,7 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     }
     
     func rowCount(section: Int) -> Int {
-        return exercises.count
+        exercises.count
     }
     
     func title(indexPath: IndexPath) -> String? {
@@ -42,7 +42,7 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     }
     
     func isSelected(row: Int) -> Bool {
-        return selectedIndices.contains(row)
+        selectedIndices.contains(row)
     }
     
     func selected(row: Int) {
@@ -70,7 +70,6 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     func reload() {
         if let completedExercises = dataSource?.completedExercises(), let alreadyAddedExercises = templateManagement.exerciseTemplates(withType: exerciseType) {
-            
             exercises = alreadyAddedExercises
                 .filter { $0.name != nil }
                 .filter { !completedExercises.contains($0.name!) }
