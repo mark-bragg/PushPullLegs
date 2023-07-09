@@ -34,9 +34,7 @@ class ExerciseSetViewModel: NSObject {
     
     weak var delegate: ExerciseSetViewModelDelegate?
     weak var setCollector: ExerciseSetCollector?
-    var completedExerciseSet: Bool {
-        return state == .finished
-    }
+    var completedExerciseSet: Bool { state == .finished }
     private var totalTime: Int?
     private var weight: Double?
     private var state: ExerciseSetState

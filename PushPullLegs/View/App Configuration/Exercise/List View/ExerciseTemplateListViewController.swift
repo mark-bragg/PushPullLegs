@@ -17,7 +17,7 @@ class ExerciseTemplateListViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView?.allowsSelection = false
+        reload()
         setupRightBarButtonItems()
     }
     
@@ -31,28 +31,6 @@ class ExerciseTemplateListViewController: PPLTableViewController {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         reload()
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel?.sectionCount?() ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let title = sectionHeaderTitle(section) else {
-            return nil
-        }
-        let headerView = tableHeaderViewContainer(titles: [title], section: section)
-        return headerView
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let height = sectionHeaderTitle(section) != nil ? super.tableView(tableView, heightForHeaderInSection: section) : 0
-        return height
-    }
-    
-    func sectionHeaderTitle(_ section: Int) -> String? {
-        guard let viewModel = viewModel, viewModel.rowCount(section: section) > 0 else { return nil }
-        return exerciseTemplateListViewModel?.titleForSection(section)
     }
     
     override func addAction() {
@@ -111,10 +89,67 @@ class ExerciseTemplateListViewController: PPLTableViewController {
         .delete
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let vm = exerciseTemplateListViewModel?.templateEditViewModel(indexPath: indexPath) else { return }
+        vm.reloader = self
+        let vc = ExerciseTemplateEditViewController()
+        vc.showExerciseType = true
+        vc.viewModel = vm
+        present(vc, animated: true) {
+            tableView.deselectRow(at: indexPath, animated: false)
+        }
+    }
+    
     override func reload() {
         exerciseTemplateListViewModel?.reload()
         tableView?.reloadData()
         super.reload()
     }
+}
+
+class ExerciseTemplateEditViewController: ExerciseTemplateCreationViewController {
+    private var editVM: ExerciseTemplateEditViewModel? { viewModel as? ExerciseTemplateEditViewModel }
     
+    override func loadView() {
+        view = ExerciseTemplateEditView()
+    }
+    
+    override func handleViewDidLayoutSubviews() {
+        guard let editVM else { return }
+        creationView.textField.text = editVM.exerciseName
+        highlightTypes(editVM.originalTypes)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        creationView.saveButton.isEnabled = true
+    }
+}
+
+class ExerciseTemplateEditViewModel: ExerciseTemplateCreationViewModel {
+    private let template: ExerciseTemplate
+    let originalTypes: [ExerciseTypeName]
+    override var titleLabel: String { "Edit Exercise" }
+    
+    init?(template: ExerciseTemplate, management: TemplateManagement) {
+        guard let types = template.types?.allObjects as? [ExerciseType] else { return nil }
+        self.template = template
+        var originalTypes = [ExerciseTypeName]()
+        for type in types {
+            guard let name = type.name, let typeName = ExerciseTypeName(rawValue: name) else { return nil }
+            originalTypes.append(typeName)
+        }
+        self.originalTypes = originalTypes
+        super.init(management: management)
+        for type in types {
+            guard let name = type.name, let typeName = ExerciseTypeName(rawValue: name) else { return nil }
+            super.updateTypesWith(selection: typeName)
+        }
+        self.exerciseName = template.name
+    }
+    
+    override func saveExercise(withName name: String, successCompletion completion: @escaping () -> Void) {
+        management.update(exerciseTemplate: template, with: name, and: exerciseTypes)
+        finishSave(name: name, completion: completion)
+    }
 }

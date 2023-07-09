@@ -68,4 +68,8 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     func noDataText() -> String {
         "No Exercises"
     }
+    
+    func templateEditViewModel(indexPath: IndexPath) -> ExerciseTemplateEditViewModel? {
+        ExerciseTemplateEditViewModel(template: exercises[indexPath.row], management: templateManagement)
+    }
 }
