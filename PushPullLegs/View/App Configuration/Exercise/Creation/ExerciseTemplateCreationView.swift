@@ -8,12 +8,19 @@
 
 import UIKit
 
+class ExerciseTemplateEditView: ExerciseTemplateCreationView {
+    override var showLateralType: Bool { false }
+}
+
 class ExerciseTemplateCreationView: UIView {
+    var title: String? {
+        get { titleLabel.text }
+        set { titleLabel.text = newValue }
+    }
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont.systemFont(ofSize: 27)
         lbl.textAlignment = .center
-        lbl.text = "New Exercise"
         return lbl
     }()
     private lazy var textFieldContainer: UIView = {
@@ -73,6 +80,7 @@ class ExerciseTemplateCreationView: UIView {
     private var parentStackHeight: CGFloat {
         showExerciseType ? 300 : 225
     }
+    var showLateralType: Bool { true }
     private lazy var lateralTypeParentView: UIView = {
         UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: parentStackView.frame.height / 3))
     }()
@@ -83,7 +91,7 @@ class ExerciseTemplateCreationView: UIView {
     init(showExerciseType: Bool = true) {
         self.showExerciseType = showExerciseType
         super.init(frame: .zero)
-        backgroundColor = .primary
+        backgroundColor = .secondary
     }
     
     @available(*, unavailable)
@@ -159,21 +167,9 @@ class ExerciseTemplateCreationView: UIView {
     }
     
     private func newButtonForType(_ type: ExerciseTypeName) -> ExerciseTypeButton {
-        let btn = ExerciseTypeButton()
-        btn.setTitle(type.rawValue, for: .normal)
-        btn.exerciseType = type
-        btn.setBackgroundColor(color: .black, forState: .highlighted)
-        btn.setBackgroundColor(color: .quaternary, forState: .normal)
+        let btn = ExerciseTypeButton(exerciseType: type)
         typeSelectionStackView?.addArrangedSubview(btn)
         return btn
-    }
-    
-    private func setupLateralTypeSegmentedControl() {
-        let segmentedControl = UISegmentedControl.PPLSegmentedControl(titles: ["Bilateral", "Unilateral"])
-        lateralTypeParentView.addSubview(segmentedControl)
-        lateralTypeSegmentedControl = segmentedControl
-        segmentedControl.selectedSegmentIndex = 0
-        constrainSegmentedControl(segmentedControl)
     }
     
     private func setButton(_ button: ExerciseTypeButton) {
@@ -186,13 +182,26 @@ class ExerciseTemplateCreationView: UIView {
             legsButton = button
         case .arms:
             armsButton = button
-        default:
-            break
+        }
+    }
+    
+    func highlight(types: [ExerciseTypeName]) {
+        for type in ExerciseTypeName.allCases {
+            button(for: type)?.isHighlighted = types.contains { $0 == type }
         }
     }
     
     func button(for type: ExerciseTypeName) -> ExerciseTypeButton? {
         typeButtons.first(where: { $0?.exerciseType == type }) ?? nil
+    }
+    
+    private func setupLateralTypeSegmentedControl() {
+        guard showLateralType else { return }
+        let segmentedControl = UISegmentedControl.PPLSegmentedControl(titles: ["Bilateral", "Unilateral"])
+        lateralTypeParentView.addSubview(segmentedControl)
+        lateralTypeSegmentedControl = segmentedControl
+        segmentedControl.selectedSegmentIndex = 0
+        constrainSegmentedControl(segmentedControl)
     }
     
     private func constrainSegmentedControl(_ segCon: UISegmentedControl) {

@@ -15,7 +15,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
             isSaveEnabled = exerciseNameIsValid(exerciseName)
         }
     }
-    private var management: TemplateManagement
+    let management: TemplateManagement
     private var preSetType: Bool = false
     var reloader: ReloadProtocol?
     @Published private(set) var isSaveEnabled: Bool = false
@@ -25,9 +25,8 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
         }
     }
     var lateralType: LateralType = .bilateral
-    private var isUnilateral: Bool {
-        lateralType == .unilateral
-    }
+    var isUnilateral: Bool { lateralType == .unilateral }
+    var titleLabel: String { "New Exercise" }
     
     init(withType type: ExerciseTypeName? = nil, management: TemplateManagement) {
         self.exerciseTypes = type != nil ? [type!] : []
@@ -43,13 +42,9 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
         exerciseTypes.contains(type)
     }
     
-    func saveExercise(withName name: String, successCompletion completion: () -> Void) {
+    func saveExercise(withName name: String, successCompletion completion: @escaping () -> Void) {
         guard saveExerciseTemplate(name) else { return }
-        if let exerciseTemplate = management.exerciseTemplate(name: name), preSetType {
-            management.addToWorkout(exercise: exerciseTemplate)
-        }
-        completion()
-        reloader?.reload()
+        finishSave(name: name, completion: completion)
     }
     
     private func saveExerciseTemplate(_ name: String) -> Bool {
@@ -60,6 +55,14 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
             return false
         }
         return true
+    }
+    
+    func finishSave(name: String, completion: @escaping () -> Void) {
+        if let exerciseTemplate = management.exerciseTemplate(name: name), preSetType {
+            management.addToWorkout(exercise: exerciseTemplate)
+        }
+        completion()
+        reloader?.reload()
     }
     
     private func exerciseNameIsValid(_ name: String?) -> Bool {

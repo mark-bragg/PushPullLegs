@@ -33,7 +33,7 @@ class TemplateManagement {
         try? coreDataManager.mainContext.save()
     }
     
-    private func getExerciseTypes(_ typeNames: [ExerciseTypeName]) -> [ExerciseType] {
+    func getExerciseTypes(_ typeNames: [ExerciseTypeName] = ExerciseTypeName.allCases) -> [ExerciseType] {
         let typeNameStrings = typeNames.map { $0.rawValue }
         let req = ExerciseType.fetchRequest()
         req.predicate = NSPredicate(format: "name IN %@", argumentArray: [typeNameStrings])
@@ -95,18 +95,19 @@ class TemplateManagement {
     }
     
     func addToWorkout(exercise: ExerciseTemplate) {
-        guard
-            let exerciseType = exercise.types?.anyObject() as? ExerciseType,
-            let type = ExerciseTypeName.create(exerciseType),
-            let workout = workoutTemplate(type: type),
-            let exerciseName = exercise.name
-        else { return }
-        if workout.exerciseNames == nil {
-            workout.exerciseNames = []
+        guard let exerciseTypes = exercise.types?.allObjects as? [ExerciseType] else { return }
+        for exerciseType in exerciseTypes {
+            guard
+                let type = ExerciseTypeName.create(exerciseType),
+                let workout = workoutTemplate(type: type),
+                let exerciseName = exercise.name
+            else { return }
+            if workout.exerciseNames == nil {
+                workout.exerciseNames = []
+            }
+            workout.exerciseNames?.append(exerciseName)
+            try? coreDataManager.mainContext.save()
         }
-        exercise.addToTypes(exerciseType)
-        workout.exerciseNames?.append(exerciseName)
-        try? coreDataManager.mainContext.save()
     }
     
     func removeFromWorkout(exercise: ExerciseTemplate) {
@@ -133,7 +134,18 @@ class TemplateManagement {
         let nameIsInPred = PPLPredicate.nameIsIn(exerciseNames)
         req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [typeIsInPred, nameIsInPred])
         return (try? coreDataManager.mainContext.fetch(req) as? [ExerciseTemplate]) ?? []
-     }
+    }
+    
+    func update(exerciseTemplate: ExerciseTemplate, with name: String, and types: [ExerciseTypeName]) {
+        exerciseTemplate.name = name
+        for type in getExerciseTypes(ExerciseTypeName.allCases) {
+            exerciseTemplate.removeFromTypes(type)
+        }
+        for type in getExerciseTypes(types) {
+            exerciseTemplate.addToTypes(type)
+        }
+        try? coreDataManager.mainContext.save()
+    }
     
     private func exerciseWriter() -> ExerciseDataManager {
         let edm = ExerciseDataManager(context: coreDataManager.mainContext)
