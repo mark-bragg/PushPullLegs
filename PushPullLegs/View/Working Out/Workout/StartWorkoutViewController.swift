@@ -28,7 +28,6 @@ class StartWorkoutViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        #if !DEBUG
         presentSplash()
         hidesBottomBarWhenPushed = false
         if let wipType = AppState.shared.workoutInProgress {
@@ -40,7 +39,6 @@ class StartWorkoutViewController: PPLTableViewController {
             setTableViewY(0)
         }
         tableView?.isScrollEnabled = false
-        #endif
     }
     
     func presentSplash() {
