@@ -42,7 +42,7 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
         sut.reloader = self
         sut.lateralType = unilateral ? .unilateral : .bilateral
         sut.saveExercise(withName: "testing") {
-            expectationCompletion?.fulfill()
+            self.expectationCompletion?.fulfill()
         }
         wait(for: [expectationCompletion!, expectationReload!], timeout: 60)
         guard let temps = dbHelper.fetchExerciseTemplates(),
@@ -70,7 +70,7 @@ class ExerciseTemplateCreationViewModelTests: XCTestCase, ReloadProtocol {
         expectationReload = XCTestExpectation(description: "save exercise template reload delegate")
         sut.reloader = self
         sut.saveExercise(withName: "testing") {
-            expectationCompletion?.fulfill()
+            self.expectationCompletion?.fulfill()
         }
         wait(for: [expectationCompletion!, expectationReload!], timeout: 60)
         guard let temps = dbHelper.fetchExerciseTemplates(),
