@@ -68,18 +68,20 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let exerciseType = tableView.cellForRow(at: indexPath)?.exerciseType() else { return }
-        if let del = delegate {
-            del.workoutSelectedWithType(exerciseType)
+        exerciseType = tableView.cellForRow(at: indexPath)?.exerciseType()
+        if let del = delegate, let type = exerciseType {
+            del.workoutSelectedWithType(type)
         } else {
-            navigateToNextWorkout(exerciseType)
+            navigateToNextWorkout()
+            exerciseType = nil
         }
     }
     
-    func navigateToNextWorkout(_ type: ExerciseTypeName) {
+    func navigateToNextWorkout() {
+        guard let exerciseType else { return }
         didNavigateToWorkout = true
         let vc = WorkoutViewController()
-        vc.viewModel = WorkoutEditViewModel(withType: type)
+        vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
         vc.$popped.sink { (popped) in
             PPLDefaults.instance.setWorkoutInProgress(nil)
         }.store(in: &cancellables)
