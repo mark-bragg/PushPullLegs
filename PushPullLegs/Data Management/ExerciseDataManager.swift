@@ -108,6 +108,14 @@ class ExerciseDataManager: DataManager {
         request.sortDescriptors = [NSSortDescriptor.dateCreated]
         return (try? context.fetch(request) as? [Exercise])?.first
     }
+    
+    func change(exerciseName oldName: String, to newName: String) {
+        guard let entityNameString else { return }
+        let request = NSBatchUpdateRequest(entityName: entityNameString)
+        request.predicate = PPLPredicate.nameIsEqualTo(oldName)
+        request.propertiesToUpdate = ["name": newName]
+        _ = try? context.execute(request)
+    }
 }
 
 enum NilReferenceError: Error {
