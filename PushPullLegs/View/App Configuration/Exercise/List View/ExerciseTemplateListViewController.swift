@@ -151,7 +151,13 @@ class ExerciseTemplateEditViewModel: ExerciseTemplateCreationViewModel {
     override func saveExercise(withName name: String, successCompletion completion: @escaping () -> Void) {
         guard let ogName = template.name else { return }
         management.update(exerciseTemplate: template, with: name, and: exerciseTypes)
-        ExerciseDataManager().change(exerciseName: ogName, to: name)
+        if ogName != name {
+            ExerciseDataManager().change(exerciseName: ogName, to: name)
+        }
         finishSave(name: name, completion: completion)
+    }
+    
+    override func nameConflictExists(_ newName: String) -> Bool {
+        false
     }
 }

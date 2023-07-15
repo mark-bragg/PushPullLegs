@@ -21,7 +21,11 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     @Published private(set) var isSaveEnabled: Bool = false
     @Published var exerciseName: String? {
         willSet {
-            isSaveEnabled = isTypeSelected() && exerciseNameIsValid(newValue)
+            guard let newValue else {
+                isSaveEnabled = false
+                return
+            }
+            isSaveEnabled = isTypeSelected() && exerciseNameIsValid(newValue) && !nameConflictExists(newValue)
         }
     }
     var lateralType: LateralType = .bilateral
@@ -66,8 +70,13 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     }
     
     private func exerciseNameIsValid(_ name: String?) -> Bool {
-        guard let name = name?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) else { return false }
-        return name != "" && management.exerciseTemplate(name: name) == nil
+        guard let name = name?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        else { return false }
+        return name != ""
+    }
+    
+    func nameConflictExists(_ newName: String) -> Bool {
+         management.exerciseTemplate(name: newName) != nil
     }
     
     func updateTypesWith(selection: ExerciseTypeName) {
