@@ -32,6 +32,7 @@ class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
         
         for key in dInstance.entity.attributesByName.keys {
             guard let value = sourceValues[key] else { continue }
+            if let value = value as? NSNull { continue }
             dInstance.setValue(value, forKey: key)
         }
 
