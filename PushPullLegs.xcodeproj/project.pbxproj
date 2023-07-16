@@ -79,6 +79,7 @@
 		49ABAC9D25F44E3500517F6F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ABAC9C25F44E3500517F6F /* SoundManager.swift */; };
 		49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACA225F45BEF00517F6F /* countdown.m4a */; };
 		49ABACBC25F463C700517F6F /* start.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACAF25F45CE700517F6F /* start.m4a */; };
+		49AD6EC02A645CCE0037DD30 /* MappingModel13.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49AD6EBF2A645CCE0037DD30 /* MappingModel13.xcmappingmodel */; };
 		49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF0D20259D23D2003F8C60 /* BannerAdController.swift */; };
 		49BA7A2A296355F600C14F1F /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */; };
 		49BA7A2C2963561800C14F1F /* StartExerciseLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */; };
@@ -230,6 +231,8 @@
 		49ABAC9C25F44E3500517F6F /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		49ABACA225F45BEF00517F6F /* countdown.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = countdown.m4a; sourceTree = "<group>"; };
 		49ABACAF25F45CE700517F6F /* start.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.m4a; sourceTree = "<group>"; };
+		49AD6EBE2A645A880037DD30 /* PushPullLegs 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PushPullLegs 3.xcdatamodel"; sourceTree = "<group>"; };
+		49AD6EBF2A645CCE0037DD30 /* MappingModel13.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModel13.xcmappingmodel; sourceTree = "<group>"; };
 		49AF0D20259D23D2003F8C60 /* BannerAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdController.swift; sourceTree = "<group>"; };
 		49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTimerView.swift; sourceTree = "<group>"; };
 		49BA7A2B2963561800C14F1F /* StartExerciseLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartExerciseLabel.swift; sourceTree = "<group>"; };
@@ -915,6 +918,7 @@
 			children = (
 				49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */,
 				49FB6F432A50EE12006E7839 /* MappingModel12.xcmappingmodel */,
+				49AD6EBF2A645CCE0037DD30 /* MappingModel13.xcmappingmodel */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -1176,6 +1180,7 @@
 				490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */,
 				49BA7AAF297DCA7400C14F1F /* GraphData.swift in Sources */,
 				4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */,
+				49AD6EC02A645CCE0037DD30 /* MappingModel13.xcmappingmodel in Sources */,
 				49BA7AAB297DC98200C14F1F /* GraphView.swift in Sources */,
 				49E675FA244CDA54001F5974 /* ExerciseTemplateSelectionViewController.swift in Sources */,
 				49565A2D26B9FF1400F13E44 /* WorkoutNoteViewController.swift in Sources */,
@@ -1706,10 +1711,11 @@
 		49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				49AD6EBE2A645A880037DD30 /* PushPullLegs 3.xcdatamodel */,
 				49FB6F3A2A50E0CD006E7839 /* PushPullLegs 2.xcdatamodel */,
 				49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */,
 			);
-			currentVersion = 49FB6F3A2A50E0CD006E7839 /* PushPullLegs 2.xcdatamodel */;
+			currentVersion = 49AD6EBE2A645A880037DD30 /* PushPullLegs 3.xcdatamodel */;
 			path = PushPullLegs.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
