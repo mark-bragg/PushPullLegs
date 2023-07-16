@@ -16,19 +16,26 @@ enum EntityName: String {
     case unilateralExerciseSet = "UnilateralExerciseSet"
     case workoutTemplate = "WorkoutTemplate"
     case exerciseTemplate = "ExerciseTemplate"
+    case exerciseType = "ExerciseType"
 }
 
-enum ExerciseType: String {
+enum ExerciseTypeName: String, CaseIterable {
     case push = "Push"
     case pull = "Pull"
     case legs = "Legs"
-    case error = "EXERCISE TYPE ERROR"
+    case arms = "Arms"
+    
+    static func create(_ type: ExerciseType) -> ExerciseTypeName? {
+        guard let name = type.name else { return nil }
+        return ExerciseTypeName(rawValue: name)
+    }
 }
 
 enum TemplateError: Error {
     case duplicateWorkout
     case duplicateExercise
     case missingExercise
+    case failedToCreateExercise
 }
 
 extension Exercise {

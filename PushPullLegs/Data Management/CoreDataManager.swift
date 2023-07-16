@@ -34,6 +34,7 @@ class CoreDataManager: CoreDataManagement {
         self.storeType = storeType
         loadPersistentStore { [weak self] in
             self?.addWorkouts()
+            self?.addExerciseTypes()
             self?.cleanupUncascadedObjects()
             completion?()
         }
@@ -64,12 +65,31 @@ class CoreDataManager: CoreDataManagement {
     
     private func addWorkouts() {
         let mgmt = TemplateManagement(coreDataManager: self)
-        guard Array.emptyOrNil(mgmt.workoutTemplates()) else {
-            return
+        let templates = mgmt.workoutTemplates() ?? []
+        ExerciseTypeName.allCases.forEach { type in
+            guard !templates.contains(where: { $0.name == type.rawValue }) else { return }
+            try? mgmt.addWorkoutTemplate(type: type)
         }
-        try? mgmt.addWorkoutTemplate(type: .push)
-        try? mgmt.addWorkoutTemplate(type: .pull)
-        try? mgmt.addWorkoutTemplate(type: .legs)
+    }
+    
+    private func addExerciseTypes() {
+        let etm = exerciseTypeManager()
+        if let typeObjects = try? mainContext.fetch(ExerciseType.fetchRequest()) {
+            ExerciseTypeName.allCases.forEach { type in
+                guard !typeObjects.contains(where: { $0.name == type.rawValue }) else { return }
+                etm.create(name: type.rawValue)
+            }
+        } else {
+            ExerciseTypeName.allCases.forEach { type in
+                etm.create(name: type.rawValue)
+            }
+        }
+    }
+    
+    private func exerciseTypeManager() -> DataManager {
+        let dm = DataManager()
+        dm.entityName = EntityName.exerciseType
+        return dm
     }
     
     private func cleanupUncascadedObjects() {

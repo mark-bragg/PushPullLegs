@@ -226,7 +226,7 @@ class WorkoutDataManagerTests : XCTestCase {
     }
     
     func testGetLastWorkoutType_noWorkoutsSaved_nilReturned() {
-        XCTAssert(sut.getLastWorkoutType() == .error)
+        XCTAssertNil(sut.getLastWorkoutType())
     }
     
     func testGetLastWorkoutType_onePushSaved_pushReturned() {
@@ -237,7 +237,7 @@ class WorkoutDataManagerTests : XCTestCase {
     }
     
     func testGetLastWorkoutType_onePushOnePullSaved_pullReturned() {
-        for type in [ExerciseType.push, ExerciseType.pull] {
+        for type in [ExerciseTypeName.push, ExerciseTypeName.pull] {
             let workout = dbHelper.createWorkout(name: type)
             workout.dateCreated = Date()
         }
@@ -246,7 +246,7 @@ class WorkoutDataManagerTests : XCTestCase {
     }
     
     func testGetLastWorkoutType_onePushOnePullOneLegsSaved_pullReturned() {
-        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs] {
+        for type in [ExerciseTypeName.push, ExerciseTypeName.pull, ExerciseTypeName.legs] {
             let workout = dbHelper.createWorkout(name: type)
             workout.dateCreated = Date()
         }
@@ -255,7 +255,7 @@ class WorkoutDataManagerTests : XCTestCase {
     }
     
     func testGetLastWorkoutType_PushPullLegsPushSaved_pushReturned() {
-        for type in [ExerciseType.push, ExerciseType.pull, ExerciseType.legs, ExerciseType.push] {
+        for type in [ExerciseTypeName.push, ExerciseTypeName.pull, ExerciseTypeName.legs, ExerciseTypeName.push] {
             let workout = dbHelper.createWorkout(name: type)
             workout.dateCreated = Date()
         }
@@ -284,32 +284,32 @@ class WorkoutDataManagerTests : XCTestCase {
         var workouts = sut.workouts(ascending: false, types: [.push])
         XCTAssert(workouts.count == 10)
         for wkt in workouts {
-            XCTAssert(wkt.name == ExerciseType.push.rawValue)
+            XCTAssert(wkt.name == ExerciseTypeName.push.rawValue)
         }
         workouts = sut.workouts(ascending: false, types: [.pull])
         XCTAssert(workouts.count == 10)
         for wkt in workouts {
-            XCTAssert(wkt.name == ExerciseType.pull.rawValue)
+            XCTAssert(wkt.name == ExerciseTypeName.pull.rawValue)
         }
         workouts = sut.workouts(ascending: false, types: [.legs])
         XCTAssert(workouts.count == 10)
         for wkt in workouts {
-            XCTAssert(wkt.name == ExerciseType.legs.rawValue)
+            XCTAssert(wkt.name == ExerciseTypeName.legs.rawValue)
         }
         workouts = sut.workouts(ascending: false, types: [.push, .pull])
         XCTAssert(workouts.count == 20)
         for wkt in workouts {
-            XCTAssert(wkt.name == ExerciseType.push.rawValue || wkt.name == ExerciseType.pull.rawValue)
+            XCTAssert(wkt.name == ExerciseTypeName.push.rawValue || wkt.name == ExerciseTypeName.pull.rawValue)
         }
         workouts = sut.workouts(ascending: false, types: [.pull, .legs])
         XCTAssert(workouts.count == 20)
         for wkt in workouts {
-            XCTAssert(wkt.name == ExerciseType.pull.rawValue || wkt.name == ExerciseType.legs.rawValue)
+            XCTAssert(wkt.name == ExerciseTypeName.pull.rawValue || wkt.name == ExerciseTypeName.legs.rawValue)
         }
         workouts = sut.workouts(ascending: false, types: [.push, .pull, .legs])
         XCTAssert(workouts.count == 30)
         for wkt in workouts {
-            XCTAssert(wkt.name == ExerciseType.push.rawValue || wkt.name == ExerciseType.pull.rawValue || wkt.name == ExerciseType.legs.rawValue)
+            XCTAssert(wkt.name == ExerciseTypeName.push.rawValue || wkt.name == ExerciseTypeName.pull.rawValue || wkt.name == ExerciseTypeName.legs.rawValue)
         }
     }
     

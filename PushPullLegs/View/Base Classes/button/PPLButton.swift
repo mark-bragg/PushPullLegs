@@ -9,17 +9,22 @@
 import Foundation
 import UIKit
 
-class ExerciseTypeButton : UIButton {
-    var exerciseType: ExerciseType? = nil
+class ExerciseTypeButton : UILabel {
+    let exerciseType: ExerciseTypeName
+    override var isHighlighted: Bool {
+        didSet { backgroundColor = isHighlighted ? .black : .quaternary }
+    }
     
-    func setBackgroundColor(color: UIColor, forState: UIControl.State) {
-        let size = CGSize(width: 1, height: 1)
-        UIGraphicsBeginImageContext(size)
-        let context = UIGraphicsGetCurrentContext()
-        context?.setFillColor(color.cgColor)
-        context?.fill(CGRect(origin: CGPoint.zero, size: size))
-        let colorImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        setBackgroundImage(colorImage, for: forState)
+    init(exerciseType: ExerciseTypeName) {
+        self.exerciseType = exerciseType
+        super.init(frame: .zero)
+        text = exerciseType.rawValue
+        textAlignment = .center
+        isHighlighted = false
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

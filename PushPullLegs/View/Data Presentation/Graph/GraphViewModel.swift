@@ -11,7 +11,7 @@ import UIKit
 import Combine
 
 class GraphViewModel: NSObject, ObservableObject {
-    private(set) var type: ExerciseType
+    private(set) var type: ExerciseTypeName
     private var workoutDataManager: WorkoutDataManager
     private var exerciseDataManager: ExerciseDataManager
     @Published var data: GraphData = GraphData(name: "", points: [], exerciseNames: [])
@@ -19,7 +19,7 @@ class GraphViewModel: NSObject, ObservableObject {
         !data.points.isEmpty
     }
     
-    init(type: ExerciseType, workoutDataManager: WorkoutDataManager = WorkoutDataManager(), exerciseDataManager: ExerciseDataManager = ExerciseDataManager()) {
+    init(type: ExerciseTypeName, workoutDataManager: WorkoutDataManager = WorkoutDataManager(), exerciseDataManager: ExerciseDataManager = ExerciseDataManager()) {
         self.type = type
         self.workoutDataManager = workoutDataManager
         self.exerciseDataManager = exerciseDataManager
@@ -45,7 +45,7 @@ struct GraphPointDTO {
 }
 
 class GraphDataManager {
-    static func calculateWorkoutData(_ dm: WorkoutDataManager = WorkoutDataManager(), type: ExerciseType) -> GraphData {
+    static func calculateWorkoutData(_ dm: WorkoutDataManager = WorkoutDataManager(), type: ExerciseTypeName) -> GraphData {
         let workouts = dm.workouts(ascending: true, types: [type])
             .map { GraphPointDTO(volume: $0.volume(), dateCreated: $0.dateCreated) }
         return graphData(workouts, type: type, name: type.rawValue)
@@ -55,12 +55,12 @@ class GraphDataManager {
         guard
             let exercises = try? edm.exercises(name: name),
             let workoutName = exercises.first?.workout?.name,
-            let type = ExerciseType(rawValue: workoutName)
+            let type = ExerciseTypeName(rawValue: workoutName)
         else { return nil }
         return graphData(exercises.map({ GraphPointDTO(volume: $0.volume(), dateCreated: $0.workout?.dateCreated) }), type: type, name: name, excludedName: name)
     }
     
-    private static func graphData(_ dto: [GraphPointDTO], type: ExerciseType, name: String, excludedName: String? = nil) -> GraphData {
+    private static func graphData(_ dto: [GraphPointDTO], type: ExerciseTypeName, name: String, excludedName: String? = nil) -> GraphData {
         var data = [GraphDataPoint]()
         for datum in dto {
             if let date = datum.dateCreated {
@@ -70,7 +70,7 @@ class GraphDataManager {
         return GraphData(name: name, points: data, exerciseNames: GraphDataManager.getExerciseNames(type: type, excluding: excludedName))
     }
     
-    private static func getExerciseNames(_ edm: ExerciseDataManager = ExerciseDataManager(), type: ExerciseType, excluding name: String? = nil) -> [String] {
+    private static func getExerciseNames(_ edm: ExerciseDataManager = ExerciseDataManager(), type: ExerciseTypeName, excluding name: String? = nil) -> [String] {
         guard let temps = TemplateManagement().exerciseTemplates(withType: type) else { return [] }
         return temps.filter {
             $0.name != nil && $0.name != ""

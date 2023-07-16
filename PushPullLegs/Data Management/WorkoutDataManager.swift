@@ -50,10 +50,10 @@ class WorkoutDataManager: DataManager {
         }
     }
     
-    func getLastWorkoutType() -> ExerciseType? {
-        var type: ExerciseType = .error
+    func getLastWorkoutType() -> ExerciseTypeName? {
+        var type: ExerciseTypeName?
         context.performAndWait {
-            type = ExerciseType(rawValue: fetchLatestWorkout()?.name ?? "") ?? .error
+            type = ExerciseTypeName(rawValue: fetchLatestWorkout()?.name ?? "")
         }
         return type
     }
@@ -74,7 +74,7 @@ class WorkoutDataManager: DataManager {
         return nil
     }
     
-    func previousWorkout(before date: Date?, type: ExerciseType?) -> Workout? {
+    func previousWorkout(before date: Date?, type: ExerciseTypeName?) -> Workout? {
         guard let entityNameString, let type else { return nil }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
@@ -100,7 +100,7 @@ class WorkoutDataManager: DataManager {
         return nil
     }
     
-    func workouts(ascending: Bool = false, types: [ExerciseType] = [.push, .pull, .legs]) -> [Workout] {
+    func workouts(ascending: Bool = false, types: [ExerciseTypeName] = ExerciseTypeName.allCases) -> [Workout] {
         guard let entityNameString else { return [] }
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         req.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
@@ -118,7 +118,7 @@ class WorkoutDataManager: DataManager {
         return []
     }
     
-    func workouts(ascending: Bool = false, types: [ExerciseType] = [.push, .pull, .legs], initialDate: Date? = nil, finalDate: Date? = nil) -> [Workout] {
+    func workouts(ascending: Bool = false, types: [ExerciseTypeName] = ExerciseTypeName.allCases, initialDate: Date? = nil, finalDate: Date? = nil) -> [Workout] {
         guard let entityNameString else { return [] }
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         req.sortDescriptors = [WorkoutSortDescriptor.dateCreated]
@@ -140,7 +140,7 @@ class WorkoutDataManager: DataManager {
         return []
     }
     
-    func exercises(type: ExerciseType, name: String) -> [Exercise] {
+    func exercises(type: ExerciseTypeName, name: String) -> [Exercise] {
         guard let entityNameString else { return [] }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityNameString)
         request.predicate = NSPredicate(format: "name = %@", argumentArray: [type.rawValue])

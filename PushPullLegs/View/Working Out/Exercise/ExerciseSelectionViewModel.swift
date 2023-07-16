@@ -16,12 +16,12 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     private var exercises = [ExerciseTemplate]()
     private var selectedIndices = [Int]()
-    let exerciseType: ExerciseType
+    let exerciseType: ExerciseTypeName
     private var templateManagement: TemplateManagement
     var multiSelect: Bool = true
     weak var dataSource: ExerciseSelectionViewModelDataSource?
     
-    init(withType type: ExerciseType, templateManagement: TemplateManagement, dataSource: ExerciseSelectionViewModelDataSource? = nil) {
+    init(withType type: ExerciseTypeName, templateManagement: TemplateManagement, dataSource: ExerciseSelectionViewModelDataSource? = nil) {
         self.templateManagement = templateManagement
         exerciseType = type
         super.init()
@@ -30,7 +30,7 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     }
     
     func rowCount(section: Int) -> Int {
-        return exercises.count
+        exercises.count
     }
     
     func title(indexPath: IndexPath) -> String? {
@@ -42,7 +42,7 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     }
     
     func isSelected(row: Int) -> Bool {
-        return selectedIndices.contains(row)
+        selectedIndices.contains(row)
     }
     
     func selected(row: Int) {
@@ -70,7 +70,6 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     func reload() {
         if let completedExercises = dataSource?.completedExercises(), let alreadyAddedExercises = templateManagement.exerciseTemplates(withType: exerciseType) {
-            
             exercises = alreadyAddedExercises
                 .filter { $0.name != nil }
                 .filter { !completedExercises.contains($0.name!) }

@@ -51,7 +51,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     var previousExercise: Exercise? {
         guard
             let exerciseName,
-            let type = ExerciseType(rawValue: type ?? "")
+            let type = ExerciseTypeName(rawValue: type ?? "")
         else { return nil }
         let workouts = WorkoutDataManager().workouts(ascending: false, types: [type])
         for workout in workouts {
@@ -77,7 +77,9 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     init(withDataManager dataManager: ExerciseDataManager = ExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
         exerciseName = exerciseTemplate.name
-        type = exerciseTemplate.type
+        if let exerciseType = exerciseTemplate.types?.anyObject() as? ExerciseType, let rawValue = exerciseType.name {
+            type = ExerciseTypeName(rawValue: rawValue)?.rawValue
+        }
         super.init()
         exerciseManager = dataManager
     }
@@ -93,7 +95,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func isFirstTimePerformingExercise() -> Bool {
         guard
-            let type = ExerciseType(rawValue: exercise?.workout?.name ?? ""),
+            let type = ExerciseTypeName(rawValue: exercise?.workout?.name ?? ""),
             let currentWorkout = exercise?.workout,
             let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
             let exercises = previousWorkout.exercises?.array as? [Exercise]
@@ -129,7 +131,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     
     func previousVolume() -> Double {
         guard
-            let type = ExerciseType(rawValue: exercise?.workout?.name ?? ""),
+            let type = ExerciseTypeName(rawValue: exercise?.workout?.name ?? ""),
             let currentWorkout = exercise?.workout,
             let previousWorkout = WorkoutDataManager().previousWorkout(before: currentWorkout.dateCreated, type: type),
             let previousExercises = previousWorkout.exercises?.array as? [Exercise],
@@ -250,18 +252,30 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
 extension ExerciseSet {
     func volume() -> Double {
         let weight = weight * (PPLDefaults.instance.isKilograms() ? 2.20462 : 1)
-        return weight * reps * averageRepDuration()
+        return weight * reps * log(base: 4, value: Double(duration))
     }
     
     func averageRepDuration() -> Double {
-        Double(duration) / reps
+        guard reps > 0 else { return 0 }
+        return Double(duration) / reps
     }
+}
+
+extension Double {
+    var durationLog: Double {
+        log(base: 4, value: self)
+    }
+}
+
+func log(base: Double, value: Double) -> Double {
+    guard base > 0 && value > 0 else { return 0 }
+    return log(value) / log(base)
 }
 
 extension Double {
     func truncateIfNecessary() -> Double {
         let digitCount = "\(Int(self))".count
-        guard digitCount < 4
+        guard digitCount < 3
         else { return self }
         let decimalCount = digitCount < 3 ? 2 : 1
         return Double(String(format: "%.\(decimalCount)f", self)) ?? 0

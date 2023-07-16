@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 
 class WorkoutLogViewModel: DatabaseViewModel {
+    var selectedIndex: Int?
     let formatter = DateFormatter()
     static var ascending = false
     weak var reloader: ReloadProtocol?
@@ -30,11 +31,11 @@ class WorkoutLogViewModel: DatabaseViewModel {
     }
     
     override func rowCount(section: Int) -> Int {
-        return dbObjects.count
+        dbObjects.count
     }
     
     func title() -> String? {
-        return "Workout Log"
+        "Workout Log"
     }
     
     override func title(indexPath: IndexPath) -> String? {
@@ -51,7 +52,7 @@ class WorkoutLogViewModel: DatabaseViewModel {
     }
     
     func tableHeaderTitles() -> [String] {
-        return ["Name", "Date"]
+        ["Name", "Date"]
     }
     
     override func objectDeleted(_ object: NSManagedObject) {

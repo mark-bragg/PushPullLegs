@@ -27,9 +27,7 @@ protocol ExerciseTemplateListViewModelDelegate {
 class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
     let templateManagement: TemplateManagement
-    private var pushExercises = [ExerciseTemplate]()
-    private var pullExercises = [ExerciseTemplate]()
-    private var legsExercises = [ExerciseTemplate]()
+    private lazy var exercises = [ExerciseTemplate]()
     var delegate: ExerciseTemplateListViewModelDelegate?
     
     init(withTemplateManagement mgmt: TemplateManagement) {
@@ -39,32 +37,23 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
     }
     
     func rowCount(section: Int) -> Int {
-        return exercisesForSection(section).count
+        exercises.count
     }
     
     func title() -> String? {
-        return "Exercises"
+        "Exercises"
     }
     
     func sectionCount() -> Int {
-        return 3
+        1
     }
     
     func title(indexPath: IndexPath) -> String? {
-        exercisesForSection(indexPath.section)[indexPath.row].name
+        exercises[indexPath.row].name
     }
     
     func titleForSection(_ section: Int) -> String? {
-        switch section {
-        case 0:
-            return ExerciseType.push.rawValue
-        case 1:
-            return ExerciseType.pull.rawValue
-        case 2:
-            return ExerciseType.legs.rawValue
-        default:
-            return ExerciseType.error.rawValue
-        }
+        ExerciseTypeName.allCases[section].rawValue
     }
     
     func deleteExercise(indexPath: IndexPath) {
@@ -72,26 +61,15 @@ class ExerciseTemplateListViewModel: NSObject, PPLTableViewModel, ReloadProtocol
         templateManagement.deleteExerciseTemplate(name: name)
     }
     
-    private func exercisesForSection(_ section: Int) -> [ExerciseTemplate] {
-        switch section {
-        case 0:
-            return pushExercises
-        case 1:
-            return pullExercises
-        case 2:
-            return legsExercises
-        default:
-            return []
-        }
-    }
-    
     func reload() {
-        pushExercises = templateManagement.exerciseTemplates(withType: .push)?.sorted(by: exerciseTemplateSorter) ?? []
-        pullExercises = templateManagement.exerciseTemplates(withType: .pull)?.sorted(by: exerciseTemplateSorter) ?? []
-        legsExercises = templateManagement.exerciseTemplates(withType: .legs)?.sorted(by: exerciseTemplateSorter) ?? []
+        exercises = templateManagement.exerciseTemplates()?.sorted(by: exerciseTemplateSorter) ?? []
     }
     
     func noDataText() -> String {
         "No Exercises"
+    }
+    
+    func templateEditViewModel(indexPath: IndexPath) -> ExerciseTemplateEditViewModel? {
+        ExerciseTemplateEditViewModel(template: exercises[indexPath.row], management: templateManagement)
     }
 }

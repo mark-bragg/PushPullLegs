@@ -72,14 +72,14 @@ class PPLDefaults: NSObject {
         userDetails?.string(forKey: kWorkoutInProgress) != nil
     }
     
-    func workoutInProgress() -> ExerciseType? {
+    func workoutInProgress() -> ExerciseTypeName? {
         if let typeString = userDetails?.string(forKey: kWorkoutInProgress) {
-            return ExerciseType(rawValue: typeString)
+            return ExerciseTypeName(rawValue: typeString)
         }
         return nil
     }
     
-    func setWorkoutInProgress(_ value: ExerciseType?) {
+    func setWorkoutInProgress(_ value: ExerciseTypeName?) {
         let typeString = value?.rawValue
         userDetails?.set(typeString, forKey: kWorkoutInProgress)
     }
@@ -116,7 +116,7 @@ class PPLDefaults: NSObject {
     }
     
     func isAdvertisingEnabled() -> Bool {
-        userDetails?.bool(forKey: kIsAdsEnabled) ?? false
+        false // userDetails?.bool(forKey: kIsAdsEnabled) ?? false
     }
     
     func disableAds() {
@@ -148,10 +148,7 @@ class PPLDefaults: NSObject {
     }
     
     func launchCount() -> Int {
-        guard let count = userDetails?.value(forKey: kLaunchCount) as? Int else {
-            return 0
-        }
-        return count
+        userDetails?.integer(forKey: kLaunchCount) ?? 0
     }
 }
 

@@ -9,12 +9,12 @@
 import UIKit
 
 protocol WorkoutSelectionDelegate: NSObject {
-    func workoutSelectedWithType(_ type: ExerciseType)
+    func workoutSelectedWithType(_ type: ExerciseTypeName)
 }
 
 class StartWorkoutViewController: PPLTableViewController {
 
-    private var exerciseType: ExerciseType?
+    private var exerciseType: ExerciseTypeName?
     private var didNavigateToWorkout: Bool = false
     weak var delegate: WorkoutSelectionDelegate?
     var splashVC: SplashViewController?
@@ -62,7 +62,7 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.frame.height / 3
+        tableView.frame.height / CGFloat(ExerciseTypeName.allCases.count)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -76,6 +76,7 @@ class StartWorkoutViewController: PPLTableViewController {
     }
     
     func navigateToNextWorkout() {
+        guard let exerciseType else { return }
         didNavigateToWorkout = true
         let vc = WorkoutViewController()
         vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
@@ -123,9 +124,9 @@ fileprivate extension UITableViewCell {
         lbl.textColor = PPLColor.text
     }
     
-    func exerciseType() -> ExerciseType? {
+    func exerciseType() -> ExerciseTypeName? {
         guard let title = title() else { return nil }
-        return ExerciseType(rawValue: title)
+        return ExerciseTypeName(rawValue: title)
     }
     
     func title() -> String? {
@@ -176,23 +177,18 @@ extension StartWorkoutViewController: StoreManagerDelegate {
 }
 
 class StartWorkoutViewModel: NSObject, PPLTableViewModel {
+    private var workoutNames: [ExerciseTypeName] { ExerciseTypeName.allCases }
+    
     func rowCount(section: Int = 0) -> Int {
-        3
+        workoutNames.count
     }
     
     func title(indexPath: IndexPath) -> String? {
-        switch indexPath.row {
-        case 0:
-            return "Push"
-        case 1:
-            return "Pull"
-        default:
-            return "Legs"
-        }
+        workoutNames[indexPath.row].rawValue
     }
     
     func title() -> String? {
-        return "Start Next Workout"
+        "Start Next Workout"
     }
     
 }

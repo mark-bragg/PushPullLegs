@@ -137,6 +137,10 @@ class WorkoutLogViewController: DatabaseTableViewController {
         self.tableView?.beginUpdates()
         tableView?.reloadData()
         self.tableView?.endUpdates()
+        if let selectedIndex = workoutLogViewModel?.selectedIndex {
+            workoutLogViewModel?.selectedIndex = nil
+            tableView((tableView ?? UITableView()), didSelectRowAt: IndexPath(row: selectedIndex, section: 0))
+        }
     }
 }
 
@@ -198,7 +202,7 @@ fileprivate extension UITableViewCell {
 }
 
 extension WorkoutLogViewController: WorkoutSelectionDelegate {
-    func workoutSelectedWithType(_ type: ExerciseType) {
+    func workoutSelectedWithType(_ type: ExerciseTypeName) {
         WorkoutDataManager().create(name: type.rawValue, keyValuePairs: ["dateCreated": Date()])
         dismiss(animated: true, completion: nil)
         reload()

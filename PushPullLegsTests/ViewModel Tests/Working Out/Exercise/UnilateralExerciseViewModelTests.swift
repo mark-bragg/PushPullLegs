@@ -30,7 +30,7 @@ class UnilateralExerciseViewModelTests: XCTestCase {
         XCTAssert(sut.rowCount(section: section) == rowCount, "\nexpected: \(rowCount)\nactual:\(sut.rowCount(section: section))")
         guard dbHelper.fetchSets(exercise)!.contains(where: { (set) -> Bool in
             guard let set = set as? UnilateralExerciseSet else { return false }
-            let dataIsCorrect = set.duration == d && set.weight == w.truncateDigitsAfterDecimal(afterDecimalDigits: 2) && set.reps == r
+            let dataIsCorrect = set.duration == d && set.weight == w.truncateIfNecessary() && set.reps == r
             return dataIsCorrect && (set.isLeftSide ? side == .left : side == .right)
         }) else {
             XCTFail()
@@ -228,8 +228,8 @@ class UnilateralExerciseViewModelTests: XCTestCase {
             let r = 25 + i
             let t = 7 + i
             let volumeActual = sut.volumeForIndexPath(IndexPath(row: Int(i), section: 0))
-            let volumeExpected = ((w * r * t) / 60).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
-            XCTAssert(volumeExpected == volumeActual, "\nexpected: \(volumeExpected)\nactual: \(volumeActual)")
+            let volumeExpected = (w * r * t.durationLog).truncateIfNecessary()
+            XCTAssertEqual(volumeExpected, volumeActual)
         }
     }
     
@@ -247,8 +247,8 @@ class UnilateralExerciseViewModelTests: XCTestCase {
             let r = 25 + i
             let t = 7 + i
             let volumeActual = sut.volumeForIndexPath(IndexPath(row: Int(i), section: 1))
-            let volumeExpected = ((w * r * t) / 60).truncateDigitsAfterDecimal(afterDecimalDigits: 2)
-            XCTAssert(volumeExpected == volumeActual, "\nexpected: \(volumeExpected)\nactual: \(volumeActual)")
+            let volumeExpected = (w * r * t.durationLog).truncateIfNecessary()
+            XCTAssertEqual(volumeExpected, volumeActual)
         }
     }
     
@@ -257,7 +257,7 @@ class UnilateralExerciseViewModelTests: XCTestCase {
         dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90, w: 25, d: 7, l: false))
         sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         let v = sut.totalVolume()
-        XCTAssert(v == (90 * 25 * 7) / 60, "volume for single right set is incorrect")
+        XCTAssertEqual(v, 90 * 25 * 7.0.durationLog)
     }
     
     func testTotalVolume_singleLeftSet() {
@@ -265,7 +265,7 @@ class UnilateralExerciseViewModelTests: XCTestCase {
         dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90, w: 25, d: 7, l: true))
         sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         let v = sut.totalVolume()
-        XCTAssert(v == (90 * 25 * 7) / 60, "volume for single left set is incorrect")
+        XCTAssertEqual(v, (90 * 25 * 7.0.durationLog))
     }
     
     func testSectionCount() {

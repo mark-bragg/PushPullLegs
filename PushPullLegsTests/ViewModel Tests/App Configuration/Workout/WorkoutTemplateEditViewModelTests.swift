@@ -24,13 +24,13 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
         dbHelper = DBHelper(coreDataStack: coreDataStack)
     }
     
-    func addWorkoutTemplate(type: ExerciseType = .push) {
-        let temp = NSEntityDescription.insertNewObject(forEntityName: "WorkoutTemplate", into: coreDataStack.mainContext) as! WorkoutTemplate
+    func addWorkoutTemplate(type: ExerciseTypeName = .push) {
+        let temp = NSEntityDescription.insertNewObject(forEntityName: EntityName.workoutTemplate.rawValue, into: coreDataStack.mainContext) as! WorkoutTemplate
         temp.name = type.rawValue
         try? coreDataStack.mainContext.save()
         let temps = dbHelper.fetchWorkoutTemplates()
         count += 1
-        XCTAssert(temps.count == count)
+        XCTAssertEqual(temps.count, count)
     }
     
     func addExerciseTemplate(name: String = TempName, workout: WorkoutTemplate, addToWorkout: Bool = false) {
@@ -46,8 +46,8 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
     }
     
     func assertRowCounts() {
-        XCTAssert(sut.rowCount(section: 0) == selectedCount, "\nIncorrect Selected Row Count\nexpected: \(selectedCount)\nactual: \(sut.rowCount(section: 0))")
-        XCTAssert(sut.rowCount(section: 1) == unselectedCount(), "\nIncorrect Unselected Row Count\nexpected: \(unselectedCount())\nactual: \(sut.rowCount(section: 1))")
+        XCTAssertEqual(sut.rowCount(section: 0), selectedCount, "\nIncorrect Selected Row Count\nexpected: \(selectedCount)\nactual: \(sut.rowCount(section: 0))")
+        XCTAssertEqual(sut.rowCount(section: 1), unselectedCount(), "\nIncorrect Unselected Row Count\nexpected: \(unselectedCount())\nactual: \(sut.rowCount(section: 1))")
     }
     
     func select(_ indexPath: IndexPath) {
@@ -58,53 +58,53 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
     func testType_push() {
         addWorkoutTemplate()
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.exerciseType == .push)
+        XCTAssertEqual(sut.exerciseType, .push)
     }
     
     func testType_pull() {
         addWorkoutTemplate(type: .legs)
         sut = WorkoutTemplateEditViewModel(withType: .legs, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.exerciseType == .legs)
+        XCTAssertEqual(sut.exerciseType, .legs)
     }
     
     func testType_legs() {
         addWorkoutTemplate(type: .pull)
         sut = WorkoutTemplateEditViewModel(withType: .pull, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.exerciseType == .pull)
+        XCTAssertEqual(sut.exerciseType, .pull)
     }
     
     func testRowCount_exercisesAddedAndNotAdded_section0() {
         addWorkoutTemplate()
         addExerciseTemplate(name: "ex\(exerciseCount)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.rowCount(section: 0) == exerciseCount)
+        XCTAssertEqual(sut.rowCount(section: 0), exerciseCount)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         sut.reload()
-        XCTAssert(sut.rowCount(section: 0) == exerciseCount, "\nexpected: \(exerciseCount)\nactual: \(sut.rowCount(section: 0))")
+        XCTAssertEqual(sut.rowCount(section: 0), exerciseCount, "\nexpected: \(exerciseCount)\nactual: \(sut.rowCount(section: 0))")
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         sut.reload()
-        XCTAssert(sut.rowCount(section: 0) == exerciseCount, "\nexpected: \(exerciseCount)\nactual: \(sut.rowCount(section: 0))")
+        XCTAssertEqual(sut.rowCount(section: 0), exerciseCount, "\nexpected: \(exerciseCount)\nactual: \(sut.rowCount(section: 0))")
     }
     
     func testRowCount_exercisesAddedAndNotAdded_section1() {
         addWorkoutTemplate()
         addExerciseTemplate(name: "ex\(exerciseCount)", workout:dbHelper.fetchWorkoutTemplates().first!)
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.rowCount(section: 1) == exerciseCount)
+        XCTAssertEqual(sut.rowCount(section: 1), exerciseCount)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!)
         sut.reload()
-        XCTAssert(sut.rowCount(section: 1) == exerciseCount)
+        XCTAssertEqual(sut.rowCount(section: 1), exerciseCount)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!)
         addExerciseTemplate(name: "ex\(exerciseCount + 1)", workout:dbHelper.fetchWorkoutTemplates().first!)
         sut.reload()
-        XCTAssert(sut.rowCount(section: 1) == exerciseCount)
+        XCTAssertEqual(sut.rowCount(section: 1), exerciseCount)
     }
     
     func testRowCount_exercisesAddedAndNotAdded_section0_section1() {
@@ -126,14 +126,14 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
         addWorkoutTemplate()
         addExerciseTemplate(name: "ex\(exerciseCount)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.rowCount(section: 0) == 1)
+        XCTAssertEqual(sut.rowCount(section: 0), 1)
     }
     
     func testRowCount_exercisesNotAddedOnly_section0() {
         addWorkoutTemplate()
         addExerciseTemplate(name: "ex\(exerciseCount)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.rowCount(section: 0) == 1)
+        XCTAssertEqual(sut.rowCount(section: 0), 1)
     }
     
     func testTitleForRow_onlyExercisesAdded_section0() {
@@ -146,7 +146,7 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
             sut.reload()
             titles.append(title)
             let titleToTest = sut.title(indexPath: IndexPath(row: i, section: 0))
-            XCTAssert(title == titleToTest!)
+            XCTAssertEqual(title, titleToTest!)
         }
         for i in 0...9 {
             XCTAssert(titles.contains(sut.title(indexPath: IndexPath(row: i, section: 0))!))
@@ -163,7 +163,7 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
             sut.reload()
             titles.append(title)
             let titleToTest = sut.title(indexPath: IndexPath(row: i, section: 0))
-            XCTAssert(title == titleToTest!)
+            XCTAssertEqual(title, titleToTest!)
         }
         for i in 0...9 {
             XCTAssert(titles.contains(sut.title(indexPath: IndexPath(row: i, section: 0))!))
@@ -184,9 +184,9 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
             selectedTitles.append(title1)
             unselectedTitles.append(title2)
             let title1ToTest = sut.title(indexPath: IndexPath(row: i, section: 0))
-            XCTAssert(title1 == title1ToTest!)
+            XCTAssertEqual(title1, title1ToTest!)
             let title2ToTest = sut.title(indexPath: IndexPath(row: i, section: 1))
-            XCTAssert(title2 == title2ToTest!)
+            XCTAssertEqual(title2, title2ToTest!)
         }
         for i in 0...9 {
             XCTAssert(selectedTitles.contains(sut.title(indexPath: IndexPath(row: i, section: 0))!))
@@ -197,21 +197,21 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
     func testSectionCount_noExercises_sectionCountIsZero() {
         addWorkoutTemplate(type: .push)
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.sectionCount() == 0)
+        XCTAssertEqual(sut.sectionCount(), 0)
     }
     
     func testSectionCount_oneExerciseNotAdded_sectionCountIsOne() {
         addWorkoutTemplate(type: .push)
         addExerciseTemplate(name: "ex", workout: dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.sectionCount() == 1)
+        XCTAssertEqual(sut.sectionCount(), 1)
     }
     
     func testSectionCount_oneExerciseAdded_sectionCountIsOne() {
         addWorkoutTemplate(type: .push)
         addExerciseTemplate(name: "ex", workout: dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.sectionCount() == 1)
+        XCTAssertEqual(sut.sectionCount(), 1)
     }
     
     func testSectionCount_oneExerciseAdded_oneExerciseNotAdded_sectionCountIsOne() {
@@ -219,7 +219,7 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
         addExerciseTemplate(name: "ex", workout: dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         addExerciseTemplate(name: "ex1", workout: dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(sut.sectionCount() == 2)
+        XCTAssertEqual(sut.sectionCount(), 2)
     }
     
     func testSelected() {
@@ -227,9 +227,9 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
         addExerciseTemplate(name: "ex1", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
         sut.reload()
-        XCTAssert(sut.rowCount(section: 0) == 1)
+        XCTAssertEqual(sut.rowCount(section: 0), 1)
         select(IndexPath(row: 0, section: 0))
-        XCTAssert(sut.rowCount(section: 0) == 1)
+        XCTAssertEqual(sut.rowCount(section: 0), 1)
     }
     
     func testUnselected() {
@@ -237,9 +237,9 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
         addExerciseTemplate(name: "ex1", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         sut.reload()
-        XCTAssert(sut.rowCount(section: 0) == 1)
+        XCTAssertEqual(sut.rowCount(section: 0), 1)
         select(IndexPath(row: 0, section: 0))
-        XCTAssert(sut.rowCount(section: 0) == 1)
+        XCTAssertEqual(sut.rowCount(section: 0), 1)
     }
     
     func testSelectedUnselected() {
@@ -252,25 +252,25 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
         sut.reload()
         assertRowCounts()
         select(IndexPath(row: 0, section: 0))
-        XCTAssert(sut.rowCount(section: 0) == 3)
-        XCTAssert(sut.rowCount(section: 1) == 5)
+        XCTAssertEqual(sut.rowCount(section: 0), 3)
+        XCTAssertEqual(sut.rowCount(section: 1), 5)
         select(IndexPath(row: 0, section: 0))
-        XCTAssert(sut.rowCount(section: 0) == 2)
-        XCTAssert(sut.rowCount(section: 1) == 6)
+        XCTAssertEqual(sut.rowCount(section: 0), 2)
+        XCTAssertEqual(sut.rowCount(section: 1), 6)
         select(IndexPath(row: 0, section: 0))
-        XCTAssert(sut.rowCount(section: 0) == 1)
-        XCTAssert(sut.rowCount(section: 1) == 7)
+        XCTAssertEqual(sut.rowCount(section: 0), 1)
+        XCTAssertEqual(sut.rowCount(section: 1), 7)
         for i in 0...3 {
             addExerciseTemplate(name: "ex\(i+200)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
         }
         sut.reload()
-        XCTAssert(sut.rowCount(section: 0) == 1)
-        XCTAssert(sut.rowCount(section: 1) == 11)
+        XCTAssertEqual(sut.rowCount(section: 0), 1)
+        XCTAssertEqual(sut.rowCount(section: 1), 11)
         select(IndexPath(row: 3, section: 1))
         select(IndexPath(row: 2, section: 1))
         select(IndexPath(row: 1, section: 1))
-        XCTAssert(sut.rowCount(section: 0) == 4)
-        XCTAssert(sut.rowCount(section: 1) == 8)
+        XCTAssertEqual(sut.rowCount(section: 0), 4)
+        XCTAssertEqual(sut.rowCount(section: 1), 8)
     }
     
     func testTitleForSection_noWorkoutsAdded_NotAddedToWorkoutReturnedForSection0() {
@@ -279,7 +279,7 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
             addExerciseTemplate(name: "ex\(i+100)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
         }
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(WorkoutTemplateEditViewModel.removed == sut.titleForSection(0))
+        XCTAssertEqual(WorkoutTemplateEditViewModel.removed, sut.titleForSection(0))
     }
     
     func testTitleForSection_onlyWorkoutsAdded_addedToWorkoutReturnedForSection0() {
@@ -288,7 +288,7 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
             addExerciseTemplate(name: "ex\(i+100)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         }
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(WorkoutTemplateEditViewModel.added == sut.titleForSection(0))
+        XCTAssertEqual(WorkoutTemplateEditViewModel.added, sut.titleForSection(0))
     }
     
     func testTitleForSection_workoutsAddedAndNotAddedt_addedToWorkoutReturnedForSection0_notAddedToWorkoutReturnedForSection1() {
@@ -297,7 +297,7 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
             addExerciseTemplate(name: "ex\(i+100)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: true)
         }
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(WorkoutTemplateEditViewModel.added == sut.titleForSection(0))
+        XCTAssertEqual(WorkoutTemplateEditViewModel.added, sut.titleForSection(0))
     }
     
     func testTitleForSection_allWorkoutsAdded_nilTitleReturnedForSection1() {
@@ -307,8 +307,8 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
             addExerciseTemplate(name: "ex\(i+1000)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
         }
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(WorkoutTemplateEditViewModel.added == sut.titleForSection(0))
-        XCTAssert(WorkoutTemplateEditViewModel.removed == sut.titleForSection(1))
+        XCTAssertEqual(WorkoutTemplateEditViewModel.added, sut.titleForSection(0))
+        XCTAssertEqual(WorkoutTemplateEditViewModel.removed, sut.titleForSection(1))
     }
     
     func testTitleForSection() {
@@ -318,14 +318,14 @@ class WorkoutTemplateEditViewModelTests: XCTestCase {
             addExerciseTemplate(name: "ex\(i+100)", workout:dbHelper.fetchWorkoutTemplates().first!, addToWorkout: false)
         }
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(WorkoutTemplateEditViewModel.added == sut.titleForSection(0))
-        XCTAssert(WorkoutTemplateEditViewModel.removed == sut.titleForSection(1))
+        XCTAssertEqual(WorkoutTemplateEditViewModel.added, sut.titleForSection(0))
+        XCTAssertEqual(WorkoutTemplateEditViewModel.removed, sut.titleForSection(1))
     }
     
     func testTitleForSection_noExercisesInDB_noExercisesReturned() {
         addWorkoutTemplate()
         sut = WorkoutTemplateEditViewModel(withType: .push, templateManagement: TemplateManagement(coreDataManager: coreDataStack))
-        XCTAssert(WorkoutTemplateEditViewModel.noExercises == sut.titleForSection(0))
+        XCTAssertEqual(WorkoutTemplateEditViewModel.noExercises, sut.titleForSection(0))
     }
     
     func testIsSelected() {
