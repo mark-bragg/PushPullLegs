@@ -32,7 +32,7 @@ class StartWorkoutViewController: PPLTableViewController {
         hidesBottomBarWhenPushed = false
         if let wipType = AppState.shared.workoutInProgress {
             exerciseType = wipType
-            navigateToNextWorkout()
+            navigateToNextWorkout(WorkoutEditViewModel())
         }
         if let _ = delegate {
             removeBanner()
@@ -69,17 +69,29 @@ class StartWorkoutViewController: PPLTableViewController {
         exerciseType = tableView.cellForRow(at: indexPath)?.exerciseType()
         if let del = delegate, let type = exerciseType {
             del.workoutSelectedWithType(type)
-        } else {
-            navigateToNextWorkout()
-            exerciseType = nil
+        } else if let exerciseType {
+            navigateToNextWorkout(WorkoutEditViewModel(withType: exerciseType))
+            self.exerciseType = nil
         }
     }
     
-    func navigateToNextWorkout() {
+    private func navigateToWorkoutInProgress() {
+        didNavigateToWorkout = true
+        let vc = WorkoutViewController()
+        vc.viewModel = WorkoutEditViewModel()
+        vc.$popped.sink { (popped) in
+            PPLDefaults.instance.setWorkoutInProgress(nil)
+        }.store(in: &cancellables)
+        AppState.shared.workoutInProgress = exerciseType
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func navigateToNextWorkout(_ workoutVM: WorkoutEditViewModel) {
         guard let exerciseType else { return }
         didNavigateToWorkout = true
         let vc = WorkoutViewController()
-        vc.viewModel = WorkoutEditViewModel(withType: exerciseType)
+        vc.viewModel = workoutVM
         vc.$popped.sink { (popped) in
             PPLDefaults.instance.setWorkoutInProgress(nil)
         }.store(in: &cancellables)
