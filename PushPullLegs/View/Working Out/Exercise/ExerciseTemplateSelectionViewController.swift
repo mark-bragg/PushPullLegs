@@ -21,7 +21,11 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         super.viewWillAppear(animated)
         tableView?.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
         tableView?.allowsMultipleSelection = true
-        navigationItem.title = "Select Exercises"
+        navigationItem.title = exerciseSelectionViewModel?.title()
+        setupBarButtonItems()
+    }
+    
+    func setupBarButtonItems() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(pop))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addExercise))
     }

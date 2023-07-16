@@ -26,6 +26,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     weak var setNavController: SetNavigationController?
     private var isLeftBarItemSetToDone = false
     private var exerciseViewModel: ExerciseViewModel? { viewModel as? ExerciseViewModel }
+    private var superSetExerciseViewModel: ExerciseViewModel?
     private var isTimerViewHidden = true
     private var restTimerHeightConstraint: NSLayoutConstraint?
     
@@ -127,6 +128,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         super.addAction()
         prepareExerciseSetViewModel()
         let wc = WeightCollectionViewController()
+        wc.superSetDelegate = self
         let setNavController = SetNavigationController(rootViewController: wc)
         wc.exerciseSetViewModel = exerciseSetViewModel
         presentModally(setNavController)
@@ -151,13 +153,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         restTimerHeightConstraint.constant = constant
     }
     
-    private func prepareExerciseSetViewModel() {
-        exerciseSetViewModel = ExerciseSetViewModel()
-        exerciseSetViewModel?.delegate = self
-        exerciseSetViewModel?.setCollector = exerciseViewModel
-        exerciseSetViewModel?.defaultWeight = exerciseViewModel?.defaultWeight
-    }
-    
     func navigationController(_ navigationController: SetNavigationController, willPop viewController: UIViewController) {
         if viewController.isEqual(exerciseTimer) {
             try? exerciseSetViewModel?.revertState()
@@ -169,14 +164,14 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel) {
         let et = ExerciseTimerViewController()
-        et.exerciseSetViewModel = self.exerciseSetViewModel
+        et.exerciseSetViewModel = exerciseSetViewModel
         setNavController?.pushViewController(et, animated: true)
         exerciseTimer = et
     }
     
     func exerciseSetViewModelStoppedTimer(_ viewModel: ExerciseSetViewModel) {
         let rc = RepsCollectionViewController()
-        rc.exerciseSetViewModel = self.exerciseSetViewModel
+        rc.exerciseSetViewModel = exerciseSetViewModel
         setNavController?.pushViewController(rc, animated: true)
         repsCollector = rc
     }
@@ -184,15 +179,57 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
         dismiss(animated: true, completion: {
             self.reload()
-            if let rtv = self.restTimerView {
+            if self.superSetIsInProgress() {
+                self.startSuperSetSecondSet()
+            } else if let rtv = self.restTimerView {
                 self.showRestTimerView()
                 rtv.restartTimer()
+                if let evm = self.exerciseViewModel, evm.hasData() {
+                    AppState.shared.exerciseInProgress = !self.readOnly ? evm.title() : nil
+                    self.presentProgressNotification()
+                }
             }
         })
-        if let exerciseViewModel, exerciseViewModel.hasData() {
-            AppState.shared.exerciseInProgress = !readOnly ? exerciseViewModel.title() : nil
-            presentProgressNotification()
+    }
+    
+    func superSetIsInProgress() -> Bool {
+        guard let exerciseViewModel else { return false }
+        return exerciseViewModel.isPerformingSuperSet
+    }
+    
+    func startSuperSetSecondSet() {
+        prepareSuperSetExerciseSetViewModel()
+        let wc = SuperSetWeightCollectionViewController()
+        if let secondName = exerciseViewModel?.superSetSecondExerciseName {
+            wc.navItemTitle = "Weight for \(secondName)"
         }
+        wc.superSetDelegate = self
+        let setNavController = SetNavigationController(rootViewController: wc)
+        wc.exerciseSetViewModel = exerciseSetViewModel
+        presentModally(setNavController)
+        self.setNavController = setNavController
+        setNavController.setDelegate = self
+        weightCollector = wc
+        if let _ = restTimerView {
+            hideRestTimerView()
+        }
+    }
+    
+    private func prepareSuperSetExerciseSetViewModel() {
+        exerciseSetViewModel = ExerciseSetViewModel()
+        exerciseSetViewModel?.delegate = self
+        exerciseSetViewModel?.superSetCollector = exerciseViewModel
+        guard let exName = exerciseViewModel?.superSetSecondExerciseName,
+              let template = TemplateManagement().exerciseTemplate(name: exName)
+        else { return }
+        exerciseSetViewModel?.defaultWeight = ExerciseViewModel(exerciseTemplate: template).defaultWeight
+    }
+    
+    private func prepareExerciseSetViewModel() {
+        exerciseSetViewModel = ExerciseSetViewModel()
+        exerciseSetViewModel?.delegate = self
+        exerciseSetViewModel?.setCollector = exerciseViewModel
+        exerciseSetViewModel?.defaultWeight = exerciseViewModel?.defaultWeight
     }
     
     func presentProgressNotification() {
@@ -262,6 +299,27 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         return cell
     }
     
+}
+
+extension ExerciseViewController: SuperSetDelegate {
+    func superSetSelected() {
+        guard let exerciseName = exerciseViewModel?.exerciseName,
+              let typeName = exerciseViewModel?.type,
+              let type = ExerciseTypeName(rawValue: typeName)
+        else { return }
+        let esvm = SuperSetExerciseSelectionViewModel(withType: type, templateManagement: TemplateManagement(), minus: exerciseName)
+        let ssvc = SuperSetViewController()
+        ssvc.viewModel = esvm
+        ssvc.superSetDelegate = self
+        weightCollector?.present(ssvc, animated: true)
+    }
+    
+    func secondExerciseSelected(_ name: String) {
+        exerciseViewModel?.prepareForSuperSet(name)
+        weightCollector?.superSetIsReady = true
+        weightCollector?.exerciseSetViewModel?.superSetCollector = exerciseViewModel
+        weightCollector?.dismiss(animated: true)
+    }
 }
 
 protocol SetNavigationControllerDelegate {

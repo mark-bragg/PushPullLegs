@@ -116,6 +116,12 @@ class ExerciseDataManager: DataManager {
         request.propertiesToUpdate = ["name": newName]
         _ = try? context.execute(request)
     }
+    
+    func createSuperSet(_ workout: Workout) -> SuperSet? {
+        let superSet = NSEntityDescription.insertNewObject(forEntityName: EntityName.superSet.rawValue, into: context) as? SuperSet
+        superSet?.workout = workout
+        return superSet
+    }
 }
 
 enum NilReferenceError: Error {

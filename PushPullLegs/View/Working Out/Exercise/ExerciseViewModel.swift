@@ -30,7 +30,7 @@ protocol ExerciseViewModelDelegate: NSObject {
     func exerciseViewModel(_ viewModel: ExerciseViewModel, started exercise: Exercise?)
 }
 
-class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
+class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollector {
     
     weak var reloader: ReloadProtocol?
     weak var delegate: ExerciseViewModelDelegate?
@@ -60,6 +60,14 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
             }
         }
         return nil
+    }
+    private var firstSuperSetSetCompleted = false
+    private(set) var superSetSecondExerciseName: String?
+    var isPerformingSuperSet: Bool { superSetSecondExerciseName != nil }
+    var superSetFirstSet: ExerciseSet?
+    
+    func prepareForSuperSet(_ secondExerciseName: String) {
+        superSetSecondExerciseName = secondExerciseName
     }
     
     private func previousExerciseWith(name: String, workout: Workout) -> Exercise? {
@@ -113,7 +121,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     func progressMessage() -> String {
         let currentVolume = totalVolume()
         let preVolume = previousVolume()
-        let percent = Int(((currentVolume / preVolume) - 1) * 100)
+        let percent = preVolume >= 1 ? Int(((currentVolume / preVolume) - 1) * 100) : 0
         var percentMessage = "\(percent)%"
         if percent == 0 {
             // no change
@@ -141,11 +149,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
     }
     
     func collectSet(duration: Int, weight: Double, reps: Double) {
-        if finishedCellData.count == 0 {
-            createExercise()
-            exercise = exercise ?? exerciseManager.creation as? Exercise
-            delegate?.exerciseViewModel(self, started: exercise)
-        }
+        handleFirstSetCompletion()
         exerciseManager.insertSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
             guard let self = self, let name = self.title() else { return }
             self.handleFinishedSet(exerciseSet, name)
@@ -211,6 +215,49 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector {
             return "Reps"
         }
         return "Time"
+    }
+    
+    func collectSuperSetSet(duration: Int, weight: Double, reps: Double) {
+        if firstSuperSetSetCompleted, let superSetSecondExerciseName, let workout = exercise?.workout, let exercises = workout.exercises?.array as? [Exercise] {
+            var secondExercise = exercises.first { $0.name == superSetSecondExerciseName }
+            if secondExercise == nil {
+                let tempMan = ExerciseDataManager()
+                tempMan.create(name: superSetSecondExerciseName)
+                guard let secondExerciseCreation = tempMan.creation as? Exercise else { return }
+                WorkoutDataManager().add(secondExerciseCreation, to: workout)
+                secondExercise = secondExerciseCreation
+            }
+            exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: secondExercise) { [weak self] exerciseSet in
+                guard let self, let workout = self.exercise?.workout else { return }
+                let currentSuperSet = self.exerciseManager.createSuperSet(workout)
+                currentSuperSet?.set1 = self.superSetFirstSet?.objectID.uriRepresentation()
+                currentSuperSet?.set2 = exerciseSet.objectID.uriRepresentation()
+                currentSuperSet?.workout = workout
+            }
+            clearSuperSetState()
+        } else {
+            firstSuperSetSetCompleted = true
+            handleFirstSetCompletion()
+            exerciseManager.insertSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
+                guard let self, let name = self.title() else { return }
+                self.handleFinishedSet(exerciseSet, name)
+                superSetFirstSet = exerciseSet
+            }
+            collectFinishedCellData()
+        }
+    }
+    
+    private func clearSuperSetState() {
+        firstSuperSetSetCompleted = false
+        superSetSecondExerciseName = nil
+        superSetFirstSet = nil
+    }
+    
+    private func handleFirstSetCompletion() {
+        guard finishedCellData.count == 0 else { return }
+        createExercise()
+        exercise = exercise ?? exerciseManager.creation as? Exercise
+        delegate?.exerciseViewModel(self, started: exercise)
     }
     
     func collectFinishedCellData() {

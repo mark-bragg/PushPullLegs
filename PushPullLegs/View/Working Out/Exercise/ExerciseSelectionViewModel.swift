@@ -14,10 +14,10 @@ import Foundation
 
 class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
     
-    private var exercises = [ExerciseTemplate]()
+    var exercises = [ExerciseTemplate]()
     private var selectedIndices = [Int]()
     let exerciseType: ExerciseTypeName
-    private var templateManagement: TemplateManagement
+    private(set) var templateManagement: TemplateManagement
     var multiSelect: Bool = true
     weak var dataSource: ExerciseSelectionViewModelDataSource?
     
@@ -82,5 +82,9 @@ class ExerciseSelectionViewModel: NSObject, PPLTableViewModel, ReloadProtocol {
                     .sorted(by: exerciseTemplateSorter)
             }
         }
+    }
+    
+    func title() -> String? {
+        "Select Exercises"
     }
 }
