@@ -41,6 +41,10 @@ class StartWorkoutViewController: PPLTableViewController {
         tableView?.isScrollEnabled = false
     }
     
+    override func addNoDataView() {
+        // no op
+    }
+    
     func presentSplash() {
         guard StartWorkoutViewController.isFirstAppearence else { return }
         StartWorkoutViewController.isFirstAppearence = false

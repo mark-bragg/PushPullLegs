@@ -35,7 +35,6 @@
 		492B645F26D4B7220004171D /* UnilateralExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492B645E26D4B7220004171D /* UnilateralExerciseViewController.swift */; };
 		49359B8524C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */; };
 		49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8624C28C64005FF7A8 /* PPLTableView.swift */; };
-		49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8824C29886005FF7A8 /* PPLAddButton.swift */; };
 		49359B8D24D60001005FF7A8 /* PPLButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B8C24D60001005FF7A8 /* PPLButton.swift */; };
 		49359B9724DCE3E7005FF7A8 /* PPLTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */; };
 		49359B9D24DD01AC005FF7A8 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49359B9C24DD01AC005FF7A8 /* Combine.framework */; };
@@ -187,7 +186,6 @@
 		492B645E26D4B7220004171D /* UnilateralExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnilateralExerciseViewController.swift; sourceTree = "<group>"; };
 		49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushPullLegs.xcdatamodel; sourceTree = "<group>"; };
 		49359B8624C28C64005FF7A8 /* PPLTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableView.swift; sourceTree = "<group>"; };
-		49359B8824C29886005FF7A8 /* PPLAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLAddButton.swift; sourceTree = "<group>"; };
 		49359B8C24D60001005FF7A8 /* PPLButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLButton.swift; sourceTree = "<group>"; };
 		49359B9624DCE3E7005FF7A8 /* PPLTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLTableViewModel.swift; sourceTree = "<group>"; };
 		49359B9C24DD01AC005FF7A8 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
@@ -375,7 +373,6 @@
 		491C8D00254BC157003A7526 /* button */ = {
 			isa = PBXGroup;
 			children = (
-				49359B8824C29886005FF7A8 /* PPLAddButton.swift */,
 				49359B8C24D60001005FF7A8 /* PPLButton.swift */,
 			);
 			path = button;
@@ -1176,7 +1173,6 @@
 				49453378244FC8FA00FA1665 /* WorkoutLogViewController.swift in Sources */,
 				491DD62B248C565C0001F9F8 /* PPLStopWatch.swift in Sources */,
 				492B3B432660AF8F00929BB3 /* GraphViewController.swift in Sources */,
-				49359B8924C29886005FF7A8 /* PPLAddButton.swift in Sources */,
 				490D88E72452856A005FFEA3 /* ExerciseSetViewModel.swift in Sources */,
 				49BA7AAF297DCA7400C14F1F /* GraphData.swift in Sources */,
 				4993789A243B86D400EAD55E /* WorkoutTemplateListViewModel.swift in Sources */,

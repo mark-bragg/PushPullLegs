@@ -13,7 +13,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
     
     var viewModel: PPLTableViewModel?
     weak var tableView: PPLTableView?
-    weak var noDataView: NoDataView?
     private let tableViewTag = 1776
     var cancellables: Set<AnyCancellable> = []
     private var topConstraint: NSLayoutConstraint?
@@ -29,10 +28,6 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         if let tbv = tableView {
             tbv.removeFromSuperview()
             tableView = nil
-        }
-        if let ndv = noDataView {
-            ndv.removeFromSuperview()
-            noDataView = nil
         }
         removeBanner()
         setupViews()
@@ -149,26 +144,23 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         }
     }
     
+    var ndvc: NoDataViewController?
     func addNoDataView() {
-        while view.subviews.contains(where: { $0.isKind(of: NoDataView.self) }) {
-            view.subviews.first(where: { $0.isKind(of: NoDataView.self) })!.removeFromSuperview()
-        }
-        let ndv = NoDataView(frame: view.bounds)
-        view.addSubview(ndv)
-        ndv.isHidden = true
+        guard ndvc == nil else { return }
+        let ndvc = NoDataViewController()
+        addChildViewController(childController: ndvc, to: view)
         if let vm = viewModel, let ndt = vm.noDataText?() {
-            ndv.text = ndt
+            ndvc.text = ndt
         }
-        noDataView = ndv
-        view.bringSubviewToFront(bannerContainerView(0))
+        self.ndvc = ndvc
     }
     
     func showNoDataView() {
-        noDataView?.isHidden = false
+        ndvc?.showNoData(y: bannerContainerHeight())
     }
     
     func hideNoDataView() {
-        noDataView?.isHidden = true
+        ndvc?.hideNoData()
     }
     
     func tableHeaderViewContainer(titles: [String], section: Int = 0) -> HeaderViewContainer {
@@ -304,6 +296,21 @@ extension UIViewController {
     func titleLabelFont() -> UIFont {
         UIFont.systemFont(ofSize: 20, weight: .bold)
     }
+    
+    func addChildViewController(childController: UIViewController, to containerView: UIView) {
+        addChild(childController)
+        containerView.addSubview(childController.view)
+        childController.view.frame = containerView.bounds
+        childController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        childController.didMove(toParent: self)
+    }
+
+    func removeChildViewController(childController: UIViewController) {
+        childController.willMove(toParent: nil)
+        childController.view.removeFromSuperview()
+        childController.removeFromParent()
+    }
+
 }
 
 extension UILabel {
