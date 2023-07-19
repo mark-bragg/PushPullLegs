@@ -172,19 +172,3 @@ extension PPLDefaults: WeightDefaults {
         userDetails?.removeObject(forKey: name)
     }
 }
-
-protocol ColorDefaults {
-    func setDefaultColor(_ colorName: String)
-    func getDefaultColor() -> String
-}
-
-extension PPLDefaults: ColorDefaults {
-    func setDefaultColor(_ colorName: String) {
-        userDetails?.set(colorName, forKey: kDefaultColor)
-        DefaultColorUpdate.notifyObservers()
-    }
-    
-    func getDefaultColor() -> String {
-        (userDetails?.value(forKey: kDefaultColor) as? String) ?? "black"
-    }
-}

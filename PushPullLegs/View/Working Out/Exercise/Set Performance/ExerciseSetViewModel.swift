@@ -9,8 +9,12 @@
 import Foundation
 import Combine
 
-protocol ExerciseSetCollector: NSObject {
+protocol ExerciseSetCollector: NSObjectProtocol {
     func collectSet(duration: Int, weight: Double, reps: Double)
+}
+
+protocol SuperSetCollector: NSObjectProtocol {
+    func collectSuperSetSet(duration: Int, weight: Double, reps: Double)
 }
 
 fileprivate enum ExerciseSetState {
@@ -21,7 +25,7 @@ fileprivate enum ExerciseSetState {
     case canceled
 }
 
-protocol ExerciseSetViewModelDelegate: NSObject {
+protocol ExerciseSetViewModelDelegate: NSObjectProtocol {
     func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel)
     func exerciseSetViewModelStoppedTimer(_ viewModel: ExerciseSetViewModel)
     func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel)
@@ -34,6 +38,7 @@ class ExerciseSetViewModel: NSObject {
     
     weak var delegate: ExerciseSetViewModelDelegate?
     weak var setCollector: ExerciseSetCollector?
+    weak var superSetCollector: SuperSetCollector?
     var completedExerciseSet: Bool { state == .finished }
     private var totalTime: Int?
     private var weight: Double?
@@ -134,7 +139,6 @@ class ExerciseSetViewModel: NSObject {
     
     func finishSetWithReps(_ reps: Double) {
         guard
-            let setCollector,
             let totalTime,
             let weight
         else { return }
@@ -144,7 +148,11 @@ class ExerciseSetViewModel: NSObject {
             print("invalid state error")
             return
         }
-        setCollector.collectSet(duration: totalTime, weight: weight, reps: reps)
+        if let superSetCollector {
+            superSetCollector.collectSuperSetSet(duration: totalTime, weight: weight, reps: reps)
+        } else {
+            setCollector?.collectSet(duration: totalTime, weight: weight, reps: reps)
+        }
         delegate?.exerciseSetViewModelFinishedSet(self)
     }
     

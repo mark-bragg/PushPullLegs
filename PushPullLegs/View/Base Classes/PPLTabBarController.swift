@@ -10,7 +10,7 @@ import UIKit
 import AppTrackingTransparency
 import AdSupport
 
-class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
+class PPLTabBarController: UITabBarController {
     
     var isGraphPresented = false
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -19,7 +19,6 @@ class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DefaultColorUpdate.addObserver(self)
         viewControllers = [
             workoutNavigationController(),
             workoutLogNavigationController(),
@@ -34,7 +33,9 @@ class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        ATTrackingManager.requestTrackingAuthorization { self.handleTrackingAuthorization(status: $0) }
+        ATTrackingManager.requestTrackingAuthorization { [weak self] in
+            self?.handleTrackingAuthorization(status: $0)
+        }
     }
     
     private func handleTrackingAuthorization(status: ATTrackingManager.AuthorizationStatus) {
@@ -49,7 +50,9 @@ class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
     }
     
     private func requestNotificationAuthorization() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { self.handleNotificationAuthorization(status: $0, error: $1) }
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { [weak self] in
+            self?.handleNotificationAuthorization(status: $0, error: $1)
+        }
     }
     
     private func handleNotificationAuthorization(status: Bool, error: Error?) {
@@ -83,18 +86,6 @@ class PPLTabBarController: UITabBarController, DefaultColorUpdateResponder {
         vc.tabBarItem = .settingsTab
         return vc
     }
-    
-    func handleDefaultColorUpdate() {
-        guard let viewControllers = viewControllers as? [PPLNavigationController] else { return }
-        
-        for navController in viewControllers {
-            navController.navigationBar.barTintColor = PPLColor.secondary
-            if let defaultColorObserver = navController.viewControllers.first as? PPLTableViewController {
-                defaultColorObserver.reload()
-            }
-        }
-    }
-
 }
 
 extension UITabBarItem {

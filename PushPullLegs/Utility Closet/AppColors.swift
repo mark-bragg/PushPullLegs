@@ -56,24 +56,3 @@ extension PPLColor {
         UIColor(named: "\(name)_primary") ?? .black
     }
 }
-
-@objc protocol DefaultColorUpdateResponder: NSObjectProtocol {
-    @objc func handleDefaultColorUpdate()
-}
-
-class DefaultColorUpdate {
-    private static var observers: Set<NSObject> = Set()
-    
-    static func addObserver(_ responder: DefaultColorUpdateResponder) {
-        guard let responder = responder as? NSObject else { return }
-        observers.insert(responder)
-    }
-    
-    static func notifyObservers() {
-        for observer in observers {
-            if let observer = observer as? DefaultColorUpdateResponder {
-                observer.handleDefaultColorUpdate()
-            }
-        }
-    }
-}

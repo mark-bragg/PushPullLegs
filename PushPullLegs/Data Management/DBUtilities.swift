@@ -17,6 +17,7 @@ enum EntityName: String {
     case workoutTemplate = "WorkoutTemplate"
     case exerciseTemplate = "ExerciseTemplate"
     case exerciseType = "ExerciseType"
+    case superSet = "SuperSet"
 }
 
 enum ExerciseTypeName: String, CaseIterable {

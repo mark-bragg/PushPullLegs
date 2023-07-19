@@ -15,6 +15,26 @@ extension UIView {
     }
 }
 
+class NoDataViewController: UIViewController {
+    var text: String?
+    private weak var noDataView: NoDataView?
+    
+    func showNoData(y: CGFloat) {
+        var frame = view.bounds
+        frame.origin.y = y
+        let ndv = NoDataView(frame: frame)
+        view.addSubview(ndv)
+        self.noDataView = ndv
+        ndv.text = text
+        view.superview?.bringSubviewToFront(view)
+    }
+    
+    func hideNoData() {
+        noDataView?.removeFromSuperview()
+        view.superview?.sendSubviewToBack(view)
+    }
+}
+
 class NoDataView: UIView {
     var image: UIImage? { UIImage(named: "dumbbells") }
     var imageSideLength: CGFloat { min(frame.height, frame.width) / 2.125 }
@@ -54,7 +74,7 @@ class NoDataView: UIView {
         return lbl
     }()
     
-    var text: String = "" {
+    var text: String? = "" {
         didSet {
             label.text = text
             label.sizeToFit()
@@ -74,87 +94,7 @@ class NoDataView: UIView {
         backgroundColor = .black
         label.text = text
         imageView.image = image?.withTintColor(.blue, renderingMode: .alwaysTemplate)
-        
-//        if !spinning {
-//            spinner = Timer.publish(every: 0.1, on: .main, in: .default)
-//                .autoconnect()
-//                .sink(receiveValue: { _ in
-//                    self.imageView.rotate(M_2_PI * 0.25)
-//                })
-//        }
-//        if imageView2 == nil {
-//            let imageView2 = SpinningFadingImageView()
-//            addSubview(imageView2)
-//            imageView2.translatesAutoresizingMaskIntoConstraints = false
-//            imageView2.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-//            imageView2.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-//            imageView2.widthAnchor.constraint(equalToConstant: imageSideLength).isActive = true
-//            imageView2.heightAnchor.constraint(equalToConstant: imageSideLength).isActive = true
-//            imageView2.image = image
-//            self.imageView2 = imageView2
-//        }
         backgroundImage.image = image
-    }
-}
-
-class AnimatingImageView: UIImageView {
-    var timeLimit: CGFloat? { didSet { handleTimeLimit() } }
-    var pauseLimit: CGFloat = 0.1
-    var repeater: AnyCancellable?
-    override var image: UIImage? {
-        didSet {
-            guard repeater == nil
-            else { return }
-            repeater = Timer.publish(every: pauseLimit, on: .main, in: .default)
-                .autoconnect()
-                .sink(receiveValue: { _ in
-                    self.prepareToAnimate()
-                })
-        }
-    }
-    
-    private func handleTimeLimit() {
-        guard let timeLimit, timeLimit <= 0
-        else { return }
-        
-        repeater?.cancel()
-    }
-    
-    private func prepareToAnimate() {
-        if let timeLimit {
-            self.timeLimit = timeLimit - pauseLimit
-        }
-        animate()
-    }
-    
-    func animate() {
-        // no op
-    }
-}
-
-
-
-class SpinningFadingImageView: AnimatingImageView {
-    private var goingUp = false
-    private var alphaDelta: CGFloat = 0.1
-    var radialDelta: CGFloat = .pi * 2.025
-    
-    override func animate() {
-        rotate(radialDelta)
-        
-        if goingUp {
-            alpha += alphaDelta
-            goingUp = alpha < 1
-        } else {
-            alpha -= alphaDelta
-            goingUp = alpha <= 0.1
-        }
-    }
-}
-
-class FadeInAndOutImageView: AnimatingImageView {
-    override func animate() {
-        
     }
 }
 
