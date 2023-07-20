@@ -6,7 +6,7 @@ target 'PushPullLegs' do
   use_frameworks!
 
   # Pods for PushPullLegs
-  pod 'StartAppSDK', '~> 4.10.0'
+  pod 'StartAppSDK'
 
   target 'PushPullLegsTests' do
     inherit! :search_paths

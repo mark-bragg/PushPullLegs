@@ -1,0 +1,6 @@
+framework module Pods_PushPullLegs_PushPullLegsUITests {
+  umbrella header "Pods-PushPullLegs-PushPullLegsUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
