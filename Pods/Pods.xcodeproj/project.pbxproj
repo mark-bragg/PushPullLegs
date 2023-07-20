@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -16,6 +16,7 @@
 			dependencies = (
 			);
 			name = StartAppSDK;
+			productName = StartAppSDK;
 		};
 /* End PBXAggregateTarget section */
 
@@ -68,7 +69,7 @@
 		6F94E1FE27B798A748EFCBD08C9FC811 /* StartAppSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = StartAppSDK.release.xcconfig; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		73C854240BD6BBAD8A2110BC688F1683 /* Pods-PushPullLegsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-PushPullLegsTests.release.xcconfig"; sourceTree = "<group>"; };
-		744FDEE8C114D37001779608BA947ABB /* Pods-PushPullLegs */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-PushPullLegs"; path = Pods_PushPullLegs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		744FDEE8C114D37001779608BA947ABB /* Pods_PushPullLegs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PushPullLegs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7496DE7F01DB09E886D608E7CE130226 /* StartAppSDK-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "StartAppSDK-xcframeworks.sh"; sourceTree = "<group>"; };
 		778CF93DCEC289ACE2CCB3410B72B624 /* Pods-PushPullLegs.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-PushPullLegs.modulemap"; sourceTree = "<group>"; };
 		7F95AE74C299032B4EA53CD007B4C43B /* Pods-PushPullLegsTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-PushPullLegsTests-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -77,8 +78,8 @@
 		8CB9AE821336008F54975FC6D2ED7C63 /* Pods-PushPullLegs-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-PushPullLegs-Info.plist"; sourceTree = "<group>"; };
 		9A8E05F79BC63542E3B65210C02A2828 /* Pods-PushPullLegs-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-PushPullLegs-acknowledgements.plist"; sourceTree = "<group>"; };
 		9AFB87290282AB31E0EAC9BB8958F033 /* Pods-PushPullLegsTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-PushPullLegsTests-acknowledgements.plist"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		B391282B2CC4404122371844E11499BE /* StartApp.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = StartApp.xcframework; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		B391282B2CC4404122371844E11499BE /* StartApp.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; path = StartApp.xcframework; sourceTree = "<group>"; };
 		C00A07A87FD16583BFD6723FD6BD4B12 /* Pods-PushPullLegs-PushPullLegsUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-PushPullLegs-PushPullLegsUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		D2161DBC3BDADB5A0307D8FE307315E1 /* Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-PushPullLegs-PushPullLegsUITests.release.xcconfig"; sourceTree = "<group>"; };
 		D387E224F009B337474F232D4FE80360 /* Pods-PushPullLegsTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-PushPullLegsTests-dummy.m"; sourceTree = "<group>"; };
@@ -122,7 +123,7 @@
 		4DF933FC8682BD79E0349B906648E6B5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				744FDEE8C114D37001779608BA947ABB /* Pods-PushPullLegs */,
+				744FDEE8C114D37001779608BA947ABB /* Pods_PushPullLegs.framework */,
 				8593DE22AE158C889FF9B39552D9BC31 /* Pods-PushPullLegs-PushPullLegsUITests */,
 				F3111C686863B8F1B61EF47B025F4332 /* Pods-PushPullLegsTests */,
 			);
@@ -154,7 +155,6 @@
 				EEDEEED507A1593CC6520F27BB4685D8 /* Frameworks */,
 				5BA087EB03FB6727C7A1ACB49DCF4CBC /* Support Files */,
 			);
-			name = StartAppSDK;
 			path = StartAppSDK;
 			sourceTree = "<group>";
 		};
@@ -297,7 +297,7 @@
 			);
 			name = "Pods-PushPullLegs";
 			productName = Pods_PushPullLegs;
-			productReference = 744FDEE8C114D37001779608BA947ABB /* Pods-PushPullLegs */;
+			productReference = 744FDEE8C114D37001779608BA947ABB /* Pods_PushPullLegs.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		635E8EA86AC907CFA4EF5C98243BFC1B /* Pods-PushPullLegs-PushPullLegsUITests */ = {
