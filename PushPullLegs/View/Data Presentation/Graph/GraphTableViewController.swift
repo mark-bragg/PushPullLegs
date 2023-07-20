@@ -27,6 +27,10 @@ class GraphTableViewController: PPLTableViewController {
         reload()
     }
     
+    override func addNoDataView() {
+        // no op
+    }
+    
     override func reload() {
         for wgvc in [pushVc, pullVc, legsVc, armsVc] {
             wgvc?.refresh(nil)
