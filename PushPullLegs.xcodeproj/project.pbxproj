@@ -78,6 +78,10 @@
 		49ABAC9D25F44E3500517F6F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ABAC9C25F44E3500517F6F /* SoundManager.swift */; };
 		49ABACA325F45BEF00517F6F /* countdown.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACA225F45BEF00517F6F /* countdown.m4a */; };
 		49ABACBC25F463C700517F6F /* start.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 49ABACAF25F45CE700517F6F /* start.m4a */; };
+		49AC08D82A6C853C00B66843 /* DropSetCountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AC08D72A6C853C00B66843 /* DropSetCountViewController.swift */; };
+		49AC08DA2A6C858400B66843 /* DropSetWeightCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AC08D92A6C858400B66843 /* DropSetWeightCollectionViewController.swift */; };
+		49AC08DC2A6C861B00B66843 /* ExerciseDropSetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AC08DB2A6C861B00B66843 /* ExerciseDropSetViewModel.swift */; };
+		49AC08DE2A6C863A00B66843 /* DropSetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AC08DD2A6C863A00B66843 /* DropSetModel.swift */; };
 		49AD6EC02A645CCE0037DD30 /* MappingModel13.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49AD6EBF2A645CCE0037DD30 /* MappingModel13.xcmappingmodel */; };
 		49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF0D20259D23D2003F8C60 /* BannerAdController.swift */; };
 		49BA7A2A296355F600C14F1F /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BA7A29296355F600C14F1F /* ExerciseTimerView.swift */; };
@@ -229,6 +233,10 @@
 		49ABAC9C25F44E3500517F6F /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		49ABACA225F45BEF00517F6F /* countdown.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = countdown.m4a; sourceTree = "<group>"; };
 		49ABACAF25F45CE700517F6F /* start.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.m4a; sourceTree = "<group>"; };
+		49AC08D72A6C853C00B66843 /* DropSetCountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropSetCountViewController.swift; sourceTree = "<group>"; };
+		49AC08D92A6C858400B66843 /* DropSetWeightCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropSetWeightCollectionViewController.swift; sourceTree = "<group>"; };
+		49AC08DB2A6C861B00B66843 /* ExerciseDropSetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDropSetViewModel.swift; sourceTree = "<group>"; };
+		49AC08DD2A6C863A00B66843 /* DropSetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropSetModel.swift; sourceTree = "<group>"; };
 		49AD6EBE2A645A880037DD30 /* PushPullLegs 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PushPullLegs 3.xcdatamodel"; sourceTree = "<group>"; };
 		49AD6EBF2A645CCE0037DD30 /* MappingModel13.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModel13.xcmappingmodel; sourceTree = "<group>"; };
 		49AF0D20259D23D2003F8C60 /* BannerAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdController.swift; sourceTree = "<group>"; };
@@ -363,6 +371,7 @@
 		490D88E1245282E5005FFEA3 /* Set Performance */ = {
 			isa = PBXGroup;
 			children = (
+				49AC08D62A6C850200B66843 /* Drop Sets */,
 				490D88E62452856A005FFEA3 /* ExerciseSetViewModel.swift */,
 				49E8933D295E6CE000B99345 /* Quantity Collection */,
 				49BA7A28296355C400C14F1F /* Exercise Timer */,
@@ -652,6 +661,17 @@
 				49ABACA225F45BEF00517F6F /* countdown.m4a */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		49AC08D62A6C850200B66843 /* Drop Sets */ = {
+			isa = PBXGroup;
+			children = (
+				49AC08D72A6C853C00B66843 /* DropSetCountViewController.swift */,
+				49AC08D92A6C858400B66843 /* DropSetWeightCollectionViewController.swift */,
+				49AC08DB2A6C861B00B66843 /* ExerciseDropSetViewModel.swift */,
+				49AC08DD2A6C863A00B66843 /* DropSetModel.swift */,
+			);
+			path = "Drop Sets";
 			sourceTree = "<group>";
 		};
 		49BA7A28296355C400C14F1F /* Exercise Timer */ = {
@@ -1193,6 +1213,7 @@
 				49028D2B243DA206005EC078 /* WorkoutTemplateEditViewModel.swift in Sources */,
 				49BA7A2C2963561800C14F1F /* StartExerciseLabel.swift in Sources */,
 				492B3B3B26609F2700929BB3 /* PPLDropDownViewController.swift in Sources */,
+				49AC08DE2A6C863A00B66843 /* DropSetModel.swift in Sources */,
 				49CD43E0261798F600C8A6C8 /* DBExerciseViewController.swift in Sources */,
 				49A3E38126DB39A2005E477C /* DBUnilateralExerciseViewController.swift in Sources */,
 				49EF4BB423F8390A0071687D /* Date+Helpers.swift in Sources */,
@@ -1203,8 +1224,10 @@
 				49AB68D124FC63FF0057D5F7 /* CountdownPickerViewController.swift in Sources */,
 				49359B8724C28C64005FF7A8 /* PPLTableView.swift in Sources */,
 				4937729324001807005F566A /* DBUtilities.swift in Sources */,
+				49AC08D82A6C853C00B66843 /* DropSetCountViewController.swift in Sources */,
 				49C1EA522608179100330CBF /* IAPTransaction.swift in Sources */,
 				4972DA2826EC63940068F0C0 /* ExerciseViewControllerFactory.swift in Sources */,
+				49AC08DA2A6C858400B66843 /* DropSetWeightCollectionViewController.swift in Sources */,
 				49E675FE244CDAB6001F5974 /* ExerciseSelectionViewModel.swift in Sources */,
 				4973C11C244BB068009460F2 /* WorkoutViewController.swift in Sources */,
 				49CD44072619520A00C8A6C8 /* DurationCollectionViewController.swift in Sources */,
@@ -1227,6 +1250,7 @@
 				4997C1DB2426C0A600712DB9 /* ExerciseTemplateCreationViewController.swift in Sources */,
 				49EF4BB023F838F60071687D /* ExerciseDataManager.swift in Sources */,
 				49F60844254E009700407D0A /* ArrowViewDimensions.swift in Sources */,
+				49AC08DC2A6C861B00B66843 /* ExerciseDropSetViewModel.swift in Sources */,
 				49C8D24124A99E0000B361C7 /* PPLDefaults.swift in Sources */,
 				4980D9AC25A42A4D0054EA5F /* InterstitialAdController.swift in Sources */,
 				49E8932F295B759900B99345 /* AccessibilityIdentifiers.swift in Sources */,

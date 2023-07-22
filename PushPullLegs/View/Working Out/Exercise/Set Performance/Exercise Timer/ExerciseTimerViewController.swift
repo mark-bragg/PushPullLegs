@@ -37,7 +37,7 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
     
     private func setupTimerLabel() {
         addTimerLabelTap()
-        timerView?.timerLabel.text = exerciseSetViewModel?.initialTimerText()
+        timerView?.timerLabel.text = exerciseSetViewModel?.initialTimerText() ?? "00:00"
         timerView?.finishButton.setTitle("Finish Set", for: .normal)
         timerView?.finishButton.isEnabled = PPLDefaults.instance.countdown() == 0
         bind()
@@ -68,7 +68,8 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
         timerView?.timerLabel.isUserInteractionEnabled = true
     }
     
-    @objc private func timerTapped() {
+    @objc
+    private func timerTapped() {
         timerView?.timerLabel.isUserInteractionEnabled = false
         guard !didShowStartText
         else { return }
@@ -88,13 +89,15 @@ class ExerciseTimerViewController: UIViewController, ExercisingViewController {
         })
     }
     
-    @objc private func buttonPressed(_ sender: Any) {
+    @objc
+    private func buttonPressed(_ sender: Any) {
         if PPLDefaults.instance.areTimerSoundsEnabled() {
             SoundManager.shared.silenceNextNoise = true
         }
     }
     
-    @objc private func buttonReleased(_ sender: Any) {
+    @objc
+    private func buttonReleased(_ sender: Any) {
         exerciseSetViewModel?.stopTimer()
     }
     

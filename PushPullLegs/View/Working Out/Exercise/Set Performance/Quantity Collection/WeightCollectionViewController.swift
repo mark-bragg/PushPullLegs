@@ -6,6 +6,7 @@
 //  Copyright © 2020 Mark Bragg. All rights reserved.
 //
 
+import Combine
 import UIKit
 
 protocol SuperSetDelegate: NSObjectProtocol {
@@ -17,12 +18,17 @@ class SuperSetWeightCollectionViewController: WeightCollectionViewController {
     override func addSuperSetBarButtonItem() {
         // no op
     }
+    
+    override func addDropSetBarButtonItem() {
+        // no op
+    }
 }
 
 class WeightCollectionViewController: QuantityCollectionViewController, ExercisingViewController {
 
     var exerciseSetViewModel: ExerciseSetViewModel?
     weak var superSetDelegate: SuperSetDelegate?
+    weak var dropSetDelegate: DropSetDelegate?
     var superSetIsReady = false {
         didSet { navigationItem.rightBarButtonItem?.isEnabled = !superSetIsReady }
     }
@@ -36,16 +42,26 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
         textField?.keyboardType = .decimalPad
         characterLimit = 7
         addSuperSetBarButtonItem()
+        addDropSetBarButtonItem()
     }
     
     func addSuperSetBarButtonItem() {
-        let bbItem = UIBarButtonItem(title: "Super Set", style: .plain, target: self, action: #selector(addSuperSet))
-        navigationItem.rightBarButtonItem = bbItem
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Super Set", style: .plain, target: self, action: #selector(addSuperSet))
     }
     
     @objc
     private func addSuperSet() {
         superSetDelegate?.superSetSelected()
+        navigationItem.leftBarButtonItem = nil
+    }
+    
+    func addDropSetBarButtonItem() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Drop Sets", style: .plain, target: self, action: #selector(addDropSets))
+    }
+    
+    @objc
+    private func addDropSets() {
+        dropSetDelegate?.dropSetSelected()
     }
     
     override func viewWillAppear(_ animated: Bool) {

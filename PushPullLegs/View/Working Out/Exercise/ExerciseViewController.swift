@@ -29,6 +29,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     private var superSetExerciseViewModel: ExerciseViewModel?
     private var isTimerViewHidden = true
     private var restTimerHeightConstraint: NSLayoutConstraint?
+    var dropSetViewModel: ExerciseDropSetViewModel?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -129,6 +130,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         prepareExerciseSetViewModel()
         let wc = WeightCollectionViewController()
         wc.superSetDelegate = self
+        wc.dropSetDelegate = self
         let setNavController = SetNavigationController(rootViewController: wc)
         wc.exerciseSetViewModel = exerciseSetViewModel
         presentModally(setNavController)
@@ -298,7 +300,6 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         labels.t.text = exerciseViewModel.durationForIndexPath(indexPath)
         return cell
     }
-    
 }
 
 extension ExerciseViewController: SuperSetDelegate {
@@ -319,6 +320,83 @@ extension ExerciseViewController: SuperSetDelegate {
         weightCollector?.superSetIsReady = true
         weightCollector?.exerciseSetViewModel?.superSetCollector = exerciseViewModel
         weightCollector?.dismiss(animated: true)
+    }
+}
+
+extension ExerciseViewController: DropSetDelegate {
+    var dropSetCount: Int {
+        get { 0 }
+        set { presentDropSetWeightCollection(newValue) }
+    }
+    
+    func presentDropSetWeightCollection(_ setCount: Int) {
+        guard setCount > 0 else {
+            presentMoreThanOneSetNeededForDropSetsAlert()
+            return
+        }
+        dismiss(animated: true) {
+            let dswc = DropSetWeightCollectionViewController()
+            dswc.dropSetCount = setCount + 1
+            dswc.dropSetDelegate = self
+            self.presentModally(dswc)
+        }
+    }
+    
+    func presentMoreThanOneSetNeededForDropSetsAlert() {
+        let alert = UIAlertController(title: "You can't have zero drop sets", message: "That would just be a regular set.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        presentedViewController?.present(alert, animated: true)
+    }
+    
+    func dropSetSelected() {
+        let dscc = DropSetCountViewController()
+        dscc.dropSetDelegate = self
+        dismiss(animated: true) {
+            self.presentModally(dscc)
+        }
+    }
+    
+    func dropSetsStarted(with weights: [Double]) {
+        let dropSetModel = DropSetModel()
+        dropSetModel.weightsPerSet = weights
+        dropSetViewModel = ExerciseDropSetViewModel(dropSetModel: dropSetModel)
+        dropSetViewModel?.dropSetDelegate = self
+        startNextDropSet()
+    }
+    
+    func collectDropSet(duration: Int) {
+        dropSetViewModel?.dropSetModel.durationsPerSet.append(duration)
+        let rcvc = RepsCollectionViewController()
+        rcvc.exerciseSetViewModel = dropSetViewModel
+        dismiss(animated: true) {
+            self.presentModally(rcvc)
+        }
+    }
+    
+    func dropSetCompleted(with reps: Double) {
+        guard let dropSetModel = dropSetViewModel?.dropSetModel else { return }
+        dropSetModel.repsPerSet.append(reps)
+        guard dropSetModel.isComplete else {
+            return startNextDropSet()
+        }
+        collectDropSetData(dropSetModel)
+    }
+    
+    func startNextDropSet() {
+        let timer = ExerciseTimerViewController()
+        timer.exerciseSetViewModel = dropSetViewModel
+        dismiss(animated: true) {
+            self.presentModally(timer)
+        }
+    }
+    
+    func collectDropSetData(_ dropSetModel: DropSetModel) {
+        for i in 0..<dropSetModel.weightsPerSet.count {
+            exerciseViewModel?.collectSet(duration: dropSetModel.durationsPerSet[i],
+                                          weight: dropSetModel.weightsPerSet[i],
+                                          reps: dropSetModel.repsPerSet[i])
+        }
+        dismiss(animated: true)
     }
 }
 

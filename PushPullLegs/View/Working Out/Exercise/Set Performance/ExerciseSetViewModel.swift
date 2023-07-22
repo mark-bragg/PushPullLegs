@@ -40,10 +40,11 @@ class ExerciseSetViewModel: NSObject {
     weak var setCollector: ExerciseSetCollector?
     weak var superSetCollector: SuperSetCollector?
     var completedExerciseSet: Bool { state == .finished }
-    private var totalTime: Int?
-    private var weight: Double?
+    private(set) var totalTime: Int?
+    private(set) var weight: Double?
     private var state: ExerciseSetState
     var stopWatch: PPLStopWatch?
+    var countdownValue: Int { PPLDefaults.instance.countdown() }
     private var countdown = PPLDefaults.instance.countdown()
     private var countdownCanceled = false
     @Published private(set) var setBegan: Bool?
@@ -53,6 +54,7 @@ class ExerciseSetViewModel: NSObject {
     override init() {
         state = .notStarted
         super.init()
+        countdown = countdownValue
         $setBegan.sink { (began) in
             guard PPLDefaults.instance.areTimerSoundsEnabled(), let began = began, began else { return }
             SoundManager.shared.playStartSound()
@@ -60,7 +62,7 @@ class ExerciseSetViewModel: NSObject {
     }
     
     func restartSet() {
-        countdown = PPLDefaults.instance.countdown()
+        countdown = countdownValue
         stopWatch?.start()
     }
     
@@ -72,7 +74,7 @@ class ExerciseSetViewModel: NSObject {
     func startSet() {
         setStateForStartSet()
         if PPLDefaults.instance.isWorkoutInProgress() {
-            countdown = PPLDefaults.instance.countdown()
+            countdown = countdownValue
             stopWatch?.start()
         }
     }
@@ -202,7 +204,7 @@ class ExerciseSetViewModel: NSObject {
     }
     
     func initialTimerText() -> String {
-        let countdown = PPLDefaults.instance.countdown()
+        let countdown = countdownValue
         if countdown >= 10 {
             return "0:\(countdown)"
         }
@@ -211,7 +213,7 @@ class ExerciseSetViewModel: NSObject {
     
     func cancelCountdown() {
         countdownCanceled = true
-        countdown = PPLDefaults.instance.countdown()
+        countdown = countdownValue
     }
     
     func weightCollectionButtonText() -> String {
