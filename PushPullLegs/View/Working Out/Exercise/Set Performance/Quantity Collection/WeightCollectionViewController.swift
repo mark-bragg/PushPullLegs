@@ -9,21 +9,6 @@
 import Combine
 import UIKit
 
-protocol SuperSetDelegate: NSObjectProtocol {
-    func superSetSelected()
-    func secondExerciseSelected(_ name: String)
-}
-
-class SuperSetWeightCollectionViewController: WeightCollectionViewController {
-    override func addSuperSetBarButtonItem() {
-        // no op
-    }
-    
-    override func addDropSetBarButtonItem() {
-        // no op
-    }
-}
-
 class WeightCollectionViewController: QuantityCollectionViewController, ExercisingViewController {
 
     var exerciseSetViewModel: ExerciseSetViewModel?
@@ -82,47 +67,5 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
             let converter = PPLDefaults.instance.isKilograms() ? 2.20462 : 1.0
             exerciseSetViewModel?.willStartSetWithWeight(weight * converter)
         }
-    }
-    
-}
-
-class SuperSetViewController: ExerciseTemplateSelectionViewController {
-    weak var superSetDelegate: SuperSetDelegate?
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tableView?.allowsMultipleSelection = false
-    }
-    
-    override func setupBarButtonItems() {
-        // no op
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let name = exerciseSelectionViewModel?.title(indexPath: indexPath)
-        else { return }
-        superSetDelegate?.secondExerciseSelected(name)
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        super.tableHeaderViewContainer(titles: ["Select Exercise For Second Set"])
-    }
-}
-
-class SuperSetExerciseSelectionViewModel: ExerciseSelectionViewModel {
-    private let exerciseNameToRemove: String
-    
-    init(withType type: ExerciseTypeName, templateManagement: TemplateManagement, minus exerciseName: String, dataSource: ExerciseSelectionViewModelDataSource? = nil) {
-        self.exerciseNameToRemove = exerciseName
-        super.init(withType: type, templateManagement: templateManagement, dataSource: dataSource)
-    }
-    
-    override func reload() {
-        exercises = templateManagement.exerciseTemplatesForWorkout(exerciseType)
-        exercises.removeAll { $0.name == exerciseNameToRemove }
-    }
-    
-    override func title() -> String? {
-        "Select Second Exercise"
     }
 }

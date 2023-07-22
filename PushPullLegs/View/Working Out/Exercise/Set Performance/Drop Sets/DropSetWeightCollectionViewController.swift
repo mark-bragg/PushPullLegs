@@ -8,15 +8,6 @@
 
 import Combine
 
-protocol DropSetDelegate: NSObjectProtocol {
-    func dropSetSelected()
-    var dropSetCount: Int { get set }
-    func dropSetsStarted(with weights: [Double])
-    func startNextDropSet()
-    func collectDropSet(duration: Int)
-    func dropSetCompleted(with reps: Double)
-}
-
 class DropSetWeightCollectionViewController: WeightCollectionViewController {
     var dropSetCount: Int = 0
     private weak var tableView: UITableView?
