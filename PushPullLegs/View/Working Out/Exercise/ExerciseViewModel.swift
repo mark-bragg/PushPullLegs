@@ -148,6 +148,24 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
         return previousExercise.volume()
     }
     
+    func collectDropSets(_ sets: [(duration: Int, weight: Double, reps: Double)]) {
+        handleFirstSetCompletion()
+        guard let exercise else { return }
+        exerciseManager.insertDropSets(sets, exercise: exercise) { [weak self] (dropSet) in
+            guard let self = self, let name = self.title(), let sets = dropSet.exerciseSets() else { return }
+            self.handleFinishedDropSets(sets, name)
+        }
+        collectFinishedCellData()
+    }
+    
+    func handleFinishedDropSets(_ exerciseSets: [ExerciseSet], _ name: String) {
+        isFirstSet = false
+        for exerciseSet in exerciseSets {
+            appendFinishedSetData(FinishedSetDataModel(withExerciseSet: exerciseSet))
+        }
+        reloader?.reload()
+    }
+    
     func collectSet(duration: Int, weight: Double, reps: Double) {
         handleFirstSetCompletion()
         exerciseManager.insertSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in

@@ -44,6 +44,7 @@
 		4945337A244FCC1900FA1665 /* PPLTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453379244FCC1900FA1665 /* PPLTabBarController.swift */; };
 		4945337C2450895600FA1665 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4945337B2450895500FA1665 /* ExerciseViewModel.swift */; };
 		49453382245090F600FA1665 /* ExerciseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49453381245090F600FA1665 /* ExerciseViewModelTests.swift */; };
+		494F8D152A6CB6C1002E23AC /* MappingModel14.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 494F8D142A6CB6C1002E23AC /* MappingModel14.xcmappingmodel */; };
 		49565A2D26B9FF1400F13E44 /* WorkoutNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49565A2C26B9FF1400F13E44 /* WorkoutNoteViewController.swift */; };
 		49568BA424422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */; };
 		4957DFB4246B549F00574C89 /* WorkoutReadViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */; };
@@ -204,6 +205,8 @@
 		4945337B2450895500FA1665 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		49453381245090F600FA1665 /* ExerciseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModelTests.swift; sourceTree = "<group>"; };
 		494B3E212718ED0D0085058C /* PushPullLegs-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PushPullLegs-Bridging-Header.h"; sourceTree = "<group>"; };
+		494F8D112A6CAAE0002E23AC /* PushPullLegs 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PushPullLegs 4.xcdatamodel"; sourceTree = "<group>"; };
+		494F8D142A6CB6C1002E23AC /* MappingModel14.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModel14.xcmappingmodel; sourceTree = "<group>"; };
 		49565A2C26B9FF1400F13E44 /* WorkoutNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutNoteViewController.swift; sourceTree = "<group>"; };
 		49568BA324422E1C00166F09 /* WorkoutTemplateListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListViewModelTests.swift; sourceTree = "<group>"; };
 		4957DFB3246B549F00574C89 /* WorkoutReadViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutReadViewModelTests.swift; sourceTree = "<group>"; };
@@ -956,6 +959,7 @@
 				49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */,
 				49FB6F432A50EE12006E7839 /* MappingModel12.xcmappingmodel */,
 				49AD6EBF2A645CCE0037DD30 /* MappingModel13.xcmappingmodel */,
+				494F8D142A6CB6C1002E23AC /* MappingModel14.xcmappingmodel */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -1222,6 +1226,7 @@
 				49E675FA244CDA54001F5974 /* ExerciseTemplateSelectionViewController.swift in Sources */,
 				49565A2D26B9FF1400F13E44 /* WorkoutNoteViewController.swift in Sources */,
 				493C2C712455E5D2005308AF /* WeightCollectionViewController.swift in Sources */,
+				494F8D152A6CB6C1002E23AC /* MappingModel14.xcmappingmodel in Sources */,
 				49AC08E72A6C8F8700B66843 /* DropSetDelegate.swift in Sources */,
 				490D88EA2452B5FD005FFEA3 /* ExerciseTimerViewController.swift in Sources */,
 				49028D26243DA0A0005EC078 /* WorkoutTemplateEditViewController.swift in Sources */,
@@ -1755,11 +1760,12 @@
 		49359B8324C0E18C005FF7A8 /* PushPullLegs.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				494F8D112A6CAAE0002E23AC /* PushPullLegs 4.xcdatamodel */,
 				49AD6EBE2A645A880037DD30 /* PushPullLegs 3.xcdatamodel */,
 				49FB6F3A2A50E0CD006E7839 /* PushPullLegs 2.xcdatamodel */,
 				49359B8424C0E18C005FF7A8 /* PushPullLegs.xcdatamodel */,
 			);
-			currentVersion = 49AD6EBE2A645A880037DD30 /* PushPullLegs 3.xcdatamodel */;
+			currentVersion = 494F8D112A6CAAE0002E23AC /* PushPullLegs 4.xcdatamodel */;
 			path = PushPullLegs.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

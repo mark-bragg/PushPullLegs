@@ -391,11 +391,11 @@ extension ExerciseViewController: DropSetDelegate {
     }
     
     func collectDropSetData(_ dropSetModel: DropSetModel) {
+        var sets = [(Int, Double, Double)]()
         for i in 0..<dropSetModel.weightsPerSet.count {
-            exerciseViewModel?.collectSet(duration: dropSetModel.durationsPerSet[i],
-                                          weight: dropSetModel.weightsPerSet[i],
-                                          reps: dropSetModel.repsPerSet[i])
+            sets.append((dropSetModel.durationsPerSet[i], dropSetModel.weightsPerSet[i], dropSetModel.repsPerSet[i]))
         }
+        exerciseViewModel?.collectDropSets(sets)
         dismiss(animated: true)
     }
 }
