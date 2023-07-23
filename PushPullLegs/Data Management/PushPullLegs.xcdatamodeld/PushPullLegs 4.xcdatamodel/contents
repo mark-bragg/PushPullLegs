@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DropSet" representedClassName="DropSet" syncable="YES" codeGenerationType="class">
-        <attribute name="sets" optional="YES" attributeType="Transformable" customClassName="[URI]"/>
+        <attribute name="sets" optional="YES" attributeType="Transformable" customClassName="[URL]"/>
         <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Exercise" inverseName="dropSets" inverseEntity="Exercise"/>
     </entity>
     <entity name="Exercise" representedClassName="Exercise" syncable="YES" codeGenerationType="class">
@@ -39,7 +39,6 @@
         <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="note" optional="YES" attributeType="String"/>
-        <relationship name="dropSets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DropSet"/>
         <relationship name="exercises" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Exercise" inverseName="workout" inverseEntity="Exercise"/>
         <relationship name="superSets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SuperSet" inverseName="workout" inverseEntity="SuperSet"/>
     </entity>
