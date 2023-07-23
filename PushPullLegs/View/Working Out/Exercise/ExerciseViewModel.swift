@@ -150,9 +150,10 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     
     func collectDropSets(_ sets: [(duration: Int, weight: Double, reps: Double)]) {
         handleFirstSetCompletion()
+        guard let exercise else { return }
         exerciseManager.insertDropSets(sets, exercise: exercise) { [weak self] (dropSet) in
-            guard let self = self, let name = self.title() else { return }
-            self.handleFinishedDropSets(dropSet.exerciseSets, name)
+            guard let self = self, let name = self.title(), let sets = dropSet.exerciseSets() else { return }
+            self.handleFinishedDropSets(sets, name)
         }
         collectFinishedCellData()
     }

@@ -123,7 +123,7 @@ class ExerciseDataManager: DataManager {
         return superSet
     }
     
-    func insertDropSets(_ sets: [(duration: Int, weight: Double, reps: Double)], exercise: Exercise, completion: (DropSet) -> Void) {
+    func insertDropSets(_ sets: [(duration: Int, weight: Double, reps: Double)], exercise: Exercise, completion: @escaping (DropSet) -> Void) {
         var exerciseSets = [NSManagedObjectID]()
         for set in sets {
             insertSet(duration: set.duration, weight: set.weight, reps: set.reps, exercise: exercise) { [weak self] exerciseSet in
@@ -139,9 +139,9 @@ class ExerciseDataManager: DataManager {
         context.performAndWait {
             guard let dropSet = NSEntityDescription.insertNewObject(forEntityName: EntityName.dropSet.rawValue, into: context) as? DropSet
             else { return }
-            dropSet.sets = setIds.compactMap({ $0.uriRepresentation })
+            dropSet.sets = setIds.compactMap({ $0.uriRepresentation() })
             dropSet.exercise = exercise
-            context.save()
+            try? context.save()
         }
     }
 }
@@ -178,13 +178,13 @@ extension UnilateralExerciseSet {
 
 extension DropSet {
     public func exerciseSets() -> [ExerciseSet]? {
-        guard let setURLs = sets as? [URL],
+        guard let sets,
               let context = managedObjectContext,
               let coordinator = context.persistentStoreCoordinator
         else { return nil }
-        let setIds = setURLs.compactMap { coordinator.managedObjectID(forURIRepresentation: $0) }
+        let setIds = sets.compactMap { coordinator.managedObjectID(forURIRepresentation: $0) }
         let request = ExerciseSet.fetchRequest()
         request.predicate = NSPredicate(format: "self in %@", argumentArray: [setIds])
-        return managedObjectContext?.fetch(request)
+        return try? managedObjectContext?.fetch(request)
     }
 }
