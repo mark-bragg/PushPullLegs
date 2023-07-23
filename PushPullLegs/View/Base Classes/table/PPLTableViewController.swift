@@ -64,7 +64,7 @@ class PPLTableViewController: UIViewController, AdsRemovedResponder {
         tableView = tbl
     }
     
-    private func constrainTableView() {
+    func constrainTableView() {
         let guide = view.safeAreaLayoutGuide
         guard let tableView = tableView else { return }
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true

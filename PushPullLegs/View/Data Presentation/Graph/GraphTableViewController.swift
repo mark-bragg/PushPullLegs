@@ -100,7 +100,7 @@ class GraphTableViewController: PPLTableViewController {
         }
     }
     
-    private func constrainTableView() {
+    override func constrainTableView() {
         let guide = view.safeAreaLayoutGuide
         tableView?.translatesAutoresizingMaskIntoConstraints = false
         tableView?.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true

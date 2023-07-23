@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1053,8 +1053,9 @@
 		49EF4B6D23F8381F0071687D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1210;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "Mark Bragg";
 				TargetAttributes = {
 					49EF4B7423F8381F0071687D = {

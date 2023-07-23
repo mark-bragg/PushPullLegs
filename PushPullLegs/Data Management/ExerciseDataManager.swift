@@ -188,3 +188,21 @@ extension DropSet {
         return try? managedObjectContext?.fetch(request)
     }
 }
+
+extension SuperSet {
+    public func exerciseSets() -> (set1: ExerciseSet, set2: ExerciseSet)? {
+        guard let set1,
+              let set2,
+              let context = managedObjectContext,
+              let coordinator = context.persistentStoreCoordinator,
+              let set1Id = coordinator.managedObjectID(forURIRepresentation: set1),
+              let set2Id = coordinator.managedObjectID(forURIRepresentation: set2)
+        else { return nil }
+        let request = ExerciseSet.fetchRequest()
+        request.predicate = NSPredicate(format: "self in %@", argumentArray: [[set1Id, set2Id]])
+        guard let sets1and2 = try? managedObjectContext?.fetch(request),
+              sets1and2.count == 2
+        else { return nil }
+        return (sets1and2[0], sets1and2[1])
+    }
+}

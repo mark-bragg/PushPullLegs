@@ -112,7 +112,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
         section == 0 ? finishedCellDataLeft.count : finishedCellDataRight.count
     }
     
-    func sectionCount() -> Int {
+    override func sectionCount() -> Int {
         return 2
     }
     

@@ -14,6 +14,8 @@ class FinishedSetDataModel {
     var weight: Double
     var reps: Double
     var volume: Double
+    let isSuperSet: Bool
+    let isDropSet: Bool
     
     init(withExerciseSet exerciseSet: ExerciseSet) {
         duration = Int(exerciseSet.duration)
@@ -23,6 +25,14 @@ class FinishedSetDataModel {
             weight = (weight * 0.453592).truncateIfNecessary()
         }
         volume = exerciseSet.volume()
+        if let superSets = exerciseSet.exercise?.workout?.superSets?.allObjects as? [SuperSet] {
+            isSuperSet = superSets.contains { Set([$0.set1, $0.set2]).contains(exerciseSet.objectID.uriRepresentation()) }
+        } else {
+            isSuperSet = false
+        }
+        isDropSet = (exerciseSet.exercise?.dropSets?.array as? [DropSet])?.contains { dropSet in
+            dropSet.sets?.contains { $0 == exerciseSet.objectID.uriRepresentation() } ?? false
+        } ?? false
     }
 }
 
@@ -188,23 +198,70 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     }
     
     override func rowCount(section: Int = 0) -> Int {
-        return finishedCellData.count
+        if section == 0 {
+            return finishedCellData.filter({ !($0.isDropSet || $0.isSuperSet) }).count
+        } else if section == 1 {
+            return finishedCellData.filter({ $0.isDropSet }).count
+        }
+        return finishedCellData.filter({ $0.isSuperSet }).count
+    }
+    
+    private var superSets: [SuperSet] {
+        guard let exercise,
+              let sets = exercise.sets,
+              let superSets = exercise.workout?.superSets?.allObjects as? [SuperSet]
+        else { return [] }
+        var mySuperSets = [SuperSet]()
+        for superSet in superSets {
+            guard let superSetSets = superSet.exerciseSets()
+            else { continue }
+            if sets.contains(superSetSets.set1) || sets.contains(superSetSets.set2) {
+                mySuperSets.append(superSet)
+            }
+        }
+        return mySuperSets
+    }
+    
+    private var hasDropSets: Bool {
+        guard let dropSets = exercise?.dropSets
+        else { return false }
+        return dropSets.count > 0
+    }
+    
+    func sectionCount() -> Int {
+        var sectionCount = 1
+        if !superSets.isEmpty {
+            sectionCount += 1
+        }
+        if hasDropSets {
+            sectionCount += 1
+        }
+        return sectionCount
     }
     
     override func title(indexPath: IndexPath) -> String? {
-        return nil
+        nil
+    }
+    
+    func dataForIndexPath(_ indexPath: IndexPath) -> FinishedSetDataModel {
+        if indexPath.section == 0 {
+            return finishedCellData.filter({ !($0.isDropSet || $0.isSuperSet) })[indexPath.row]
+        } else if indexPath.section == 1 {
+            return finishedCellData.filter({ $0.isDropSet })[indexPath.row]
+        }
+        return finishedCellData.filter({ $0.isSuperSet })[indexPath.row]
     }
     
     func weightForIndexPath(_ indexPath: IndexPath) -> Double {
-        return finishedCellData[indexPath.row].weight
+        dataForIndexPath(indexPath).weight
     }
     
     func durationForIndexPath(_ indexPath: IndexPath) -> String {
-        return String.format(seconds: finishedCellData[indexPath.row].duration)
+        String.format(seconds: dataForIndexPath(indexPath).duration)
     }
     
     func repsForIndexPath(_ indexPath: IndexPath) -> Double {
-        return finishedCellData[indexPath.row].reps
+        dataForIndexPath(indexPath).reps
     }
     
     func totalVolume() -> Double {
@@ -216,7 +273,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     }
     
     func volumeForIndexPath(_ indexPath: IndexPath) -> Double {
-        return finishedCellData[indexPath.row].volume
+        finishedCellData[indexPath.row].volume
     }
     
     func title() -> String? {
@@ -251,17 +308,19 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
                 currentSuperSet?.set1 = self.superSetFirstSet?.objectID.uriRepresentation()
                 currentSuperSet?.set2 = exerciseSet.objectID.uriRepresentation()
                 currentSuperSet?.workout = workout
+                self.collectFinishedCellData()
+                self.clearSuperSetState()
+                self.reloader?.reload()
             }
-            clearSuperSetState()
         } else {
             firstSuperSetSetCompleted = true
             handleFirstSetCompletion()
             exerciseManager.insertSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
                 guard let self, let name = self.title() else { return }
                 self.handleFinishedSet(exerciseSet, name)
-                superSetFirstSet = exerciseSet
+                self.superSetFirstSet = exerciseSet
+                self.collectFinishedCellData()
             }
-            collectFinishedCellData()
         }
     }
     
@@ -310,6 +369,11 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     
     func noDataText() -> String {
         "Start your next set!"
+    }
+    
+    func superSet(at index: Int) -> SuperSet? {
+        guard superSets.count > index else { return nil }
+        return superSets[index]
     }
     
 }

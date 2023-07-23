@@ -31,6 +31,22 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     private var restTimerHeightConstraint: NSLayoutConstraint?
     var dropSetViewModel: ExerciseDropSetViewModel?
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addHeaderView()
+    }
+    
+    private func addHeaderView() {
+        guard let exerciseViewModel else { return }
+        let header = normalSetHeaderView(exerciseViewModel, 1)
+        view.addSubview(header)
+        header.translatesAutoresizingMaskIntoConstraints = false
+        header.heightAnchor.constraint(equalToConstant: header.frame.height).isActive = true
+        header.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        header.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if !readOnly {
@@ -38,7 +54,18 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
                 hideNoDataView()
             }
         }
-        tableView?.allowsSelection = false
+        tableView?.allowsSelection = true
+    }
+    
+    override func constrainTableView() {
+        let guide = view.safeAreaLayoutGuide
+        guard let tableView = tableView else { return }
+        tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+        setTableViewY(bannerContainerHeight() + self.tableView(tableView, heightForHeaderInSection: 1))
+        let bottom = tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
+        bottom.identifier = "bottom"
+        bottom.isActive = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -279,8 +306,21 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         exerciseSetViewModel = nil
     }
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        viewModel?.sectionCount?() ?? 1
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let exerciseViewModel else { return nil }
+        if section == 0 {
+            return nil
+        } else if section == 1 {
+            return dropSetHeaderView(exerciseViewModel)
+        }
+        return superSetHeaderView(exerciseViewModel)
+    }
+    
+    private func normalSetHeaderView(_ exerciseViewModel: ExerciseViewModel, _ section: Int) -> UIView {
         var titles = [String]()
         for i in 0...2 {
             titles.append(exerciseViewModel.headerLabelText(i))
@@ -289,15 +329,93 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         return view
     }
     
+    private func dropSetHeaderView(_ exerciseViewModel: ExerciseViewModel) -> UIView {
+        tableHeaderViewContainer(titles: ["Drop Sets"], section: 1)
+    }
+    
+    private func superSetHeaderView(_ exerciseViewModel: ExerciseViewModel) -> UIView {
+        tableHeaderViewContainer(titles: ["Super Sets"], section: 2)
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier),
             let exerciseViewModel
         else { return UITableViewCell() }
+        cell.selectionStyle = indexPath.section == 2 ? .default : .none
+        cell.accessoryType = indexPath.section == 2 ? .disclosureIndicator : .none
         let labels = cell.labels(width: tableView.frame.width / 3)
         labels.w.text = "\(exerciseViewModel.weightForIndexPath(indexPath))"
         labels.r.text = "\(exerciseViewModel.repsForIndexPath(indexPath))"
         labels.t.text = exerciseViewModel.durationForIndexPath(indexPath)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section == 2 else { return }
+        presentSuperSet(indexPath.row)
+    }
+    
+    private func presentSuperSet(_ index: Int) {
+        guard let superSet = exerciseViewModel?.superSet(at: index)
+        else { return }
+        let ssvm = SuperSetDataViewModel(superSet: superSet)
+        let ssvc = SuperSetDataViewController()
+        ssvc.viewModel = ssvm
+        navigationController?.pushViewController(ssvc, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard section != 0 else { return 0 }
+        return super.tableView(tableView, heightForHeaderInSection: section)
+    }
+}
+
+class SuperSetDataViewModel: NSObject, PPLTableViewModel {
+    private let superSet: SuperSet
+    lazy var sets: (ExerciseSet, ExerciseSet)? = {
+        superSet.exerciseSets()
+    }()
+    
+    init(superSet: SuperSet) {
+        self.superSet = superSet
+    }
+    
+    func sectionCount() -> Int {
+        2
+    }
+    
+    func rowCount(section: Int) -> Int {
+        1
+    }
+    
+    func title(indexPath: IndexPath) -> String? {
+        indexPath.section == 0 ?
+        sets?.0.exercise?.name :
+        sets?.1.exercise?.name
+    }
+    
+    func title() -> String? {
+        "Super Set"
+    }
+}
+
+class SuperSetDataViewController: PPLTableViewController {
+    private var superSetViewModel: SuperSetDataViewModel? { viewModel as? SuperSetDataViewModel }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        viewModel?.title(indexPath: IndexPath(row: 0, section: section))
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: defaultCellIdentifier),
+              let set = indexPath.section == 0 ? superSetViewModel?.sets?.0 : superSetViewModel?.sets?.1
+        else { return UITableViewCell() }
+        let data = FinishedSetDataModel(withExerciseSet: set)
+        let labels = cell.labels(width: tableView.frame.width)
+        labels.r.text = "\(data.reps)"
+        labels.t.text = String.format(seconds: data.duration)
+        labels.w.text = "\(data.weight)"
         return cell
     }
 }
@@ -397,6 +515,7 @@ extension ExerciseViewController: DropSetDelegate {
         }
         exerciseViewModel?.collectDropSets(sets)
         dismiss(animated: true)
+        reload()
     }
 }
 
