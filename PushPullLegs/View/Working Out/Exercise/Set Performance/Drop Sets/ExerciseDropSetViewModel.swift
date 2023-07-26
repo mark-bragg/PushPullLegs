@@ -14,7 +14,6 @@ class ExerciseDropSetViewModel: ExerciseSetViewModel {
     init(dropSetModel: DropSetModel) {
         self.dropSetModel = dropSetModel
         super.init()
-        startSet()
     }
     
     override func stopTimer() {

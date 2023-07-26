@@ -10,7 +10,7 @@ protocol DropSetDelegate: NSObjectProtocol {
     func dropSetSelected()
     var dropSetCount: Int { get set }
     func dropSetsStarted(with weights: [Double])
-    func startNextDropSet()
+    func startNextDropSet(_ dropSetModel: DropSetModel)
     func collectDropSet(duration: Int)
     func dropSetCompleted(with reps: Double)
 }

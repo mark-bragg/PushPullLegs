@@ -49,7 +49,11 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
         get { dataManager as? ExerciseDataManager ?? ExerciseDataManager() }
     }
     var exercise: Exercise?
-    private var finishedCellData = [FinishedSetDataModel]()
+    private var regularSetData = [FinishedSetDataModel]()
+    private var dropSetData = [FinishedSetDataModel]()
+    private var superSetData = [FinishedSetDataModel]()
+    private var dropSetDbObjects = [DropSet]()
+    private var superSetDbObjects = [SuperSet]()
     private(set) var exerciseName: String?
     var defaultWeight: Double? {
         guard let name = title()
@@ -108,7 +112,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
         type = exercise.workout?.name
         super.init()
         exerciseManager = dataManager
-        collectFinishedCellData()
+        collectSetData()
     }
     
     func isFirstTimePerformingExercise() -> Bool {
@@ -158,6 +162,12 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
         return previousExercise.volume()
     }
     
+    func collectSetData() {
+        collectDropSetData()
+        collectSuperSetData()
+        collectRegularSetData()
+    }
+    
     func collectDropSets(_ sets: [(duration: Int, weight: Double, reps: Double)]) {
         handleFirstSetCompletion()
         guard let exercise else { return }
@@ -165,13 +175,28 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
             guard let self = self, let name = self.title(), let sets = dropSet.exerciseSets() else { return }
             self.handleFinishedDropSets(sets, name)
         }
-        collectFinishedCellData()
+        collectSetData()
+    }
+    
+    private func collectDropSetData() {
+        guard let exercise = exerciseManager.fetch(exercise) as? Exercise,
+              let dropSets = exercise.dropSets?.array as? [DropSet]
+        else { return }
+        dropSetData.removeAll()
+        var dropSetsToSave = [DropSet]()
+        for dropSet in dropSets {
+            guard let dropSetSets = dropSet.exerciseSets()
+            else { continue }
+            dropSetData.append(contentsOf: dropSetSets.compactMap { FinishedSetDataModel(withExerciseSet: $0) })
+            dropSetsToSave.append(dropSet)
+        }
+        dropSetDbObjects = dropSetsToSave
     }
     
     func handleFinishedDropSets(_ exerciseSets: [ExerciseSet], _ name: String) {
         isFirstSet = false
         for exerciseSet in exerciseSets {
-            appendFinishedSetData(FinishedSetDataModel(withExerciseSet: exerciseSet))
+            dropSetData.append(FinishedSetDataModel(withExerciseSet: exerciseSet))
         }
         reloader?.reload()
     }
@@ -182,7 +207,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
             guard let self = self, let name = self.title() else { return }
             self.handleFinishedSet(exerciseSet, name)
         }
-        collectFinishedCellData()
+        collectSetData()
     }
     
     func handleFinishedSet(_ exerciseSet: ExerciseSet, _ name: String) {
@@ -194,62 +219,37 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     }
     
     func appendFinishedSetData(_ data: FinishedSetDataModel) {
-        finishedCellData.append(data)
+        regularSetData.append(data)
     }
     
     override func rowCount(section: Int = 0) -> Int {
         if section == 0 {
-            return finishedCellData.filter({ !($0.isDropSet || $0.isSuperSet) }).count
+            return regularSetData.count
         } else if section == 1 {
-            return finishedCellData.filter({ $0.isDropSet }).count
+            return dropSetData.count
         }
-        return finishedCellData.filter({ $0.isSuperSet }).count
-    }
-    
-    private var superSets: [SuperSet] {
-        guard let exercise,
-              let sets = exercise.sets,
-              let superSets = exercise.workout?.superSets?.allObjects as? [SuperSet]
-        else { return [] }
-        var mySuperSets = [SuperSet]()
-        for superSet in superSets {
-            guard let superSetSets = superSet.exerciseSets()
-            else { continue }
-            if sets.contains(superSetSets.set1) || sets.contains(superSetSets.set2) {
-                mySuperSets.append(superSet)
-            }
-        }
-        return mySuperSets
-    }
-    
-    private var hasDropSets: Bool {
-        guard let dropSets = exercise?.dropSets
-        else { return false }
-        return dropSets.count > 0
+        return superSetData.count
     }
     
     func sectionCount() -> Int {
-        var sectionCount = 1
-        if !superSets.isEmpty {
-            sectionCount += 1
-        }
-        if hasDropSets {
-            sectionCount += 1
-        }
-        return sectionCount
+        3
     }
     
     override func title(indexPath: IndexPath) -> String? {
         nil
     }
     
-    func dataForIndexPath(_ indexPath: IndexPath) -> FinishedSetDataModel {
-        if indexPath.section == 0 {
-            return finishedCellData.filter({ !($0.isDropSet || $0.isSuperSet) })[indexPath.row]
-        } else if indexPath.section == 1 {
-            return finishedCellData.filter({ $0.isDropSet })[indexPath.row]
+    func dataFor(section: Int) -> [FinishedSetDataModel] {
+        if section == 0 {
+            return regularSetData
+        } else if section == 1 {
+            return dropSetData
         }
-        return finishedCellData.filter({ $0.isSuperSet })[indexPath.row]
+        return superSetData
+    }
+    
+    func dataForIndexPath(_ indexPath: IndexPath) -> FinishedSetDataModel {
+        dataFor(section: indexPath.section)[indexPath.row]
     }
     
     func weightForIndexPath(_ indexPath: IndexPath) -> Double {
@@ -266,14 +266,14 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     
     func totalVolume() -> Double {
         var total = Double(0)
-        for row in 0..<finishedCellData.count {
+        for row in 0..<regularSetData.count {
             total += volumeForIndexPath(IndexPath(row: row, section: 0))
         }
         return total
     }
     
     func volumeForIndexPath(_ indexPath: IndexPath) -> Double {
-        finishedCellData[indexPath.row].volume
+        regularSetData[indexPath.row].volume
     }
     
     func title() -> String? {
@@ -292,7 +292,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
         return "Time"
     }
     
-    func collectSuperSetSet(duration: Int, weight: Double, reps: Double) {
+    func collectSuperSetSet(duration: Int, weight: Double, reps: Double, _ delegate: ExerciseSetViewModelDelegate?) {
         if firstSuperSetSetCompleted, let superSetSecondExerciseName, let workout = exercise?.workout, let exercises = workout.exercises?.array as? [Exercise] {
             var secondExercise = exercises.first { $0.name == superSetSecondExerciseName }
             if secondExercise == nil {
@@ -302,26 +302,31 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
                 WorkoutDataManager().add(secondExerciseCreation, to: workout)
                 secondExercise = secondExerciseCreation
             }
-            exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: secondExercise) { [weak self] exerciseSet in
-                guard let self, let workout = self.exercise?.workout else { return }
-                let currentSuperSet = self.exerciseManager.createSuperSet(workout)
-                currentSuperSet?.set1 = self.superSetFirstSet?.objectID.uriRepresentation()
-                currentSuperSet?.set2 = exerciseSet.objectID.uriRepresentation()
-                currentSuperSet?.workout = workout
-                self.collectFinishedCellData()
+            exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: secondExercise) { [weak self] secondSet in
+                guard let self, let workout = self.exercise?.workout, let firstSet = self.superSetFirstSet else { return }
+                let currentSuperSet = self.exerciseManager.createSuperSet(with: workout, set1: firstSet, set2: secondSet)
+                self.collectSetData()
                 self.clearSuperSetState()
                 self.reloader?.reload()
+                delegate?.exerciseSetViewModelFinishedSet(nil)
             }
         } else {
             firstSuperSetSetCompleted = true
             handleFirstSetCompletion()
             exerciseManager.insertSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
                 guard let self, let name = self.title() else { return }
-                self.handleFinishedSet(exerciseSet, name)
+                self.handleFinishedSuperSet(exerciseSet, name)
                 self.superSetFirstSet = exerciseSet
-                self.collectFinishedCellData()
+                delegate?.exerciseSetViewModelFinishedSet(nil)
             }
         }
+    }
+    
+    func handleFinishedSuperSet(_ exerciseSet: ExerciseSet, _ name: String) {
+        isFirstSet = false
+        superSetData.append(FinishedSetDataModel(withExerciseSet: exerciseSet))
+        reloader?.reload()
+        let row = rowCount() - 1
     }
     
     private func clearSuperSetState() {
@@ -331,19 +336,68 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     }
     
     private func handleFirstSetCompletion() {
-        guard finishedCellData.count == 0 else { return }
+        guard regularSetData.count == 0 else { return }
         createExercise()
         exercise = exercise ?? exerciseManager.creation as? Exercise
         delegate?.exerciseViewModel(self, started: exercise)
     }
     
-    func collectFinishedCellData() {
-        guard let exercise = exerciseManager.fetch(exercise) as? Exercise, let sets = exercise.sets?.array as? [ExerciseSet] else { return }
-        finishedCellData.removeAll()
+    func collectSuperSetData() {
+        guard let exercise = exerciseManager.fetch(exercise) as? Exercise,
+              let workout = exercise.workout,
+              let superSets = workout.superSets?.allObjects as? [SuperSet],
+              !superSets.isEmpty
+        else { return }
+        superSetData.removeAll()
+        var superSetsToSave = [SuperSet]()
+        for superSet in superSets {
+            guard let superSetSets = superSet.exerciseSets(),
+                  let exerciseSets = exercise.sets?.array as? [ExerciseSet]
+            else { continue }
+            if exerciseSets.contains(where: { $0 == superSetSets.set1 }) {
+                superSetData.append(FinishedSetDataModel(withExerciseSet: superSetSets.set1))
+                superSetsToSave.append(superSet)
+            } else if exerciseSets.contains(where: { $0 == superSetSets.set2 }) {
+                superSetData.append(FinishedSetDataModel(withExerciseSet: superSetSets.set2))
+                superSetsToSave.append(superSet)
+            }
+        }
+        superSetDbObjects = superSetsToSave
+    }
+    
+    func collectRegularSetData() {
+        guard let exercise = exerciseManager.fetch(exercise) as? Exercise, var sets = exercise.sets?.array as? [ExerciseSet] else { return }
+        sets = sets.filter { regularSet in
+            for dropSetDbObject in dropSetDbObjects {
+                if let dropSetSets = dropSetDbObject.exerciseSets(), dropSetSets.contains(where: { $0 == regularSet }) {
+                    return false
+                }
+            }
+            for superSetDbObject in superSetDbObjects {
+                if let superSetSets = superSetDbObject.exerciseSets(), superSetSets.set1  == regularSet || superSetSets.set2 == regularSet {
+                    return false
+                }
+            }
+            return true
+        }
+        regularSetData.removeAll()
         for set in sets {
-            finishedCellData.append(FinishedSetDataModel(withExerciseSet: set))
+            regularSetData.append(FinishedSetDataModel(withExerciseSet: set))
         }
         dbObjects = sets
+    }
+    
+    func titleForSection(_ section: Int) -> String? {
+        if section == 0 {
+            if regularSetData.isEmpty {
+                return !dropSetData.isEmpty ? "Drop Sets" : "Super Sets"
+            }
+        } else if section == 1 {
+            return !dropSetData.isEmpty ? "Drop Sets" : "Super Sets"
+        } else if section == 2 {
+            return "Super Sets"
+        }
+        return nil
     }
     
     override func deleteDatabaseObject() {
@@ -352,15 +406,15 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     }
     
     override func refresh() {
-        finishedCellData = [FinishedSetDataModel]()
-        collectFinishedCellData()
-        if finishedCellData.count == 0 {
+        regularSetData = [FinishedSetDataModel]()
+        collectSetData()
+        if regularSetData.count == 0 || dropSetData.count == 0  || superSetData.count == 0  {
             reloader?.reload()
         }
     }
     
     func hasData() -> Bool {
-        finishedCellData.count > 0
+        !(regularSetData.isEmpty && dropSetData.isEmpty && superSetData.isEmpty)
     }
     
     func createExercise() {
@@ -372,8 +426,34 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     }
     
     func superSet(at index: Int) -> SuperSet? {
-        guard superSets.count > index else { return nil }
-        return superSets[index]
+        guard superSetDbObjects.count > index else { return nil }
+        return superSetDbObjects[index]
+    }
+    
+    override func delete(indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            dataManager?.delete(dbObjects[indexPath.row])
+        } else if indexPath.section == 1 {
+            dataManager?.delete(dropSetDbObjects[indexPath.row])
+        } else {
+            delete(superSet: superSetDbObjects[indexPath.row])
+        }
+        CoreDataManager.shared.save()
+    }
+    
+    private func delete(superSet: SuperSet) {
+        guard let sets = superSet.exerciseSets()
+        else { return }
+        dataManager?.delete(sets.set1)
+        dataManager?.delete(sets.set2)
+        dataManager?.delete(superSet)
+    }
+    
+    override func deletionAlertMessage(_ indexPath: IndexPath) -> String? {
+        if indexPath.section == 2 {
+            return "This will delete the other set as well"
+        }
+        return nil
     }
     
 }

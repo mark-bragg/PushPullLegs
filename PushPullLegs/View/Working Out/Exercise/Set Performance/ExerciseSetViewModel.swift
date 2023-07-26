@@ -14,7 +14,7 @@ protocol ExerciseSetCollector: NSObjectProtocol {
 }
 
 protocol SuperSetCollector: NSObjectProtocol {
-    func collectSuperSetSet(duration: Int, weight: Double, reps: Double)
+    func collectSuperSetSet(duration: Int, weight: Double, reps: Double, _ delegate: ExerciseSetViewModelDelegate?)
 }
 
 fileprivate enum ExerciseSetState {
@@ -28,7 +28,7 @@ fileprivate enum ExerciseSetState {
 protocol ExerciseSetViewModelDelegate: NSObjectProtocol {
     func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel)
     func exerciseSetViewModelStoppedTimer(_ viewModel: ExerciseSetViewModel)
-    func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel)
+    func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel?)
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel)
 }
 
@@ -151,11 +151,11 @@ class ExerciseSetViewModel: NSObject {
             return
         }
         if let superSetCollector {
-            superSetCollector.collectSuperSetSet(duration: totalTime, weight: weight, reps: reps)
+            superSetCollector.collectSuperSetSet(duration: totalTime, weight: weight, reps: reps, delegate)
         } else {
             setCollector?.collectSet(duration: totalTime, weight: weight, reps: reps)
+            delegate?.exerciseSetViewModelFinishedSet(self)
         }
-        delegate?.exerciseSetViewModelFinishedSet(self)
     }
     
     func cancel() {

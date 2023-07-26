@@ -123,6 +123,15 @@ class ExerciseDataManager: DataManager {
         return superSet
     }
     
+    func createSuperSet(with workout: Workout, set1: ExerciseSet, set2: ExerciseSet) -> SuperSet? {
+        let superSet = NSEntityDescription.insertNewObject(forEntityName: EntityName.superSet.rawValue, into: context) as? SuperSet
+        superSet?.workout = workout
+        superSet?.set1 = set1.objectID.uriRepresentation()
+        superSet?.set2 = set2.objectID.uriRepresentation()
+        try? context.save()
+        return superSet
+    }
+    
     func insertDropSets(_ sets: [(duration: Int, weight: Double, reps: Double)], exercise: Exercise, completion: @escaping (DropSet) -> Void) {
         var exerciseSets = [NSManagedObjectID]()
         for set in sets {

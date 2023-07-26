@@ -85,7 +85,7 @@ class WorkoutDataViewModel: DatabaseViewModel, ReloadProtocol, ExerciseTemplateS
         return previousExercise < exercisesDone[row] ? .increase : .decrease
     }
     
-    override func deletionAlertMessage() -> String? {
+    override func deletionAlertMessage(_ indexPath: IndexPath) -> String? {
         "Delete exercise?"
     }
     

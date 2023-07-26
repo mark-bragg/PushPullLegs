@@ -30,6 +30,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     private var isTimerViewHidden = true
     private var restTimerHeightConstraint: NSLayoutConstraint?
     var dropSetViewModel: ExerciseDropSetViewModel?
+    var headerViewHeight: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,10 +39,11 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     
     private func addHeaderView() {
         guard let exerciseViewModel else { return }
-        let header = normalSetHeaderView(exerciseViewModel, 1)
+        let header = normalSetHeaderView(exerciseViewModel, -1)
+        headerViewHeight = header.frame.height
         view.addSubview(header)
         header.translatesAutoresizingMaskIntoConstraints = false
-        header.heightAnchor.constraint(equalToConstant: header.frame.height).isActive = true
+        header.heightAnchor.constraint(equalToConstant: headerViewHeight).isActive = true
         header.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         header.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -62,7 +64,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         guard let tableView = tableView else { return }
         tableView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        setTableViewY(bannerContainerHeight() + self.tableView(tableView, heightForHeaderInSection: 1))
+        setTableViewY(bannerContainerHeight() + headerViewHeight)
         let bottom = tableView.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
         bottom.identifier = "bottom"
         bottom.isActive = true
@@ -205,9 +207,8 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         repsCollector = rc
     }
     
-    func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
+    func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel?) {
         dismiss(animated: true, completion: {
-            self.reload()
             if self.superSetIsInProgress() {
                 self.startSuperSetSecondSet()
             } else if let rtv = self.restTimerView {
@@ -217,6 +218,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
                     AppState.shared.exerciseInProgress = !self.readOnly ? evm.title() : nil
                     self.presentProgressNotification()
                 }
+                self.reload()
             }
         })
     }
@@ -227,6 +229,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     func startSuperSetSecondSet() {
+        prepareExerciseSetViewModel()
         prepareSuperSetExerciseSetViewModel()
         let wc = SuperSetWeightCollectionViewController()
         if let secondName = exerciseViewModel?.superSetSecondExerciseName {
@@ -311,13 +314,11 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let exerciseViewModel else { return nil }
-        if section == 0 {
-            return nil
-        } else if section == 1 {
-            return dropSetHeaderView(exerciseViewModel)
-        }
-        return superSetHeaderView(exerciseViewModel)
+        guard let exerciseViewModel,
+              section != 0,
+              exerciseViewModel.rowCount(section: section) > 0
+        else { return nil }
+        return section == 1 ? dropSetHeaderView(exerciseViewModel) : superSetHeaderView(exerciseViewModel)
     }
     
     private func normalSetHeaderView(_ exerciseViewModel: ExerciseViewModel, _ section: Int) -> UIView {
@@ -366,7 +367,12 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section != 0 else { return 0 }
+        if section == -1 {
+            return 20
+        }
+        guard section != 0,
+             (exerciseViewModel?.rowCount(section: section) ?? 0) > 0
+        else { return 0 }
         return super.tableView(tableView, heightForHeaderInSection: section)
     }
 }
@@ -477,9 +483,7 @@ extension ExerciseViewController: DropSetDelegate {
     func dropSetsStarted(with weights: [Double]) {
         let dropSetModel = DropSetModel()
         dropSetModel.weightsPerSet = weights
-        dropSetViewModel = ExerciseDropSetViewModel(dropSetModel: dropSetModel)
-        dropSetViewModel?.dropSetDelegate = self
-        startNextDropSet()
+        startNextDropSet(dropSetModel)
     }
     
     func collectDropSet(duration: Int) {
@@ -495,13 +499,15 @@ extension ExerciseViewController: DropSetDelegate {
         guard let dropSetModel = dropSetViewModel?.dropSetModel else { return }
         dropSetModel.repsPerSet.append(reps)
         guard dropSetModel.isComplete else {
-            return startNextDropSet()
+            return startNextDropSet(dropSetModel)
         }
         collectDropSetData(dropSetModel)
     }
     
-    func startNextDropSet() {
+    func startNextDropSet(_ dropSetModel: DropSetModel) {
         let timer = ExerciseTimerViewController()
+        dropSetViewModel = ExerciseDropSetViewModel(dropSetModel: dropSetModel)
+        dropSetViewModel?.dropSetDelegate = self
         timer.exerciseSetViewModel = dropSetViewModel
         dismiss(animated: true) {
             self.presentModally(timer)
