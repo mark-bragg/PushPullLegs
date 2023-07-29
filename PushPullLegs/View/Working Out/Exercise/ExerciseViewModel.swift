@@ -434,11 +434,32 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
         if indexPath.section == 0 {
             dataManager?.delete(dbObjects[indexPath.row])
         } else if indexPath.section == 1 {
-            dataManager?.delete(dropSetDbObjects[indexPath.row])
-        } else {
+            let data = dataForIndexPath(indexPath)
+            for dropSetDbObject in dropSetDbObjects {
+                guard let sets = dropSetDbObject.exerciseSets()
+                else { continue }
+                var setToDelete: ExerciseSet?
+                for set in sets {
+                    if set.duration == data.duration, set.reps == data.reps, set.weight == data.weight {
+                        setToDelete = set
+                        break
+                    }
+                }
+                if let setToDelete {
+                    if sets.count == 1 {
+                        dataManager?.delete(dropSetDbObjects[indexPath.row])
+                    }
+                    dataManager?.delete(setToDelete)
+                }
+            }
+        } else if let sets = superSetDbObjects[indexPath.row].exerciseSets() {
+            dataManager?.delete(sets.set1)
+            dataManager?.delete(sets.set2)
             delete(superSet: superSetDbObjects[indexPath.row])
         }
         CoreDataManager.shared.save()
+        collectSetData()
+        reloader?.reload()
     }
     
     private func delete(superSet: SuperSet) {
