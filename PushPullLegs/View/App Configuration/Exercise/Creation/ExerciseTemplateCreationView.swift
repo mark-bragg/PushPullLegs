@@ -10,6 +10,7 @@ import UIKit
 
 class ExerciseTemplateEditView: ExerciseTemplateCreationView {
     override var showLateralType: Bool { false }
+    override var showMuscleFocus: Bool { false }
 }
 
 class ExerciseTemplateCreationView: UIView {
@@ -81,10 +82,15 @@ class ExerciseTemplateCreationView: UIView {
         showExerciseType ? 300 : 225
     }
     var showLateralType: Bool { true }
+    var showMuscleFocus: Bool { true }
     private lazy var lateralTypeParentView: UIView = {
         UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: parentStackView.frame.height / 3))
     }()
     weak var lateralTypeSegmentedControl: UISegmentedControl?
+    private lazy var muscleFocusParentView: UIView = {
+        UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: parentStackView.frame.height / 3))
+    }()
+    weak var muscleFocusSegmentedControl: UISegmentedControl?
     private var firstLoad = true
     private var showExerciseType = true
     
@@ -201,15 +207,32 @@ class ExerciseTemplateCreationView: UIView {
         lateralTypeParentView.addSubview(segmentedControl)
         lateralTypeSegmentedControl = segmentedControl
         segmentedControl.selectedSegmentIndex = 0
-        constrainSegmentedControl(segmentedControl)
+        constrainLateralTypeSegmentedControl(segmentedControl)
     }
     
-    private func constrainSegmentedControl(_ segCon: UISegmentedControl) {
+    private func constrainLateralTypeSegmentedControl(_ segCon: UISegmentedControl) {
         segCon.translatesAutoresizingMaskIntoConstraints = false
         segCon.leadingAnchor.constraint(equalTo: lateralTypeParentView.leadingAnchor, constant: 24).isActive = true
         segCon.trailingAnchor.constraint(equalTo: lateralTypeParentView.trailingAnchor, constant: -24).isActive = true
         segCon.topAnchor.constraint(equalTo: lateralTypeParentView.topAnchor, constant: 4).isActive = true
         segCon.bottomAnchor.constraint(equalTo: lateralTypeParentView.bottomAnchor, constant: -4).isActive = true
+    }
+    
+    private func setupMuscleFocusSegmentedControl() {
+        guard showLateralType else { return }
+        let segmentedControl = UISegmentedControl.PPLSegmentedControl(titles: ["Compound", "Isolation"])
+        segmentedControl.selectedSegmentIndex = 0
+        muscleFocusParentView.addSubview(segmentedControl)
+        muscleFocusSegmentedControl = segmentedControl
+        constrainMuscleFocusSegmentedControl(segmentedControl)
+    }
+    
+    private func constrainMuscleFocusSegmentedControl(_ segCon: UISegmentedControl) {
+        segCon.translatesAutoresizingMaskIntoConstraints = false
+        segCon.leadingAnchor.constraint(equalTo: muscleFocusParentView.leadingAnchor, constant: 24).isActive = true
+        segCon.trailingAnchor.constraint(equalTo: muscleFocusParentView.trailingAnchor, constant: -24).isActive = true
+        segCon.topAnchor.constraint(equalTo: muscleFocusParentView.topAnchor, constant: 4).isActive = true
+        segCon.bottomAnchor.constraint(equalTo: muscleFocusParentView.bottomAnchor, constant: -4).isActive = true
     }
     
     private func fillStack() {

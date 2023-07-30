@@ -40,6 +40,9 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
         if let segCon = creationView.lateralTypeSegmentedControl, segCon.allTargets.isEmpty {
             segCon.addTarget(self, action: #selector(lateralTypeChanged(_:)), for: .valueChanged)
         }
+        if let segCon = creationView.muscleFocusSegmentedControl, segCon.allTargets.isEmpty {
+            segCon.addTarget(self, action: #selector(muscleFocusChanged(_:)), for: .valueChanged)
+        }
         handleViewDidLayoutSubviews()
     }
     
@@ -156,9 +159,13 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     @objc
     private func lateralTypeChanged(_ control: UISegmentedControl) {
-        viewModel?.lateralType = control.selectedSegmentIndex == 0 ? LateralType.bilateral : .unilateral
+        viewModel?.lateralType = control.selectedSegmentIndex == 0 ? .bilateral : .unilateral
     }
     
+    @objc
+    private func muscleFocusChanged(_ control: UISegmentedControl) {
+        viewModel?.muscleGrouping = control.selectedSegmentIndex == 0 ? .compound : .isolation
+    }
 }
 
 class ExerciseNameSanitizer: NSObject, StringSanitizer {

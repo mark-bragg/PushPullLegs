@@ -1,5 +1,5 @@
 //
-//  UnilateralExerciseViewModelTests.swift
+//  UnilateralIsolationExerciseViewModelTests.swift
 //  PushPullLegsTests
 //
 //  Created by Mark Bragg on 8/23/21.
@@ -9,9 +9,9 @@
 import XCTest
 @testable import PushPullLegs
 
-class UnilateralExerciseViewModelTests: XCTestCase {
+class UnilateralIsolationExerciseViewModelTests: XCTestCase {
     
-    var sut: UnilateralExerciseViewModel!
+    var sut: UnilateralIsolationExerciseViewModel!
     let dbHelper = DBHelper(coreDataStack: CoreDataTestStack())
     let exerciseTemplateName = "exercise template"
     var exerciseCompletionExpectation: XCTestExpectation?
@@ -22,14 +22,14 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         dbHelper.addExerciseTemplate(name: exerciseTemplateName, type: .push)
         let template = dbHelper.fetchExerciseTemplates()!.first!
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exerciseTemplate: template)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exerciseTemplate: template)
     }
     
     func assertFinishedSet(_ d: Int, _ w: Double, _ r: Double, _ exercise: Exercise, _ rowCount: Int, _ side: HandSide) {
         let section = side == .left ? 0 : 1
         XCTAssert(sut.rowCount(section: section) == rowCount, "\nexpected: \(rowCount)\nactual:\(sut.rowCount(section: section))")
         guard dbHelper.fetchSets(exercise)!.contains(where: { (set) -> Bool in
-            guard let set = set as? UnilateralExerciseSet else { return false }
+            guard let set = set as? UnilateralIsolationExerciseSet else { return false }
             let dataIsCorrect = set.duration == d && set.weight == w.truncateIfNecessary() && set.reps == r
             return dataIsCorrect && (set.isLeftSide ? side == .left : side == .right)
         }) else {
@@ -111,40 +111,40 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testRowCount_sutInitializedAfterExerciseIsSaved_0() {
-        let exercise = dbHelper.createUnilateralExercise()
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        let exercise = dbHelper.createUnilateralIsolationExercise()
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.rowCount(section: 0) == 0)
         XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testRowCount_sutInitializedAfterExerciseIsSaved_1_0() {
-        let exercise = dbHelper.createUnilateralExercise()
-        dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 10, w: 10, d: 10, l: true))
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        let exercise = dbHelper.createUnilateralIsolationExercise()
+        dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 10, w: 10, d: 10, l: true))
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.rowCount(section: 0) == 1)
         XCTAssert(sut.rowCount(section: 1) == 0)
     }
     
     func testRowCount_sutInitializedAfterExerciseIsSaved_4_3() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for _ in 0..<4 {
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 10, w: 10, d: 10, l: true))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 10, w: 10, d: 10, l: true))
         }
         for _ in 0..<3 {
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 10, w: 10, d: 10, l: false))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 10, w: 10, d: 10, l: false))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.rowCount(section: 0) == 4)
         XCTAssert(sut.rowCount(section: 1) == 3)
     }
     
     func testWeightForIndexPath_left() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for i in 0..<4 {
             let i = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 1 * i, w: 2 * i, d: 3 * Int(i), l: true))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 1 * i, w: 2 * i, d: 3 * Int(i), l: true))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.hasData())
         for i in 0..<4 {
             XCTAssert(sut.weightForIndexPath(IndexPath(row: i, section: 0)) == 2 * Double(i))
@@ -152,12 +152,12 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testWeightForIndexPath_right() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for i in 0..<4 {
             let i = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 1 * i, w: 2 * i, d: 3 * Int(i), l: false))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 1 * i, w: 2 * i, d: 3 * Int(i), l: false))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.hasData())
         for i in 0..<4 {
             XCTAssert(sut.weightForIndexPath(IndexPath(row: i, section: 1)) == 2 * Double(i))
@@ -165,12 +165,12 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testRepsForIndexPath_left() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for i in 0..<4 {
             let i = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 11 * i, w: 0, d: 0, l: true))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 11 * i, w: 0, d: 0, l: true))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.hasData())
         for i in 0..<4 {
             XCTAssert(sut.repsForIndexPath(IndexPath(row: i, section: 0)) == 11 * Double(i))
@@ -178,12 +178,12 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testRepsForIndexPath_right() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for i in 0..<4 {
             let i = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 11 * i, w: 0, d: 0, l: false))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 11 * i, w: 0, d: 0, l: false))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.hasData())
         for i in 0..<4 {
             XCTAssert(sut.repsForIndexPath(IndexPath(row: i, section: 1)) == 11 * Double(i))
@@ -191,11 +191,11 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testDurationForIndexPath_left() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for i in 0..<4 {
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 0, w: 0, d: 7 * i, l: true))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 0, w: 0, d: 7 * i, l: true))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.hasData())
         for i in 0..<4 {
             XCTAssert(sut.durationForIndexPath(IndexPath(row: i, section: 0)) == String.format(seconds: 7 * i))
@@ -203,11 +203,11 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testDurationForIndexPath_right() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for i in 0..<4 {
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 0, w: 0, d: 7 * i, l: false))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 0, w: 0, d: 7 * i, l: false))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.hasData())
         for i in 0..<4 {
             XCTAssert(sut.durationForIndexPath(IndexPath(row: i, section: 1)) == String.format(seconds: 7 * i))
@@ -215,12 +215,12 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testVolumeForIndexPath_left() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for i in 0..<4 {
             let i = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90 + i, w: 25 + i, d: 7 + Int(i), l: true))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 90 + i, w: 25 + i, d: 7 + Int(i), l: true))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.hasData())
         for i in 0..<4 {
             let i = Double(i)
@@ -234,12 +234,12 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testVolumeForIndexPath_right() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         for i in 0..<4 {
             let i = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90 + i, w: 25 + i, d: 7 + Int(i), l: false))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 90 + i, w: 25 + i, d: 7 + Int(i), l: false))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.hasData())
         for i in 0..<4 {
             let i = Double(i)
@@ -253,17 +253,17 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testTotalVolume_singleRightSet() {
-        let exercise = dbHelper.createUnilateralExercise()
-        dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90, w: 25, d: 7, l: false))
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        let exercise = dbHelper.createUnilateralIsolationExercise()
+        dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 90, w: 25, d: 7, l: false))
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         let v = sut.totalVolume()
         XCTAssertEqual(v, 90 * 25 * 7.0.durationLog)
     }
     
     func testTotalVolume_singleLeftSet() {
-        let exercise = dbHelper.createUnilateralExercise()
-        dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90, w: 25, d: 7, l: true))
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        let exercise = dbHelper.createUnilateralIsolationExercise()
+        dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 90, w: 25, d: 7, l: true))
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         let v = sut.totalVolume()
         XCTAssertEqual(v, (90 * 25 * 7.0.durationLog))
     }
@@ -273,14 +273,14 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testDeleteLeftSet() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         leftRowCount = 3
         rightRowCount = 2
         for i in 0..<5 {
             let ii = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90 + ii, w: 25 + ii, d: 7 + i, l: i % 2 == 0))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 90 + ii, w: 25 + ii, d: 7 + i, l: i % 2 == 0))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         sut.reloader = self
         XCTAssert(sut.rowCount(section: 0) == leftRowCount)
         XCTAssert(sut.rowCount(section: 1) == rightRowCount)
@@ -293,14 +293,14 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testDeleteRightSet() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         leftRowCount = 3
         rightRowCount = 2
         for i in 0..<5 {
             let ii = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90 + ii, w: 25 + ii, d: 7 + i, l: i % 2 == 0))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 90 + ii, w: 25 + ii, d: 7 + i, l: i % 2 == 0))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         sut.reloader = self
         XCTAssert(sut.rowCount(section: 0) == leftRowCount)
         XCTAssert(sut.rowCount(section: 1) == rightRowCount)
@@ -313,14 +313,14 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testDeleteAllSets() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         leftRowCount = 3
         rightRowCount = 2
         for i in 0..<5 {
             let ii = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90 + ii, w: 25 + ii, d: 7 + i, l: i % 2 == 0))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 90 + ii, w: 25 + ii, d: 7 + i, l: i % 2 == 0))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         XCTAssert(sut.rowCount(section: 0) == leftRowCount)
         XCTAssert(sut.rowCount(section: 1) == rightRowCount)
         
@@ -350,14 +350,14 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     }
     
     func testDeleteDatabaseObject() {
-        let exercise = dbHelper.createUnilateralExercise()
+        let exercise = dbHelper.createUnilateralIsolationExercise()
         leftRowCount = 3
         rightRowCount = 2
         for i in 0..<5 {
             let ii = Double(i)
-            dbHelper.addUnilateralExerciseSetTo(exercise, data: (r: 90 + ii, w: 25 + ii, d: 7 + i, l: i % 2 == 0))
+            dbHelper.addUnilateralIsolationExerciseSetTo(exercise, data: (r: 90 + ii, w: 25 + ii, d: 7 + i, l: i % 2 == 0))
         }
-        sut = UnilateralExerciseViewModel(withDataManager: UnilateralExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
+        sut = UnilateralIsolationExerciseViewModel(withDataManager: UnilateralIsolationExerciseDataManager(context: dbHelper.coreDataStack.mainContext), exercise: exercise)
         sut.reloader = self
         XCTAssert(sut.rowCount(section: 0) == leftRowCount)
         XCTAssert(sut.rowCount(section: 1) == rightRowCount)
@@ -437,7 +437,7 @@ class UnilateralExerciseViewModelTests: XCTestCase {
     
 }
 
-extension UnilateralExerciseViewModelTests: ReloadProtocol {
+extension UnilateralIsolationExerciseViewModelTests: ReloadProtocol {
     func reload() {
         deletionExpectation.fulfill()
         XCTAssert(sut.rowCount(section: 0) == leftRowCount, "\nexpected: \(leftRowCount)\nactual: \(sut.rowCount(section: 0))")

@@ -1,5 +1,5 @@
 //
-//  UnilateralExerciseViewModel.swift
+//  UnilateralIsolationExerciseViewModel.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 8/23/21.
@@ -12,7 +12,7 @@ import CoreData
 fileprivate class FinishedUnilateralSetDataModel: FinishedSetDataModel {
     var isLeftSide: Bool
     
-    init(withExerciseSet exerciseSet: UnilateralExerciseSet) {
+    init(withExerciseSet exerciseSet: UnilateralIsolationExerciseSet) {
         isLeftSide = exerciseSet.isLeftSide
         super.init(withExerciseSet: exerciseSet)
     }
@@ -23,17 +23,17 @@ enum HandSide: String {
     case right = "Right"
 }
 
-class UnilateralExerciseViewModel: ExerciseViewModel {
+class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
     var currentSide: HandSide?
     fileprivate var finishedCellDataLeft = [FinishedUnilateralSetDataModel]()
     fileprivate var finishedCellDataRight = [FinishedUnilateralSetDataModel]()
     
-    override init(withDataManager dataManager: ExerciseDataManager = UnilateralExerciseDataManager(), exercise: Exercise) {
+    override init(withDataManager dataManager: ExerciseDataManager = UnilateralIsolationExerciseDataManager(), exercise: Exercise) {
         super.init(withDataManager: dataManager, exercise: exercise)
         
     }
     
-    override init(withDataManager dataManager: ExerciseDataManager = UnilateralExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
+    override init(withDataManager dataManager: ExerciseDataManager = UnilateralIsolationExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
         super.init(withDataManager: dataManager, exerciseTemplate: exerciseTemplate)
     }
     
@@ -41,10 +41,10 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
         guard let currentSide = currentSide else { return }
         if !hasData() {
             createExercise()
-            exercise = exercise ?? exerciseManager.creation as? UnilateralExercise
+            exercise = exercise ?? exerciseManager.creation as? UnilateralIsolationExercise
             delegate?.exerciseViewModel(self, started: exercise)
         }
-        guard let exercise = exercise as? UnilateralExercise else { return }
+        guard let exercise = exercise as? UnilateralIsolationExercise else { return }
         if currentSide == .left {
             exerciseManager.insertLeftSet(duration: duration, weight: weight.truncateIfNecessary(), reps: reps, exercise: exercise) { [weak self] (exerciseSet) in
                 guard let self = self, let name = self.title() else { return }
@@ -60,7 +60,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
     }
     
     override func handleFinishedSet(_ exerciseSet: ExerciseSet, _ name: String) {
-        guard let exerciseSet = exerciseSet as? UnilateralExerciseSet else { return }
+        guard let exerciseSet = exerciseSet as? UnilateralIsolationExerciseSet else { return }
         appendFinishedSetData(FinishedUnilateralSetDataModel(withExerciseSet: exerciseSet))
         PPLDefaults.instance.setWeight(exerciseSet.weight, forExerciseWithName: name)
         self.reloader?.reload()
@@ -80,7 +80,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
     }
     
     override func collectRegularSetData() {
-        guard let objectID = exercise?.objectID, let exercise = exerciseManager.fetch(objectID) as? UnilateralExercise, let sets = exercise.sets?.array as? [UnilateralExerciseSet] else { return }
+        guard let objectID = exercise?.objectID, let exercise = exerciseManager.fetch(objectID) as? UnilateralIsolationExercise, let sets = exercise.sets?.array as? [UnilateralIsolationExerciseSet] else { return }
         finishedCellDataLeft.removeAll()
         finishedCellDataRight.removeAll()
         for set in sets {
@@ -122,9 +122,9 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
     
     override func delete(indexPath: IndexPath) {
         guard
-            let man = dataManager as? UnilateralExerciseDataManager,
+            let man = dataManager as? UnilateralIsolationExerciseDataManager,
             let objectID = exercise?.objectID,
-            let exercise = exerciseManager.fetch(objectID) as? UnilateralExercise
+            let exercise = exerciseManager.fetch(objectID) as? UnilateralIsolationExercise
         else {
             return }
         man.deletionObserver = self

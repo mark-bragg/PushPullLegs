@@ -15,11 +15,11 @@ class ExerciseViewControllerFactory {
         guard let vm = getViewModelForExerciseVC(object, isDB) else { return nil }
         var vc: ExerciseViewController
         if isDB {
-            vc = self.isUnilateral(vm) ? DBUnilateralExerciseViewController() : DBExerciseViewController()
+            vc = self.isUnilateral(vm) ? DBUnilateralIsolationExerciseViewController() : DBExerciseViewController()
             vc.viewModel = vm
             
         } else {
-            vc = self.isUnilateral(vm) ? UnilateralExerciseViewController() : ExerciseViewController()
+            vc = self.isUnilateral(vm) ? UnilateralIsolationExerciseViewController() : ExerciseViewController()
             vm.reloader = vc
             vc.viewModel = vm
         }
@@ -32,7 +32,7 @@ class ExerciseViewControllerFactory {
     
     private static func getDBVM(_ object: Any?) -> ExerciseViewModel? {
         guard let exercise = object as? Exercise else { return nil }
-        return getExerciseViewModel(exercise, exercise.isKind(of: UnilateralExercise.self))
+        return getExerciseViewModel(exercise, exercise.isKind(of: UnilateralIsolationExercise.self))
     }
     
     private static func getVM(_ object: Any?) -> ExerciseViewModel? {
@@ -45,15 +45,15 @@ class ExerciseViewControllerFactory {
     }
     
     private static func getTemplateViewModel(_ exerciseTemplate: ExerciseTemplate, _ unilateral: Bool) -> ExerciseViewModel? {
-        return unilateral ? UnilateralExerciseViewModel(exerciseTemplate: exerciseTemplate) : ExerciseViewModel(exerciseTemplate: exerciseTemplate)
+        return unilateral ? UnilateralIsolationExerciseViewModel(exerciseTemplate: exerciseTemplate) : ExerciseViewModel(exerciseTemplate: exerciseTemplate)
     }
     
     private static func getExerciseViewModel(_ exercise: Exercise, _ unilateral: Bool) -> ExerciseViewModel? {
-        return unilateral ? UnilateralExerciseViewModel(exercise: exercise) : ExerciseViewModel(exercise: exercise)
+        return unilateral ? UnilateralIsolationExerciseViewModel(exercise: exercise) : ExerciseViewModel(exercise: exercise)
     }
     
     private static func isUnilateral(_ vm: ExerciseViewModel) -> Bool {
-        vm.isKind(of: UnilateralExerciseViewModel.self)
+        vm.isKind(of: UnilateralIsolationExerciseViewModel.self)
     }
 
 }

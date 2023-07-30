@@ -30,17 +30,17 @@ class ExerciseDataManager: DataManager {
         }
     }
     
-    func insertLeftSet(duration: Int, weight: Double, reps: Double, exercise: UnilateralExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
+    func insertLeftSet(duration: Int, weight: Double, reps: Double, exercise: UnilateralIsolationExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
         insertSetRightLeft(true, duration: duration, weight: weight, reps: reps, exercise: exercise, completion: completion)
     }
     
-    func insertRightSet(duration: Int, weight: Double, reps: Double, exercise: UnilateralExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
+    func insertRightSet(duration: Int, weight: Double, reps: Double, exercise: UnilateralIsolationExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
         insertSetRightLeft(false, duration: duration, weight: weight, reps: reps, exercise: exercise, completion: completion)
     }
     
-    fileprivate func insertSetRightLeft(_ isLeft: Bool, duration: Int, weight: Double, reps: Double, exercise: UnilateralExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
+    fileprivate func insertSetRightLeft(_ isLeft: Bool, duration: Int, weight: Double, reps: Double, exercise: UnilateralIsolationExercise, completion: ((_ exerciseSet: ExerciseSet) -> Void)? ) {
         context.performAndWait {
-            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.unilateralExerciseSet.rawValue, into: context) as? UnilateralExerciseSet,
+            if let set = NSEntityDescription.insertNewObject(forEntityName: EntityName.unilateralIsolationExerciseSet.rawValue, into: context) as? UnilateralIsolationExerciseSet,
                 let exerciseInContext = fetch(exercise) as? Exercise {
                 set.isLeftSide = isLeft
                 addSet(set, toExercise: exerciseInContext, withData: (Int16(duration), weight, reps), completion: completion)
@@ -159,16 +159,16 @@ enum NilReferenceError: Error {
     case nilWorkout
 }
 
-class UnilateralExerciseDataManager: ExerciseDataManager {
+class UnilateralIsolationExerciseDataManager: ExerciseDataManager {
     override init(context: NSManagedObjectContext = CoreDataManager.shared.mainContext) {
         super.init(context: context)
-        entityName = .unilateralExercise
+        entityName = .unilateralIsolationExercise
     }
     
-    func delete(set data: (w: Double, r: Double, d: Int, l: Bool), from exercise: UnilateralExercise) {
+    func delete(set data: (w: Double, r: Double, d: Int, l: Bool), from exercise: UnilateralIsolationExercise) {
         guard
-            let e = fetch(exercise.objectID) as? UnilateralExercise,
-            var s = e.sets?.array as? [UnilateralExerciseSet],
+            let e = fetch(exercise.objectID) as? UnilateralIsolationExercise,
+            var s = e.sets?.array as? [UnilateralIsolationExerciseSet],
             let i = s.firstIndex(where: { $0.isEqualToData(data) })
         else { return }
         
@@ -179,7 +179,7 @@ class UnilateralExerciseDataManager: ExerciseDataManager {
     }
 }
 
-extension UnilateralExerciseSet {
+extension UnilateralIsolationExerciseSet {
     public func isEqualToData(_ data: (w: Double, r: Double, d: Int, l: Bool)) -> Bool {
         return self.weight == data.w && self.reps == data.r && self.duration == data.d && self.isLeftSide == data.l
     }

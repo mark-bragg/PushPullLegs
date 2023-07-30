@@ -30,6 +30,8 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     }
     var lateralType: LateralType = .bilateral
     var isUnilateral: Bool { lateralType == .unilateral }
+    var muscleGrouping = MuscleGrouping.compound
+    var isCompound: Bool { muscleGrouping == .compound }
     var titleLabel: String { "New Exercise" }
     
     init(withType type: ExerciseTypeName? = nil, management: TemplateManagement) {

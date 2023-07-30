@@ -1,5 +1,5 @@
 //
-//  UnilateralExerciseViewController.swift
+//  UnilateralIsolationExerciseViewController.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 8/23/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UnilateralExerciseViewController: ExerciseViewController {
+class UnilateralIsolationExerciseViewController: ExerciseViewController {
     
     private var isPresentingPrevious = false
     
@@ -79,7 +79,7 @@ extension ExerciseViewController {
         }
     }
     
-    private var unilateralVM: UnilateralExerciseViewModel? {
-        self.viewModel as? UnilateralExerciseViewModel
+    private var unilateralVM: UnilateralIsolationExerciseViewModel? {
+        self.viewModel as? UnilateralIsolationExerciseViewModel
     }
 }

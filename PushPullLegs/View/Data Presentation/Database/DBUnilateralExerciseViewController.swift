@@ -1,5 +1,5 @@
 //
-//  DBUnilateralExerciseViewController.swift
+//  DBUnilateralIsolationExerciseViewController.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 8/28/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DBUnilateralExerciseViewController: DBExerciseViewController {
+class DBUnilateralIsolationExerciseViewController: DBExerciseViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         viewModel?.sectionCount?() ?? 1

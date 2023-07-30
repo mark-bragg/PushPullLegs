@@ -8,9 +8,9 @@
 
 class PreviousUnilateralPerformanceViewController: PreviousPerformanceViewController {
     private var headerViews: [UIView]
-    private var unilateralExercise: UnilateralExercise? { exercise as? UnilateralExercise }
-    private var uniSets: [UnilateralExerciseSet] {
-        unilateralExercise?.sets?.array as? [UnilateralExerciseSet] ?? []
+    private var unilateralExercise: UnilateralIsolationExercise? { exercise as? UnilateralIsolationExercise }
+    private var uniSets: [UnilateralIsolationExerciseSet] {
+        unilateralExercise?.sets?.array as? [UnilateralIsolationExerciseSet] ?? []
     }
     private var leftSets: [ExerciseSet] { uniSets.filter { $0.isLeftSide } }
     private var rightSets: [ExerciseSet] { uniSets.filter { !$0.isLeftSide } }

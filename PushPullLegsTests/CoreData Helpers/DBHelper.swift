@@ -131,12 +131,12 @@ class DBHelper {
         return exercise
     }
     
-    func createUnilateralExercise(_ name: String? = nil, sets: [(d: Int, r: Double, w: Double, l: Bool)]? = nil) -> UnilateralExercise {
-        let exercise = NSEntityDescription.insertNewObject(forEntityName: "UnilateralExercise", into: coreDataStack.mainContext) as! UnilateralExercise
+    func createUnilateralIsolationExercise(_ name: String? = nil, sets: [(d: Int, r: Double, w: Double, l: Bool)]? = nil) -> UnilateralIsolationExercise {
+        let exercise = NSEntityDescription.insertNewObject(forEntityName: "UnilateralIsolationExercise", into: coreDataStack.mainContext) as! UnilateralIsolationExercise
         exercise.name = name
         if let sets = sets {
             for set in sets {
-                let exerciseSet = NSEntityDescription.insertNewObject(forEntityName: "UnilateralExerciseSet", into: coreDataStack.mainContext) as! UnilateralExerciseSet
+                let exerciseSet = NSEntityDescription.insertNewObject(forEntityName: "UnilateralIsolationExerciseSet", into: coreDataStack.mainContext) as! UnilateralIsolationExerciseSet
                 exerciseSet.duration = Int16(set.d)
                 exerciseSet.reps = set.r
                 exerciseSet.weight = set.w
@@ -161,9 +161,9 @@ class DBHelper {
         }
     }
     
-    func addUnilateralExerciseSetTo(_ exercise: UnilateralExercise, data: (r: Double, w: Double, d: Int, l: Bool)? = nil) {
-        let set = NSEntityDescription.insertNewObject(forEntityName: "UnilateralExerciseSet", into: coreDataStack.mainContext) as! UnilateralExerciseSet
-        if let exerciseInContext = try? coreDataStack.mainContext.existingObject(with: exercise.objectID) as? UnilateralExercise {
+    func addUnilateralIsolationExerciseSetTo(_ exercise: UnilateralIsolationExercise, data: (r: Double, w: Double, d: Int, l: Bool)? = nil) {
+        let set = NSEntityDescription.insertNewObject(forEntityName: "UnilateralIsolationExerciseSet", into: coreDataStack.mainContext) as! UnilateralIsolationExerciseSet
+        if let exerciseInContext = try? coreDataStack.mainContext.existingObject(with: exercise.objectID) as? UnilateralIsolationExercise {
             exerciseInContext.addToSets(set)
             if let data = data {
                 set.duration = Int16(data.d)

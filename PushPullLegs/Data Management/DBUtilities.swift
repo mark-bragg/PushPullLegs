@@ -11,9 +11,9 @@ import Foundation
 enum EntityName: String {
     case workout = "Workout"
     case exercise = "Exercise"
-    case unilateralExercise = "UnilateralExercise"
+    case unilateralIsolationExercise = "UnilateralIsolationExercise"
     case exerciseSet = "ExerciseSet"
-    case unilateralExerciseSet = "UnilateralExerciseSet"
+    case unilateralIsolationExerciseSet = "UnilateralIsolationExerciseSet"
     case workoutTemplate = "WorkoutTemplate"
     case exerciseTemplate = "ExerciseTemplate"
     case exerciseType = "ExerciseType"
@@ -49,4 +49,9 @@ extension Exercise {
 enum LateralType {
     case bilateral
     case unilateral
+}
+
+enum MuscleGrouping {
+    case compound
+    case isolation
 }

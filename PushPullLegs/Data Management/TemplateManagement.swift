@@ -17,13 +17,13 @@ class TemplateManagement {
         self.coreDataManager = coreDataManager
     }
     
-    func addExerciseTemplate(name: String, types: [ExerciseTypeName], unilateral: Bool = false) throws {
+    func addExerciseTemplate(name: String, types: [ExerciseTypeName], unilateral: Bool = false, compound: Bool = true) throws {
         let er = exerciseReader()
         if er.exists(name: name) {
             throw TemplateError.duplicateExercise
         }
         let ew = exerciseWriter()
-        ew.create(name: name, keyValuePairs: [DBAttributeKey.unilateral: unilateral])
+        ew.create(name: name, keyValuePairs: [DBAttributeKey.unilateral: unilateral, .compound: compound])
         guard let et = ew.creation as? ExerciseTemplate else {
             throw TemplateError.failedToCreateExercise
         }

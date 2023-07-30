@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DropSet" representedClassName="DropSet" syncable="YES" codeGenerationType="class">
+        <attribute name="sets" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[URL]"/>
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Exercise" inverseName="dropSets" inverseEntity="Exercise"/>
+    </entity>
+    <entity name="Exercise" representedClassName="Exercise" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="dropSets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="DropSet" inverseName="exercise" inverseEntity="DropSet"/>
+        <relationship name="sets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="ExerciseSet" inverseName="exercise" inverseEntity="ExerciseSet"/>
+        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="exercises" inverseEntity="Workout"/>
+    </entity>
+    <entity name="ExerciseSet" representedClassName="ExerciseSet" syncable="YES" codeGenerationType="class">
+        <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="reps" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Exercise" inverseName="sets" inverseEntity="Exercise"/>
+    </entity>
+    <entity name="ExerciseTemplate" representedClassName=".ExerciseTemplate" syncable="YES" codeGenerationType="class">
+        <attribute name="compound" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="unilateral" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="types" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExerciseType" inverseName="exerciseTemplates" inverseEntity="ExerciseType"/>
+    </entity>
+    <entity name="ExerciseType" representedClassName="ExerciseType" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="exerciseTemplates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExerciseTemplate" inverseName="types" inverseEntity="ExerciseTemplate"/>
+    </entity>
+    <entity name="SuperSet" representedClassName="SuperSet" syncable="YES" codeGenerationType="class">
+        <attribute name="set1" optional="YES" attributeType="URI"/>
+        <attribute name="set2" optional="YES" attributeType="URI"/>
+        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="superSets" inverseEntity="Workout"/>
+    </entity>
+    <entity name="UnilateralIsolationExercise" representedClassName="UnilateralIsolationExercise" parentEntity="Exercise" syncable="YES" codeGenerationType="class"/>
+    <entity name="UnilateralIsolationExerciseSet" representedClassName="UnilateralIsolationExerciseSet" parentEntity="ExerciseSet" syncable="YES" codeGenerationType="class">
+        <attribute name="isLeftSide" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Workout" representedClassName="Workout" syncable="YES" codeGenerationType="class">
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <relationship name="exercises" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Exercise" inverseName="workout" inverseEntity="Exercise"/>
+        <relationship name="superSets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SuperSet" inverseName="workout" inverseEntity="SuperSet"/>
+    </entity>
+    <entity name="WorkoutTemplate" representedClassName="WorkoutTemplate" syncable="YES" codeGenerationType="class">
+        <attribute name="exerciseNames" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
+</model>
