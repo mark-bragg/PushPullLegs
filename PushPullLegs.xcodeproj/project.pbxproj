@@ -142,6 +142,9 @@
 		49F8EF292447754900B6BD45 /* ExerciseTemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF282447754700B6BD45 /* ExerciseTemplateListViewController.swift */; };
 		49F8EF2E2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF2D2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift */; };
 		49F8EF30244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F8EF2F244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift */; };
+		49FB60982A7608CC00B6EF81 /* MappingModel15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FB60972A7608CC00B6EF81 /* MappingModel15.xcmappingmodel */; };
+		49FB609A2A760B7600B6EF81 /* MappingModel45.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FB60992A760B7600B6EF81 /* MappingModel45.xcmappingmodel */; };
+		49FB609C2A760C0200B6EF81 /* ExerciseTemplateMigrationFrom4To5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB609B2A760C0200B6EF81 /* ExerciseTemplateMigrationFrom4To5.swift */; };
 		49FB6F422A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */; };
 		49FB6F442A50EE12006E7839 /* MappingModel12.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FB6F432A50EE12006E7839 /* MappingModel12.xcmappingmodel */; };
 		6344E6784DEC24F8D43486C0 /* Pods_PushPullLegs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3861DCF756C6822B283C0AD /* Pods_PushPullLegs.framework */; };
@@ -311,6 +314,9 @@
 		49F8EF2D2447765B00B6BD45 /* ExerciseTemplateListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateListViewModelTests.swift; sourceTree = "<group>"; };
 		49F8EF2F244776DA00B6BD45 /* ExerciseTemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateListViewModel.swift; sourceTree = "<group>"; };
 		49FB60942A75EC3D00B6EF81 /* PushPullLegs 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PushPullLegs 5.xcdatamodel"; sourceTree = "<group>"; };
+		49FB60972A7608CC00B6EF81 /* MappingModel15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModel15.xcmappingmodel; sourceTree = "<group>"; };
+		49FB60992A760B7600B6EF81 /* MappingModel45.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModel45.xcmappingmodel; sourceTree = "<group>"; };
+		49FB609B2A760C0200B6EF81 /* ExerciseTemplateMigrationFrom4To5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateMigrationFrom4To5.swift; sourceTree = "<group>"; };
 		49FB6F3A2A50E0CD006E7839 /* PushPullLegs 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PushPullLegs 2.xcdatamodel"; sourceTree = "<group>"; };
 		49FB6F412A50EB4F006E7839 /* ExerciseTemplateMigrationFromTypeToTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTemplateMigrationFromTypeToTypes.swift; sourceTree = "<group>"; };
 		49FB6F432A50EE12006E7839 /* MappingModel12.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModel12.xcmappingmodel; sourceTree = "<group>"; };
@@ -961,6 +967,9 @@
 				49FB6F432A50EE12006E7839 /* MappingModel12.xcmappingmodel */,
 				49AD6EBF2A645CCE0037DD30 /* MappingModel13.xcmappingmodel */,
 				494F8D142A6CB6C1002E23AC /* MappingModel14.xcmappingmodel */,
+				49FB60972A7608CC00B6EF81 /* MappingModel15.xcmappingmodel */,
+				49FB60992A760B7600B6EF81 /* MappingModel45.xcmappingmodel */,
+				49FB609B2A760C0200B6EF81 /* ExerciseTemplateMigrationFrom4To5.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -1206,6 +1215,7 @@
 				49C1EA5D260AF84F00330CBF /* WorkoutLogViewModel.swift in Sources */,
 				4929DB112454DB0C009DCC7F /* RepsCollectionViewController.swift in Sources */,
 				49680BDE24DE430B00DFF1E0 /* GraphTableViewController.swift in Sources */,
+				49FB60982A7608CC00B6EF81 /* MappingModel15.xcmappingmodel in Sources */,
 				49E30B4B243AF3E6002FABD6 /* ExerciseTemplateCreationViewModel.swift in Sources */,
 				49F60854254E08EC00407D0A /* CoreDataHelpers.swift in Sources */,
 				496BE36924E63F5C00A4E08B /* NoDataView.swift in Sources */,
@@ -1264,6 +1274,7 @@
 				49E89332295CCE1300B99345 /* PPLDropdownMenu.swift in Sources */,
 				490D88EF2453ED7B005FFEA3 /* StringExtensions.swift in Sources */,
 				49E8933F2962537800B99345 /* ExerciseTemplateCreationView.swift in Sources */,
+				49FB609A2A760B7600B6EF81 /* MappingModel45.xcmappingmodel in Sources */,
 				49BA7A2A296355F600C14F1F /* ExerciseTimerView.swift in Sources */,
 				492B643A26D1A4AD0004171D /* SplashViewController.swift in Sources */,
 				4993789E243B964200EAD55E /* ReloadProtocol.swift in Sources */,
@@ -1294,6 +1305,7 @@
 				49EF4BB223F838FE0071687D /* WorkoutDataManager.swift in Sources */,
 				490D88E32452832F005FFEA3 /* QuantityCollectionViewController.swift in Sources */,
 				49AB1D7B24849C980003CFA1 /* AppState.swift in Sources */,
+				49FB609C2A760C0200B6EF81 /* ExerciseTemplateMigrationFrom4To5.swift in Sources */,
 				49AF0D21259D23D2003F8C60 /* BannerAdController.swift in Sources */,
 				4925AE3D25C5360500232B76 /* StoreManager.swift in Sources */,
 				49A08D80293468E000870DDA /* PreviousPerformanceViewController.swift in Sources */,

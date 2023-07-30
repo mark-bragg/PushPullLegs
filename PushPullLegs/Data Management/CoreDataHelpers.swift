@@ -37,7 +37,7 @@ extension DBAttributeKey {
     static let duration = "duration"
     static let exerciseNames = "exerciseNames"
     static let unilateral = "unilateral"
-    static let compound = "compound"
+    static let isolation = "isolation"
 }
 
 let persistentContainerName = "PushPullLegs"

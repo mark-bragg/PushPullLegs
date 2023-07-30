@@ -56,6 +56,11 @@ class ExerciseTemplateMigrationFromTypeToTypes: NSEntityMigrationPolicy {
 
         // Add the new Type instance to the types relationship of the new ExerciseTemplate.
         dInstance.setValue(NSSet(object: type), forKey: "types")
+        
+        // Set the new instance isolation value to the same value as unilateral
+        if let isolation = sourceValues[DBAttributeKey.unilateral] as? Bool {
+            dInstance.setValue(isolation, forKey: DBAttributeKey.isolation)
+        }
 
         // Associate the source and destination instances.
         manager.associate(sourceInstance: sInstance, withDestinationInstance: dInstance, for: mapping)

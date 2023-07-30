@@ -112,6 +112,7 @@ class ExerciseTemplateCreationView: UIView {
         addSaveButton()
         styleTextField()
         setupLateralTypeSegmentedControl()
+        setupMuscleFocusSegmentedControl()
         fillStack()
     }
     
@@ -219,7 +220,7 @@ class ExerciseTemplateCreationView: UIView {
     }
     
     private func setupMuscleFocusSegmentedControl() {
-        guard showLateralType else { return }
+        guard showMuscleFocus else { return }
         let segmentedControl = UISegmentedControl.PPLSegmentedControl(titles: ["Compound", "Isolation"])
         segmentedControl.selectedSegmentIndex = 0
         muscleFocusParentView.addSubview(segmentedControl)
@@ -244,5 +245,6 @@ class ExerciseTemplateCreationView: UIView {
             parentStackView.addArrangedSubview(typeSelectionContainerView)
         }
         parentStackView.addArrangedSubview(lateralTypeParentView)
+        parentStackView.addArrangedSubview(muscleFocusParentView)
     }
 }

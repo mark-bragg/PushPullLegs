@@ -31,7 +31,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     var lateralType: LateralType = .bilateral
     var isUnilateral: Bool { lateralType == .unilateral }
     var muscleGrouping = MuscleGrouping.compound
-    var isCompound: Bool { muscleGrouping == .compound }
+    var isIsolation: Bool { muscleGrouping == .isolation }
     var titleLabel: String { "New Exercise" }
     
     init(withType type: ExerciseTypeName? = nil, management: TemplateManagement) {
@@ -56,7 +56,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     private func saveExerciseTemplate(_ name: String) -> Bool {
         guard !exerciseTypes.isEmpty else { return false }
         do {
-            try management.addExerciseTemplate(name: name, types: exerciseTypes, unilateral: isUnilateral, compound: isCompound)
+            try management.addExerciseTemplate(name: name, types: exerciseTypes, unilateral: isUnilateral, isolation: isIsolation)
         } catch {
             return false
         }
