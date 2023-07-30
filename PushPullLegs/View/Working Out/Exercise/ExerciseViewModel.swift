@@ -79,6 +79,11 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
     private(set) var superSetSecondExerciseName: String?
     var isPerformingSuperSet: Bool { superSetSecondExerciseName != nil }
     var superSetFirstSet: ExerciseSet?
+    var canSuperSet: Bool {
+        guard let type = ExerciseTypeName(rawValue: type ?? "")
+        else { return false }
+        return TemplateManagement().exerciseTemplatesForWorkout(type).count > 1
+    }
     
     func prepareForSuperSet(_ secondExerciseName: String) {
         superSetSecondExerciseName = secondExerciseName
@@ -304,7 +309,7 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
             }
             exerciseManager.insertSet(duration: duration, weight: weight, reps: reps, exercise: secondExercise) { [weak self] secondSet in
                 guard let self, let workout = self.exercise?.workout, let firstSet = self.superSetFirstSet else { return }
-                let currentSuperSet = self.exerciseManager.createSuperSet(with: workout, set1: firstSet, set2: secondSet)
+                _ = self.exerciseManager.createSuperSet(with: workout, set1: firstSet, set2: secondSet)
                 self.collectSetData()
                 self.clearSuperSetState()
                 self.reloader?.reload()
@@ -326,7 +331,6 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
         isFirstSet = false
         superSetData.append(FinishedSetDataModel(withExerciseSet: exerciseSet))
         reloader?.reload()
-        let row = rowCount() - 1
     }
     
     private func clearSuperSetState() {
@@ -482,7 +486,8 @@ class ExerciseViewModel: DatabaseViewModel, ExerciseSetCollector, SuperSetCollec
 extension ExerciseSet {
     func volume() -> Double {
         let weight = weight * (PPLDefaults.instance.isKilograms() ? 2.20462 : 1)
-        return weight * reps * log(base: 4, value: Double(duration))
+        let vol = weight * reps * log(base: 4, value: Double(duration))
+        return vol.truncateIfNecessary()
     }
     
     func averageRepDuration() -> Double {

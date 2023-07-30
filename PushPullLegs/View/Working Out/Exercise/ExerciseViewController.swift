@@ -108,11 +108,9 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     @objc func presentPreviousPerformance() {
         guard
             let exerciseViewModel,
-            let previousExercise = exerciseViewModel.previousExercise,
-            let tableView,
-            let headerView = self.tableView(tableView, viewForHeaderInSection: 0)
+            let previousExercise = exerciseViewModel.previousExercise
         else { return }
-        presentModally(PreviousPerformanceViewController(exercise: previousExercise, headerView: headerView))
+        presentModally(PreviousPerformanceViewController(exercise: previousExercise, headerView: normalSetHeaderView(exerciseViewModel, -1)))
     }
     
     func setupRestTimerView() {
@@ -160,6 +158,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         let wc = WeightCollectionViewController()
         wc.superSetDelegate = self
         wc.dropSetDelegate = self
+        wc.thereAreOtherExercises = exerciseViewModel?.canSuperSet ?? false
         let setNavController = SetNavigationController(rootViewController: wc)
         wc.exerciseSetViewModel = exerciseSetViewModel
         presentModally(setNavController)
@@ -436,6 +435,7 @@ extension ExerciseViewController: SuperSetDelegate {
         let ssvc = SuperSetViewController()
         ssvc.viewModel = esvm
         ssvc.superSetDelegate = self
+        ssvc.isModalInPresentation = true
         weightCollector?.present(ssvc, animated: true)
     }
     

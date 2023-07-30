@@ -1495,6 +1495,7 @@
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1566,6 +1567,7 @@
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = TNHL9TABT7;
 				INFOPLIST_FILE = PushPullLegs/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

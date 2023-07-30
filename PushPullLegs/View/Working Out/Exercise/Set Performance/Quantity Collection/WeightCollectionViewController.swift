@@ -18,6 +18,7 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
         didSet { navigationItem.rightBarButtonItem?.isEnabled = !superSetIsReady }
     }
     var navItemTitle: String = "Weight"
+    var thereAreOtherExercises = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +37,17 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
     
     @objc
     private func addSuperSet() {
+        guard thereAreOtherExercises else {
+            return presentAddAnExerciseToSuperSetAlert()
+        }
         superSetDelegate?.superSetSelected()
         navigationItem.leftBarButtonItem = nil
+    }
+    
+    private func presentAddAnExerciseToSuperSetAlert() {
+        let alert = UIAlertController(title: "Add Another Exercise", message: "You need to add another exercise in order to do a super set.", preferredStyle: .alert)
+        alert.addAction(.ok)
+        present(alert, animated: true)
     }
     
     func addDropSetBarButtonItem() {
@@ -68,4 +78,8 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
             exerciseSetViewModel?.willStartSetWithWeight(weight * converter)
         }
     }
+}
+
+extension UIAlertAction {
+    static var ok: UIAlertAction { UIAlertAction(title: "OK", style: .default) }
 }
