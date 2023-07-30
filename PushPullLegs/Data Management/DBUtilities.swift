@@ -42,7 +42,11 @@ enum TemplateError: Error {
 
 extension Exercise {
     var isUnilateral: Bool {
-        return TemplateManagement.init().exerciseTemplate(name: name ?? "")?.unilateral ?? false
+        TemplateManagement.init().exerciseTemplate(name: name ?? "")?.unilateral ?? false
+    }
+    
+    var isIsolation: Bool {
+        TemplateManagement.init().exerciseTemplate(name: name ?? "")?.isolation ?? false
     }
 }
 

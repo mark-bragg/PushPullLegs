@@ -56,7 +56,7 @@ class ExerciseTemplateCreationViewModel: ObservableObject {
     private func saveExerciseTemplate(_ name: String) -> Bool {
         guard !exerciseTypes.isEmpty else { return false }
         do {
-            try management.addExerciseTemplate(name: name, types: exerciseTypes, unilateral: isUnilateral)
+            try management.addExerciseTemplate(name: name, types: exerciseTypes, unilateral: isUnilateral, compound: isCompound)
         } catch {
             return false
         }

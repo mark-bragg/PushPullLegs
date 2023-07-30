@@ -13,7 +13,7 @@ class UnilateralIsolationExerciseViewController: ExerciseViewController {
     private var isPresentingPrevious = false
     
     override func addAction() {
-        unilateralAddActionResponse {
+        unilateralIsolationAddActionResponse {
             super.addAction()
         }
     }
@@ -28,7 +28,7 @@ class UnilateralIsolationExerciseViewController: ExerciseViewController {
         else { return }
         let leftHeaderView = updateSectionHeaders(0, leftSuperHeaderView)
         let rightHeaderView = updateSectionHeaders(1, rightSuperHeaderView)
-        presentModally(PreviousUnilateralPerformanceViewController(exercise: previousExercise, headerViews: [leftHeaderView, rightHeaderView]))
+        presentModally(PreviousUnilateralIsolationPerformanceViewController(exercise: previousExercise, headerViews: [leftHeaderView, rightHeaderView]))
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -64,7 +64,7 @@ extension ExerciseViewController {
         section == 0 ? HandSide.left.rawValue : HandSide.right.rawValue
     }
     
-    func unilateralAddActionResponse(completion: @escaping () -> Void) {
+    func unilateralIsolationAddActionResponse(completion: @escaping () -> Void) {
         let alert = UIAlertController(title: "Which side are you lifting?", message: nil, preferredStyle: .actionSheet)
         alert.addAction(alertAction(.left, completion: completion))
         alert.addAction(alertAction(.right, completion: completion))
@@ -72,14 +72,14 @@ extension ExerciseViewController {
     }
     
     private func alertAction(_ side: HandSide, completion: @escaping () -> Void) -> UIAlertAction {
-        let vm = unilateralVM
+        let vm = unilateralIsolationVM
         return UIAlertAction(title: side.rawValue, style: .default) { _ in
             vm?.currentSide = side
             completion()
         }
     }
     
-    private var unilateralVM: UnilateralIsolationExerciseViewModel? {
+    private var unilateralIsolationVM: UnilateralIsolationExerciseViewModel? {
         self.viewModel as? UnilateralIsolationExerciseViewModel
     }
 }

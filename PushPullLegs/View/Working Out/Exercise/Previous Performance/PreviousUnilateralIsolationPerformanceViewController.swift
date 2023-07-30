@@ -1,19 +1,19 @@
 //
-//  PreviousUnilateralPerformanceViewController.swift
+//  PreviousUnilateralIsolationPerformanceViewController.swift
 //  PushPullLegs
 //
 //  Created by Mark Bragg on 11/27/22.
 //  Copyright © 2022 Mark Bragg. All rights reserved.
 //
 
-class PreviousUnilateralPerformanceViewController: PreviousPerformanceViewController {
+class PreviousUnilateralIsolationPerformanceViewController: PreviousPerformanceViewController {
     private var headerViews: [UIView]
-    private var unilateralExercise: UnilateralIsolationExercise? { exercise as? UnilateralIsolationExercise }
-    private var uniSets: [UnilateralIsolationExerciseSet] {
-        unilateralExercise?.sets?.array as? [UnilateralIsolationExerciseSet] ?? []
+    private var uniIsoexercise: UnilateralIsolationExercise? { exercise as? UnilateralIsolationExercise }
+    private var uniIsoSets: [UnilateralIsolationExerciseSet] {
+        uniIsoexercise?.sets?.array as? [UnilateralIsolationExerciseSet] ?? []
     }
-    private var leftSets: [ExerciseSet] { uniSets.filter { $0.isLeftSide } }
-    private var rightSets: [ExerciseSet] { uniSets.filter { !$0.isLeftSide } }
+    private var leftSets: [ExerciseSet] { uniIsoSets.filter { $0.isLeftSide } }
+    private var rightSets: [ExerciseSet] { uniIsoSets.filter { !$0.isLeftSide } }
     
     init(exercise: Exercise, headerViews: [UIView]) {
         self.headerViews = headerViews

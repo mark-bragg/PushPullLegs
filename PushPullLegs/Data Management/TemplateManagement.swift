@@ -17,7 +17,7 @@ class TemplateManagement {
         self.coreDataManager = coreDataManager
     }
     
-    func addExerciseTemplate(name: String, types: [ExerciseTypeName], unilateral: Bool = false, compound: Bool = true) throws {
+    func addExerciseTemplate(name: String, types: [ExerciseTypeName], unilateral: Bool = false, compound: Bool) throws {
         let er = exerciseReader()
         if er.exists(name: name) {
             throw TemplateError.duplicateExercise

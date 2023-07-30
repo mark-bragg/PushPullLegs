@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-fileprivate class FinishedUnilateralSetDataModel: FinishedSetDataModel {
+fileprivate class FinishedUnilateralIsolationSetDataModel: FinishedSetDataModel {
     var isLeftSide: Bool
     
     init(withExerciseSet exerciseSet: UnilateralIsolationExerciseSet) {
@@ -25,8 +25,8 @@ enum HandSide: String {
 
 class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
     var currentSide: HandSide?
-    fileprivate var finishedCellDataLeft = [FinishedUnilateralSetDataModel]()
-    fileprivate var finishedCellDataRight = [FinishedUnilateralSetDataModel]()
+    fileprivate var finishedCellDataLeft = [FinishedUnilateralIsolationSetDataModel]()
+    fileprivate var finishedCellDataRight = [FinishedUnilateralIsolationSetDataModel]()
     
     override init(withDataManager dataManager: ExerciseDataManager = UnilateralIsolationExerciseDataManager(), exercise: Exercise) {
         super.init(withDataManager: dataManager, exercise: exercise)
@@ -61,17 +61,17 @@ class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
     
     override func handleFinishedSet(_ exerciseSet: ExerciseSet, _ name: String) {
         guard let exerciseSet = exerciseSet as? UnilateralIsolationExerciseSet else { return }
-        appendFinishedSetData(FinishedUnilateralSetDataModel(withExerciseSet: exerciseSet))
+        appendFinishedSetData(FinishedUnilateralIsolationSetDataModel(withExerciseSet: exerciseSet))
         PPLDefaults.instance.setWeight(exerciseSet.weight, forExerciseWithName: name)
         self.reloader?.reload()
     }
     
     override func appendFinishedSetData(_ data: FinishedSetDataModel) {
-        guard let data = data as? FinishedUnilateralSetDataModel else { return }
+        guard let data = data as? FinishedUnilateralIsolationSetDataModel else { return }
         addCellData(data)
     }
     
-    private func addCellData(_ data: FinishedUnilateralSetDataModel) {
+    private func addCellData(_ data: FinishedUnilateralIsolationSetDataModel) {
         if data.isLeftSide {
             finishedCellDataLeft.append(data)
         } else {
@@ -84,7 +84,7 @@ class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
         finishedCellDataLeft.removeAll()
         finishedCellDataRight.removeAll()
         for set in sets {
-            addCellData(FinishedUnilateralSetDataModel(withExerciseSet: set))
+            addCellData(FinishedUnilateralIsolationSetDataModel(withExerciseSet: set))
         }
     }
     
@@ -104,7 +104,7 @@ class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
         String.format(seconds: dataForSection(indexPath.section)[indexPath.row].duration)
     }
     
-    private func dataForSection(_ section: Int) -> [FinishedUnilateralSetDataModel] {
+    private func dataForSection(_ section: Int) -> [FinishedUnilateralIsolationSetDataModel] {
         return section == 0 ? finishedCellDataLeft : finishedCellDataRight
     }
     

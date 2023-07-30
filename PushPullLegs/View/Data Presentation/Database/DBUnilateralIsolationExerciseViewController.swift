@@ -25,7 +25,7 @@ class DBUnilateralIsolationExerciseViewController: DBExerciseViewController {
     }
     
     override func addAction() {
-        unilateralAddActionResponse {
+        unilateralIsolationAddActionResponse {
             super.addAction()
         }
     }
