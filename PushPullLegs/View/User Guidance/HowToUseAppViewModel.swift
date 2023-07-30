@@ -14,9 +14,9 @@ class HowToUseAppViewModel: NSObject, PPLTableViewModel {
     private var rowHeights = [Int: CGFloat]()
     private let sectionTitles = ["The Regimen", "Progressive Overload", "Initial Setup", "Working Out", "Observing Data"]
     
-    private let regimenExplanation = "This app is designed specifically for the Push Pull Legs program: start off with a Push workout the first day, followed by a Pull workout the next day, and then a Legs workout on the third day; spend the next day resting, and then repeat the cycle starting with the Push workout again. This may not be the way you want to do it, so you can customize the pattern.\nFor example, you can start off with a Legs workout instead of a Push on your first day, or you can do Pull Legs Push. Everybody is different, and you should customize the regimen if it works better for you. The main idea of the app is to separate your exercises and workouts into the categories of Push, Pull, and Legs because this is one of the most effective weightlifting programs for increasing your strength, and it has one strict requirement: progressive overload.\n"
+    private let regimenExplanation = "Start off with a Push workout the first day, followed by a Pull workout the next day, rest for one day, and start back up with a Legs workout on the fourth day, and finish it off with an Arms workout on the fifth day; spend the next two days resting, and then repeat the cycle starting with the Push workout again. This may not be the way you want to do it, so you can customize the pattern.\nFor example, you can start off with a Legs workout instead of a Push on your first day, or you can do Arms Legs Pull Push (this is what I do). Everybody is different, and you should customize the regimen if it works better for you. The main idea of the app is to separate your exercises and workouts into the categories of Push and Pull, and/or Arms and Legs. In order to see progress, you must adhere to one strict requirement: progressive overload.\n"
     
-    private let progressiveOverloadExplanation = "This is crucial in order to make gains. As you continue down the path of lifting weights day after day, you need to increase your volume. Volume is a calculation of work done in a set with the following formula:\n\nv = weight • time • reps\n\nIncreasing each of these three factors increases the volume. The total volume from each workout is compared to the previous workouts. This is progressive overload, consistently increasing your workout volume over time, and it is absolutely required in order to make gains. As you look back on your workouts and exercises, make sure the volume is increasing along with the weight. Don't get frustrated if you have decreases now and then, some workouts are just better than others, but over time, the average volume per workout will increase. Just stick to the program. Real gains come with time as long as you are consistent with your program.\n"
+    private let progressiveOverloadExplanation = "This is crucial in order to make gains. As you continue down the path of lifting weights day after day, you need to increase your volume. Volume is a calculation of work done in a set with the following formula:\n\nv = weight • reps • Log4(time)\n\nIncreasing each of these three factors increases the volume. The total volume from each workout is compared to the previous workouts. This is progressive overload, consistently increasing your workout volume over time, and it is absolutely required in order to make gains. The reason time is modified with a logarithm is because as you increase your time on a lift, the amount of benefit it has on the workout begins to drop off. For instance, a heavy lift that takes 60 seconds to perform 15 reps till failure has a very high intensity and will likely result in some gain in strength as you recover. However, if you perform a lift with such lightweight that you can do it for minutes and minutes, you are not going to build any strength off of that performance. The reason the logarithm is base 4 is because the assumption is each rep should take about 4 seconds. As you look back on your workouts and exercises, make sure the volume is increasing along with the weight. Don't get frustrated if you have decreases now and then, some workouts you just perform better than others, but over time, the average volume per workout will increase. Just stick to the program. Real gains come with time as long as you are consistent!\n"
     
     private let initialSetupExplanation = "Before you can begin working out and performing sets, you need to add exercises to the app. You can do this in a few different ways. \n1. You can begin any workout, and from the workout screen, add a new exercise.\n2. You can navigate back from this screen to the Settings screen, and tap Edit Workout List, select the workout that you wish to edit, and add your exercises.\n3. Similar to step 2, navigate back from this screen to the Settings screen, but this time, tap Edit Exercise List, and add your exercises.\n"
     
@@ -31,11 +31,11 @@ class HowToUseAppViewModel: NSObject, PPLTableViewModel {
     }
     
     func sectionCount() -> Int {
-        return sectionTitles.count
+        sectionTitles.count
     }
     
     func titleForSection(_ section: Int) -> String? {
-        return sectionTitles[section]
+        sectionTitles[section]
     }
     
     func title(indexPath: IndexPath) -> String? {
@@ -56,7 +56,7 @@ class HowToUseAppViewModel: NSObject, PPLTableViewModel {
     }
     
     func title() -> String? {
-        return "How to Use the App"
+        "How to Use the App"
     }
     
     func setHeight(_ height: CGFloat, forSection section: Int) {
@@ -64,8 +64,7 @@ class HowToUseAppViewModel: NSObject, PPLTableViewModel {
     }
     
     func heightForRow(_ row: Int) -> CGFloat {
-        guard let height = rowHeights[row] else { return 0 }
-        return height
+        rowHeights[row] ?? 0
     }
     
 }

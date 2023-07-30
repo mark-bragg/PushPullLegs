@@ -20,6 +20,7 @@ class NoDataViewController: UIViewController {
     private weak var noDataView: NoDataView?
     
     func showNoData(y: CGFloat) {
+        guard noDataView == nil  else { return }
         var frame = view.bounds
         frame.origin.y = y
         let ndv = NoDataView(frame: frame)

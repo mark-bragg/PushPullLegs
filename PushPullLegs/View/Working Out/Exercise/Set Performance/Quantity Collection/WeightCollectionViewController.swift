@@ -6,27 +6,19 @@
 //  Copyright © 2020 Mark Bragg. All rights reserved.
 //
 
+import Combine
 import UIKit
-
-protocol SuperSetDelegate: NSObjectProtocol {
-    func superSetSelected()
-    func secondExerciseSelected(_ name: String)
-}
-
-class SuperSetWeightCollectionViewController: WeightCollectionViewController {
-    override func addSuperSetBarButtonItem() {
-        // no op
-    }
-}
 
 class WeightCollectionViewController: QuantityCollectionViewController, ExercisingViewController {
 
     var exerciseSetViewModel: ExerciseSetViewModel?
     weak var superSetDelegate: SuperSetDelegate?
+    weak var dropSetDelegate: DropSetDelegate?
     var superSetIsReady = false {
         didSet { navigationItem.rightBarButtonItem?.isEnabled = !superSetIsReady }
     }
     var navItemTitle: String = "Weight"
+    var thereAreOtherExercises = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,16 +28,35 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
         textField?.keyboardType = .decimalPad
         characterLimit = 7
         addSuperSetBarButtonItem()
+        addDropSetBarButtonItem()
     }
     
     func addSuperSetBarButtonItem() {
-        let bbItem = UIBarButtonItem(title: "Super Set", style: .plain, target: self, action: #selector(addSuperSet))
-        navigationItem.rightBarButtonItem = bbItem
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Super Set", style: .plain, target: self, action: #selector(addSuperSet))
     }
     
     @objc
     private func addSuperSet() {
+        guard thereAreOtherExercises else {
+            return presentAddAnExerciseToSuperSetAlert()
+        }
         superSetDelegate?.superSetSelected()
+        navigationItem.leftBarButtonItem = nil
+    }
+    
+    private func presentAddAnExerciseToSuperSetAlert() {
+        let alert = UIAlertController(title: "Add Another Exercise", message: "You need to add another exercise in order to do a super set.", preferredStyle: .alert)
+        alert.addAction(.ok)
+        present(alert, animated: true)
+    }
+    
+    func addDropSetBarButtonItem() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Drop Sets", style: .plain, target: self, action: #selector(addDropSets))
+    }
+    
+    @objc
+    private func addDropSets() {
+        dropSetDelegate?.dropSetSelected()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,46 +78,8 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
             exerciseSetViewModel?.willStartSetWithWeight(weight * converter)
         }
     }
-    
 }
 
-class SuperSetViewController: ExerciseTemplateSelectionViewController {
-    weak var superSetDelegate: SuperSetDelegate?
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tableView?.allowsMultipleSelection = false
-    }
-    
-    override func setupBarButtonItems() {
-        // no op
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let name = exerciseSelectionViewModel?.title(indexPath: indexPath)
-        else { return }
-        superSetDelegate?.secondExerciseSelected(name)
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        super.tableHeaderViewContainer(titles: ["Select Exercise For Second Set"])
-    }
-}
-
-class SuperSetExerciseSelectionViewModel: ExerciseSelectionViewModel {
-    private let exerciseNameToRemove: String
-    
-    init(withType type: ExerciseTypeName, templateManagement: TemplateManagement, minus exerciseName: String, dataSource: ExerciseSelectionViewModelDataSource? = nil) {
-        self.exerciseNameToRemove = exerciseName
-        super.init(withType: type, templateManagement: templateManagement, dataSource: dataSource)
-    }
-    
-    override func reload() {
-        exercises = templateManagement.exerciseTemplatesForWorkout(exerciseType)
-        exercises.removeAll { $0.name == exerciseNameToRemove }
-    }
-    
-    override func title() -> String? {
-        "Select Second Exercise"
-    }
+extension UIAlertAction {
+    static var ok: UIAlertAction { UIAlertAction(title: "OK", style: .default) }
 }

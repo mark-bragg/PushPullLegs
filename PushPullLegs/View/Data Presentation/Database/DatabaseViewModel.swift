@@ -46,7 +46,7 @@ class DatabaseViewModel: NSObject, PPLTableViewModel, DeletionObserver {
         "Are you sure?"
     }
     
-    func deletionAlertMessage() -> String? {
+    func deletionAlertMessage(_ indexPath: IndexPath) -> String? {
         nil
     }
     

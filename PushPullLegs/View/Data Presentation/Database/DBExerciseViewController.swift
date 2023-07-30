@@ -33,7 +33,7 @@ class DBExerciseViewController: ExerciseViewController {
         setNavController?.pushViewController(dvc, animated: true)
     }
     
-    override func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel) {
+    override func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel?) {
         super.exerciseSetViewModelFinishedSet(viewModel)
         setupRightBarButtonItems()
     }

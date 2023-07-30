@@ -56,7 +56,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
                 self.handleFinishedSet(exerciseSet, name)
             }
         }
-        collectFinishedCellData()
+        collectRegularSetData()
     }
     
     override func handleFinishedSet(_ exerciseSet: ExerciseSet, _ name: String) {
@@ -79,7 +79,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
         }
     }
     
-    override func collectFinishedCellData() {
+    override func collectRegularSetData() {
         guard let objectID = exercise?.objectID, let exercise = exerciseManager.fetch(objectID) as? UnilateralExercise, let sets = exercise.sets?.array as? [UnilateralExerciseSet] else { return }
         finishedCellDataLeft.removeAll()
         finishedCellDataRight.removeAll()
@@ -112,7 +112,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
         section == 0 ? finishedCellDataLeft.count : finishedCellDataRight.count
     }
     
-    func sectionCount() -> Int {
+    override func sectionCount() -> Int {
         return 2
     }
     
@@ -142,7 +142,7 @@ class UnilateralExerciseViewModel: ExerciseViewModel {
     }
     
     override func refresh() {
-        collectFinishedCellData()
+        collectRegularSetData()
         reloader?.reload()
     }
     

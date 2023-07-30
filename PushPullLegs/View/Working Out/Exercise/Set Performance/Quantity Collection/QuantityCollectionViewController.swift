@@ -17,7 +17,7 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
     weak var label: UILabel?
     weak var textField: UITextField?
     weak var button: UIButton?
-    private let height: CGFloat = 308
+    let height: CGFloat = 308
     
     private var performingTextCorrection = false
     var characterLimit = 0
@@ -59,12 +59,16 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
     }
     
     func getTextField() -> UIView {
-        let txtContainer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height/3))
+        let txtContainer = UIView(frame: textFieldContainerFrame())
         let txtFld = UITextField()
         txtContainer.addSubview(txtFld)
         textField = txtFld
         prepareTextField()
         return txtContainer
+    }
+    
+    func textFieldContainerFrame() -> CGRect {
+        CGRect(x: 0, y: 0, width: view.frame.width, height: height/3)
     }
     
     func prepareTextField() {
@@ -108,29 +112,38 @@ class QuantityCollectionViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        button?.isEnabled = textField?.text != nil
+        button?.isEnabled = textField?.text != nil && textField?.text != ""
         textField?.becomeFirstResponder()
     }
     
-    @objc func editingChanged(_ sender: Any) {
-        guard let text = textField?.text, !text.isEmpty else {
+    @objc
+    func editingChanged(_ sender: Any) {
+        guard let textField = sender as? UITextField, let text = textField.text, !text.isEmpty else {
             button?.isEnabled = false
             return
         }
-        if !performingTextCorrection {
-            performingTextCorrection = true
-            performTextFieldCorrection(text)
-            performingTextCorrection = false
-        }
-        guard let textFinal = textField?.text, !textFinal.isEmpty else {
+        handleTextCorrection(textField, text)
+        guard let textFinal = textField.text, !textFinal.isEmpty else {
             button?.isEnabled = false
             return
         }
-        button?.isEnabled = true
+        button?.isEnabled = buttonIsEnabledAfterTextIsCorrected()
     }
     
-    func performTextFieldCorrection(_ text: String) {
-        guard let textField, let uiRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument) else { return }
+    func handleTextCorrection(_ textField: UITextField, _ text: String) {
+        if !performingTextCorrection {
+            performingTextCorrection = true
+            performTextFieldCorrection(textField, text)
+            performingTextCorrection = false
+        }
+    }
+    
+    func buttonIsEnabledAfterTextIsCorrected() -> Bool {
+        true
+    }
+    
+    func performTextFieldCorrection(_ textField: UITextField, _ text: String) {
+        guard let uiRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument) else { return }
         let correctedText = text.reduceToCharacterLimit(characterLimit).cleanupPeriods().trimLeadingZeroes().trimDecimalDigitsToTwo()
         textField.replace(uiRange, withText: correctedText)
     }

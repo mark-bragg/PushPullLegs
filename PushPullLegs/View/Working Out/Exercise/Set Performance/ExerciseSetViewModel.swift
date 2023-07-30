@@ -14,7 +14,7 @@ protocol ExerciseSetCollector: NSObjectProtocol {
 }
 
 protocol SuperSetCollector: NSObjectProtocol {
-    func collectSuperSetSet(duration: Int, weight: Double, reps: Double)
+    func collectSuperSetSet(duration: Int, weight: Double, reps: Double, _ delegate: ExerciseSetViewModelDelegate?)
 }
 
 fileprivate enum ExerciseSetState {
@@ -28,7 +28,7 @@ fileprivate enum ExerciseSetState {
 protocol ExerciseSetViewModelDelegate: NSObjectProtocol {
     func exerciseSetViewModelWillStartSet(_ viewModel: ExerciseSetViewModel)
     func exerciseSetViewModelStoppedTimer(_ viewModel: ExerciseSetViewModel)
-    func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel)
+    func exerciseSetViewModelFinishedSet(_ viewModel: ExerciseSetViewModel?)
     func exerciseSetViewModelCanceledSet(_ viewModel: ExerciseSetViewModel)
 }
 
@@ -40,10 +40,11 @@ class ExerciseSetViewModel: NSObject {
     weak var setCollector: ExerciseSetCollector?
     weak var superSetCollector: SuperSetCollector?
     var completedExerciseSet: Bool { state == .finished }
-    private var totalTime: Int?
-    private var weight: Double?
+    private(set) var totalTime: Int?
+    private(set) var weight: Double?
     private var state: ExerciseSetState
     var stopWatch: PPLStopWatch?
+    var countdownValue: Int { PPLDefaults.instance.countdown() }
     private var countdown = PPLDefaults.instance.countdown()
     private var countdownCanceled = false
     @Published private(set) var setBegan: Bool?
@@ -53,6 +54,7 @@ class ExerciseSetViewModel: NSObject {
     override init() {
         state = .notStarted
         super.init()
+        countdown = countdownValue
         $setBegan.sink { (began) in
             guard PPLDefaults.instance.areTimerSoundsEnabled(), let began = began, began else { return }
             SoundManager.shared.playStartSound()
@@ -60,7 +62,7 @@ class ExerciseSetViewModel: NSObject {
     }
     
     func restartSet() {
-        countdown = PPLDefaults.instance.countdown()
+        countdown = countdownValue
         stopWatch?.start()
     }
     
@@ -72,7 +74,7 @@ class ExerciseSetViewModel: NSObject {
     func startSet() {
         setStateForStartSet()
         if PPLDefaults.instance.isWorkoutInProgress() {
-            countdown = PPLDefaults.instance.countdown()
+            countdown = countdownValue
             stopWatch?.start()
         }
     }
@@ -149,11 +151,11 @@ class ExerciseSetViewModel: NSObject {
             return
         }
         if let superSetCollector {
-            superSetCollector.collectSuperSetSet(duration: totalTime, weight: weight, reps: reps)
+            superSetCollector.collectSuperSetSet(duration: totalTime, weight: weight, reps: reps, delegate)
         } else {
             setCollector?.collectSet(duration: totalTime, weight: weight, reps: reps)
+            delegate?.exerciseSetViewModelFinishedSet(self)
         }
-        delegate?.exerciseSetViewModelFinishedSet(self)
     }
     
     func cancel() {
@@ -202,7 +204,7 @@ class ExerciseSetViewModel: NSObject {
     }
     
     func initialTimerText() -> String {
-        let countdown = PPLDefaults.instance.countdown()
+        let countdown = countdownValue
         if countdown >= 10 {
             return "0:\(countdown)"
         }
@@ -211,7 +213,7 @@ class ExerciseSetViewModel: NSObject {
     
     func cancelCountdown() {
         countdownCanceled = true
-        countdown = PPLDefaults.instance.countdown()
+        countdown = countdownValue
     }
     
     func weightCollectionButtonText() -> String {

@@ -27,6 +27,10 @@ class GraphTableViewController: PPLTableViewController {
         reload()
     }
     
+    override func addNoDataView() {
+        // no op
+    }
+    
     override func reload() {
         for wgvc in [pushVc, pullVc, legsVc, armsVc] {
             wgvc?.refresh(nil)
@@ -96,7 +100,7 @@ class GraphTableViewController: PPLTableViewController {
         }
     }
     
-    private func constrainTableView() {
+    override func constrainTableView() {
         let guide = view.safeAreaLayoutGuide
         tableView?.translatesAutoresizingMaskIntoConstraints = false
         tableView?.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
@@ -124,17 +128,17 @@ class GraphTableViewController: PPLTableViewController {
             let view = viewForRow(indexPath.row)
         else { return UITableViewCell() }
         cell.tag = indexPath.row
-        cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
+//        cell.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.rowHeight)
         cell.contentView.addSubview(view)
         constrain(view, toInsideOf: cell.contentView)
+        cell.accessoryType = .none
         if let gVm = vcForRow(indexPath.row)?.viewModel, gVm.hasData {
-            
             cell.contentView.subviews.first { $0.isKind(of: NoDataGraphView.self) }?.removeFromSuperview()
             cell.accessoryType = .disclosureIndicator
             let tapView = TapView(tag: indexPath.row + 1, target: self, action: #selector(tapViewTapped(_:)))
             cell.contentView.addSubview(tapView)
             constrain(tapView, toInsideOf: cell.contentView)
-        } else {
+        } else if !cell.contentView.subviews.contains(where: { $0.isKind(of: NoDataGraphView.self) }) {
             let ndv = NoDataGraphView()
             cell.contentView.addSubview(ndv)
             constrain(ndv, toInsideOf: cell.contentView)
@@ -143,8 +147,6 @@ class GraphTableViewController: PPLTableViewController {
         if let tapView = cell.contentView.subviews.first(where: { $0.isKind(of: TapView.self) }) {
             tapView.removeFromSuperview()
         }
-        
-        
         cell.selectionStyle = .none
         return cell
     }
@@ -192,7 +194,6 @@ class GraphTableViewController: PPLTableViewController {
     @objc private func showGraph(_ row: Int) {
         guard let nav = navigationController else { return }
         let vc = GraphViewController(type: typeForRow(row))
-//        vc.isInteractive = true
         vc.hidesBottomBarWhenPushed = true
         nav.show(vc, sender: self)
     }

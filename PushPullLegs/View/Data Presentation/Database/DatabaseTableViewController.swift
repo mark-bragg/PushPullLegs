@@ -21,7 +21,8 @@ class DatabaseTableViewController: PPLTableViewController {
         setupRightBarButtonItems()
     }
     
-    @objc func edit() {
+    @objc
+    func edit() {
         let isEditing = !(tableView?.isEditing ?? false)
         tableView?.setEditing(isEditing, animated: false)
         if isEditing, let viewModel = viewModel {
@@ -35,12 +36,13 @@ class DatabaseTableViewController: PPLTableViewController {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         dbTblViewModel?.objectToDelete = indexPath
-        presentDeleteConfirmation(self)
+        presentDeleteConfirmation(self, indexPath: indexPath)
     }
     
-    @objc func presentDeleteConfirmation(_ sender: Any) {
+    @objc
+    func presentDeleteConfirmation(_ sender: Any, indexPath: IndexPath) {
         guard let dbTblViewModel else { return }
-        let alert = UIAlertController.init(title: dbTblViewModel.deletionAlertTitle(), message: dbTblViewModel.deletionAlertMessage(), preferredStyle: .actionSheet)
+        let alert = UIAlertController.init(title: dbTblViewModel.deletionAlertTitle(), message: dbTblViewModel.deletionAlertMessage(indexPath), preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { action in
             dbTblViewModel.deleteDatabaseObject()
             self.reload()

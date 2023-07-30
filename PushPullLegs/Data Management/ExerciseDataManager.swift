@@ -122,6 +122,37 @@ class ExerciseDataManager: DataManager {
         superSet?.workout = workout
         return superSet
     }
+    
+    func createSuperSet(with workout: Workout, set1: ExerciseSet, set2: ExerciseSet) -> SuperSet? {
+        let superSet = NSEntityDescription.insertNewObject(forEntityName: EntityName.superSet.rawValue, into: context) as? SuperSet
+        superSet?.workout = workout
+        superSet?.set1 = set1.objectID.uriRepresentation()
+        superSet?.set2 = set2.objectID.uriRepresentation()
+        try? context.save()
+        return superSet
+    }
+    
+    func insertDropSets(_ sets: [(duration: Int, weight: Double, reps: Double)], exercise: Exercise, completion: @escaping (DropSet) -> Void) {
+        var exerciseSets = [NSManagedObjectID]()
+        for set in sets {
+            insertSet(duration: set.duration, weight: set.weight, reps: set.reps, exercise: exercise) { [weak self] exerciseSet in
+                exerciseSets.append(exerciseSet.objectID)
+                if exerciseSets.count == sets.count {
+                    self?.addDropSet(setIds: exerciseSets, exercise: exercise, completion: completion)
+                }
+            }
+        }
+    }
+    
+    private func addDropSet(setIds: [NSManagedObjectID], exercise: Exercise, completion: (DropSet) -> Void) {
+        context.performAndWait {
+            guard let dropSet = NSEntityDescription.insertNewObject(forEntityName: EntityName.dropSet.rawValue, into: context) as? DropSet
+            else { return }
+            dropSet.sets = setIds.compactMap({ $0.uriRepresentation() })
+            dropSet.exercise = exercise
+            try? context.save()
+        }
+    }
 }
 
 enum NilReferenceError: Error {
@@ -151,5 +182,36 @@ class UnilateralExerciseDataManager: ExerciseDataManager {
 extension UnilateralExerciseSet {
     public func isEqualToData(_ data: (w: Double, r: Double, d: Int, l: Bool)) -> Bool {
         return self.weight == data.w && self.reps == data.r && self.duration == data.d && self.isLeftSide == data.l
+    }
+}
+
+extension DropSet {
+    public func exerciseSets() -> [ExerciseSet]? {
+        guard let sets,
+              let context = managedObjectContext,
+              let coordinator = context.persistentStoreCoordinator
+        else { return nil }
+        let setIds = sets.compactMap { coordinator.managedObjectID(forURIRepresentation: $0) }
+        let request = ExerciseSet.fetchRequest()
+        request.predicate = NSPredicate(format: "self in %@", argumentArray: [setIds])
+        return try? managedObjectContext?.fetch(request)
+    }
+}
+
+extension SuperSet {
+    public func exerciseSets() -> (set1: ExerciseSet, set2: ExerciseSet)? {
+        guard let set1,
+              let set2,
+              let context = managedObjectContext,
+              let coordinator = context.persistentStoreCoordinator,
+              let set1Id = coordinator.managedObjectID(forURIRepresentation: set1),
+              let set2Id = coordinator.managedObjectID(forURIRepresentation: set2)
+        else { return nil }
+        let request = ExerciseSet.fetchRequest()
+        request.predicate = NSPredicate(format: "self in %@", argumentArray: [[set1Id, set2Id]])
+        guard let sets1and2 = try? managedObjectContext?.fetch(request),
+              sets1and2.count == 2
+        else { return nil }
+        return (sets1and2[0], sets1and2[1])
     }
 }

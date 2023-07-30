@@ -37,6 +37,10 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
         delegate?.exerciseTemplatesAdded()
     }
     
+    override func addNoDataView() {
+        // no op
+    }
+    
     @objc func addExercise() {
         guard let exerciseSelectionViewModel else { return }
         let vc = ExerciseTemplateCreationViewController()

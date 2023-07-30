@@ -26,6 +26,10 @@ class AppConfigurationViewController: PPLTableViewController {
         view.isUserInteractionEnabled = true
     }
     
+    override func addNoDataView() {
+        // no op
+    }
+    
     override func viewWillLayoutSubviews() {
         viewModel = AppConfigurationViewModel()
         super.viewWillLayoutSubviews()
