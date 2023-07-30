@@ -161,7 +161,7 @@ extension Workout {
                 volume += exercise.volume()
             }
         }
-        return volume
+        return volume.truncateIfNecessary()
     }
 }
 

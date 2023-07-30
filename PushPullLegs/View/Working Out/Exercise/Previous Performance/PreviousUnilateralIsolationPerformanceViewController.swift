@@ -51,6 +51,6 @@ class PreviousUnilateralIsolationPerformanceViewController: PreviousPerformanceV
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? leftSets.count : rightSets.count
+        section == 0 ? leftSets.count : rightSets.count
     }
 }

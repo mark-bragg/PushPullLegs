@@ -15,18 +15,22 @@ class DBUnilateralIsolationExerciseViewController: DBExerciseViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let vm = viewModel, vm.rowCount(section: section) > 0, let view = super.tableView(tableView, viewForHeaderInSection: section) else { return nil }
-        return updateSectionHeaders(section, view)
+        guard let vm = viewModel, vm.rowCount(section: section) > 0 else { return nil }
+        return tableHeaderViewContainer(titles: [section == 0 ? "Left" : "Right"], section: section)
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let vm = viewModel else { return 0 }
-        return vm.rowCount(section: section) > 0 ? super.tableView(tableView, heightForHeaderInSection: section) : 0
+        return vm.rowCount(section: section) > 0 ? 40 : 0
     }
     
     override func addAction() {
         unilateralIsolationAddActionResponse {
             super.addAction()
         }
+    }
+    
+    override func weightCollectionViewController() -> WeightCollectionViewController {
+        WeightCollectionViewController()
     }
 }

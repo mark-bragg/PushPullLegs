@@ -155,10 +155,7 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
     override func addAction() {
         super.addAction()
         prepareExerciseSetViewModel()
-        let wc = WeightCollectionViewController()
-        wc.superSetDelegate = self
-        wc.dropSetDelegate = self
-        wc.thereAreOtherExercises = exerciseViewModel?.canSuperSet ?? false
+        let wc = weightCollectionViewController()
         let setNavController = SetNavigationController(rootViewController: wc)
         wc.exerciseSetViewModel = exerciseSetViewModel
         presentModally(setNavController)
@@ -168,6 +165,14 @@ class ExerciseViewController: DatabaseTableViewController, ExerciseSetViewModelD
         if let _ = restTimerView {
             hideRestTimerView()
         }
+    }
+    
+    func weightCollectionViewController() -> WeightCollectionViewController {
+        let wc = WeightCollectionViewController()
+        wc.superSetDelegate = self
+        wc.dropSetDelegate = self
+        wc.thereAreOtherExercises = exerciseViewModel?.canSuperSet ?? false
+        return wc
     }
     
     private func hideRestTimerView() {

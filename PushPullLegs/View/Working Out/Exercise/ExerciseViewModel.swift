@@ -510,9 +510,7 @@ func log(base: Double, value: Double) -> Double {
 extension Double {
     func truncateIfNecessary() -> Double {
         let digitCount = "\(Int(self))".count
-        guard digitCount < 3
-        else { return self }
-        let decimalCount = digitCount < 3 ? 2 : 1
+        let decimalCount = digitCount < 3 ? 2 : digitCount > 4 ? 0 : 1
         return Double(String(format: "%.\(decimalCount)f", self)) ?? 0
     }
 }

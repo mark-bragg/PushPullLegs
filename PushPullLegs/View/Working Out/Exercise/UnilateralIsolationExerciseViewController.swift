@@ -11,6 +11,7 @@ import UIKit
 class UnilateralIsolationExerciseViewController: ExerciseViewController {
     
     private var isPresentingPrevious = false
+    private var uniIsoVM: UnilateralIsolationExerciseViewModel? { viewModel as? UnilateralIsolationExerciseViewModel }
     
     override func addAction() {
         unilateralIsolationAddActionResponse {
@@ -18,32 +19,41 @@ class UnilateralIsolationExerciseViewController: ExerciseViewController {
         }
     }
     
+    override func weightCollectionViewController() -> WeightCollectionViewController {
+        WeightCollectionViewController()
+    }
+    
     override func presentPreviousPerformance() {
         isPresentingPrevious = true
         guard
-            let previousExercise = (viewModel as? ExerciseViewModel)?.previousExercise,
-            let tableView,
-            let leftSuperHeaderView = self.tableView(tableView, viewForHeaderInSection: 0),
-            let rightSuperHeaderView = self.tableView(tableView, viewForHeaderInSection: 1)
+            let uniIsoVM,
+            let previousExercise = (viewModel as? ExerciseViewModel)?.previousExercise
         else { return }
-        let leftHeaderView = updateSectionHeaders(0, leftSuperHeaderView)
-        let rightHeaderView = updateSectionHeaders(1, rightSuperHeaderView)
-        presentModally(PreviousUnilateralIsolationPerformanceViewController(exercise: previousExercise, headerViews: [leftHeaderView, rightHeaderView]))
+        let leftSuperHeaderView = tableHeaderViewContainer(titles: [uniIsoVM.titleForSection(0) ?? ""], section: 0)
+        let rightSuperHeaderView = tableHeaderViewContainer(titles: [uniIsoVM.titleForSection(1) ?? ""], section: 1)
+//        let leftHeaderView = updateSectionHeaders(0, leftSuperHeaderView)
+//        let rightHeaderView = updateSectionHeaders(1, rightSuperHeaderView)
+        presentModally(PreviousUnilateralIsolationPerformanceViewController(exercise: previousExercise, headerViews: [leftSuperHeaderView, rightSuperHeaderView]))
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let vm = viewModel,
-              vm.rowCount(section: section) > 0 || isPresentingPrevious,
-              let superHeader = super.tableView(tableView, viewForHeaderInSection: section)
+        guard let vm = uniIsoVM,
+              vm.rowCount(section: section) > 0 || isPresentingPrevious
         else { return nil }
-        return updateSectionHeaders(section, superHeader)
+//        return updateSectionHeaders(section, superHeader)
+        return tableHeaderViewContainer(titles: [vm.titleForSection(section) ?? ""], section: section)
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard let vm = viewModel,
-              vm.rowCount(section: section) > 0 || isPresentingPrevious
-        else { return 0 }
-        return super.tableView(tableView, heightForHeaderInSection: section)
+        guard let uniIsoVM else { return 0 }
+        if section == 0 && uniIsoVM.rowCount(section: 0) > 0 {
+            return 40
+        } else if section == 1 && uniIsoVM.rowCount(section: 1) > 0 {
+            return 40
+        } else if isPresentingPrevious {
+            return 40
+        }
+        return 0
     }
     
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {

@@ -32,6 +32,8 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
     }
     
     func addSuperSetBarButtonItem() {
+        guard superSetDelegate != nil
+        else { return }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Super Set", style: .plain, target: self, action: #selector(addSuperSet))
     }
     
@@ -51,6 +53,8 @@ class WeightCollectionViewController: QuantityCollectionViewController, Exercisi
     }
     
     func addDropSetBarButtonItem() {
+        guard dropSetDelegate != nil
+        else { return }
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Drop Sets", style: .plain, target: self, action: #selector(addDropSets))
     }
     

@@ -30,7 +30,6 @@ class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
     
     override init(withDataManager dataManager: ExerciseDataManager = UnilateralIsolationExerciseDataManager(), exercise: Exercise) {
         super.init(withDataManager: dataManager, exercise: exercise)
-        
     }
     
     override init(withDataManager dataManager: ExerciseDataManager = UnilateralIsolationExerciseDataManager(), exerciseTemplate: ExerciseTemplate) {
@@ -105,7 +104,7 @@ class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
     }
     
     private func dataForSection(_ section: Int) -> [FinishedUnilateralIsolationSetDataModel] {
-        return section == 0 ? finishedCellDataLeft : finishedCellDataRight
+        section == 0 ? finishedCellDataLeft : finishedCellDataRight
     }
     
     override func rowCount(section: Int = 0) -> Int {
@@ -113,11 +112,11 @@ class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
     }
     
     override func sectionCount() -> Int {
-        return 2
+        2
     }
     
     override func hasData() -> Bool {
-        return finishedCellDataLeft.count > 0 || finishedCellDataRight.count > 0
+        finishedCellDataLeft.count > 0 || finishedCellDataRight.count > 0
     }
     
     override func delete(indexPath: IndexPath) {
@@ -156,17 +155,24 @@ class UnilateralIsolationExerciseViewModel: ExerciseViewModel {
         return total
     }
     
+    override func titleForSection(_ section: Int) -> String? {
+        section == 0 ? HandSide.left.rawValue : HandSide.right.rawValue
+    }
+    
 }
 
 extension Int {
     /// expected format: "##:##"
     static func unstringDuration(_ duration: String) -> Int {
-        guard let seconds = getSeconds(duration), let minutes = getMinutes(duration) else { return 0 }
+        guard let seconds = getSeconds(duration),
+              let minutes = getMinutes(duration)
+        else { return 0 }
         return  seconds + (minutes * 60)
     }
     
     private static func getSeconds(_ duration: String) -> Int? {
-        guard let minutes = getMinutes(duration) else { return nil }
+        guard let minutes = getMinutes(duration)
+        else { return nil }
         let dropCount = minutes < 10 ? 2 : 3
         return Int(duration.dropFirst(dropCount))
     }
