@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDelegate {
+class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
     var creationView: ExerciseTemplateCreationView {
         (view as? ExerciseTemplateCreationView) ?? ExerciseTemplateCreationView()
     }
@@ -48,6 +48,11 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     
     func handleViewDidLayoutSubviews() {
         // no op
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        creationView.helpButton.addTarget(self, action: #selector(help(_:)), for: .touchUpInside)
     }
     
     private func bind() {
@@ -166,6 +171,50 @@ class ExerciseTemplateCreationViewController: UIViewController, UITextFieldDeleg
     private func muscleFocusChanged(_ control: UISegmentedControl) {
         viewModel?.muscleGrouping = control.selectedSegmentIndex == 0 ? .compound : .isolation
     }
+    
+    @objc
+    func help(_ control: UIControl) {
+        let vc = UIViewController()
+        let lbl = UILabel()
+        lbl.numberOfLines = 0
+        let text = helpText
+        let size = text.size(font: lbl.font, width: view.frame.width)
+        lbl.setHTMLFromString(htmlText: text)
+        
+        lbl.textColor = .white
+        vc.view.backgroundColor = .black
+        lbl.preferredMaxLayoutWidth = view.frame.width
+        vc.view.addSubview(lbl)
+        vc.popoverPresentationController?.delegate = self
+        lbl.frame = CGRect(x: 0, y: 0, width: size.width - 8, height: view.frame.height)
+        present(vc, animated: true)
+    }
+    
+    private var helpText: String {
+        let bilateralText = "<b>Bilateral</b><p>A bilateral exercise uses both sides of your body in a single coordinated movement like most barbell exercises; for example, bench press.</p>"
+        let unilateralText = "<b>Unilateral</b><p>An example of a unilateral exercise would be dumbbell bench press; same as the barbell bench press, but your arms are working independently from each other.</p>"
+        let compoundText = "<b>Compound</b><p>A compound exercise is one that targets multiple muscles/muscle groups like the barbell squat.</p>"
+        let isolationText = "<b>Isolation</b><p>An isolation exercise is meant to focus on a single muscle/muscle group, like calf raises.</p>"
+        let bilateralCompoundText = "<b>Bilateral Compound</b><p>Bilateral Compound exercises include: bench press, squats, deadlifts.</p>"
+        let bilateralIsolationText = "<b>Bilateral Isolation</b><p>Bilateral Isolation exercises include: barbell curls, double leg calf raises, tricep press downs.</p>"
+        let isolationCompoundText = "<b>Unilateral Compound</b><p>Unilateral Compound exercises include: dumbbell bench press, cable flyes, overhead dumbbell press. The caveat here is that you are performing both sides at the same time.</p>"
+        let isolationUnilateralText = "<b>Unilateral Isolation</b><p>If you were to perform one side at a time, that would be a Unilateral Isolation exercise: isolation dumbbell curls (one muscle), barbell lunges (one muscle group).</p>"
+        return bilateralText + unilateralText + compoundText + isolationText + bilateralCompoundText + bilateralIsolationText + isolationCompoundText + isolationUnilateralText
+    }
+}
+
+extension UILabel {
+    func setHTMLFromString(htmlText: String) {
+        let modifiedFont = String(format:"<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: \(self.font!.pointSize)\">%@</span>", htmlText)
+        
+        guard let attrStr = try? NSAttributedString(
+            data: modifiedFont.data(using: .unicode, allowLossyConversion: true)!,
+            options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue],
+            documentAttributes: nil)
+        else { return }
+        
+        self.attributedText = attrStr
+    }
 }
 
 class ExerciseNameSanitizer: NSObject, StringSanitizer {
@@ -189,3 +238,12 @@ protocol StringSanitizer: NSObject {
     func sanitize(_ string: String) -> String
 }
 
+
+extension String {
+  func size(font: UIFont, width: CGFloat) -> CGSize {
+      let attrString = NSAttributedString(string: self, attributes: [NSAttributedString.Key.font: font])
+      let bounds = attrString.boundingRect(with: CGSize(width: width, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
+      let size = CGSize(width: bounds.width, height: bounds.height)
+      return size
+  }
+}

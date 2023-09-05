@@ -81,18 +81,35 @@ class ExerciseTemplateCreationView: UIView {
     private var parentStackHeight: CGFloat {
         showExerciseType ? 300 : 225
     }
+    lazy var helpButton: UIButton = {
+        let hb = UIButton(type: .infoDark)
+        let hbSL: CGFloat = segmentedControlParentViewHeight / 2.0
+        hb.frame = CGRect(x: frame.width - hbSL, y: (segmentedControlParentViewHeight - hbSL) / 2, width: hbSL, height: hbSL)
+        return hb
+    }()
     var showLateralType: Bool { true }
     var showMuscleFocus: Bool { true }
+    private var segmentedControlParentViewHeight: CGFloat { parentStackView.frame.height / 3 }
     private lazy var lateralTypeParentView: UIView = {
-        UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: parentStackView.frame.height / 3))
+        let pv = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: segmentedControlParentViewHeight))
+        return pv
     }()
     weak var lateralTypeSegmentedControl: UISegmentedControl?
     private lazy var muscleFocusParentView: UIView = {
-        UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: parentStackView.frame.height / 3))
+        let pv = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: segmentedControlParentViewHeight))
+        return pv
     }()
     weak var muscleFocusSegmentedControl: UISegmentedControl?
     private var firstLoad = true
     private var showExerciseType = true
+    
+    private func constrain(helpButton: UIButton, toTheRightOf parentView: UIView) {
+        helpButton.translatesAutoresizingMaskIntoConstraints = false
+        helpButton.trailingAnchor.constraint(equalTo: parentView.trailingAnchor).isActive = true
+        helpButton.centerYAnchor.constraint(equalTo: parentView.centerYAnchor).isActive = true
+        helpButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        helpButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
+    }
     
     init(showExerciseType: Bool = true) {
         self.showExerciseType = showExerciseType
@@ -209,6 +226,8 @@ class ExerciseTemplateCreationView: UIView {
         lateralTypeSegmentedControl = segmentedControl
         segmentedControl.selectedSegmentIndex = 0
         constrainLateralTypeSegmentedControl(segmentedControl)
+        lateralTypeParentView.addSubview(helpButton)
+        constrain(helpButton: helpButton, toTheRightOf: lateralTypeParentView)
     }
     
     private func constrainLateralTypeSegmentedControl(_ segCon: UISegmentedControl) {
