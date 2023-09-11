@@ -19,7 +19,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView?.register(UITableViewCell.self, forCellReuseIdentifier: exerciseCellReuseIdentifier)
+        tableView?.register(PPLSelectionCell.self, forCellReuseIdentifier: UITableViewCellIdentifier)
         tableView?.allowsMultipleSelection = true
         navigationItem.title = exerciseSelectionViewModel?.title()
         setupBarButtonItems()
@@ -53,7 +53,7 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier) else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCellIdentifier) as? PPLSelectionCell else {
             return UITableViewCell()
         }
         var textLabel = cell.contentView.subviews.first(where: { $0.isKind(of: PPLNameLabel.self) }) as? PPLNameLabel
@@ -67,11 +67,11 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
     private func newTextLabel(_ rootView: UIView) -> PPLNameLabel {
         let textLabel = PPLNameLabel()
         textLabel.textColor = PPLColor.text
-        textLabel.textAlignment = .center
+        textLabel.textAlignment = .left
         rootView.addSubview(textLabel)
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: 10).isActive = true
-        textLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: -10).isActive = true
+        textLabel.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: 10).isActive = true
         textLabel.centerYAnchor.constraint(equalTo: rootView.centerYAnchor, constant: 0).isActive = true
         return textLabel
     }
@@ -98,5 +98,27 @@ class ExerciseTemplateSelectionViewController: PPLTableViewController {
 extension ExerciseTemplateSelectionViewController {
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         
+    }
+}
+
+class PPLSelectionCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
+    override var selectionStyle: UITableViewCell.SelectionStyle {
+        get { .none }
+        set { super.selectionStyle = .none }
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        accessoryType = selected ? .checkmark : .none
     }
 }
